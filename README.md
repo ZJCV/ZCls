@@ -8,7 +8,7 @@
  <div align="center"><a title="" href="https://github.com/ZJCV/PyCls"><img align="center" src="./imgs/PyCls.png"></a></div>
 
 <p align="center">
-  «PyCls»是一个分类模型CodeBase
+  «PyCls»是一个分类模型基准代码库
 <br>
 <br>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square"></a>
