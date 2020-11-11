@@ -5,7 +5,7 @@
   <!-- <a title="俄语" href="../ru/README.md">🇷🇺</a> -->
 </div>
 
- <div align="center"><a title="" href="https://github.com/ZJCV/PyCls"><img align="center" src="./imgs/PyCls.png"></a></div>
+ <div align="center"><a title="" href="git@github.com:ZJCV/PyCls.git"><img align="center" src="./imgs/PyCls.png"></a></div>
 
 <p align="center">
   «PyCls»是一个分类模型基准代码库
