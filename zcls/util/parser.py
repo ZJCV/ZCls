@@ -82,7 +82,7 @@ def parse_test_args():
                         help="path to config file")
     parser.add_argument('pretrained', default="", metavar='PRETRAINED_FILE',
                         help="path to pretrained model", type=str)
-    parser.add_argument('--output', default="./outputs/test", type=str)
+    parser.add_argument('--output', default="./outputs/tests", type=str)
 
     parser.add_argument('-g',
                         '--gpus',
