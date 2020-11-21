@@ -10,9 +10,9 @@
 from torch.nn.parallel import DistributedDataParallel as DDP
 
 from ..layers.batchnorm_helper import convert_sync_bn
-import pycls.util.distributed as du
-from pycls.util.checkpoint import CheckPointer
-from pycls.util import logging
+import zcls.util.distributed as du
+from zcls.util.checkpoint import CheckPointer
+from zcls.util import logging
 
 from .. import registry
 from .build_resnet import build_resnet

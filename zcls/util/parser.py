@@ -9,7 +9,7 @@
 
 import os
 import argparse
-from pycls.config import cfg
+from zcls.config import cfg
 
 
 def parse_train_args():

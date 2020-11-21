@@ -1,4 +1,4 @@
-from pycls.util.registry import Registry
+from zcls.util.registry import Registry
 
 OPTIMIZERS = Registry()
 LR_SCHEDULERS = Registry()

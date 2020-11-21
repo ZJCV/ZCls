@@ -10,7 +10,7 @@
 import psutil
 import torch
 import torch.multiprocessing as mp
-import pycls.util.multiprocessing as mpu
+import zcls.util.multiprocessing as mpu
 
 
 def launch_job(cfg, init_method, func, daemon=False):
@@ -18,7 +18,7 @@ def launch_job(cfg, init_method, func, daemon=False):
     Run 'func' on one or more GPUs, specified in cfg
     Args:
         cfg (CfgNode): configs. Details can be found in
-            pycls/config/defaults.py
+            zcls/config/defaults.py
         init_method (str): initialization method to launch the job with multiple
             devices.
         func (function): job to run on GPU(s)

@@ -10,18 +10,18 @@
 import numpy as np
 import torch
 
-from pycls.data.build import build_dataloader
-from pycls.engine.trainer import do_train
-from pycls.model.recognizers.build import build_recognizer
-from pycls.model.criterions.build import build_criterion
-from pycls.optim.optimizers.build import build_optimizer
-from pycls.optim.lr_schedulers.build import build_lr_scheduler
-from pycls.util import logging
-from pycls.util.checkpoint import CheckPointer
-from pycls.util.collect_env import collect_env_info
-from pycls.util.distributed import init_distributed_training, get_device, get_local_rank, synchronize
-from pycls.util.misc import launch_job
-from pycls.util.parser import parse_train_args, load_train_config
+from zcls.data.build import build_dataloader
+from zcls.engine.trainer import do_train
+from zcls.model.recognizers.build import build_recognizer
+from zcls.model.criterions.build import build_criterion
+from zcls.optim.optimizers.build import build_optimizer
+from zcls.optim.lr_schedulers.build import build_lr_scheduler
+from zcls.util import logging
+from zcls.util.checkpoint import CheckPointer
+from zcls.util.collect_env import collect_env_info
+from zcls.util.distributed import init_distributed_training, get_device, get_local_rank, synchronize
+from zcls.util.misc import launch_job
+from zcls.util.parser import parse_train_args, load_train_config
 
 
 def train(cfg):

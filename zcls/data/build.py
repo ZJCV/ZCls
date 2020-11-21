@@ -13,7 +13,7 @@ from torch.utils.data import RandomSampler, SequentialSampler
 
 from .datasets.build import build_dataset
 from .transforms.build import build_transform
-import pycls.util.distributed as du
+import zcls.util.distributed as du
 
 
 def build_dataloader(cfg, is_train=True):

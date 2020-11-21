@@ -10,14 +10,14 @@
 import numpy as np
 import torch
 
-from pycls.model.recognizers.build import build_recognizer
-from pycls.engine.inference import do_evaluation
-from pycls.util.collect_env import collect_env_info
-from pycls.util import logging
-from pycls.util.distributed import get_device, get_local_rank
-from pycls.util.parser import parse_test_args, load_test_config
-from pycls.util.misc import launch_job
-from pycls.util.distributed import synchronize, init_distributed_training
+from zcls.model.recognizers.build import build_recognizer
+from zcls.engine.inference import do_evaluation
+from zcls.util.collect_env import collect_env_info
+from zcls.util import logging
+from zcls.util.distributed import get_device, get_local_rank
+from zcls.util.parser import parse_test_args, load_test_config
+from zcls.util.misc import launch_job
+from zcls.util.distributed import synchronize, init_distributed_training
 
 
 def test(cfg):

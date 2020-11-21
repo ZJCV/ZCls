@@ -12,11 +12,11 @@ import datetime
 import time
 import torch
 
-from pycls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
-from pycls.util.distributed import is_master_proc, synchronize
-from pycls.util import logging
-from pycls.engine.inference import do_evaluation
-from pycls.data.build import shuffle_dataset
+from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
+from zcls.util.distributed import is_master_proc, synchronize
+from zcls.util import logging
+from zcls.engine.inference import do_evaluation
+from zcls.data.build import shuffle_dataset
 
 
 def do_train(cfg, arguments,

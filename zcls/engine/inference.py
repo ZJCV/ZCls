@@ -12,9 +12,9 @@ import datetime
 import torch
 from tqdm import tqdm
 
-import pycls.util.logging as logging
-from pycls.util.distributed import all_gather, is_master_proc
-from pycls.data.build import build_dataloader
+import zcls.util.logging as logging
+from zcls.util.distributed import all_gather, is_master_proc
+from zcls.data.build import build_dataloader
 
 
 @torch.no_grad()

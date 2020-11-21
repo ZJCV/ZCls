@@ -10,7 +10,7 @@
 import torch
 
 from .base_evaluator import BaseEvaluator
-from pycls.util.metrics import topk_accuracy
+from zcls.util.metrics import topk_accuracy
 
 
 class CIFAREvaluator(BaseEvaluator):

@@ -1,4 +1,4 @@
-from pycls.util.registry import Registry
+from zcls.util.registry import Registry
 
 RECOGNIZER = Registry()
 

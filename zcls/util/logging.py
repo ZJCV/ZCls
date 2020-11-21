@@ -8,7 +8,7 @@ import logging
 import os
 import sys
 
-import pycls.util.distributed as du
+import zcls.util.distributed as du
 
 
 def _suppress_print():

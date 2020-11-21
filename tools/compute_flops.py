@@ -11,10 +11,10 @@ import time
 import numpy as np
 import torch
 
-from pycls.util.distributed import get_device, get_local_rank
-from pycls.util.metrics import compute_num_flops
-from pycls.config import cfg
-from pycls.model.recognizers.build import build_recognizer
+from zcls.util.distributed import get_device, get_local_rank
+from zcls.util.metrics import compute_num_flops
+from zcls.config import cfg
+from zcls.model.recognizers.build import build_recognizer
 
 
 def main(data_shape, config_file, mobile_name):
