@@ -15,7 +15,7 @@ from zcls.util.checkpoint import CheckPointer
 from zcls.util import logging
 
 from .. import registry
-from .build_resnet import build_resnet
+from .resnet_recognizer import build_resnet
 
 
 def build_recognizer(cfg, device):

@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/r50_cifar100_224'
+OUTPUT_DIR: 'outputs/r50_custom_cifar100_224'
 TRAIN:
   LOG_STEP: 10
   MAX_EPOCH: 100
@@ -11,7 +11,7 @@ TRAIN:
   EVAL_EPOCH: 5
   RESUME: False
   USE_TENSORBOARD: True
-DATASETS:
+DATASET:
   NAME: 'CIFAR100'
   DATA_DIR: './data/cifar'
 TRANSFORM:
@@ -32,9 +32,15 @@ DATALOADER:
 MODEL:
   NAME: 'ResNet'
   PRETRAINED: ''
-  SYNC_BN: True
+  TORCHVISION_PRETRAINED: False
+  SYNC_BN: False
+  BACKBONE:
+    ARCH: 'resnet50'
+  HEAD:
+    FEATURE_DIMS: 2048
+    NUM_CLASSES: 100
   RECOGNIZER:
-    NAME: 'R50_Pytorch'
+    NAME: 'ResNet_Custom'
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:

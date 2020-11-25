@@ -11,8 +11,8 @@ from .cifar import CIFAR
 
 
 def build_dataset(cfg, transform=None, is_train=True, download=True):
-    dataset_name = cfg.DATASETS.NAME
-    data_dir = cfg.DATASETS.DATA_DIR
+    dataset_name = cfg.DATASET.NAME
+    data_dir = cfg.DATASET.DATA_DIR
 
     if dataset_name == 'CIFAR100':
         dataset = CIFAR(data_dir, train=is_train, transform=transform, download=download)

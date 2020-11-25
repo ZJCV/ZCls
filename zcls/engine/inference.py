@@ -39,7 +39,7 @@ def compute_on_dataset(images, targets, device, model, num_gpus, evaluator):
 
 def inference(cfg, model, device, **kwargs):
     cur_epoch = kwargs.get('cur_epoch', None)
-    dataset_name = cfg.DATASETS.NAME
+    dataset_name = cfg.DATASET.NAME
     num_gpus = cfg.NUM_GPUS
 
     data_loader = build_dataloader(cfg, is_train=False)

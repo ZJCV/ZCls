@@ -78,7 +78,8 @@ class ResNetBackbone(nn.Module):
         self._init_weights(self.zero_init_residual)
 
     def _make_stem(self):
-        self.conv1 = self.conv_layer(self.inplanes, self.base_planes, kernel_size=(7, 7), stride=2, padding=3)
+        self.conv1 = self.conv_layer(self.inplanes, self.base_planes, kernel_size=(7, 7), stride=2, padding=3,
+                                     bias=False)
         self.bn1 = self.norm_layer(self.base_planes)
         self.relu = self.act_layer(inplace=True)
 
