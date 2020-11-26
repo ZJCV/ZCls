@@ -29,8 +29,8 @@ _C.DIST_BACKEND = "nccl"
 # ---------------------------------------------------------------------------- #
 _C.TRAIN = CN()
 _C.TRAIN.LOG_STEP = 10
-_C.TRAIN.SAVE_EPOCH = 10
-_C.TRAIN.EVAL_EPOCH = 10
-_C.TRAIN.MAX_EPOCH = 100
+_C.TRAIN.SAVE_EPOCH = 5
+_C.TRAIN.EVAL_EPOCH = 5
+_C.TRAIN.MAX_EPOCH = 200
 _C.TRAIN.RESUME = False
 _C.TRAIN.USE_TENSORBOARD = True

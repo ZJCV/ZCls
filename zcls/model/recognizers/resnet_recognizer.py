@@ -8,6 +8,7 @@
 """
 
 import torch.nn as nn
+from torch.nn.modules.module import T
 from torchvision.models import resnet
 from torchvision.models.utils import load_state_dict_from_url
 
@@ -44,7 +45,9 @@ class ResNetRecognizer(nn.Module):
                  arch='resnet18',
                  feature_dims=2048,
                  num_classes=1000,
-                 torchvision_pretrained=False):
+                 torchvision_pretrained=False,
+                 fix_bn=False,
+                 partial_bn=False):
         super(ResNetRecognizer, self).__init__()
         block_layer, layer_blocks = arch_settings[arch]
 
@@ -58,6 +61,8 @@ class ResNetRecognizer(nn.Module):
         )
 
         self._init_weights(arch=arch, pretrained=torchvision_pretrained)
+        self.fix_bn = fix_bn
+        self.partial_bn = partial_bn
 
     def _init_weights(self, arch='resnet18', pretrained=False):
         if pretrained:
@@ -66,6 +71,27 @@ class ResNetRecognizer(nn.Module):
             print(res)
             res = self.head.load_state_dict(state_dict, strict=False)
             print(res)
+
+    def freezing_bn(self: T) -> None:
+        count = 0
+        for m in self.modules():
+            if isinstance(m, nn.BatchNorm2d):
+                count += 1
+                if count == 1 and self.partial_bn:
+                    continue
+
+                m.eval()
+                # shutdown update in frozen mode
+                m.weight.requires_grad = False
+                m.bias.requires_grad = False
+
+    def train(self, mode: bool = True) -> T:
+        super(ResNetRecognizer, self).train(mode=mode)
+
+        if mode and (self.partial_bn or self.fix_bn):
+            self.freezing_bn()
+
+        return self
 
     def forward(self, x):
         x = self.backbone(x)
@@ -76,7 +102,12 @@ class ResNetRecognizer(nn.Module):
 
 class ResNet_Pytorch(nn.Module):
 
-    def __init__(self, arch="resnet18", num_classes=1000, torchvision_pretrained=False):
+    def __init__(self,
+                 arch="resnet18",
+                 num_classes=1000,
+                 torchvision_pretrained=False,
+                 fix_bn=False,
+                 partial_bn=False):
         super(ResNet_Pytorch, self).__init__()
         if arch == 'resnet18':
             self.model = resnet.resnet18(pretrained=torchvision_pretrained, num_classes=num_classes)
@@ -84,6 +115,29 @@ class ResNet_Pytorch(nn.Module):
             self.model = resnet.resnet50(pretrained=torchvision_pretrained, num_classes=num_classes)
         else:
             raise ValueError('no such value')
+        self.fix_bn = fix_bn
+        self.partial_bn = partial_bn
+
+    def freezing_bn(self):
+        count = 0
+        for m in self.modules():
+            if isinstance(m, nn.BatchNorm2d):
+                count += 1
+                if count == 1 and self.partial_bn:
+                    continue
+
+                m.eval()
+                # shutdown update in frozen mode
+                m.weight.requires_grad = False
+                m.bias.requires_grad = False
+
+    def train(self, mode: bool = True) -> T:
+        super(ResNet_Pytorch, self).train(mode=mode)
+
+        if mode and (self.partial_bn or self.fix_bn):
+            self.freezing_bn()
+
+        return self
 
     def forward(self, x):
         x = self.model(x)
