@@ -9,7 +9,7 @@
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from ..layers.batchnorm_helper import convert_sync_bn
+from zcls.model.batchnorm_helper import convert_sync_bn
 import zcls.util.distributed as du
 from zcls.util.checkpoint import CheckPointer
 from zcls.util import logging

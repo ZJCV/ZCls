@@ -12,6 +12,9 @@ import torch.nn as nn
 
 
 class BatchNorm2d(nn.BatchNorm2d):
+    """
+    from [pytorch_misc/batch_norm_manual.py](https://github.com/ptrblck/pytorch_misc/blob/master/batch_norm_manual.py)
+    """
 
     def __init__(self, num_features, eps=1e-5, momentum=0.1,
                  affine=True, track_running_stats=True):
@@ -47,7 +50,7 @@ class BatchNorm2d(nn.BatchNorm2d):
             mean = self.running_mean
             var = self.running_var
 
-        input = (input - mean[None, :, None, None]) / (torch.sqrt(var[None, :, None, None] + self.eps))
+        input = (input - mean[None,:,  None, None]) / (torch.sqrt(var[None, :, None, None] + self.eps))
         if self.affine:
             input = input * self.weight[None, :, None, None] + self.bias[None, :, None, None]
 
