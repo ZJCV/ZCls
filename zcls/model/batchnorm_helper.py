@@ -8,6 +8,7 @@
 """
 
 import torch.nn as nn
+from functools import partial
 
 
 def convert_sync_bn(model, process_group, device):
@@ -19,3 +20,22 @@ def convert_sync_bn(model, process_group, device):
             setattr(model, child_name, m)
         else:
             convert_sync_bn(child, process_group, device)
+
+
+def get_norm(cfg):
+    """
+    Args:
+        cfg (CfgNode): model building configs, details are in the comments of
+            the config file.
+    Returns:
+        nn.Module: the normalization layer.
+    """
+    if cfg.MODEL.NORM_TYPE == "batchnorm2d":
+        return nn.BatchNorm2d
+    elif cfg.MODEL.NORM_TYPE == "groupnorm":
+        num_groups = cfg.MODEL.GROUPS
+        return partial(nn.GroupNorm, num_groups=num_groups)
+    else:
+        raise NotImplementedError(
+            "Norm type {} is not supported".format(cfg.BN.NORM_TYPE)
+        )

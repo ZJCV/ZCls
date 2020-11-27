@@ -19,6 +19,7 @@ def add_config(_C):
     _C.MODEL.PRETRAINED = ""
     _C.MODEL.TORCHVISION_PRETRAINED = False
     _C.MODEL.SYNC_BN = False
+    _C.MODEL.GROUPS = 3
 
     _C.MODEL.BACKBONE = CN()
     # for ResNet

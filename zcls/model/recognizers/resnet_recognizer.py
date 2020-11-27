@@ -49,6 +49,11 @@ class ResNetRecognizer(nn.Module):
                  fix_bn=False,
                  partial_bn=False):
         super(ResNetRecognizer, self).__init__()
+
+        self.num_classes = num_classes
+        self.fix_bn = fix_bn
+        self.partial_bn = partial_bn
+
         block_layer, layer_blocks = arch_settings[arch]
 
         self.backbone = ResNetBackbone(
@@ -57,20 +62,20 @@ class ResNetRecognizer(nn.Module):
         )
         self.head = ResNetHead(
             feature_dims=feature_dims,
-            num_classes=num_classes
+            num_classes=1000
         )
 
         self._init_weights(arch=arch, pretrained=torchvision_pretrained)
-        self.fix_bn = fix_bn
-        self.partial_bn = partial_bn
 
     def _init_weights(self, arch='resnet18', pretrained=False):
         if pretrained:
             state_dict = load_state_dict_from_url(model_urls[arch], progress=True)
-            res = self.backbone.load_state_dict(state_dict, strict=False)
-            print(res)
-            res = self.head.load_state_dict(state_dict, strict=False)
-            print(res)
+            self.backbone.load_state_dict(state_dict, strict=False)
+            self.head.load_state_dict(state_dict, strict=False)
+        if self.num_classes != 1000:
+            fc = self.head.fc
+            fc_features = fc.in_features
+            self.head.fc = nn.Linear(fc_features, self.num_classes)
 
     def freezing_bn(self: T) -> None:
         count = 0
@@ -109,14 +114,25 @@ class ResNet_Pytorch(nn.Module):
                  fix_bn=False,
                  partial_bn=False):
         super(ResNet_Pytorch, self).__init__()
-        if arch == 'resnet18':
-            self.model = resnet.resnet18(pretrained=torchvision_pretrained, num_classes=num_classes)
-        elif arch == 'resnet50':
-            self.model = resnet.resnet50(pretrained=torchvision_pretrained, num_classes=num_classes)
-        else:
-            raise ValueError('no such value')
+
+        self.num_classes = num_classes
         self.fix_bn = fix_bn
         self.partial_bn = partial_bn
+
+        if arch == 'resnet18':
+            self.model = resnet.resnet18(pretrained=torchvision_pretrained, num_classes=1000)
+        elif arch == 'resnet50':
+            self.model = resnet.resnet50(pretrained=torchvision_pretrained, num_classes=1000)
+        else:
+            raise ValueError('no such value')
+
+        self._init_weights()
+
+    def _init_weights(self):
+        if self.num_classes != 1000:
+            fc = self.model.fc
+            fc_features = fc.in_features
+            self.model.fc = nn.Linear(fc_features, self.num_classes)
 
     def freezing_bn(self):
         count = 0
