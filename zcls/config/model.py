@@ -18,8 +18,14 @@ def add_config(_C):
     _C.MODEL.NAME = 'ResNet'
     _C.MODEL.PRETRAINED = ""
     _C.MODEL.TORCHVISION_PRETRAINED = False
-    _C.MODEL.SYNC_BN = False
-    _C.MODEL.GROUPS = 3
+
+    _C.MODEL.NORM = CN()
+    _C.MODEL.NORM.TYPE = 'BatchNorm2d'
+    # for bn
+    _C.MODEL.NORM.SYNC_BN = False
+    _C.MODEL.NORM.FIX_BN = False
+    # for groupnorm
+    _C.MODEL.NORM.GROUPS = 32
 
     _C.MODEL.BACKBONE = CN()
     # for ResNet

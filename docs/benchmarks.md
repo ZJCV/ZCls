@@ -16,7 +16,7 @@
     <th>top5 acc</th>
     <th>resolution(TxHxW)</th>
     <th>inference_time(image/s)</th>
-    <th>gpu_mem(M)</th>
+    <th>gpu_mem(G)</th>
     <th>ckpt</th>
   </tr>
 </thead>
@@ -32,7 +32,7 @@
     <td>67.659</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
   </tr>
   <tr>
@@ -46,7 +46,7 @@
     <td>97.321</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
   </tr>
   <tr>
@@ -60,7 +60,7 @@
     <td>69.018</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
   </tr>
   <tr>
@@ -74,7 +74,7 @@
     <td>97.321</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
   </tr>
 </tbody>

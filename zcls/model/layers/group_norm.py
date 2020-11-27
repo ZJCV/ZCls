@@ -16,7 +16,7 @@ class GroupNorm(nn.Module):
     refer to [group_normalization/group_norm.py](https://github.com/taokong/group_normalization/blob/master/group_norm.py)
     """
 
-    def __init__(self, num_groups: int, num_channels: int, eps: float = 1e-5, affine: bool = True):
+    def __init__(self, num_groups: int = 4, num_channels: int = 32, eps: float = 1e-5, affine: bool = True):
         super(GroupNorm, self).__init__()
         self.num_groups = num_groups
         self.num_channels = num_channels
@@ -27,15 +27,16 @@ class GroupNorm(nn.Module):
             self.weight = torch.ones(num_channels, 1, 1)
             self.bias = torch.zeros(num_channels, 1, 1)
 
-    def forward(self, x):
-        N, C, H, W = x.size()
+    def forward(self, inputs):
+        shape = inputs.size()
+        N, C = shape[:2]
 
-        x = x.view(N, self.num_groups, -1)
+        x = inputs.view(N, self.num_groups, -1)
 
         mean = x.mean(dim=2, keepdim=True)
         std = x.std(dim=2, keepdim=True)
 
         x = (x - mean) / (std + self.eps)
-        x = x.view(N, C, H, W)
+        x = x.view(shape)
 
         return x * self.weight + self.bias

@@ -17,6 +17,7 @@ from ..backbones.basicblock import BasicBlock
 from ..backbones.bottleneck import Bottleneck
 from ..backbones.resnet_backbone import ResNetBackbone
 from ..heads.resnet_head import ResNetHead
+from ..batchnorm_helper import get_norm, freezing_bn
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
@@ -47,7 +48,8 @@ class ResNetRecognizer(nn.Module):
                  num_classes=1000,
                  torchvision_pretrained=False,
                  fix_bn=False,
-                 partial_bn=False):
+                 partial_bn=False,
+                 norm_layer=None):
         super(ResNetRecognizer, self).__init__()
 
         self.num_classes = num_classes
@@ -58,7 +60,8 @@ class ResNetRecognizer(nn.Module):
 
         self.backbone = ResNetBackbone(
             layer_blocks=layer_blocks,
-            block_layer=block_layer
+            block_layer=block_layer,
+            norm_layer=norm_layer
         )
         self.head = ResNetHead(
             feature_dims=feature_dims,
@@ -77,24 +80,11 @@ class ResNetRecognizer(nn.Module):
             fc_features = fc.in_features
             self.head.fc = nn.Linear(fc_features, self.num_classes)
 
-    def freezing_bn(self: T) -> None:
-        count = 0
-        for m in self.modules():
-            if isinstance(m, nn.BatchNorm2d):
-                count += 1
-                if count == 1 and self.partial_bn:
-                    continue
-
-                m.eval()
-                # shutdown update in frozen mode
-                m.weight.requires_grad = False
-                m.bias.requires_grad = False
-
     def train(self, mode: bool = True) -> T:
         super(ResNetRecognizer, self).train(mode=mode)
 
         if mode and (self.partial_bn or self.fix_bn):
-            self.freezing_bn()
+            freezing_bn(self, partial_bn=self.partial_bn)
 
         return self
 
@@ -134,24 +124,11 @@ class ResNet_Pytorch(nn.Module):
             fc_features = fc.in_features
             self.model.fc = nn.Linear(fc_features, self.num_classes)
 
-    def freezing_bn(self):
-        count = 0
-        for m in self.modules():
-            if isinstance(m, nn.BatchNorm2d):
-                count += 1
-                if count == 1 and self.partial_bn:
-                    continue
-
-                m.eval()
-                # shutdown update in frozen mode
-                m.weight.requires_grad = False
-                m.bias.requires_grad = False
-
     def train(self, mode: bool = True) -> T:
         super(ResNet_Pytorch, self).train(mode=mode)
 
         if mode and (self.partial_bn or self.fix_bn):
-            self.freezing_bn()
+            freezing_bn(self, partial_bn=self.partial_bn)
 
         return self
 
@@ -167,20 +144,26 @@ def build_resnet(cfg):
     torchvision_pretrained = cfg.MODEL.TORCHVISION_PRETRAINED
     arch = cfg.MODEL.BACKBONE.ARCH
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
+    fix_bn = cfg.MODEL.NORM.FIX_BN
 
     if type == 'ResNet_Pytorch':
         return ResNet_Pytorch(
             arch=arch,
             num_classes=num_classes,
-            torchvision_pretrained=torchvision_pretrained
+            torchvision_pretrained=torchvision_pretrained,
+            fix_bn=fix_bn
         )
     elif type == 'ResNet_Custom':
         feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
+        norm_layer = get_norm(cfg)
+
         return ResNetRecognizer(
             arch=arch,
             feature_dims=feature_dims,
             num_classes=num_classes,
-            torchvision_pretrained=torchvision_pretrained
+            torchvision_pretrained=torchvision_pretrained,
+            fix_bn=fix_bn,
+            norm_layer=norm_layer
         )
     else:
         raise ValueError(f'{type} does not exist')

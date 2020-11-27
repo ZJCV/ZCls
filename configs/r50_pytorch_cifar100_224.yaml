@@ -33,7 +33,10 @@ MODEL:
   NAME: 'ResNet'
   PRETRAINED: ''
   TORCHVISION_PRETRAINED: False
-  SYNC_BN: False
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
   BACKBONE:
     ARCH: 'resnet50'
   HEAD:

@@ -35,7 +35,7 @@ MODEL:
   TORCHVISION_PRETRAINED: False
   NORM:
     TYPE: 'BatchNorm2d'
-    SYNC_BN: False
+    SYNC_BN: True
     FIX_BN: False
   BACKBONE:
     ARCH: 'resnet50'

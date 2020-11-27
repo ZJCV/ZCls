@@ -34,9 +34,8 @@ MODEL:
   PRETRAINED: ''
   TORCHVISION_PRETRAINED: False
   NORM:
-    TYPE: 'BatchNorm2d'
-    SYNC_BN: False
-    FIX_BN: False
+    TYPE: 'GroupNorm'
+    GROUPS: 32
   BACKBONE:
     ARCH: 'resnet50'
   HEAD:
@@ -57,7 +56,7 @@ LR_SCHEDULER:
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [100, 150, 175]
+    MILESTONES: [ 100, 150, 175 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0

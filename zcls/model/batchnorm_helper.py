@@ -10,6 +10,8 @@
 import torch.nn as nn
 from functools import partial
 
+from .layers.group_norm_wrapper import GroupNormWrapper
+
 
 def convert_sync_bn(model, process_group, device):
     # convert all BN layers in the model to syncBN
@@ -30,12 +32,26 @@ def get_norm(cfg):
     Returns:
         nn.Module: the normalization layer.
     """
-    if cfg.MODEL.NORM_TYPE == "batchnorm2d":
+    if cfg.MODEL.NORM.TYPE == "BatchNorm2d":
         return nn.BatchNorm2d
-    elif cfg.MODEL.NORM_TYPE == "groupnorm":
-        num_groups = cfg.MODEL.GROUPS
-        return partial(nn.GroupNorm, num_groups=num_groups)
+    elif cfg.MODEL.NORM.TYPE == "GroupNorm":
+        num_groups = cfg.MODEL.NORM.GROUPS
+        return partial(GroupNormWrapper, num_groups=num_groups)
     else:
         raise NotImplementedError(
             "Norm type {} is not supported".format(cfg.BN.NORM_TYPE)
         )
+
+
+def freezing_bn(model, partial_bn=False):
+    count = 0
+    for m in model.modules():
+        if isinstance(m, nn.BatchNorm2d):
+            count += 1
+            if count == 1 and partial_bn:
+                continue
+
+            m.eval()
+            # shutdown update in frozen mode
+            m.weight.requires_grad = False
+            m.bias.requires_grad = False

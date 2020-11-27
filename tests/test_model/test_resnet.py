@@ -10,6 +10,8 @@
 import torch
 from torchvision.models import resnet50
 
+from zcls.config import cfg
+from zcls.model.batchnorm_helper import get_norm
 from zcls.model.recognizers.resnet_recognizer import ResNetRecognizer
 
 
@@ -31,5 +33,20 @@ def test_resnet():
     print(model)
 
 
+def test_resnet_gn():
+    cfg.MODEL.NORM.TYPE = 'GroupNorm'
+    norm_layer = get_norm(cfg)
+    print(norm_layer)
+
+    model = ResNetRecognizer(
+        arch="resnet50",
+        feature_dims=2048,
+        num_classes=1000,
+        norm_layer=norm_layer
+    )
+    print(model)
+
+
 if __name__ == '__main__':
-    test_resnet()
+    # test_resnet()
+    test_resnet_gn()
