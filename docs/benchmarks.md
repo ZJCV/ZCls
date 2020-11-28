@@ -114,7 +114,7 @@
     <td>67.659</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
     <td>/</td>
   </tr>
@@ -130,7 +130,7 @@
     <td>74.266</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/TLzdegHpHjzDWA7" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
@@ -146,7 +146,7 @@
     <td>97.321</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
     <td>/</td>
   </tr>
@@ -162,7 +162,7 @@
     <td>97.708</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td>/</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/5PTbRiT8G2QN2ok" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
@@ -178,7 +178,7 @@
     <td>97.639</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>/</td>
+    <td>8.05</td>
     <td><br>/</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/FmscE4jeHkLtp9H" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
