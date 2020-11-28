@@ -145,13 +145,15 @@ def build_resnet(cfg):
     arch = cfg.MODEL.BACKBONE.ARCH
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
+    partial_bn = cfg.MODEL.NORM.PARTIAL_BN
 
     if type == 'ResNet_Pytorch':
         return ResNet_Pytorch(
             arch=arch,
             num_classes=num_classes,
             torchvision_pretrained=torchvision_pretrained,
-            fix_bn=fix_bn
+            fix_bn=fix_bn,
+            partial_bn=partial_bn
         )
     elif type == 'ResNet_Custom':
         feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
@@ -163,6 +165,7 @@ def build_resnet(cfg):
             num_classes=num_classes,
             torchvision_pretrained=torchvision_pretrained,
             fix_bn=fix_bn,
+            partial_bn=partial_bn,
             norm_layer=norm_layer
         )
     else:

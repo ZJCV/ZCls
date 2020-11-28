@@ -24,6 +24,7 @@ def add_config(_C):
     # for bn
     _C.MODEL.NORM.SYNC_BN = False
     _C.MODEL.NORM.FIX_BN = False
+    _C.MODEL.NORM.PARTIAL_BN = False
     # for groupnorm
     _C.MODEL.NORM.GROUPS = 32
 

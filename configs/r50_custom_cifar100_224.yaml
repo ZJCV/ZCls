@@ -37,6 +37,7 @@ MODEL:
     TYPE: 'BatchNorm2d'
     SYNC_BN: False
     FIX_BN: False
+    PARTIAL_BN: False
   BACKBONE:
     ARCH: 'resnet50'
   HEAD:
