@@ -4,6 +4,8 @@ from torch.nn.parallel import DistributedDataParallel
 
 from . import logging
 
+logger = logging.get_logger(__name__)
+
 
 class CheckPointer:
     _last_checkpoint_name = 'last_checkpoint.txt'
@@ -13,16 +15,12 @@ class CheckPointer:
                  optimizer=None,
                  scheduler=None,
                  save_dir="",
-                 save_to_disk=None,
-                 logger=None):
+                 save_to_disk=None):
         self.model = model
         self.optimizer = optimizer
         self.scheduler = scheduler
         self.save_dir = save_dir
         self.save_to_disk = save_to_disk
-        if logger is None:
-            logger = logging.setup_logging(__name__)
-        self.logger = logger
 
     def save(self, name, **kwargs):
         if not self.save_dir:
@@ -43,7 +41,7 @@ class CheckPointer:
         data.update(kwargs)
 
         save_file = os.path.join(self.save_dir, "{}.pth".format(name))
-        self.logger.info("Saving checkpoint to {}".format(save_file))
+        logger.info("Saving checkpoint to {}".format(save_file))
         torch.save(data, save_file)
 
         self.tag_last_checkpoint(save_file)
@@ -54,10 +52,10 @@ class CheckPointer:
             f = self.get_checkpoint_file()
         if not f:
             # no checkpoint could be found
-            self.logger.info("No checkpoint found.")
+            logger.info("No checkpoint found.")
             return {}
 
-        self.logger.info("Loading checkpoint from {}".format(f))
+        logger.info("Loading checkpoint from {}".format(f))
         checkpoint = self._load_file(f, map_location=map_location)
         model = self.model
         if isinstance(model, DistributedDataParallel):
@@ -65,10 +63,10 @@ class CheckPointer:
 
         model.load_state_dict(checkpoint.pop("model"))
         if "optimizer" in checkpoint and self.optimizer:
-            self.logger.info("Loading optimizer from {}".format(f))
+            logger.info("Loading optimizer from {}".format(f))
             self.optimizer.load_state_dict(checkpoint.pop("optimizer"))
         if "scheduler" in checkpoint and self.scheduler:
-            self.logger.info("Loading scheduler from {}".format(f))
+            logger.info("Loading scheduler from {}".format(f))
             self.scheduler.load_state_dict(checkpoint.pop("scheduler"))
 
         # return any further checkpoint data

@@ -18,11 +18,12 @@ from zcls.util import logging
 from zcls.engine.inference import do_evaluation
 from zcls.data.build import shuffle_dataset
 
+logger = logging.get_logger(__name__)
+
 
 def do_train(cfg, arguments,
              data_loader, model, criterion, optimizer, lr_scheduler,
              checkpointer, device):
-    logger = logging.setup_logging(__name__)
     meters = MetricLogger()
     evaluator = data_loader.dataset.evaluator
     summary_writer = None

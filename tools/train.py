@@ -23,6 +23,8 @@ from zcls.util.distributed import init_distributed_training, get_device, get_loc
 from zcls.util.misc import launch_job
 from zcls.util.parser import parse_train_args, load_train_config
 
+logger = logging.get_logger(__name__)
+
 
 def train(cfg):
     # Set up environment.
@@ -33,7 +35,8 @@ def train(cfg):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
-    logger = logging.setup_logging(__name__)
+    # Setup logging format.
+    logging.setup_logging(cfg.OUTPUT_DIR)
     logger.info('init start')
     # 迭代轮数从１开始计数
     arguments = {"cur_epoch": 1}
@@ -45,7 +48,7 @@ def train(cfg):
     lr_scheduler = build_lr_scheduler(cfg, optimizer)
 
     checkpointer = CheckPointer(model, optimizer=optimizer, scheduler=lr_scheduler, save_dir=cfg.OUTPUT_DIR,
-                                save_to_disk=True, logger=logger)
+                                save_to_disk=True)
     if cfg.TRAIN.RESUME:
         logger.info('resume start')
         extra_checkpoint_data = checkpointer.load(map_location=device)
@@ -75,7 +78,8 @@ def main():
     args = parse_train_args()
     cfg = load_train_config(args)
 
-    logger = logging.setup_logging(__name__, output_dir=cfg.OUTPUT_DIR)
+    # Setup logging format.
+    logging.setup_logging(cfg.OUTPUT_DIR)
     logger.info(args)
 
     logger.info("Environment info:\n" + collect_env_info())

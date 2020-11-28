@@ -16,6 +16,8 @@ import zcls.util.logging as logging
 from zcls.util.distributed import all_gather, is_master_proc
 from zcls.data.build import build_dataloader
 
+logger = logging.get_logger(__name__)
+
 
 @torch.no_grad()
 def compute_on_dataset(images, targets, device, model, num_gpus, evaluator):
@@ -47,7 +49,6 @@ def inference(cfg, model, device, **kwargs):
     evaluator = data_loader.dataset.evaluator
     evaluator.clean()
 
-    logger = logging.setup_logging(__name__)
     logger.info("Evaluating {} dataset({} video clips):".format(dataset_name, len(dataset)))
 
     if is_master_proc():

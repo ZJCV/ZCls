@@ -19,6 +19,8 @@ from zcls.util.parser import parse_test_args, load_test_config
 from zcls.util.misc import launch_job
 from zcls.util.distributed import synchronize, init_distributed_training
 
+logger = logging.get_logger(__name__)
+
 
 def test(cfg):
     # Set up environment.
@@ -28,6 +30,8 @@ def test(cfg):
     torch.manual_seed(cfg.RNG_SEED)
     torch.backends.cudnn.deterministic = False
     torch.backends.cudnn.benchmark = True
+
+    logging.setup_logging(cfg.OUTPUT_DIR)
 
     device = get_device(local_rank=get_local_rank())
     model = build_recognizer(cfg, device=device)
@@ -40,7 +44,7 @@ def main():
     args = parse_test_args()
     cfg = load_test_config(args)
 
-    logger = logging.setup_logging(__name__, output_dir=cfg.OUTPUT_DIR)
+    logging.setup_logging(cfg.OUTPUT_DIR)
     logger.info(args)
 
     logger.info("Environment info:\n" + collect_env_info())
