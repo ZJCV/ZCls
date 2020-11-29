@@ -25,15 +25,17 @@ logger = logging.get_logger(__name__)
 def test(cfg):
     # Set up environment.
     init_distributed_training(cfg)
+    local_rank_id = get_local_rank()
+
     # Set random seed from configs.
-    np.random.seed(cfg.RNG_SEED)
-    torch.manual_seed(cfg.RNG_SEED)
+    np.random.seed(cfg.RNG_SEED + 10 * local_rank_id)
+    torch.manual_seed(cfg.RNG_SEED + 10 * local_rank_id)
     torch.backends.cudnn.deterministic = False
     torch.backends.cudnn.benchmark = True
 
     logging.setup_logging(cfg.OUTPUT_DIR)
 
-    device = get_device(local_rank=get_local_rank())
+    device = get_device(local_rank=local_rank_id)
     model = build_recognizer(cfg, device=device)
 
     synchronize()

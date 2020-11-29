@@ -29,9 +29,11 @@ logger = logging.get_logger(__name__)
 def train(cfg):
     # Set up environment.
     init_distributed_training(cfg)
+    local_rank_id = get_local_rank()
+
     # Set random seed from configs.
-    np.random.seed(cfg.RNG_SEED)
-    torch.manual_seed(cfg.RNG_SEED)
+    np.random.seed(cfg.RNG_SEED + 10 * local_rank_id)
+    torch.manual_seed(cfg.RNG_SEED + 10 * local_rank_id)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
@@ -41,7 +43,7 @@ def train(cfg):
     # 迭代轮数从１开始计数
     arguments = {"cur_epoch": 1}
 
-    device = get_device(get_local_rank())
+    device = get_device(local_rank_id)
     model = build_recognizer(cfg, device)
     criterion = build_criterion(cfg, device)
     optimizer = build_optimizer(cfg, model)
