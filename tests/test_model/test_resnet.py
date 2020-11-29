@@ -11,7 +11,7 @@ import torch
 from torchvision.models import resnet50
 
 from zcls.config import cfg
-from zcls.model.batchnorm_helper import get_norm
+from zcls.model.norm_helper import get_norm
 from zcls.model.recognizers.resnet_recognizer import ResNetRecognizer
 
 

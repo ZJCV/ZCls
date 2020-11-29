@@ -17,7 +17,7 @@ from ..backbones.basicblock import BasicBlock
 from ..backbones.bottleneck import Bottleneck
 from ..backbones.resnet_backbone import ResNetBackbone
 from ..heads.resnet_head import ResNetHead
-from ..batchnorm_helper import get_norm, freezing_bn
+from ..norm_helper import get_norm, freezing_bn
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
