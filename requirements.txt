@@ -22,13 +22,18 @@ tabulate == 0.8.7
 # ZCls/zcls/util/metrics.py: 10
 thop == 0.0.31.post2005241907
 
-# ZCls/tests/test_model/test_backbones.py: 10,11
-# ZCls/tests/test_model/test_batchnorm.py: 16,17
+# ZCls/tests/test_model/test_basicblock.py: 10,11
 # ZCls/tests/test_model/test_bottleneck.py: 10,11
-# ZCls/tests/test_model/test_groupnorm.py: 10
-# ZCls/tests/test_model/test_resnet.py: 10,11
+# ZCls/tests/test_model/test_mobilenetv1_backbone.py: 10,11
+# ZCls/tests/test_model/test_mobilenetv1_block.py: 10,11
+# ZCls/tests/test_model/test_mobilenetv1_head.py: 10
+# ZCls/tests/test_model/test_mobilenetv1_recognizer.py: 10
+# ZCls/tests/test_model/test_resnet.py: 10
 # ZCls/tests/test_model/test_resnet_backbone.py: 10
 # ZCls/tests/test_model/test_resnet_head.py: 10
+# ZCls/tests/test_normalization/test_batchnorm2d.py: 10,11
+# ZCls/tests/test_normalization/test_groupnorm.py: 10,11
+# ZCls/tests/test_normalization/test_layernorm.py: 10,11
 # ZCls/tools/compute_flops.py: 12
 # ZCls/tools/compute_mean_std.py: 10,13
 # ZCls/tools/test.py: 11
@@ -38,15 +43,24 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/data/datasets/evaluator/base_evaluator.py: 11
 # ZCls/zcls/data/datasets/evaluator/cifar.py: 10
 # ZCls/zcls/engine/inference.py: 12
-# ZCls/zcls/engine/trainer.py: 13,31
+# ZCls/zcls/engine/trainer.py: 13,32
 # ZCls/zcls/model/backbones/basicblock.py: 10
 # ZCls/zcls/model/backbones/bottleneck.py: 10
+# ZCls/zcls/model/backbones/mobilenetv1_backbone.py: 10
+# ZCls/zcls/model/backbones/mobilenetv1_block.py: 10
 # ZCls/zcls/model/backbones/resnet_backbone.py: 10
 # ZCls/zcls/model/criterions/crossentropy_loss.py: 10
+# ZCls/zcls/model/heads/mobilenetv1_head.py: 10,11
 # ZCls/zcls/model/heads/resnet_head.py: 10,11
-# ZCls/zcls/model/layers/norm_helper.py: 10
+# ZCls/zcls/model/init_helper.py: 11
+# ZCls/zcls/model/layers/batch_norm_2d.py: 10,11
+# ZCls/zcls/model/layers/group_norm.py: 10,11
+# ZCls/zcls/model/layers/group_norm_wrapper.py: 10
+# ZCls/zcls/model/layers/layer_norm.py: 10,11
+# ZCls/zcls/model/norm_helper.py: 10
 # ZCls/zcls/model/recognizers/build.py: 10
-# ZCls/zcls/model/recognizers/resnet_recognizer.py: 10
+# ZCls/zcls/model/recognizers/mobilenetv1_recognizer.py: 10
+# ZCls/zcls/model/recognizers/resnet_recognizer.py: 10,11
 # ZCls/zcls/optim/lr_schedulers/build.py: 10
 # ZCls/zcls/optim/lr_schedulers/gradual_warmup.py: 10,11
 # ZCls/zcls/optim/lr_schedulers/multistep_lr.py: 10,11
@@ -61,11 +75,11 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/util/multiprocessing.py: 6
 torch == 1.6.0
 
-# ZCls/tests/test_model/test_resnet.py: 12
+# ZCls/tests/test_model/test_resnet.py: 11
 # ZCls/tools/compute_mean_std.py: 12,14
 # ZCls/zcls/data/datasets/cifar.py: 11
 # ZCls/zcls/data/transforms/build.py: 10
-# ZCls/zcls/model/recognizers/resnet_recognizer.py: 11,12
+# ZCls/zcls/model/recognizers/resnet_recognizer.py: 12,13
 # ZCls/zcls/util/collect_env.py: 11
 torchvision == 0.7.0
 

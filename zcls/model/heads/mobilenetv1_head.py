@@ -21,8 +21,14 @@ class MobileNetV1Head(nn.Module):
                  ):
         super(MobileNetV1Head, self).__init__()
 
-        self.avgpool = nn.AvgPool2d((7, 7))
+        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(feature_dims, num_classes)
+
+        self._init_weights()
+
+    def _init_weights(self):
+        nn.init.normal_(self.fc.weight, 0, 0.01)
+        nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
         x = self.avgpool(x)

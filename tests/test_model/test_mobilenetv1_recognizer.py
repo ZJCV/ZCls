@@ -15,32 +15,20 @@ from zcls.model.recognizers.mobilenetv1_recognizer import MobileNetV1Recognizer
 
 
 def test_mobilenetv1():
-    model = MobileNetV1Recognizer(
-        feature_dims=1024,
-        num_classes=1000
-    )
-    print(model)
+    for s in [224, 192, 160, 128]:
+        for wm in [1.0, 0.75, 0.5, 0.25]:
+            print(f's: {s}, wn: {wm}')
+            model = MobileNetV1Recognizer(
+                width_multiplier=wm
+            )
+            # print(model)
 
-    data = torch.randn(1, 3, 224, 224)
-    outputs = model(data)['probs']
-    print(outputs.shape)
+            data = torch.randn(1, 3, s, s)
+            outputs = model(data)['probs']
+            print(outputs.shape)
 
-    assert outputs.shape == (1, 1000)
-
-
-def test_mobilenetv1_gn():
-    cfg.MODEL.NORM.TYPE = 'GroupNorm'
-    norm_layer = get_norm(cfg)
-    print(norm_layer)
-
-    model = MobileNetV1Recognizer(
-        feature_dims=1024,
-        num_classes=1000,
-        norm_layer=norm_layer
-    )
-    print(model)
+            assert outputs.shape == (1, 1000)
 
 
 if __name__ == '__main__':
     test_mobilenetv1()
-    test_mobilenetv1_gn()

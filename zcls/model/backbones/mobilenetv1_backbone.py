@@ -68,8 +68,8 @@ class MobileNetV1Backbone(nn.Module):
             if i == (self.layer_num - 1):
                 # 最后一次深度卷积操作不下采样空间尺寸
                 padding = 4
-            dw_layer = MobileNetV1Block(inplanes,
-                                        channel,
+            dw_layer = MobileNetV1Block(int(inplanes),
+                                        int(channel),
                                         stride=stride,
                                         padding=padding,
                                         conv_layer=self.conv_layer,

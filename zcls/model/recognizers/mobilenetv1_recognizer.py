@@ -29,6 +29,8 @@ class MobileNetV1Recognizer(nn.Module):
                  feature_dims=1024,
                  # 类别数
                  num_classes=1000,
+                 # 宽度乘法器
+                 width_multiplier=1.0,
                  # 固定BN
                  fix_bn=False,
                  # 仅训练第一层BN
@@ -44,6 +46,10 @@ class MobileNetV1Recognizer(nn.Module):
         self.num_classes = num_classes
         self.fix_bn = fix_bn
         self.partial_bn = partial_bn
+
+        base_channel = int(base_channel * width_multiplier)
+        channels = [int(channel * width_multiplier) for channel in channels]
+        feature_dims = int(feature_dims * width_multiplier)
 
         self.backbone = MobileNetV1Backbone(
             inplanes=inplanes,
