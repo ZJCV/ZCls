@@ -28,6 +28,12 @@ def add_config(_C):
     # for groupnorm
     _C.MODEL.NORM.GROUPS = 32
 
+    _C.MODEL.ACT = CN()
+    _C.MODEL.ACT.TYPE = 'ReLU'
+
+    _C.MODEL.COMPRESSION = CN()
+    _C.MODEL.COMPRESSION.WIDTH_MULTIPLIER = 1.0
+
     _C.MODEL.BACKBONE = CN()
     # for ResNet
     _C.MODEL.BACKBONE.ARCH = 'resnet18'

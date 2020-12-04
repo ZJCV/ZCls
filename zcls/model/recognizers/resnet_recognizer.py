@@ -80,6 +80,9 @@ class ResNetRecognizer(nn.Module):
             fc_features = fc.in_features
             self.head.fc = nn.Linear(fc_features, self.num_classes)
 
+            nn.init.normal_(self.head.fc.weight, 0, 0.01)
+            nn.init.zeros_(self.head.fc.bias)
+
     def train(self, mode: bool = True) -> T:
         super(ResNetRecognizer, self).train(mode=mode)
 
@@ -123,6 +126,9 @@ class ResNet_Pytorch(nn.Module):
             fc = self.model.fc
             fc_features = fc.in_features
             self.model.fc = nn.Linear(fc_features, self.num_classes)
+
+            nn.init.normal_(self.model.fc.weight, 0, 0.01)
+            nn.init.zeros_(self.model.fc.bias)
 
     def train(self, mode: bool = True) -> T:
         super(ResNet_Pytorch, self).train(mode=mode)

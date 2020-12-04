@@ -9,8 +9,6 @@
 
 import torch
 
-from zcls.config import cfg
-from zcls.model.norm_helper import get_norm
 from zcls.model.recognizers.mobilenetv1_recognizer import MobileNetV1Recognizer
 
 

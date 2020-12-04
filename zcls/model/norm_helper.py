@@ -33,7 +33,7 @@ def get_norm(cfg):
         return partial(GroupNormWrapper, num_groups=num_groups)
     else:
         raise NotImplementedError(
-            "Norm type {} is not supported".format(cfg.BN.NORM_TYPE)
+            "Norm type {} is not supported".format(cfg.MODEL.NORM.TYPE)
         )
 
 
