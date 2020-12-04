@@ -8,6 +8,7 @@
 """
 
 import torch.nn as nn
+from torchvision.models import mobilenet_v2
 
 from .. import registry
 from ..backbones.mobilenetv2_backbone import MobileNetV2Backbone
@@ -118,24 +119,82 @@ class MobileNetV2Recognizer(nn.Module):
         return {'probs': x}
 
 
+class MobileNetV2_Pytorch(nn.Module):
+
+    def __init__(self,
+                 num_classes=1000,
+                 width_multiplier=1.0,
+                 torchvision_pretrained=False,
+                 fix_bn=False,
+                 partial_bn=False,
+                 norm_layer=None):
+        super(MobileNetV2_Pytorch, self).__init__()
+
+        self.num_classes = num_classes
+        self.fix_bn = fix_bn
+        self.partial_bn = partial_bn
+
+        self.model = mobilenet_v2(pretrained=torchvision_pretrained,
+                                  width_mult=width_multiplier,
+                                  norm_layer=norm_layer)
+
+        self._init_weights()
+
+    def _init_weights(self):
+        if self.num_classes != 1000:
+            fc = self.model.fc
+            fc_features = fc.in_features
+            self.model.fc = nn.Linear(fc_features, self.num_classes)
+
+            nn.init.normal_(self.model.fc.weight, 0, 0.01)
+            nn.init.zeros_(self.model.fc.bias)
+
+    def train(self, mode: bool = True):
+        super(MobileNetV2_Pytorch, self).train(mode=mode)
+
+        if mode and (self.partial_bn or self.fix_bn):
+            freezing_bn(self, partial_bn=self.partial_bn)
+
+        return self
+
+    def forward(self, x):
+        x = self.model(x)
+
+        return {'probs': x}
+
+
 @registry.RECOGNIZER.register('MobileNetV2')
 def build_mobilenetv2(cfg):
+    type = cfg.MODEL.RECOGNIZER.NAME
+    torchvision_pretrained = cfg.MODEL.TORCHVISION_PRETRAINED
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
 
-    feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
     norm_layer = get_norm(cfg)
-    act_layer = get_act(cfg)
-
     width_multiplier = cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER
 
-    model = MobileNetV2Recognizer(feature_dims=feature_dims,
-                                  num_classes=num_classes,
-                                  width_multiplier=width_multiplier,
-                                  fix_bn=fix_bn,
-                                  partial_bn=partial_bn,
-                                  norm_layer=norm_layer,
-                                  act_layer=act_layer)
+    if type == 'MobileNetV2_Pytorch':
+        return MobileNetV2_Pytorch(
+            num_classes=num_classes,
+            torchvision_pretrained=torchvision_pretrained,
+            width_multiplier=width_multiplier,
+            fix_bn=fix_bn,
+            partial_bn=partial_bn,
+            norm_layer=norm_layer
+        )
+    elif type == 'MobileNetV2_Custom':
+        feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
+        act_layer = get_act(cfg)
 
-    return model
+        return MobileNetV2Recognizer(
+            feature_dims=feature_dims,
+            num_classes=num_classes,
+            width_multiplier=width_multiplier,
+            fix_bn=fix_bn,
+            partial_bn=partial_bn,
+            norm_layer=norm_layer,
+            act_layer=act_layer
+        )
+    else:
+        raise ValueError(f'{type} does not exist')

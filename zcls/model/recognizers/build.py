@@ -16,6 +16,8 @@ from zcls.util import logging
 
 from .. import registry
 from .resnet_recognizer import build_resnet
+from .mobilenetv1_recognizer import build_mobilenetv1
+from .mobilenetv2_recognizer import build_mobilenetv2
 
 logger = logging.get_logger(__name__)
 
