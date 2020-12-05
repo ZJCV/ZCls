@@ -28,8 +28,8 @@ def main(data_shape, config_file, mobile_name):
     GFlops, params_size = compute_num_flops(model, data)
     print(f'{mobile_name} ' + '*' * 10)
     print(f'device: {device}')
-    print(f'GFlops: {GFlops}')
-    print(f'Params Size: {params_size}')
+    print(f'GFlops: {GFlops:.3f}G')
+    print(f'Params Size: {params_size:.3f}MB')
 
     data = torch.randn(data_shape)
     t1 = 0.0
@@ -40,7 +40,7 @@ def main(data_shape, config_file, mobile_name):
         model(data.to(device=device, non_blocking=True))
         t1 += time.time() - start
     t2 = time.time() - begin
-    print(f'one process need {t2 / num}, model compute need: {t1 / num}')
+    print(f'one process need {t2 / num:.3f}s, model compute need: {t1 / num:.3f}s')
 
 
 if __name__ == '__main__':
@@ -49,16 +49,12 @@ if __name__ == '__main__':
     torch.backends.cudnn.deterministic = False
     torch.backends.cudnn.benchmark = True
 
-    data_shape = (1, 3, 3, 256, 256)
+    data_shape = (1, 3, 224, 224)
 
-    sf_cfg = 'configs/tsn_sfv2_ucf101_rgb_raw_dense_1x16x4.yaml'
-    sf_name = 'ShuffleNet_v2'
-    main(data_shape, sf_cfg, sf_name)
+    cfg_file = 'configs/resnet/r50_custom_cifar100_224.yaml'
+    name = 'ResNet_Custom'
+    main(data_shape, cfg_file, name)
 
-    mb_cfg = 'configs/tsn_mbv2_ucf101_rgb_raw_dense_1x16x4.yaml'
-    mb_name = 'MobileNet_v2'
-    main(data_shape, mb_cfg, mb_name)
-
-    r50_cfg = 'configs/tsn_r50_ucf101_rgb_raw_dense_1x16x4.yaml'
-    r50_name = 'ResNet50'
-    main(data_shape, r50_cfg, r50_name)
+    cfg_file = 'configs/mobilenet/mbv1_1x_cifar100_224.yaml'
+    name = 'MobileNetV1_1x'
+    main(data_shape, cfg_file, name)

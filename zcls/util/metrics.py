@@ -8,6 +8,7 @@
 """
 
 from thop import profile
+from thop import clever_format
 
 
 def compute_num_flops(model, data):
@@ -15,6 +16,7 @@ def compute_num_flops(model, data):
     # print(macs, params)
 
     GFlops = macs * 2.0 / pow(10, 9)
+    # 假定每个参数使用32位浮点数保存，那么需要4个字节
     params_size = params * 4.0 / 1024 / 1024
     return GFlops, params_size
 
