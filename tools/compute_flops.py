@@ -51,10 +51,30 @@ if __name__ == '__main__':
 
     data_shape = (1, 3, 224, 224)
 
-    cfg_file = 'configs/resnet/r50_custom_cifar100_224.yaml'
-    name = 'ResNet_Custom'
+    # cfg_file = 'configs/resnet/r50_custom_cifar100_224.yaml'
+    # name = 'ResNet_Custom'
+    # main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/mobilenet/mbv1_0.25x_cifar100_224.yaml'
+    name = 'MobileNetV1_0.25x'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/mobilenet/mbv1_0.5x_cifar100_224.yaml'
+    name = 'MobileNetV1_0.5x'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/mobilenet/mbv1_0.75x_cifar100_224.yaml'
+    name = 'MobileNetV1_0.75x'
     main(data_shape, cfg_file, name)
 
     cfg_file = 'configs/mobilenet/mbv1_1x_cifar100_224.yaml'
     name = 'MobileNetV1_1x'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/mobilenet/mbv2_custom_1x_relu6_cifar100_224.yaml'
+    name = 'MobileNetV2_custom_1x_relu6'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/mobilenet/mbv2_pytorch_1x_relu6_cifar100_224.yaml'
+    name = 'MobileNetV2_pytorch_1x_relu6'
     main(data_shape, cfg_file, name)
