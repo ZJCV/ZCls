@@ -22,14 +22,14 @@
 </thead>
 <tbody>
   <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/CL58YL7S7wHPTyr" target="_blank" rel="noopener noreferrer">r50_custom_cifar100_224</a></td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/RFnPtJ4WsgryrbB" target="_blank" rel="noopener noreferrer">r50_custom_cifar100_224</a></td>
     <td>resnet50</td>
     <td>from scratch</td>
     <td>custom</td>
     <td>1</td>
     <td>96</td>
-    <td>39.504</td>
-    <td>67.659</td>
+    <td>40.665</td>
+    <td>68.403</td>
     <td>3x224x224</td>
     <td>/</td>
     <td>8.05</td>
