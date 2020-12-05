@@ -239,6 +239,38 @@
   </tr>
 </thead>
 <tbody>
+<tr>
+    <td><a href="https://cloud.zhujian.tech:9300/s/ZWztqQEgioEa6oz" target="_blank" rel="noopener noreferrer">mbv1_0.5x_cifar100_224</a></td>
+    <td>mobilenetv1</td>
+    <td>ReLU</td>
+    <td>from scratch</td>
+    <td>custom</td>
+    <td>1</td>
+    <td>128</td>
+    <td>37.718</td>
+    <td>69.195</td>
+    <td>3x224x224</td>
+    <td>5.080</td>
+    <td>0.309</td>
+    <td>0.005</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/A89zy857erXd8FZ" target="_blank" rel="noopener noreferrer">log</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://cloud.zhujian.tech:9300/s/XHDY2aCTyQdbwWZ" target="_blank" rel="noopener noreferrer">mbv1_0.75x_cifar100_224</a></td>
+    <td>mobilenetv1</td>
+    <td>ReLU</td>
+    <td>from scratch</td>
+    <td>custom</td>
+    <td>1</td>
+    <td>128</td>
+    <td>40.012</td>
+    <td>69.660</td>
+    <td>3x224x224</td>
+    <td>9.863</td>
+    <td>0.666</td>
+    <td>0.005</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/oQbY2FgxpKHTF29" target="_blank" rel="noopener noreferrer">log</a></td>
+  </tr>
   <tr>
     <td><a href="https://cloud.zhujian.tech:9300/s/pd5EfXtpFpRgHfT" target="_blank" rel="noopener noreferrer">mbv1_1x_cifar100_224</a></td>
     <td>mobilenetv1</td>
@@ -271,5 +303,21 @@
     <td>0.009</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/qoNQwAW7DJWJj44" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
+  <tr>
+      <td><a href="https://cloud.zhujian.tech:9300/s/t3jiDqjCngAEtYN" target="_blank" rel="noopener noreferrer">mbv2_pytorch_1x_relu6_cifar100_224</a></td>
+      <td>mobilenetv2</td>
+      <td>ReLU6</td>
+      <td>from scratch</td>
+      <td>torchvision</td>
+      <td>1</td>
+      <td>128</td>
+      <td>46.143</td>
+      <td>74.733</td>
+      <td>3x224x224</td>
+      <td>8.972</td>
+      <td>0.62</td>
+      <td>0.010</td>
+      <td><a href="https://cloud.zhujian.tech:9300/s/37bJT6eXz7D6aiN" target="_blank" rel="noopener noreferrer">log</a></td>
+    </tr>
 </tbody>
 </table>
