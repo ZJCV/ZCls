@@ -255,5 +255,21 @@
     <td>0.005</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/mgLQr3Ad4eYPeT4" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
+  <tr>
+    <td><a href="https://cloud.zhujian.tech:9300/s/4YPcMJtwaHetSPr" target="_blank" rel="noopener noreferrer">mbv2_custom_1x_relu6_cifar100_224</a></td>
+    <td>mobilenetv2</td>
+    <td>ReLU6</td>
+    <td>from scratch</td>
+    <td>custom</td>
+    <td>1</td>
+    <td>128</td>
+    <td>46.746</td>
+    <td>75.781</td>
+    <td>3x224x224</td>
+    <td>13.370</td>
+    <td>0.628</td>
+    <td>0.009</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/qoNQwAW7DJWJj44" target="_blank" rel="noopener noreferrer">log</a></td>
+  </tr>
 </tbody>
 </table>
