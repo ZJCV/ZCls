@@ -216,3 +216,44 @@
   </tr>
 </tbody>
 </table>
+
+## MobileNet
+
+<table>
+<thead>
+  <tr>
+    <th>config</th>
+    <th>backbone</th>
+    <th>act</th>
+    <th>pretrain</th>
+    <th>custom</th>
+    <th>gpus</th>
+    <th>batchs</th>
+    <th>top1 acc</th>
+    <th>top5 acc</th>
+    <th>resolution(TxHxW)</th>
+    <th>model_size(MB)</th>
+    <th>GFlops</th>
+    <th>inference_time(s)</th>
+    <th>log</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td><a href="https://cloud.zhujian.tech:9300/s/pd5EfXtpFpRgHfT" target="_blank" rel="noopener noreferrer">mbv1_1x_cifar100_224</a></td>
+    <td>mobilenetv1</td>
+    <td>ReLU</td>
+    <td>from scratch</td>
+    <td>custom</td>
+    <td>1</td>
+    <td>128</td>
+    <td>41.970</td>
+    <td>73.012</td>
+    <td>3x224x224</td>
+    <td>16.144</td>
+    <td>1.158</td>
+    <td>0.005</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/mgLQr3Ad4eYPeT4" target="_blank" rel="noopener noreferrer">log</a></td>
+  </tr>
+</tbody>
+</table>
