@@ -198,5 +198,21 @@
     <td>/</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/nLBNPH9pR5ZDrEr" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
+  <tr>
+    <td><a href="https://cloud.zhujian.tech:9300/s/oz7rg4Lex5kgYwP" target="_blank" rel="noopener noreferrer">r50_sync_bn_custom_cifar100_224</a></td>
+    <td>resnet50</td>
+    <td>sync bn</td>
+    <td>from scratch</td>
+    <td>custom</td>
+    <td>2</td>
+    <td>96</td>
+    <td>38.443</td>
+    <td>66.637</td>
+    <td>3x224x224</td>
+    <td>/</td>
+    <td>8.14</td>
+    <td>/</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/GwdxDsR7dq7kkDb" target="_blank" rel="noopener noreferrer">log</a></td>
+  </tr>
 </tbody>
 </table>
