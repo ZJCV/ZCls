@@ -142,12 +142,14 @@ class MobileNetV2_Pytorch(nn.Module):
 
     def _init_weights(self):
         if self.num_classes != 1000:
-            fc = self.model.fc
+            fc = self.model.classifier[1]
             fc_features = fc.in_features
-            self.model.fc = nn.Linear(fc_features, self.num_classes)
+            fc = nn.Linear(fc_features, self.num_classes)
 
-            nn.init.normal_(self.model.fc.weight, 0, 0.01)
-            nn.init.zeros_(self.model.fc.bias)
+            nn.init.normal_(fc.weight, 0, 0.01)
+            nn.init.zeros_(fc.bias)
+
+            self.model.classifier[1] = fc
 
     def train(self, mode: bool = True):
         super(MobileNetV2_Pytorch, self).train(mode=mode)
