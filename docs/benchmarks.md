@@ -15,9 +15,10 @@
     <th>top1 acc</th>
     <th>top5 acc</th>
     <th>resolution(TxHxW)</th>
-    <th>inference_time(image/s)</th>
-    <th>gpu_mem(G)</th>
-    <th>ckpt</th>
+    <th>model_size(MB)</th>
+    <th>GFlops</th>
+    <th>inference_time(s)</th>
+    <th>log</th>
   </tr>
 </thead>
 <tbody>
@@ -31,9 +32,10 @@
     <td>40.665</td>
     <td>68.403</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.05</td>
-    <td>/</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.010</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/nLBNPH9pR5ZDrEr" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
   <tr>
     <td><a href="https://cloud.zhujian.tech:9300/s/4ADbnYzsgk2SQfi" target="_blank" rel="noopener noreferrer">r50_custom_pretrained_cifar100_224</a></td>
@@ -42,12 +44,13 @@
     <td>custom</td>
     <td>1</td>
     <td>96</td>
-    <td>82.183</td>
-    <td>97.321</td>
+    <td>82.500</td>
+    <td>97.381</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.05</td>
-    <td>/</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.011</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/wjx27CMPFMFpyNm" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
   <tr>
     <td><a href="https://cloud.zhujian.tech:9300/s/ZfHkTxSqce4zCwB" target="_blank" rel="noopener noreferrer">r50_pytorch_cifar100_224</a></td>
@@ -59,8 +62,9 @@
     <td>41.032</td>
     <td>69.018</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.05</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.010</td>
     <td>/</td>
   </tr>
   <tr>
@@ -73,8 +77,9 @@
     <td>82.183</td>
     <td>97.321</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.05</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.010</td>
     <td>/</td>
   </tr>
 </tbody>
