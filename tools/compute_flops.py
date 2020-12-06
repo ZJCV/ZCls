@@ -43,17 +43,8 @@ def main(data_shape, config_file, mobile_name):
     print(f'one process need {t2 / num:.3f}s, model compute need: {t1 / num:.3f}s')
 
 
-if __name__ == '__main__':
-    np.random.seed(cfg.RNG_SEED)
-    torch.manual_seed(cfg.RNG_SEED)
-    torch.backends.cudnn.deterministic = False
-    torch.backends.cudnn.benchmark = True
-
+def mobilenet():
     data_shape = (1, 3, 224, 224)
-
-    # cfg_file = 'configs/resnet/r50_custom_cifar100_224.yaml'
-    # name = 'ResNet_Custom'
-    # main(data_shape, cfg_file, name)
 
     cfg_file = 'configs/mobilenet/mbv1_0.25x_cifar100_224.yaml'
     name = 'MobileNetV1_0.25x'
@@ -71,6 +62,18 @@ if __name__ == '__main__':
     name = 'MobileNetV1_1x'
     main(data_shape, cfg_file, name)
 
+    cfg_file = 'configs/mobilenet/mbv2_custom_0.25x_relu6_cifar100_224.yaml'
+    name = 'MobileNetV2_custom_0.25x_relu6'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/mobilenet/mbv2_custom_0.5x_relu6_cifar100_224.yaml'
+    name = 'MobileNetV2_custom_0.5x_relu6'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/mobilenet/mbv2_custom_0.75x_relu6_cifar100_224.yaml'
+    name = 'MobileNetV2_custom_0.75x_relu6'
+    main(data_shape, cfg_file, name)
+
     cfg_file = 'configs/mobilenet/mbv2_custom_1x_relu6_cifar100_224.yaml'
     name = 'MobileNetV2_custom_1x_relu6'
     main(data_shape, cfg_file, name)
@@ -78,3 +81,33 @@ if __name__ == '__main__':
     cfg_file = 'configs/mobilenet/mbv2_pytorch_1x_relu6_cifar100_224.yaml'
     name = 'MobileNetV2_pytorch_1x_relu6'
     main(data_shape, cfg_file, name)
+
+
+def resnet():
+    data_shape = (1, 3, 224, 224)
+
+    cfg_file = 'configs/resnet/r50_custom_cifar100_224.yaml'
+    name = 'ResNet_Custom'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/resnet/r50_custom_pretrained_cifar100_224.yaml'
+    name = 'ResNet_Custom_Pretrained'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/resnet/r50_pytorch_cifar100_224.yaml'
+    name = 'ResNet_Pytorch'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/resnet/r50_pytorch_pretrained_cifar100_224.yaml'
+    name = 'ResNet_Pytorch_Pretrained'
+    main(data_shape, cfg_file, name)
+
+
+if __name__ == '__main__':
+    np.random.seed(cfg.RNG_SEED)
+    torch.manual_seed(cfg.RNG_SEED)
+    torch.backends.cudnn.deterministic = False
+    torch.backends.cudnn.benchmark = True
+
+    mobilenet()
+    resnet()
