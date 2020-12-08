@@ -14,3 +14,5 @@ class GroupNormWrapper(nn.GroupNorm):
 
     def __init__(self, num_channels: int, num_groups: int = 4, eps: float = 1e-5, affine: bool = True) -> None:
         super(GroupNormWrapper, self).__init__(num_groups, num_channels, eps, affine)
+
+        self.num_features = num_channels

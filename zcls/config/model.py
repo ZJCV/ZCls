@@ -19,6 +19,10 @@ def add_config(_C):
     _C.MODEL.PRETRAINED = ""
     _C.MODEL.TORCHVISION_PRETRAINED = False
 
+    _C.MODEL.NON_LOCAL = CN()
+    _C.MODEL.NON_LOCAL.WITH_NL = False
+    _C.MODEL.NON_LOCAL.NL_TYPE = 'EmbeddedGaussian'
+
     _C.MODEL.NORM = CN()
     _C.MODEL.NORM.TYPE = 'BatchNorm2d'
     # for bn
