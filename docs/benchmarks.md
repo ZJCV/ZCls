@@ -53,34 +53,34 @@
     <td><a href="https://cloud.zhujian.tech:9300/s/wjx27CMPFMFpyNm" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
   <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/ZfHkTxSqce4zCwB" target="_blank" rel="noopener noreferrer">r50_pytorch_cifar100_224</a></td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/bMoXAjTcxtnmjCw" target="_blank" rel="noopener noreferrer">r50_pytorch_cifar100_224</a></td>
     <td>resnet50</td>
     <td>from scratch</td>
     <td>torchvision</td>
     <td>1</td>
     <td>96</td>
-    <td>41.032</td>
-    <td>69.018</td>
+    <td>40.813</td>
+    <td>69.147</td>
     <td>3x224x224</td>
     <td>90.458</td>
     <td>8.219</td>
     <td>0.010</td>
-    <td>/</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/Htifk7XR3TrWEnk" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
   <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/k4aqzLAnqtXCM8X" target="_blank" rel="noopener noreferrer">r50_pytorch_pretrained_cifar100_224</a></td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/KTjK4LsoPMayBFY" target="_blank" rel="noopener noreferrer">r50_pytorch_pretrained_cifar100_224</a></td>
     <td>resnet50</td>
     <td>torchvision pretrained</td>
     <td>torchvision</td>
     <td>1</td>
     <td>96</td>
-    <td>82.183</td>
-    <td>97.321</td>
+    <td>82.351</td>
+    <td>97.450</td>
     <td>3x224x224</td>
     <td>90.458</td>
     <td>8.219</td>
     <td>0.010</td>
-    <td>/</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/CxoaLWEsQJ6QSMo" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
 </tbody>
 </table>
