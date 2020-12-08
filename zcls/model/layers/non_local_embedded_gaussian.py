@@ -113,19 +113,19 @@ class _NonLocalNDEmbeddedGaussian(nn.Module):
         theta_x = self.w_theta(x).view(N, self.inner_channels, -1)
         # (N, C_in, D_j) -> (N, C_inner, D2_j)
         phi_x = self.w_phi(x).view(N, self.inner_channels, -1)
-        # (N, C, D_j) * (N, C, D2_j) => (N, TxHxW, TxH2xW2).
+        # (N, C, D_j) * (N, C, D2_j) => (N, D_j, D2_j).
         f = torch.einsum("nct,ncp->ntp", (theta_x, phi_x))
 
         f_div_C = f * (self.inner_channels ** -0.5)
         # 沿着维度j计算softmax
         f_div_C = nn.functional.softmax(f_div_C, dim=2)
 
-        # (N, C_in, T, H, W) -> (N, C_inner, T*H2*W2)
+        # (N, C_in, D_j) -> (N, C_inner, D2_j)
         g_x = self.w_g(x).view(N, self.inner_channels, -1)
 
-        # (N, TxHxW, TxH2xW2) * (N, C_inner, TxH2xW2) => (N, C_inner, TxHxW).
+        # (N, D_j, D2_j) * (N, C_inner, D2_j) => (N, C_inner, D_j).
         y = torch.einsum("ntg,ncg->nct", (f_div_C, g_x))
-        # (N, C, TxHxW) => (N, C, T, H, W).
+        # (N, C, D_j) => (N, C, **).
         y = y.view(N, self.inner_channels, *x.shape[2:])
 
         w_y = self.w_z(y).contiguous()
@@ -139,7 +139,7 @@ class _NonLocalNDEmbeddedGaussian(nn.Module):
 
 class NonLocal1DEmbeddedGaussian(_NonLocalNDEmbeddedGaussian):
 
-    def __init__(self, in_channels, inner_channels=None, dimension=2, with_pool=True, norm_layer=None,
+    def __init__(self, in_channels, inner_channels=None, dimension=1, with_pool=True, norm_layer=None,
                  zero_init_final_norm=True):
         super().__init__(in_channels, inner_channels, dimension, with_pool, norm_layer, zero_init_final_norm)
 
@@ -163,7 +163,7 @@ class NonLocal2DEmbeddedGaussian(_NonLocalNDEmbeddedGaussian):
 
 class NonLocal3DEmbeddedGaussian(_NonLocalNDEmbeddedGaussian):
 
-    def __init__(self, in_channels, inner_channels=None, dimension=2, with_pool=True, norm_layer=None,
+    def __init__(self, in_channels, inner_channels=None, dimension=3, with_pool=True, norm_layer=None,
                  zero_init_final_norm=True):
         super().__init__(in_channels, inner_channels, dimension, with_pool, norm_layer, zero_init_final_norm)
 
