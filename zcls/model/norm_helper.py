@@ -28,6 +28,8 @@ def get_norm(cfg):
     """
     if cfg.MODEL.NORM.TYPE == "BatchNorm2d":
         return nn.BatchNorm2d
+    elif cfg.MODEL.NORM.TYPE == 'BatchNorm3d':
+        return nn.BatchNorm3d
     elif cfg.MODEL.NORM.TYPE == "GroupNorm":
         num_groups = cfg.MODEL.NORM.GROUPS
         return partial(GroupNormWrapper, num_groups=num_groups)

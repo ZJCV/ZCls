@@ -17,6 +17,7 @@ from zcls.util import logging
 from .. import registry
 from ..non_local_helper import make_non_local_2d
 from .resnet_recognizer import build_resnet
+from .resnet3d_recognizer import build_resnet3d
 from .mobilenetv1_recognizer import build_mobilenetv1
 from .mobilenetv2_recognizer import build_mobilenetv2
 
