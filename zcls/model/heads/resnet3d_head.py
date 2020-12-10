@@ -15,7 +15,7 @@ class ResNet3DHead(nn.Module):
 
     def __init__(self, feature_dims, num_classes):
         super(ResNet3DHead, self).__init__()
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1, 1))
+        self.avgpool = nn.AdaptiveAvgPool3d((1, 1, 1))
         self.fc = nn.Linear(feature_dims, num_classes)
 
         self._init_weights()
