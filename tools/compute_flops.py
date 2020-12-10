@@ -137,6 +137,14 @@ def non_local():
     main(data_shape, cfg_file, name)
 
 
+def resnet3d():
+    data_shape = (1, 3, 224, 224)
+
+    cfg_file = 'configs/resnet3d/r3d50_custom_pretrained_cifar100_224.yaml'
+    name = 'ResNet3D_Custom'
+    main(data_shape, cfg_file, name)
+
+
 if __name__ == '__main__':
     np.random.seed(cfg.RNG_SEED)
     torch.manual_seed(cfg.RNG_SEED)
@@ -145,5 +153,6 @@ if __name__ == '__main__':
 
     # mobilenet()
     # resnet()
-    norm()
+    # norm()
     # non_local()
+    resnet3d()

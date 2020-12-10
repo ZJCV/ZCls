@@ -415,3 +415,42 @@
     </tr>
 </tbody>
 </table>
+
+## resnet3d
+
+<table>
+<thead>
+  <tr>
+    <th>config</th>
+    <th>backbone</th>
+    <th>pretrain</th>
+    <th>custom</th>
+    <th>gpus</th>
+    <th>batchs</th>
+    <th>top1 acc</th>
+    <th>top5 acc</th>
+    <th>resolution(TxHxW)</th>
+    <th>model_size(MB)</th>
+    <th>GFlops</th>
+    <th>inference_time(s)</th>
+    <th>log</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td><a href="https://cloud.zhujian.tech:9300/s/EsnY8RwggqrBJzn" target="_blank" rel="noopener noreferrer">r3d50_custom_pretrained_cifar100_224</a></td>
+    <td>resnet3d50</td>
+    <td>pretrained</td>
+    <td>custom</td>
+    <td>1</td>
+    <td>96</td>
+    <td>82.242</td>
+    <td>97.034</td>
+    <td>3x224x224</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.014</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/9K7QR3Zi2RAwBxS" target="_blank" rel="noopener noreferrer">log</a></td>
+  </tr>
+</tbody>
+</table>
