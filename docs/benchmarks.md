@@ -102,9 +102,9 @@
     <th>top1 acc</th>
     <th>top5 acc</th>
     <th>resolution(TxHxW)</th>
-    <th>inference_time(image/s)</th>
-    <th>gpu_mem(G)</th>
-    <th>ckpt</th>
+    <th>model_size(MB)</th>
+    <th>GFlops</th>
+    <th>inference_time(s)</th>
     <th>log</th>
   </tr>
 </thead>
@@ -120,10 +120,26 @@
     <td>45.992</td>
     <td>74.266</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.05</td>
-    <td>/</td>
+    <td>90.255</td>
+    <td>8.175</td>
+    <td>0.009</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/TLzdegHpHjzDWA7" target="_blank" rel="noopener noreferrer">log</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://cloud.zhujian.tech:9300/s/7CwaqdfyBETRqEr" target="_blank" rel="noopener noreferrer">r50_gn_custom_pretrained_cifar100_224</a></td>
+    <td>resnet50</td>
+    <td>gn</td>
+    <td>torchvision pretrained BN</td>
+    <td>custom</td>
+    <td>1</td>
+    <td>96</td>
+    <td>76.597</td>
+    <td>94.633</td>
+    <td>3x224x224</td>
+    <td>90.255</td>
+    <td>8.175</td>
+    <td>0.010</td>
+    <td><a href="https://cloud.zhujian.tech:9300/s/kwpgXGgdbM2sCFn" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
   <tr>
     <td><a href="https://cloud.zhujian.tech:9300/s/fgnmCpyH8w3YpPQ" target="_blank" rel="noopener noreferrer">r50_partial_bn_custom_pretrained_cifar100_224</a></td>
@@ -136,9 +152,9 @@
     <td>84.286</td>
     <td>97.708</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.05</td>
-    <td>/</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.009</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/5PTbRiT8G2QN2ok" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
   <tr>
@@ -152,9 +168,9 @@
     <td>84.325</td>
     <td>97.639</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.05</td>
-    <td><br>/</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.008</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/FmscE4jeHkLtp9H" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
   <tr>
@@ -169,7 +185,7 @@
     <td>67.934</td>
     <td>3x224x224</td>
     <td>/</td>
-    <td>8.14</td>
+    <td>/</td>
     <td>/</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/nLBNPH9pR5ZDrEr" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
@@ -184,9 +200,9 @@
     <td>38.443</td>
     <td>66.637</td>
     <td>3x224x224</td>
-    <td>/</td>
-    <td>8.14</td>
-    <td>/</td>
+    <td>90.458</td>
+    <td>8.219</td>
+    <td>0.010</td>
     <td><a href="https://cloud.zhujian.tech:9300/s/GwdxDsR7dq7kkDb" target="_blank" rel="noopener noreferrer">log</a></td>
   </tr>
 </tbody>

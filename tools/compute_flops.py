@@ -105,6 +105,30 @@ def resnet():
     main(data_shape, cfg_file, name)
 
 
+def norm():
+    data_shape = (1, 3, 224, 224)
+
+    cfg_file = 'configs/resnet/r50_gn_custom_cifar100_224.yaml'
+    name = 'ResNet_GN_Custom'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/resnet/r50_gn_custom_pretrained_cifar100_224.yaml'
+    name = 'ResNet_GN_Custom_Pretrained'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/resnet/r50_fix_bn_custom_pretrained_cifar100_224.yaml'
+    name = 'ResNet_Fix_BN_Custom_Pretrained'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/resnet/r50_partial_bn_custom_pretrained_cifar100_224.yaml'
+    name = 'ResNet_Partial_BN_Custom_Pretrained'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/resnet/r50_sync_bn_custom_cifar100_224.yaml'
+    name = 'ResNet_Sync_BN'
+    main(data_shape, cfg_file, name)
+
+
 def non_local():
     data_shape = (1, 3, 224, 224)
 
@@ -119,6 +143,7 @@ if __name__ == '__main__':
     torch.backends.cudnn.deterministic = False
     torch.backends.cudnn.benchmark = True
 
-    mobilenet()
-    resnet()
-    non_local()
+    # mobilenet()
+    # resnet()
+    norm()
+    # non_local()
