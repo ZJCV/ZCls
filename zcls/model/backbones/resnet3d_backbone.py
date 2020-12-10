@@ -89,8 +89,6 @@ class ResNet3DBackbone(nn.Module):
         self.conv_layer = conv_layer
         self.norm_layer = norm_layer
         self.act_layer = act_layer
-        self.zero_init_residual = zero_init_residual
-        self.state_dict_2d = state_dict_2d
 
         self._make_stem()
         self.inplanes = self.base_planes
@@ -111,7 +109,7 @@ class ResNet3DBackbone(nn.Module):
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, res_layer)
 
-        self._init_weights(self.zero_init_residual)
+        self._init_weights(zero_init_residual, state_dict_2d)
 
     def _make_stem(self):
         self.conv1 = self.conv_layer(self.inplanes, self.base_planes,
@@ -179,7 +177,7 @@ class ResNet3DBackbone(nn.Module):
                                       conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
-    def _init_weights(self, zero_init_residual):
+    def _init_weights(self, zero_init_residual, state_dict_2d):
         for m in self.modules():
             if isinstance(m, nn.Conv3d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
@@ -197,7 +195,7 @@ class ResNet3DBackbone(nn.Module):
                 elif isinstance(m, ResNet3DBasicBlock):
                     nn.init.constant_(m.bn2.weight, 0)
 
-        if self.state_dict_2d:
+        if state_dict_2d:
 
             def _inflate_conv_params(conv3d, state_dict_2d, module_name_2d,
                                      inflated_param_names):
@@ -256,13 +254,13 @@ class ResNet3DBackbone(nn.Module):
             inflated_param_names = []
             for name, module in self.named_modules():
                 if isinstance(module, nn.Conv3d):
-                    _inflate_conv_params(module, self.state_dict_2d, name, inflated_param_names)
+                    _inflate_conv_params(module, state_dict_2d, name, inflated_param_names)
                 if isinstance(module, (nn.BatchNorm3d, nn.GroupNorm)):
-                    _inflate_bn_params(module, self.state_dict_2d, name, inflated_param_names)
+                    _inflate_bn_params(module, state_dict_2d, name, inflated_param_names)
 
             # check if any parameters in the 2d checkpoint are not loaded
             remaining_names = set(
-                self.state_dict_2d.keys()) - set(inflated_param_names)
+                state_dict_2d.keys()) - set(inflated_param_names)
             if remaining_names:
                 print(f'These parameters in the 2d checkpoint are not loaded: {sorted(remaining_names)}')
 

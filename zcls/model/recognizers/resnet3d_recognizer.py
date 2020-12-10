@@ -9,7 +9,6 @@
 
 import torch.nn as nn
 from torch.nn.modules.module import T
-from torchvision.models import resnet
 from torchvision.models.utils import load_state_dict_from_url
 
 from .. import registry
