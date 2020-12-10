@@ -31,6 +31,8 @@ def main(data_shape, config_file, mobile_name):
     print(f'GFlops: {GFlops:.3f}G')
     print(f'Params Size: {params_size:.3f}MB')
 
+    model = build_recognizer(cfg, device)
+    model.eval()
     data = torch.randn(data_shape)
     t1 = 0.0
     num = 100
@@ -103,6 +105,14 @@ def resnet():
     main(data_shape, cfg_file, name)
 
 
+def non_local():
+    data_shape = (1, 3, 224, 224)
+
+    cfg_file = 'configs/resnet/r50_nl_gn_custom_cifar100_224.yaml'
+    name = 'ResNet_NL_Custom'
+    main(data_shape, cfg_file, name)
+
+
 if __name__ == '__main__':
     np.random.seed(cfg.RNG_SEED)
     torch.manual_seed(cfg.RNG_SEED)
@@ -111,3 +121,4 @@ if __name__ == '__main__':
 
     mobilenet()
     resnet()
+    non_local()
