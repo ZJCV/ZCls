@@ -16,4 +16,7 @@ from .adam import build_adam
 
 def build_optimizer(cfg, model):
     assert isinstance(model, nn.Module)
-    return registry.OPTIMIZERS[cfg.OPTIMIZER.NAME](cfg, model)
+    optimizer = registry.OPTIMIZERS[cfg.OPTIMIZER.NAME](cfg, model)
+    optimizer.zero_grad()
+
+    return optimizer

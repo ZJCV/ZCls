@@ -11,6 +11,7 @@ import os
 import datetime
 import time
 import torch
+from torch.nn.parallel import DistributedDataParallel
 
 from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
 from zcls.util.distributed import is_master_proc, synchronize
@@ -36,6 +37,8 @@ def do_train(cfg, arguments,
     save_epoch = cfg.TRAIN.SAVE_EPOCH
     eval_epoch = cfg.TRAIN.EVAL_EPOCH
     max_epoch = cfg.TRAIN.MAX_EPOCH
+    gradient_accumulate_steps = cfg.TRAIN.GRADIENT_ACCUMULATE_STEPS
+
     start_epoch = arguments['cur_epoch']
     epoch_iters = len(data_loader)
     max_iter = (max_epoch - start_epoch) * epoch_iters
@@ -55,11 +58,19 @@ def do_train(cfg, arguments,
 
             output_dict = model(images)
             loss_dict = criterion(output_dict, targets)
-            loss = loss_dict['loss']
+            loss = loss_dict['loss'] / gradient_accumulate_steps
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+            if (iteration + 1) % gradient_accumulate_steps != 0:
+                if isinstance(model, DistributedDataParallel):
+                    # multi-gpu distributed training
+                    with model.no_sync():
+                        loss.backward()
+                else:
+                    loss.backward()
+            else:
+                loss.backward()
+                optimizer.step()
+                optimizer.zero_grad()
 
             acc_list = evaluator.evaluate_train(output_dict, targets)
             update_stats(cfg.NUM_GPUS, meters, loss_dict, acc_list)

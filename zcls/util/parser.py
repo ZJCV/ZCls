@@ -135,6 +135,9 @@ def load_train_config(args):
     num_gpus = cfg.NUM_GPUS
     if num_gpus > 1:
         cfg.OPTIMIZER.LR *= num_gpus
+    gradient_accumulate_step = cfg.TRAIN.GRADIENT_ACCUMULATE_STEPS
+    if gradient_accumulate_step > 1:
+        cfg.OPTIMIZER.LR *= gradient_accumulate_step
 
     cfg.freeze()
 
