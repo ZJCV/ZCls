@@ -29,6 +29,10 @@ def add_config(_C):
     _C.MODEL.NORM.SYNC_BN = False
     _C.MODEL.NORM.FIX_BN = False
     _C.MODEL.NORM.PARTIAL_BN = False
+    # Precise BN stats.
+    _C.MODEL.NORM.PRECISE_BN = False
+    # Number of samples use to compute precise bn.
+    _C.MODEL.NORM.NUM_BATCHES_PRECISE = 200
     # for groupnorm
     _C.MODEL.NORM.GROUPS = 32
 

@@ -14,6 +14,7 @@ import torch
 from torch.nn.parallel import DistributedDataParallel
 
 from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
+from zcls.util.precise_bn import calculate_and_update_precise_bn
 from zcls.util.distributed import is_master_proc, synchronize
 from zcls.util import logging
 from zcls.engine.inference import do_evaluation
@@ -96,6 +97,14 @@ def do_train(cfg, arguments,
         if is_master_proc() and save_epoch > 0 and cur_epoch % save_epoch == 0 and cur_epoch != max_epoch:
             checkpointer.save("model_{:04d}".format(cur_epoch), **arguments)
         if eval_epoch > 0 and cur_epoch % eval_epoch == 0 and cur_epoch != max_epoch:
+            if cfg.MODEL.NORM.PRECISE_BN:
+                calculate_and_update_precise_bn(
+                    data_loader,
+                    model,
+                    min(cfg.MODEL.NORM.NUM_BATCHES_PRECISE, len(data_loader)),
+                    cfg.NUM_GPUS > 0,
+                )
+
             eval_results = do_evaluation(cfg, model, device, cur_epoch=cur_epoch)
             model.train()
             if is_master_proc() and summary_writer:

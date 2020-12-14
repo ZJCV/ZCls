@@ -25,6 +25,7 @@ def build_dataloader(cfg, is_train=True):
     rank = du.get_rank()
     if is_train:
         batch_size = cfg.DATALOADER.TRAIN_BATCH_SIZE
+        drop_last = True
 
         if num_gpus > 1:
             sampler = DistributedSampler(dataset,
@@ -35,6 +36,8 @@ def build_dataloader(cfg, is_train=True):
             sampler = RandomSampler(dataset)
     else:
         batch_size = cfg.DATALOADER.TEST_BATCH_SIZE
+        drop_last = False
+
         if num_gpus > 1:
             sampler = DistributedSampler(dataset,
                                          num_replicas=world_size,
@@ -47,7 +50,7 @@ def build_dataloader(cfg, is_train=True):
                              num_workers=cfg.DATALOADER.NUM_WORKERS,
                              sampler=sampler,
                              batch_size=batch_size,
-                             drop_last=False,
+                             drop_last=drop_last,
                              pin_memory=True)
 
     return data_loader
