@@ -98,7 +98,7 @@ class SEResNetRecognizer(nn.Module):
 
 
 @registry.RECOGNIZER.register('SEResNet')
-def build_resnet(cfg):
+def build_seresnet(cfg):
     type = cfg.MODEL.RECOGNIZER.NAME
     torchvision_pretrained = cfg.MODEL.TORCHVISION_PRETRAINED
     arch = cfg.MODEL.BACKBONE.ARCH
