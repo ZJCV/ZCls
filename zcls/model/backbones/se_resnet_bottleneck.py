@@ -70,9 +70,11 @@ class SEResNetBottleneck(nn.Module):
         identity = x
 
         if self.with_se:
-            x = self.se_layer(x)
+            out = self.se_layer(x)
+        else:
+            out = x
 
-        out = self.conv1(x)
+        out = self.conv1(out)
         out = self.bn1(out)
         out = self.relu(out)
 
