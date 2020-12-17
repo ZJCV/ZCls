@@ -44,6 +44,15 @@
   year =         {2020}
 }
 
+@misc{cao2019gcnet,
+      title={GCNet: Non-local Networks Meet Squeeze-Excitation Networks and Beyond}, 
+      author={Yue Cao and Jiarui Xu and Stephen Lin and Fangyun Wei and Han Hu},
+      year={2019},
+      eprint={1904.11492},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{sandler2019mobilenetv2,
       title={MobileNetV2: Inverted Residuals and Linear Bottlenecks}, 
       author={Mark Sandler and Andrew Howard and Menglong Zhu and Andrey Zhmoginov and Liang-Chieh Chen},
