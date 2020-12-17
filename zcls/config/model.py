@@ -19,10 +19,6 @@ def add_config(_C):
     _C.MODEL.PRETRAINED = ""
     _C.MODEL.TORCHVISION_PRETRAINED = False
 
-    _C.MODEL.NON_LOCAL = CN()
-    _C.MODEL.NON_LOCAL.WITH_NL = False
-    _C.MODEL.NON_LOCAL.NL_TYPE = 'EmbeddedGaussian'
-
     _C.MODEL.NORM = CN()
     _C.MODEL.NORM.TYPE = 'BatchNorm2d'
     # for bn
@@ -41,6 +37,11 @@ def add_config(_C):
 
     _C.MODEL.COMPRESSION = CN()
     _C.MODEL.COMPRESSION.WIDTH_MULTIPLIER = 1.0
+
+    _C.MODEL.ATTENTION = CN()
+    _C.MODEL.ATTENTION.WITH_ATTENTION = (1, 1, 1, 1)
+    _C.MODEL.ATTENTION.REDUCTION = 16
+    _C.MODEL.ATTENTION.ATTENTION_TYPE = 'GlobalContextBlock2D'
 
     _C.MODEL.BACKBONE = CN()
     # for ResNet

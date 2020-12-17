@@ -27,7 +27,7 @@ class _SqueezeAndExcitationBlockND(nn.Module):
                  dimension=2):
         super(_SqueezeAndExcitationBlockND, self).__init__()
         assert dimension in [1, 2, 3]
-        assert in_channels % reduction == 0
+        assert in_channels % reduction == 0, f'in_channels = {in_channels}, reduction = {reduction}'
 
         inner_channel = in_channels // reduction
         if dimension == 1:

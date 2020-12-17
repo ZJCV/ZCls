@@ -3,12 +3,12 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/mbv2_custom_1x_relu6_cifar100_224_ga10'
+OUTPUT_DIR: 'outputs/gc_r50_precise_bn_custom_cifar100_224_ga10'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEPS: 10
   MAX_EPOCH: 200
-  SAVE_EPOCH: 5
+  SAVE_EPOCH: 5gc_r50_precise_bn_custom_cifar100_224_ga10.yaml
   EVAL_EPOCH: 5
   RESUME: False
   USE_TENSORBOARD: True
@@ -16,8 +16,8 @@ DATASET:
   NAME: 'CIFAR100'
   DATA_DIR: './data/cifar'
 TRANSFORM:
-  MEAN: (0.5071, 0.4865, 0.4409)
-  STD: (0.1942, 0.1918, 0.1958)
+  MEAN: (0.485, 0.456, 0.406)
+  STD: (0.229, 0.224, 0.225)
   TRAIN:
     SHORTER_SIDE: 224
     CENTER_CROP: True
@@ -27,27 +27,30 @@ TRANSFORM:
     CENTER_CROP: True
     TEST_CROP_SIZE: 224
 DATALOADER:
-  TRAIN_BATCH_SIZE: 96
-  TEST_BATCH_SIZE: 96
+  TRAIN_BATCH_SIZE: 80
+  TEST_BATCH_SIZE: 80
   NUM_WORKERS: 8
 MODEL:
-  NAME: 'MobileNetV2'
+  NAME: 'AttentionResNet'
   PRETRAINED: ''
-  TORCHVISION_PRETRAINED: False
+  TORCHVISION_PRETRAINED: True
   NORM:
     TYPE: 'BatchNorm2d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
-  ACT:
-    TYPE: 'ReLU6'
-  COMPRESSION:
-    WIDTH_MULTIPLIER: 1.0
+    PRECISE_BN: True
+  ATTENTION:
+    WITH_ATTENTION: (1, 1, 1, 1)
+    REDUCTION: 16
+    ATTENTION_TYPE: 'GlobalContextBlock2D'
+  BACKBONE:
+    ARCH: 'resnet50'
   HEAD:
-    FEATURE_DIMS: 1280
+    FEATURE_DIMS: 2048
     NUM_CLASSES: 100
   RECOGNIZER:
-    NAME: 'MobileNetV2_Custom'
+    NAME: 'AttentionResNetRecognizer'
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
@@ -61,7 +64,7 @@ LR_SCHEDULER:
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [100, 150, 175]
+    MILESTONES: [ 100, 150, 175 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0

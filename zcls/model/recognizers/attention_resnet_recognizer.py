@@ -12,9 +12,9 @@ from torch.nn.modules.module import T
 from torchvision.models.utils import load_state_dict_from_url
 
 from .. import registry
-from ..backbones.se_resnet_basicblock import SEResNetBasicBlock
-from ..backbones.se_resnet_bottleneck import SEResNetBottleneck
-from ..backbones.se_resnet_backbone import SEResNetBackbone
+from ..backbones.attentation_resnet_basicblock import AttentionResNetBasicBlock
+from ..backbones.attentation_resnet_bottleneck import AttentionResNetBottleneck
+from ..backbones.attention_resnet_backbone import AttentionResNetBackbone
 from ..heads.resnet_head import ResNetHead
 from ..norm_helper import get_norm, freezing_bn
 
@@ -31,25 +31,28 @@ model_urls = {
 }
 
 arch_settings = {
-    'resnet18': (SEResNetBasicBlock, (2, 2, 2, 2)),
-    'resnet34': (SEResNetBasicBlock, (3, 4, 6, 3)),
-    'resnet50': (SEResNetBottleneck, (3, 4, 6, 3)),
-    'resnet101': (SEResNetBottleneck, (3, 4, 23, 3)),
-    'resnet152': (SEResNetBottleneck, (3, 8, 36, 3))
+    'resnet18': (AttentionResNetBasicBlock, (2, 2, 2, 2)),
+    'resnet34': (AttentionResNetBasicBlock, (3, 4, 6, 3)),
+    'resnet50': (AttentionResNetBottleneck, (3, 4, 6, 3)),
+    'resnet101': (AttentionResNetBottleneck, (3, 4, 23, 3)),
+    'resnet152': (AttentionResNetBottleneck, (3, 8, 36, 3))
 }
 
 
-class SEResNetRecognizer(nn.Module):
+class AttentionResNetRecognizer(nn.Module):
 
     def __init__(self,
                  arch='resnet18',
                  feature_dims=2048,
                  num_classes=1000,
+                 with_attention=(1, 1, 1, 1),
+                 reduction=16,
+                 attention_type='GlobalContextBlock2D',
                  torchvision_pretrained=False,
                  fix_bn=False,
                  partial_bn=False,
                  norm_layer=None):
-        super(SEResNetRecognizer, self).__init__()
+        super(AttentionResNetRecognizer, self).__init__()
 
         self.num_classes = num_classes
         self.fix_bn = fix_bn
@@ -57,8 +60,11 @@ class SEResNetRecognizer(nn.Module):
 
         block_layer, layer_blocks = arch_settings[arch]
 
-        self.backbone = SEResNetBackbone(
+        self.backbone = AttentionResNetBackbone(
             layer_blocks=layer_blocks,
+            with_attention=with_attention,
+            reduction=reduction,
+            attention_type=attention_type,
             block_layer=block_layer,
             norm_layer=norm_layer
         )
@@ -83,7 +89,7 @@ class SEResNetRecognizer(nn.Module):
             nn.init.zeros_(self.head.fc.bias)
 
     def train(self, mode: bool = True) -> T:
-        super(SEResNetRecognizer, self).train(mode=mode)
+        super(AttentionResNetRecognizer, self).train(mode=mode)
 
         if mode and (self.partial_bn or self.fix_bn):
             freezing_bn(self, partial_bn=self.partial_bn)
@@ -97,8 +103,8 @@ class SEResNetRecognizer(nn.Module):
         return {'probs': x}
 
 
-@registry.RECOGNIZER.register('SEResNet')
-def build_seresnet(cfg):
+@registry.RECOGNIZER.register('AttentionResNet')
+def build_attention_resnet(cfg):
     type = cfg.MODEL.RECOGNIZER.NAME
     torchvision_pretrained = cfg.MODEL.TORCHVISION_PRETRAINED
     arch = cfg.MODEL.BACKBONE.ARCH
@@ -109,10 +115,17 @@ def build_seresnet(cfg):
     feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
     norm_layer = get_norm(cfg)
 
-    return SEResNetRecognizer(
+    with_attention = cfg.MODEL.ATTENTION.WITH_ATTENTION
+    reduction = cfg.MODEL.ATTENTION.REDUCTION
+    attention_type = cfg.MODEL.ATTENTION.ATTENTION_TYPE
+
+    return AttentionResNetRecognizer(
         arch=arch,
         feature_dims=feature_dims,
         num_classes=num_classes,
+        with_attention=with_attention,
+        reduction=reduction,
+        attention_type=attention_type,
         torchvision_pretrained=torchvision_pretrained,
         fix_bn=fix_bn,
         partial_bn=partial_bn,

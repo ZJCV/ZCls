@@ -9,11 +9,11 @@
 
 import torch.nn as nn
 
-from ..backbones.se_resnet_basicblock import SEResNetBasicBlock
-from ..backbones.se_resnet_bottleneck import SEResNetBottleneck
+from ..backbones.attentation_resnet_basicblock import AttentionResNetBasicBlock
+from ..backbones.attentation_resnet_bottleneck import AttentionResNetBottleneck
 
 
-class SEResNetBackbone(nn.Module):
+class AttentionResNetBackbone(nn.Module):
 
     def __init__(self,
                  # 输入通道数
@@ -26,10 +26,12 @@ class SEResNetBackbone(nn.Module):
                  layer_blocks=(2, 2, 2, 2),
                  # 是否执行空间下采样
                  downsamples=(0, 1, 1, 1),
-                 # 是否执行SE
-                 with_se=(1, 1, 1, 0),
+                 # 是否使用注意力模块
+                 with_attention=(1, 1, 1, 1),
                  # 衰减率
                  reduction=16,
+                 # 注意力模块类型
+                 attention_type='GlobalContextBlock2D',
                  # 块类型
                  block_layer=None,
                  # 卷积层类型
@@ -41,10 +43,11 @@ class SEResNetBackbone(nn.Module):
                  # 零初始化残差连接
                  zero_init_residual=False
                  ):
-        super(SEResNetBackbone, self).__init__()
+        super(AttentionResNetBackbone, self).__init__()
+        assert len(layer_planes) == len(layer_blocks) == len(downsamples) == len(with_attention)
 
         if block_layer is None:
-            block_layer = SEResNetBasicBlock
+            block_layer = AttentionResNetBasicBlock
         if conv_layer is None:
             conv_layer = nn.Conv2d
         if norm_layer is None:
@@ -57,8 +60,9 @@ class SEResNetBackbone(nn.Module):
         self.layer_planes = layer_planes
         self.layer_blocks = layer_blocks
         self.downsamples = downsamples
-        self.with_se = with_se
+        self.with_attention = with_attention
         self.reduction = reduction
+        self.attention_type = attention_type
         self.block_layer = block_layer
         self.conv_layer = conv_layer
         self.norm_layer = norm_layer
@@ -72,8 +76,9 @@ class SEResNetBackbone(nn.Module):
                                              self.layer_planes[i],
                                              self.layer_blocks[i],
                                              self.downsamples[i],
-                                             self.with_se[i],
+                                             self.with_attention[i],
                                              self.reduction,
+                                             self.attention_type,
                                              self.block_layer,
                                              self.conv_layer,
                                              self.norm_layer,
@@ -102,10 +107,12 @@ class SEResNetBackbone(nn.Module):
                         block_num,
                         # 是否执行空间下采样
                         is_downsample,
-                        # 是否执行SE
-                        with_se,
+                        # 是否使用注意力模块
+                        with_attention,
                         # 衰减率
                         reduction,
+                        # 注意力模块类型
+                        attention_type,
                         # 块类型
                         block_layer,
                         # 卷积层类型
@@ -115,6 +122,10 @@ class SEResNetBackbone(nn.Module):
                         # 激活层类型
                         act_layer,
                         ):
+        assert isinstance(with_attention, (int, tuple))
+        assert len(with_attention) == block_num if isinstance(with_attention, tuple) else with_attention in (0, 1)
+        with_attention = with_attention if isinstance(with_attention, tuple) else [with_attention] * block_num
+
         stride = 2 if is_downsample else 1
         expansion = self.block_layer.expansion
         if is_downsample or inplanes != planes * expansion:
@@ -127,11 +138,13 @@ class SEResNetBackbone(nn.Module):
 
         blocks = list()
         blocks.append(block_layer(
-            inplanes, planes, stride, downsample, with_se, reduction, conv_layer, norm_layer, act_layer))
+            inplanes, planes, stride, downsample, with_attention[0], reduction, attention_type,
+            conv_layer, norm_layer, act_layer))
         inplanes = planes * expansion
 
         for i in range(1, block_num):
-            blocks.append(block_layer(inplanes, planes, 1, None, with_se, reduction, conv_layer, norm_layer, act_layer))
+            blocks.append(block_layer(inplanes, planes, 1, None, with_attention[i], reduction, attention_type,
+                                      conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
     def _init_weights(self, zero_init_residual):
@@ -147,9 +160,9 @@ class SEResNetBackbone(nn.Module):
         # This improves the model by 0.2~0.3% according to https://arxiv.org/abs/1706.02677
         if zero_init_residual:
             for m in self.modules():
-                if isinstance(m, SEResNetBottleneck):
+                if isinstance(m, AttentionResNetBasicBlock):
                     nn.init.constant_(m.bn3.weight, 0)
-                elif isinstance(m, SEResNetBasicBlock):
+                elif isinstance(m, AttentionResNetBottleneck):
                     nn.init.constant_(m.bn2.weight, 0)
 
     def _forward_impl(self, x):

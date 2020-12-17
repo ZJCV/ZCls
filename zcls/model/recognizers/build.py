@@ -15,10 +15,9 @@ from zcls.util.checkpoint import CheckPointer
 from zcls.util import logging
 
 from .. import registry
-from ..non_local_helper import make_non_local_2d
 from .resnet_recognizer import build_resnet
 from .resnet3d_recognizer import build_resnet3d
-from .se_resnet_recognizer import build_seresnet
+from .attention_resnet_recognizer import build_attention_resnet
 from .mobilenetv1_recognizer import build_mobilenetv1
 from .mobilenetv2_recognizer import build_mobilenetv2
 
@@ -34,11 +33,6 @@ def build_recognizer(cfg, device):
         logger.info(
             "start sync BN on the process group of {}".format(du._LOCAL_RANK_GROUP))
         convert_sync_bn(model, du._LOCAL_PROCESS_GROUP)
-    if cfg.MODEL.NON_LOCAL.WITH_NL:
-        net_type = cfg.MODEL.RECOGNIZER.NAME
-        arch_type = cfg.MODEL.BACKBONE.ARCH
-        nl_type = cfg.MODEL.NON_LOCAL.NL_TYPE
-        make_non_local_2d(model, net_type=net_type, arch_type=arch_type, nl_type=nl_type)
     if cfg.MODEL.PRETRAINED != "":
         logger.info(f'load pretrained: {cfg.MODEL.PRETRAINED}')
         checkpointer = CheckPointer(model)
