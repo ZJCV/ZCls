@@ -44,38 +44,20 @@
   year =         {2020}
 }
 
-@misc{he2015deep,
-      title={Deep Residual Learning for Image Recognition}, 
-      author={Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},
-      year={2015},
-      eprint={1512.03385},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-
-@misc{howard2017mobilenets,
-      title={MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications}, 
-      author={Andrew G. Howard and Menglong Zhu and Bo Chen and Dmitry Kalenichenko and Weijun Wang and Tobias Weyand and Marco Andreetto and Hartwig Adam},
-      year={2017},
-      eprint={1704.04861},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-
-@misc{goyal2018accurate,
-      title={Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour}, 
-      author={Priya Goyal and Piotr Dollár and Ross Girshick and Pieter Noordhuis and Lukasz Wesolowski and Aapo Kyrola and Andrew Tulloch and Yangqing Jia and Kaiming He},
-      year={2018},
-      eprint={1706.02677},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-
 @misc{sandler2019mobilenetv2,
       title={MobileNetV2: Inverted Residuals and Linear Bottlenecks}, 
       author={Mark Sandler and Andrew Howard and Menglong Zhu and Andrey Zhmoginov and Liang-Chieh Chen},
       year={2019},
       eprint={1801.04381},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@misc{hu2019squeezeandexcitation,
+      title={Squeeze-and-Excitation Networks}, 
+      author={Jie Hu and Li Shen and Samuel Albanie and Gang Sun and Enhua Wu},
+      year={2019},
+      eprint={1709.01507},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
@@ -98,11 +80,29 @@
       primaryClass={cs.CV}
 }
 
-@misc{hu2019squeezeandexcitation,
-      title={Squeeze-and-Excitation Networks}, 
-      author={Jie Hu and Li Shen and Samuel Albanie and Gang Sun and Enhua Wu},
-      year={2019},
-      eprint={1709.01507},
+@misc{goyal2018accurate,
+      title={Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour}, 
+      author={Priya Goyal and Piotr Dollár and Ross Girshick and Pieter Noordhuis and Lukasz Wesolowski and Aapo Kyrola and Andrew Tulloch and Yangqing Jia and Kaiming He},
+      year={2018},
+      eprint={1706.02677},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@misc{howard2017mobilenets,
+      title={MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications}, 
+      author={Andrew G. Howard and Menglong Zhu and Bo Chen and Dmitry Kalenichenko and Weijun Wang and Tobias Weyand and Marco Andreetto and Hartwig Adam},
+      year={2017},
+      eprint={1704.04861},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@misc{he2015deep,
+      title={Deep Residual Learning for Image Recognition}, 
+      author={Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},
+      year={2015},
+      eprint={1512.03385},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
