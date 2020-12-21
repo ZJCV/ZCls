@@ -124,6 +124,15 @@
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
+
+@misc{szegedy2015rethinking,
+      title={Rethinking the Inception Architecture for Computer Vision}, 
+      author={Christian Szegedy and Vincent Vanhoucke and Sergey Ioffe and Jonathon Shlens and Zbigniew Wojna},
+      year={2015},
+      eprint={1512.00567},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 ```
 
 ## 参与贡献方式
