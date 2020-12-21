@@ -71,6 +71,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{he2018bag,
+      title={Bag of Tricks for Image Classification with Convolutional Neural Networks}, 
+      author={Tong He and Zhi Zhang and Hang Zhang and Zhongyue Zhang and Junyuan Xie and Mu Li},
+      year={2018},
+      eprint={1812.01187},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{wu2018group,
       title={Group Normalization}, 
       author={Yuxin Wu and Kaiming He},
