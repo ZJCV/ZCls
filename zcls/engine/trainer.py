@@ -13,6 +13,9 @@ import time
 import torch
 from torch.nn.parallel import DistributedDataParallel
 
+from torch.cuda.amp import GradScaler
+from torch.cuda.amp import autocast
+
 from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
 from zcls.util.precise_bn import calculate_and_update_precise_bn
 from zcls.util.distributed import is_master_proc, synchronize
@@ -45,6 +48,9 @@ def do_train(cfg, arguments,
     max_iter = (max_epoch - start_epoch) * epoch_iters
     current_iterations = 0
 
+    # Creates a GradScaler once at the beginning of training.
+    scaler = GradScaler()
+
     synchronize()
     model.train()
     logger.info("Start training ...")
@@ -58,22 +64,25 @@ def do_train(cfg, arguments,
             images = images.to(device=device, non_blocking=True)
             targets = targets.to(device=device, non_blocking=True)
 
-            output_dict = model(images)
-            loss_dict = criterion(output_dict, targets)
-            loss = loss_dict['loss'] / gradient_accumulate_step
+            # Runs the forward pass with autocasting.
+            with autocast():
+                output_dict = model(images)
+                loss_dict = criterion(output_dict, targets)
+                loss = loss_dict['loss'] / gradient_accumulate_step
 
             current_iterations += 1
             if current_iterations % gradient_accumulate_step != 0:
                 if isinstance(model, DistributedDataParallel):
                     # multi-gpu distributed training
                     with model.no_sync():
-                        loss.backward()
+                        scaler.scale(loss).backward()
                 else:
-                    loss.backward()
+                    scaler.scale(loss).backward()
             else:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
                 current_iterations = 0
-                loss.backward()
-                optimizer.step()
                 optimizer.zero_grad()
 
             acc_list = evaluator.evaluate_train(output_dict, targets)
