@@ -89,6 +89,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{micikevicius2018mixed,
+      title={Mixed Precision Training}, 
+      author={Paulius Micikevicius and Sharan Narang and Jonah Alben and Gregory Diamos and Erich Elsen and David Garcia and Boris Ginsburg and Michael Houston and Oleksii Kuchaiev and Ganesh Venkatesh and Hao Wu},
+      year={2018},
+      eprint={1710.03740},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
+}
+
 @misc{goyal2018accurate,
       title={Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour}, 
       author={Priya Goyal and Piotr Dollár and Ross Girshick and Pieter Noordhuis and Lukasz Wesolowski and Aapo Kyrola and Andrew Tulloch and Yangqing Jia and Kaiming He},
