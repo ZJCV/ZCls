@@ -17,7 +17,9 @@ def add_config(_C):
     _C.MODEL = CN()
     _C.MODEL.NAME = 'ResNet'
     _C.MODEL.PRETRAINED = ""
+    _C.MODEL.ZCLS_PRETRAINED = ""
     _C.MODEL.TORCHVISION_PRETRAINED = False
+    _C.MODEL.PRETRAINED_NUM_CLASSES = 1000
 
     _C.MODEL.NORM = CN()
     _C.MODEL.NORM.TYPE = 'BatchNorm2d'
