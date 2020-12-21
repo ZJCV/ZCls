@@ -53,8 +53,8 @@ class _SimplifiedNonLocalNDEmbeddedGaussian(nn.Module):
     def _construct_nonlocal(self):
         self.w_k = self.conv_layer(self.in_channels, 1, kernel_size=1, stride=1, padding=0)
         self.w_v = nn.Sequential(
-            nn.Conv1d(self.in_channels, self.in_channels, kernel_size=1, stride=1, padding=0),
-            nn.BatchNorm1d(self.in_channels)
+            self.conv_layer(self.in_channels, self.in_channels, kernel_size=1, stride=1, padding=0),
+            self.norm_layer(self.in_channels)
         )
 
     def _init_weights(self):
@@ -82,26 +82,16 @@ class _SimplifiedNonLocalNDEmbeddedGaussian(nn.Module):
         # (N, C, **) -> (N, 1, **) -> (N, 1, D_j) -> (N, 1, D_j, 1)
         context_mask = self.w_k(x).view(N, 1, -1).unsqueeze(-1)
         context_mask = nn.functional.softmax(context_mask, dim=2)
-        # (N, 1, C, D_j) * (N, 1, D_j, 1) -> (N, 1, C, 1) -> (N, C, 1)
-        context = torch.matmul(input_x, context_mask).reshape(N, C, 1)
+        # (N, 1, C, D_j) * (N, 1, D_j, 1) -> (N, 1, C, 1) -> (N, C) -> (N, C, **)
+        context = torch.matmul(input_x, context_mask).reshape(N, C).reshape(N, C, *([1] * self.dimension))
 
         transform = self.w_v(context)
-        # (N, C, 1) -> (N, C, **)
-        transform = self._expand(transform, N, C)
 
         z = transform + identity
         return z
 
     def _check_input_dim(self, input):
         raise NotImplementedError
-
-    def _expand(self, x, N, C):
-        if self.dimension == 1:
-            return x.reshape(N, C, 1)
-        elif self.dimension == 2:
-            return x.reshape(N, C, 1, 1)
-        elif self.dimension == 3:
-            return x.reshape(N, C, 1, 1, 1)
 
 
 class SimplifiedNonLocal1DEmbeddedGaussian(_SimplifiedNonLocalNDEmbeddedGaussian):

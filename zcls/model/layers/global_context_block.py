@@ -45,10 +45,10 @@ class _GlobalContextBlockND(nn.Module):
         self.w_k = self.conv_layer(self.in_channels, 1, kernel_size=1, stride=1, padding=0)
 
         reduction_channel = self.in_channels // self.reduction
-        self.w_v1 = nn.Conv1d(self.in_channels, reduction_channel, kernel_size=1, stride=1, padding=0)
-        self.ln = nn.LayerNorm([reduction_channel, 1])
+        self.w_v1 = self.conv_layer(self.in_channels, reduction_channel, kernel_size=1, stride=1, padding=0)
+        self.ln = nn.LayerNorm([reduction_channel, *([1] * self.dimension)])
         self.relu = nn.ReLU(inplace=True)
-        self.w_v2 = nn.Conv1d(reduction_channel, self.in_channels, kernel_size=1, stride=1, padding=0)
+        self.w_v2 = self.conv_layer(reduction_channel, self.in_channels, kernel_size=1, stride=1, padding=0)
 
     def _init_weights(self):
         for m in self.modules():
@@ -66,32 +66,23 @@ class _GlobalContextBlockND(nn.Module):
 
         # (N, C, **) -> (N, C, D_j) -> (N, 1, C, D_j)
         input_x = x.view(N, C, -1).unsqueeze(1)
-        # (N, C, **) -> (N, 1, **) -> (N, 1, D_j) -> (N, 1, D_j, 1)
-        context_mask = self.w_k(x).view(N, 1, -1).unsqueeze(-1)
-        context_mask = nn.functional.softmax(context_mask, dim=2)
-        # (N, 1, C, D_j) * (N, 1, D_j, 1) -> (N, 1, C, 1) -> (N, C, 1)
-        context = torch.matmul(input_x, context_mask).reshape(N, C, 1)
+        # (N, C, **) -> (N, 1, **) -> (N, 1, D_j)
+        context_mask = self.w_k(x).view(N, 1, -1)
+        # (N, 1, D_j) -> (N, 1, D_j, 1)
+        context_mask = nn.functional.softmax(context_mask, dim=2).unsqueeze(-1)
+        # (N, 1, C, D_j) * (N, 1, D_j, 1) -> (N, 1, C, 1) -> (N, C) -> (N, C, **)
+        context = torch.matmul(input_x, context_mask).reshape(N, C).reshape(N, C, *([1] * self.dimension))
 
         out = self.w_v1(context)
         out = self.ln(out)
         out = self.relu(out)
         transform = self.w_v2(out)
-        # (N, C, 1) -> (N, C, **)
-        transform = self._expand(transform, N, C)
 
         z = transform + identity
         return z
 
     def _check_input_dim(self, input):
         raise NotImplementedError
-
-    def _expand(self, x, N, C):
-        if self.dimension == 1:
-            return x.reshape(N, C, 1)
-        elif self.dimension == 2:
-            return x.reshape(N, C, 1, 1)
-        elif self.dimension == 3:
-            return x.reshape(N, C, 1, 1, 1)
 
 
 class GlobalContextBlock1D(_GlobalContextBlockND):
