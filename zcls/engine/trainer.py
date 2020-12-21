@@ -38,11 +38,12 @@ def do_train(cfg, arguments,
     save_epoch = cfg.TRAIN.SAVE_EPOCH
     eval_epoch = cfg.TRAIN.EVAL_EPOCH
     max_epoch = cfg.TRAIN.MAX_EPOCH
-    gradient_accumulate_steps = cfg.TRAIN.GRADIENT_ACCUMULATE_STEPS
+    gradient_accumulate_step = cfg.TRAIN.GRADIENT_ACCUMULATE_STEP
 
     start_epoch = arguments['cur_epoch']
     epoch_iters = len(data_loader)
     max_iter = (max_epoch - start_epoch) * epoch_iters
+    current_iterations = 0
 
     synchronize()
     model.train()
@@ -59,9 +60,10 @@ def do_train(cfg, arguments,
 
             output_dict = model(images)
             loss_dict = criterion(output_dict, targets)
-            loss = loss_dict['loss'] / gradient_accumulate_steps
+            loss = loss_dict['loss'] / gradient_accumulate_step
 
-            if (iteration + 1) % gradient_accumulate_steps != 0:
+            current_iterations += 1
+            if current_iterations % gradient_accumulate_step != 0:
                 if isinstance(model, DistributedDataParallel):
                     # multi-gpu distributed training
                     with model.no_sync():
@@ -69,6 +71,7 @@ def do_train(cfg, arguments,
                 else:
                     loss.backward()
             else:
+                current_iterations = 0
                 loss.backward()
                 optimizer.step()
                 optimizer.zero_grad()

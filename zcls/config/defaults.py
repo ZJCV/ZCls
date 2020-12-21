@@ -29,7 +29,7 @@ _C.DIST_BACKEND = "nccl"
 # ---------------------------------------------------------------------------- #
 _C.TRAIN = CN()
 _C.TRAIN.LOG_STEP = 10
-_C.TRAIN.GRADIENT_ACCUMULATE_STEPS = 1
+_C.TRAIN.GRADIENT_ACCUMULATE_STEP = 1
 _C.TRAIN.SAVE_EPOCH = 5
 _C.TRAIN.EVAL_EPOCH = 5
 _C.TRAIN.MAX_EPOCH = 200
