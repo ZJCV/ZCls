@@ -33,6 +33,8 @@ class ResNetDRecognizer(nn.Module):
                  arch='resnet18',
                  feature_dims=2048,
                  num_classes=1000,
+                 groups=1,
+                 width_per_group=64,
                  zcls_pretrained="",
                  pretrained_num_classes=1000,
                  fix_bn=False,
@@ -49,6 +51,8 @@ class ResNetDRecognizer(nn.Module):
 
         self.backbone = ResNetDBackbone(
             layer_blocks=layer_blocks,
+            groups=groups,
+            width_per_group=width_per_group,
             block_layer=block_layer,
             norm_layer=norm_layer
         )

@@ -32,6 +32,10 @@ class ResNet3DBasicBlock(nn.Module):
                  inflate=False,
                  # 膨胀类型，作用于Bottleneck
                  inflate_style='3x1x1',
+                 # cardinality
+                 groups=1,
+                 # 基础宽度
+                 base_width=64,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -41,6 +45,8 @@ class ResNet3DBasicBlock(nn.Module):
                  ):
         super(ResNet3DBasicBlock, self).__init__()
         assert inflate_style in ("3x1x1", "3x3x3")
+        if groups != 1 or base_width != 64:
+            raise ValueError('ResNet3DBasicBlock only supports groups=1 and base_width=64')
 
         if conv_layer is None:
             conv_layer = nn.Conv3d

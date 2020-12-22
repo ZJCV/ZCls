@@ -59,6 +59,29 @@ def test_resnet3d_bottleneck():
     print(outputs.shape)
     assert outputs.shape == (1, planes * expansion, 1, 28, 28)
 
+    # 32x4d
+    # 进行下采样
+    temporal_stride = 1
+    spatial_stride = 2
+    downsample = nn.Sequential(
+        nn.Conv3d(inplanes, planes * expansion, kernel_size=1,
+                  stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
+        nn.BatchNorm3d(planes * expansion),
+    )
+    model = ResNet3DBottleneck(inplanes=inplanes,
+                               planes=planes,
+                               spatial_stride=spatial_stride,
+                               temporal_stride=temporal_stride,
+                               inflate=False,
+                               downsample=downsample,
+                               groups=32,
+                               base_width=4)
+    print(model)
+
+    outputs = model(data)
+    print(outputs.shape)
+    assert outputs.shape == (1, planes * expansion, 1, 28, 28)
+
 
 def test_resnet3d_bottleneck_3_1_1():
     data = torch.randn(1, 64, 8, 56, 56)

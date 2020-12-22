@@ -37,6 +37,20 @@ def test_resnet_d_backbone():
     print(outputs.shape)
     assert outputs.shape == (1, 2048, 7, 7)
 
+    # 32x4d
+    # for R50
+    model = ResNetDBackbone(
+        layer_blocks=(3, 4, 6, 3),
+        groups=32,
+        width_per_group=4,
+        block_layer=Bottleneck,
+    )
+    print(model)
+
+    outputs = model(data)
+    print(outputs.shape)
+    assert outputs.shape == (1, 2048, 7, 7)
+
 
 if __name__ == '__main__':
     test_resnet_d_backbone()

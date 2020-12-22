@@ -46,6 +46,10 @@ class ResNet3DBackbone(nn.Module):
                  inflate_list=(0, 0, 0, 0),
                  # 膨胀类型
                  inflate_style='3x1x1',
+                 # cardinality
+                 groups=1,
+                 # 每组的宽度
+                 width_per_group=64,
                  # 块类型
                  block_layer=None,
                  # 卷积层类型
@@ -85,6 +89,8 @@ class ResNet3DBackbone(nn.Module):
         self.temporal_strides = temporal_strides
         self.inflate_list = inflate_list
         self.inflate_style = inflate_style
+        self.groups = groups
+        self.width_per_group = width_per_group
         self.block_layer = block_layer
         self.conv_layer = conv_layer
         self.norm_layer = norm_layer
@@ -167,6 +173,7 @@ class ResNet3DBackbone(nn.Module):
         blocks.append(block_layer(inplanes, planes,
                                   spatial_stride, temporal_stride, downsample,
                                   inflates[0], inflate_style,
+                                  self.groups, self.width_per_group,
                                   conv_layer, norm_layer, act_layer))
         inplanes = planes * expansion
 
@@ -174,6 +181,7 @@ class ResNet3DBackbone(nn.Module):
             blocks.append(block_layer(inplanes, planes,
                                       1, 1, None,
                                       inflates[i], inflate_style,
+                                      self.groups, self.width_per_group,
                                       conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 

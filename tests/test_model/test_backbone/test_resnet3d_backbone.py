@@ -40,6 +40,20 @@ def test_resnet3d_backbone():
     print(outputs.shape)
     assert outputs.shape == (1, 2048, 1, 7, 7)
 
+    # for RX3D50_32x4d
+    model = ResNet3DBackbone(
+        layer_blocks=(3, 4, 6, 3),
+        groups=32,
+        width_per_group=4,
+        block_layer=ResNet3DBottleneck,
+        zero_init_residual=True
+    )
+    print(model)
+
+    outputs = model(data)
+    print(outputs.shape)
+    assert outputs.shape == (1, 2048, 1, 7, 7)
+
 
 def test_pretrained_resnet3d_backbone():
     from torchvision.models.utils import load_state_dict_from_url

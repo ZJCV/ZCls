@@ -33,6 +33,10 @@ class ResNet3DBottleneck(nn.Module):
                  inflate=False,
                  # 膨胀类型，作用于Bottleneck
                  inflate_style='3x1x1',
+                 # cardinality
+                 groups=1,
+                 # 基础宽度
+                 base_width=64,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -75,15 +79,16 @@ class ResNet3DBottleneck(nn.Module):
 
         self.downsample = downsample
 
-        self.conv1 = conv_layer(inplanes, planes, kernel_size=conv1_kernel_size,
+        width = int(planes * (base_width / 64.)) * groups
+        self.conv1 = conv_layer(inplanes, width, kernel_size=conv1_kernel_size,
                                 stride=conv1_stride, padding=conv1_padding, bias=False)
-        self.bn1 = norm_layer(planes)
+        self.bn1 = norm_layer(width)
 
-        self.conv2 = conv_layer(planes, planes, kernel_size=conv2_kernel_size,
+        self.conv2 = conv_layer(width, width, kernel_size=conv2_kernel_size,
                                 stride=conv2_stride, padding=conv2_padding, bias=False)
-        self.bn2 = norm_layer(planes)
+        self.bn2 = norm_layer(width)
 
-        self.conv3 = conv_layer(planes, planes * self.expansion, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        self.conv3 = conv_layer(width, planes * self.expansion, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
         self.bn3 = norm_layer(planes * self.expansion)
 
         self.relu = act_layer(inplace=True)

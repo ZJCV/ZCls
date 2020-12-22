@@ -30,6 +30,10 @@ class ResNetDBackbone(nn.Module):
                  layer_blocks=(2, 2, 2, 2),
                  # 是否执行空间下采样
                  downsamples=(0, 1, 1, 1),
+                 # cardinality
+                 groups=1,
+                 # 每组的宽度
+                 width_per_group=64,
                  # 块类型
                  block_layer=None,
                  # 卷积层类型
@@ -57,6 +61,8 @@ class ResNetDBackbone(nn.Module):
         self.layer_planes = layer_planes
         self.layer_blocks = layer_blocks
         self.downsamples = downsamples
+        self.groups = groups
+        self.width_per_group = width_per_group
         self.block_layer = block_layer
         self.conv_layer = conv_layer
         self.norm_layer = norm_layer
@@ -132,11 +138,12 @@ class ResNetDBackbone(nn.Module):
 
         blocks = list()
         blocks.append(block_layer(
-            inplanes, planes, stride, downsample, conv_layer, norm_layer, act_layer))
+            inplanes, planes, stride, downsample, self.groups, self.width_per_group, conv_layer, norm_layer, act_layer))
         inplanes = planes * expansion
 
         for i in range(1, block_num):
-            blocks.append(block_layer(inplanes, planes, 1, None, conv_layer, norm_layer, act_layer))
+            blocks.append(block_layer(
+                inplanes, planes, 1, None, self.groups, self.width_per_group, conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
     def _init_weights(self, zero_init_residual):
