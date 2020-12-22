@@ -37,6 +37,10 @@ class AttentionResNetBasicBlock(nn.Module):
                  reduction=16,
                  # 注意力模块类型
                  attention_type='GlobalContextBlock2D',
+                 # cardinality
+                 groups=1,
+                 # 基础宽度
+                 base_width=64,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -50,6 +54,9 @@ class AttentionResNetBasicBlock(nn.Module):
                                   'SimplifiedNonLocal2DEmbeddedGaussian',
                                   'NonLocal2DEmbeddedGaussian',
                                   'SqueezeAndExcitationBlock2D']
+        if groups != 1 or base_width != 64:
+            raise ValueError('AttentionResNetBasicBlock only supports groups=1 and base_width=64')
+
 
         if conv_layer is None:
             conv_layer = nn.Conv2d

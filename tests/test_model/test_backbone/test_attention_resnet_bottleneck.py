@@ -50,6 +50,22 @@ def test_se_resnet_basicblock():
     print(outputs.shape)
     assert outputs.shape == (10, planes * expansion, 28, 28)
 
+    # 32x4d
+    # 进行下采样
+    stride = 2
+    downsample = nn.Sequential(
+        nn.Conv2d(inplanes, planes * expansion, kernel_size=1, stride=stride, bias=False),
+        nn.BatchNorm2d(planes * expansion),
+    )
+    model = AttentionResNetBottleneck(inplanes, planes, stride, downsample, with_attention=with_attention,
+                                      reduction=reduction, attention_type=attention_type,
+                                      groups=32, base_width=4)
+    print(model)
+
+    outputs = model(data)
+    print(outputs.shape)
+    assert outputs.shape == (10, planes * expansion, 28, 28)
+
 
 def test_nl_resnet_basicblock():
     data = torch.randn(10, 64, 56, 56)
@@ -67,7 +83,7 @@ def test_nl_resnet_basicblock():
         nn.BatchNorm2d(planes * expansion),
     )
     model = AttentionResNetBottleneck(inplanes, planes, stride, downsample, with_attention=with_attention,
-                                        reduction=reduction, attention_type=attention_type)
+                                      reduction=reduction, attention_type=attention_type)
     print(model)
 
     outputs = model(data)
@@ -82,6 +98,22 @@ def test_nl_resnet_basicblock():
     )
     model = AttentionResNetBottleneck(inplanes, planes, stride, downsample, with_attention=with_attention,
                                       reduction=reduction, attention_type=attention_type)
+    print(model)
+
+    outputs = model(data)
+    print(outputs.shape)
+    assert outputs.shape == (10, planes * expansion, 28, 28)
+
+    # 32x4d
+    # 进行下采样
+    stride = 2
+    downsample = nn.Sequential(
+        nn.Conv2d(inplanes, planes * expansion, kernel_size=1, stride=stride, bias=False),
+        nn.BatchNorm2d(planes * expansion),
+    )
+    model = AttentionResNetBottleneck(inplanes, planes, stride, downsample, with_attention=with_attention,
+                                      reduction=reduction, attention_type=attention_type,
+                                      groups=32, base_width=4)
     print(model)
 
     outputs = model(data)
@@ -126,6 +158,22 @@ def test_snl_resnet_basicblock():
     print(outputs.shape)
     assert outputs.shape == (10, planes * expansion, 28, 28)
 
+    # 32x4d
+    # 进行下采样
+    stride = 2
+    downsample = nn.Sequential(
+        nn.Conv2d(inplanes, planes * expansion, kernel_size=1, stride=stride, bias=False),
+        nn.BatchNorm2d(planes * expansion),
+    )
+    model = AttentionResNetBottleneck(inplanes, planes, stride, downsample, with_attention=with_attention,
+                                      reduction=reduction, attention_type=attention_type,
+                                      groups=32, base_width=4)
+    print(model)
+
+    outputs = model(data)
+    print(outputs.shape)
+    assert outputs.shape == (10, planes * expansion, 28, 28)
+
 
 def test_gc_resnet_basicblock():
     data = torch.randn(10, 64, 56, 56)
@@ -150,6 +198,7 @@ def test_gc_resnet_basicblock():
     print(outputs.shape)
     assert outputs.shape == (10, planes * expansion, 56, 56)
 
+    # 32x4d
     # 进行下采样
     stride = 2
     downsample = nn.Sequential(
@@ -157,7 +206,8 @@ def test_gc_resnet_basicblock():
         nn.BatchNorm2d(planes * expansion),
     )
     model = AttentionResNetBottleneck(inplanes, planes, stride, downsample, with_attention=with_attention,
-                                      reduction=reduction, attention_type=attention_type)
+                                      reduction=reduction, attention_type=attention_type,
+                                      groups=32, base_width=4)
     print(model)
 
     outputs = model(data)

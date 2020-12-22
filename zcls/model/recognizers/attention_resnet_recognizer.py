@@ -48,6 +48,8 @@ class AttentionResNetRecognizer(nn.Module):
                  with_attention=(1, 1, 1, 1),
                  reduction=16,
                  attention_type='GlobalContextBlock2D',
+                 groups=1,
+                 width_per_group=64,
                  torchvision_pretrained=False,
                  fix_bn=False,
                  partial_bn=False,
@@ -65,6 +67,8 @@ class AttentionResNetRecognizer(nn.Module):
             with_attention=with_attention,
             reduction=reduction,
             attention_type=attention_type,
+            groups=groups,
+            width_per_group=width_per_group,
             block_layer=block_layer,
             norm_layer=norm_layer
         )

@@ -85,7 +85,8 @@ class ResNet3DBottleneck(nn.Module):
         self.bn1 = norm_layer(width)
 
         self.conv2 = conv_layer(width, width, kernel_size=conv2_kernel_size,
-                                stride=conv2_stride, padding=conv2_padding, bias=False)
+                                stride=conv2_stride, padding=conv2_padding, bias=False,
+                                groups=groups)
         self.bn2 = norm_layer(width)
 
         self.conv3 = conv_layer(width, planes * self.expansion, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)

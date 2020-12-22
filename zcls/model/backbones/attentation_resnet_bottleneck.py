@@ -37,6 +37,10 @@ class AttentionResNetBottleneck(nn.Module):
                  reduction=16,
                  # 注意力模块类型
                  attention_type='GlobalContextBlock2D',
+                 # cardinality
+                 groups=1,
+                 # 基础宽度
+                 base_width=64,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -60,13 +64,14 @@ class AttentionResNetBottleneck(nn.Module):
 
         self.downsample = downsample
 
-        self.conv1 = conv_layer(inplanes, planes, kernel_size=1, stride=1, bias=False)
-        self.bn1 = norm_layer(planes)
+        width = int(planes * (base_width / 64.)) * groups
+        self.conv1 = conv_layer(inplanes, width, kernel_size=1, stride=1, bias=False)
+        self.bn1 = norm_layer(width)
 
-        self.conv2 = conv_layer(planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
-        self.bn2 = norm_layer(planes)
+        self.conv2 = conv_layer(width, width, kernel_size=3, stride=stride, padding=1, bias=False, groups=groups)
+        self.bn2 = norm_layer(width)
 
-        self.conv3 = conv_layer(planes, planes * self.expansion, kernel_size=1, stride=1, bias=False)
+        self.conv3 = conv_layer(width, planes * self.expansion, kernel_size=1, stride=1, bias=False)
         self.bn3 = norm_layer(planes * self.expansion)
 
         self.relu = act_layer(inplace=True)

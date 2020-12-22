@@ -32,6 +32,10 @@ class AttentionResNetBackbone(nn.Module):
                  reduction=16,
                  # 注意力模块类型
                  attention_type='GlobalContextBlock2D',
+                 # cardinality
+                 groups=1,
+                 # 每组的宽度
+                 width_per_group=64,
                  # 块类型
                  block_layer=None,
                  # 卷积层类型
@@ -63,6 +67,8 @@ class AttentionResNetBackbone(nn.Module):
         self.with_attention = with_attention
         self.reduction = reduction
         self.attention_type = attention_type
+        self.groups = groups
+        self.width_per_group = width_per_group
         self.block_layer = block_layer
         self.conv_layer = conv_layer
         self.norm_layer = norm_layer
@@ -139,11 +145,13 @@ class AttentionResNetBackbone(nn.Module):
         blocks = list()
         blocks.append(block_layer(
             inplanes, planes, stride, downsample, with_attention[0], reduction, attention_type,
+            self.groups, self.width_per_group,
             conv_layer, norm_layer, act_layer))
         inplanes = planes * expansion
 
         for i in range(1, block_num):
             blocks.append(block_layer(inplanes, planes, 1, None, with_attention[i], reduction, attention_type,
+                                      self.groups, self.width_per_group,
                                       conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
