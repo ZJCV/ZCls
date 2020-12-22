@@ -125,6 +125,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{xie2017aggregated,
+      title={Aggregated Residual Transformations for Deep Neural Networks}, 
+      author={Saining Xie and Ross Girshick and Piotr Dollár and Zhuowen Tu and Kaiming He},
+      year={2017},
+      eprint={1611.05431},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{he2015deep,
       title={Deep Residual Learning for Image Recognition}, 
       author={Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},
