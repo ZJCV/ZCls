@@ -31,6 +31,21 @@ def test_resnet_backbone():
         layer_blocks=(3, 4, 6, 3),
         block_layer=Bottleneck,
     )
+    print(model)
+
+    outputs = model(data)
+    print(outputs.shape)
+    assert outputs.shape == (1, 2048, 7, 7)
+
+    # for RX50_32x4d
+    model = ResNetBackbone(
+        layer_blocks=(3, 4, 6, 3),
+        groups=32,
+        width_per_group=4,
+        block_layer=Bottleneck,
+    )
+    print(model)
+
     outputs = model(data)
     print(outputs.shape)
     assert outputs.shape == (1, 2048, 7, 7)

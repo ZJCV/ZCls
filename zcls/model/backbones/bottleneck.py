@@ -13,6 +13,7 @@ import torch.nn as nn
 class Bottleneck(nn.Module):
     """
     依次执行大小为1x1、3x3、1x1的卷积操作，如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
+    参考Torchvision实现
     """
     expansion = 4
 
@@ -25,6 +26,10 @@ class Bottleneck(nn.Module):
                  stride=1,
                  # 下采样
                  downsample=None,
+                 # cardinality
+                 groups=1,
+                 # 基础宽度
+                 base_width=64,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -42,13 +47,14 @@ class Bottleneck(nn.Module):
 
         self.downsample = downsample
 
-        self.conv1 = conv_layer(inplanes, planes, kernel_size=1, stride=1, bias=False)
-        self.bn1 = norm_layer(planes)
+        width = int(planes * (base_width / 64.)) * groups
+        self.conv1 = conv_layer(inplanes, width, kernel_size=1, stride=1, bias=False)
+        self.bn1 = norm_layer(width)
 
-        self.conv2 = conv_layer(planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
-        self.bn2 = norm_layer(planes)
+        self.conv2 = conv_layer(width, width, kernel_size=3, stride=stride, padding=1, bias=False, groups=groups)
+        self.bn2 = norm_layer(width)
 
-        self.conv3 = conv_layer(planes, planes * self.expansion, kernel_size=1, stride=1, bias=False)
+        self.conv3 = conv_layer(width, planes * self.expansion, kernel_size=1, stride=1, bias=False)
         self.bn3 = norm_layer(planes * self.expansion)
 
         self.relu = act_layer(inplace=True)

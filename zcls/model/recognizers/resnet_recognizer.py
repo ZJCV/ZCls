@@ -46,6 +46,8 @@ class ResNetRecognizer(nn.Module):
                  arch='resnet18',
                  feature_dims=2048,
                  num_classes=1000,
+                 groups=1,
+                 width_per_group=64,
                  torchvision_pretrained=False,
                  fix_bn=False,
                  partial_bn=False,
@@ -60,6 +62,8 @@ class ResNetRecognizer(nn.Module):
 
         self.backbone = ResNetBackbone(
             layer_blocks=layer_blocks,
+            groups=groups,
+            width_per_group=width_per_group,
             block_layer=block_layer,
             norm_layer=norm_layer
         )
@@ -116,6 +120,8 @@ class ResNet_Pytorch(nn.Module):
             self.model = resnet.resnet18(pretrained=torchvision_pretrained, num_classes=1000)
         elif arch == 'resnet50':
             self.model = resnet.resnet50(pretrained=torchvision_pretrained, num_classes=1000)
+        elif arch == 'resnext50_32x4d':
+            self.model = resnet.resnext50_32x4d(pretrained=torchvision_pretrained, num_classes=1000)
         else:
             raise ValueError('no such value')
 

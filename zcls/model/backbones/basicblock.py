@@ -13,6 +13,7 @@ import torch.nn as nn
 class BasicBlock(nn.Module):
     """
     使用两个3x3卷积，如果进行下采样，那么使用第一个卷积层对输入空间尺寸进行减半操作
+    参考Torchvision实现
     """
     expansion = 1
 
@@ -25,6 +26,10 @@ class BasicBlock(nn.Module):
                  stride=1,
                  # 下采样
                  downsample=None,
+                 # cardinality
+                 groups=1,
+                 # 基础宽度
+                 base_width=64,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -33,6 +38,9 @@ class BasicBlock(nn.Module):
                  act_layer=None
                  ):
         super(BasicBlock, self).__init__()
+        if groups != 1 or base_width != 64:
+            raise ValueError('BasicBlock only supports groups=1 and base_width=64')
+
         if conv_layer is None:
             conv_layer = nn.Conv2d
         if norm_layer is None:
