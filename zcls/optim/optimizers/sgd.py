@@ -14,12 +14,10 @@ from .. import registry
 
 
 @registry.OPTIMIZERS.register('SGD')
-def build_sgd(cfg, model):
-    assert isinstance(model, nn.Module)
-
+def build_sgd(cfg, groups):
     lr = cfg.OPTIMIZER.LR
     weight_decay = cfg.OPTIMIZER.WEIGHT_DECAY
 
     momentum = cfg.OPTIMIZER.SGD.MOMENTUM
 
-    return optim.SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay)
+    return optim.SGD(groups, lr=lr, momentum=momentum, weight_decay=weight_decay)

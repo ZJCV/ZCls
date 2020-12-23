@@ -14,10 +14,8 @@ from .. import registry
 
 
 @registry.OPTIMIZERS.register('ADAM')
-def build_adam(cfg, model):
-    assert isinstance(model, nn.Module)
-
+def build_adam(cfg, groups):
     lr = cfg.OPTIMIZER.LR
     weight_decay = cfg.OPTIMIZER.WEIGHT_DECAY
 
-    return optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+    return optim.Adam(groups, lr=lr, weight_decay=weight_decay)
