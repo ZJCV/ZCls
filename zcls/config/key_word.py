@@ -8,3 +8,4 @@
 """
 
 KEY_OUTPUT = 'output'
+KEY_LOSS = 'loss'

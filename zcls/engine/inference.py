@@ -39,6 +39,7 @@ def compute_on_dataset(images, targets, device, model, num_gpus, evaluator):
     evaluator.evaluate_test(output_dict, targets)
 
 
+@torch.no_grad()
 def inference(cfg, model, device, **kwargs):
     cur_epoch = kwargs.get('cur_epoch', None)
     dataset_name = cfg.DATASET.NAME

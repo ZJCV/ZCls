@@ -196,7 +196,7 @@ class TorchvisionResNet(nn.Module, ABC):
 def build_resnet(cfg):
     # for recognizer
     recognizer_name = cfg.MODEL.RECOGNIZER.NAME
-    torchvision_pretrained = cfg.MODEL.TORCHVISION_PRETRAINED
+    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
@@ -216,7 +216,7 @@ def build_resnet(cfg):
         )
     elif recognizer_name == 'CustomResNet':
         # for recognizer
-        pretrained = cfg.MODEL.PRETRAINED
+        pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED
         conv_layer = get_conv(cfg)
         norm_layer = get_norm(cfg)
         act_layer = get_act(cfg)
@@ -227,7 +227,7 @@ def build_resnet(cfg):
         layer_planes = cfg.MODEL.BACKBONE.LAYER_PLANES
         down_samples = cfg.MODEL.BACKBONE.DOWN_SAMPLES
         groups = cfg.MODEL.BACKBONE.GROUPS
-        width_per_group = cfg.MODEL.BACKBONE.WITH_PER_GROUP
+        width_per_group = cfg.MODEL.BACKBONE.WIDTH_PER_GROUP
 
         return ResNetRecognizer(
             # for RECOGNIZER

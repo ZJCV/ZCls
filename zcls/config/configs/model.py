@@ -98,7 +98,7 @@ def add_config(_C):
     # 预训练模型类别数
     _C.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES = 1000
     # 零初始化残差连接
-    _C.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL = False
+    _C.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL = True
 
     # ---------------------------------------------------------------------------- #
     # criterion

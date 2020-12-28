@@ -10,6 +10,7 @@
 import torch
 
 from .base_evaluator import BaseEvaluator
+from zcls.config.key_word import KEY_OUTPUT
 from zcls.util.metrics import topk_accuracy
 
 
@@ -27,9 +28,9 @@ class CIFAREvaluator(BaseEvaluator):
         self.cate_num_dict = dict()
 
     def evaluate_train(self, output_dict: dict, targets: torch.Tensor):
-        assert isinstance(output_dict, dict) and 'probs' in output_dict.keys()
+        assert isinstance(output_dict, dict) and KEY_OUTPUT in output_dict.keys()
 
-        probs = output_dict['probs']
+        probs = output_dict[KEY_OUTPUT]
         res = topk_accuracy(probs, targets, topk=self.topk)
 
         acc_dict = dict()
@@ -38,8 +39,8 @@ class CIFAREvaluator(BaseEvaluator):
         return acc_dict
 
     def evaluate_test(self, output_dict: dict, targets: torch.Tensor):
-        assert isinstance(output_dict, dict) and 'probs' in output_dict.keys()
-        probs = output_dict['probs']
+        assert isinstance(output_dict, dict) and KEY_OUTPUT in output_dict.keys()
+        probs = output_dict[KEY_OUTPUT]
         outputs = probs.to(device=self.device)
         targets = targets.to(device=self.device)
 

@@ -16,10 +16,12 @@ from torch.nn.parallel import DistributedDataParallel
 from torch.cuda.amp import GradScaler
 from torch.cuda.amp import autocast
 
+from zcls.config.key_word import KEY_OUTPUT, KEY_LOSS
 from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
 from zcls.util.precise_bn import calculate_and_update_precise_bn
 from zcls.util.distributed import is_master_proc, synchronize
 from zcls.util import logging
+from zcls.util.mixup_util import mixup_data, mixup_criterion
 from zcls.engine.inference import do_evaluation
 from zcls.data.build import shuffle_dataset
 
@@ -68,7 +70,7 @@ def do_train(cfg, arguments,
             with autocast():
                 output_dict = model(images)
                 loss_dict = criterion(output_dict, targets)
-                loss = loss_dict['loss'] / gradient_accumulate_step
+                loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
 
             current_iterations += 1
             if current_iterations % gradient_accumulate_step != 0:

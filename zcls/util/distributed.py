@@ -9,8 +9,8 @@ import pickle
 import torch
 import torch.distributed as dist
 
-_LOCAL_PROCESS_GROUP = None
-_LOCAL_RANK_GROUP = None
+LOCAL_PROCESS_GROUP = None
+LOCAL_RANK_GROUP = None
 
 
 def all_gather(tensors):
@@ -280,11 +280,11 @@ def init_distributed_training(cfg):
         )
         pg = dist.new_group(ranks_on_i)
         if i == cfg.RANK_ID:
-            global _LOCAL_PROCESS_GROUP
-            _LOCAL_PROCESS_GROUP = pg
+            global LOCAL_PROCESS_GROUP
+            LOCAL_PROCESS_GROUP = pg
 
-            global _LOCAL_RANK_GROUP
-            _LOCAL_RANK_GROUP = ranks_on_i
+            global LOCAL_RANK_GROUP
+            LOCAL_RANK_GROUP = ranks_on_i
 
 
 def get_local_size() -> int:
@@ -297,7 +297,7 @@ def get_local_size() -> int:
         return 1
     if not dist.is_initialized():
         return 1
-    return dist.get_world_size(group=_LOCAL_PROCESS_GROUP)
+    return dist.get_world_size(group=LOCAL_PROCESS_GROUP)
 
 
 def get_local_rank() -> int:
@@ -309,8 +309,8 @@ def get_local_rank() -> int:
         return 0
     if not dist.is_initialized():
         return 0
-    assert _LOCAL_PROCESS_GROUP is not None
-    return dist.get_rank(group=_LOCAL_PROCESS_GROUP)
+    assert LOCAL_PROCESS_GROUP is not None
+    return dist.get_rank(group=LOCAL_PROCESS_GROUP)
 
 
 def get_device(local_rank=None):
