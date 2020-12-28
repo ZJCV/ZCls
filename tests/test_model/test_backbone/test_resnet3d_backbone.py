@@ -81,7 +81,7 @@ def test_resnet3d_backbone_c2d():
     data = torch.randn(1, 3, 32, 224, 224)
     # for R50
     model = ResNet3DBackbone(
-        inplanes=3,
+        in_planes=3,
         base_planes=64,
         conv1_kernel=(1, 7, 7),
         conv1_stride=(2, 2, 2),
@@ -92,7 +92,7 @@ def test_resnet3d_backbone_c2d():
         with_pool2=True,
         layer_planes=(64, 128, 256, 512),
         layer_blocks=(3, 4, 6, 3),
-        downsamples=(0, 1, 1, 1),
+        down_samples=(0, 1, 1, 1),
         temporal_strides=(1, 1, 1, 1),
         inflate_list=(0, 0, 0, 0),
         inflate_style='3x1x1',
@@ -114,7 +114,7 @@ def test_resnet3d_backbone_i3d_3x1x1():
     data = torch.randn(1, 3, 32, 224, 224)
     # for R50
     model = ResNet3DBackbone(
-        inplanes=3,
+        in_planes=3,
         base_planes=64,
         conv1_kernel=(5, 7, 7),
         conv1_stride=(2, 2, 2),
@@ -125,7 +125,7 @@ def test_resnet3d_backbone_i3d_3x1x1():
         with_pool2=True,
         layer_planes=(64, 128, 256, 512),
         layer_blocks=(3, 4, 6, 3),
-        downsamples=(0, 1, 1, 1),
+        down_samples=(0, 1, 1, 1),
         temporal_strides=(1, 1, 1, 1),
         inflate_list=((1, 0, 1), (0, 1, 0, 1), (0, 1, 0, 1, 0, 1), (0, 1, 0)),
         inflate_style='3x1x1',
@@ -147,7 +147,7 @@ def test_resnet3d_backbone_i3d_3x3x3():
     data = torch.randn(1, 3, 32, 224, 224)
     # for R50
     model = ResNet3DBackbone(
-        inplanes=3,
+        in_planes=3,
         base_planes=64,
         conv1_kernel=(5, 7, 7),
         conv1_stride=(2, 2, 2),
@@ -158,7 +158,7 @@ def test_resnet3d_backbone_i3d_3x3x3():
         with_pool2=True,
         layer_planes=(64, 128, 256, 512),
         layer_blocks=(3, 4, 6, 3),
-        downsamples=(0, 1, 1, 1),
+        down_samples=(0, 1, 1, 1),
         temporal_strides=(1, 1, 1, 1),
         inflate_list=((1, 0, 1), (0, 1, 0, 1), (0, 1, 0, 1, 0, 1), (0, 1, 0)),
         inflate_style='3x3x3',

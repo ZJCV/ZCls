@@ -6,11 +6,12 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
 
-class ResNet3DBottleneck(nn.Module):
+class ResNet3DBottleneck(nn.Module, ABC):
     """
     依次执行大小为Tx1x1、Tx3x3、1x1x1的卷积操作，
     如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
@@ -20,15 +21,15 @@ class ResNet3DBottleneck(nn.Module):
 
     def __init__(self,
                  # 输入通道数
-                 inplanes,
+                 in_planes,
                  # 输出通道数
-                 planes,
+                 out_planes,
                  # 空间步长
                  spatial_stride=1,
                  # 时间步长
                  temporal_stride=1,
                  # 下采样
-                 downsample=None,
+                 down_sample=None,
                  # 是否膨胀
                  inflate=False,
                  # 膨胀类型，作用于Bottleneck
@@ -77,10 +78,10 @@ class ResNet3DBottleneck(nn.Module):
             conv2_stride = (1, spatial_stride, spatial_stride)
             conv2_padding = (0, 1, 1)
 
-        self.downsample = downsample
+        self.down_sample = down_sample
 
-        width = int(planes * (base_width / 64.)) * groups
-        self.conv1 = conv_layer(inplanes, width, kernel_size=conv1_kernel_size,
+        width = int(out_planes * (base_width / 64.)) * groups
+        self.conv1 = conv_layer(in_planes, width, kernel_size=conv1_kernel_size,
                                 stride=conv1_stride, padding=conv1_padding, bias=False)
         self.bn1 = norm_layer(width)
 
@@ -89,8 +90,8 @@ class ResNet3DBottleneck(nn.Module):
                                 groups=groups)
         self.bn2 = norm_layer(width)
 
-        self.conv3 = conv_layer(width, planes * self.expansion, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
-        self.bn3 = norm_layer(planes * self.expansion)
+        self.conv3 = conv_layer(width, out_planes * self.expansion, kernel_size=(1, 1, 1), stride=(1, 1, 1), bias=False)
+        self.bn3 = norm_layer(out_planes * self.expansion)
 
         self.relu = act_layer(inplace=True)
 
@@ -108,8 +109,8 @@ class ResNet3DBottleneck(nn.Module):
         out = self.conv3(out)
         out = self.bn3(out)
 
-        if self.downsample is not None:
-            identity = self.downsample(x)
+        if self.down_sample is not None:
+            identity = self.down_sample(x)
 
         out += identity
         out = self.relu(out)

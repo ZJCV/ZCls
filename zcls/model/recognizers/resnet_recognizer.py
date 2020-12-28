@@ -24,11 +24,13 @@ from ..act_helper import get_act
 from ..conv_helper import get_conv
 
 arch_settings = {
-    'resnet18': (BasicBlock, (2, 2, 2, 2)),
-    'resnet34': (BasicBlock, (3, 4, 6, 3)),
-    'resnet50': (Bottleneck, (3, 4, 6, 3)),
-    'resnet101': (Bottleneck, (3, 4, 23, 3)),
-    'resnet152': (Bottleneck, (3, 8, 36, 3))
+    'resnet18': (BasicBlock, (2, 2, 2, 2), 1, 64),
+    'resnet34': (BasicBlock, (3, 4, 6, 3), 1, 64),
+    'resnet50': (Bottleneck, (3, 4, 6, 3), 1, 64),
+    'resnet101': (Bottleneck, (3, 4, 23, 3), 1, 64),
+    'resnet152': (Bottleneck, (3, 8, 36, 3), 1, 64),
+    'resnext50_32x4d': (Bottleneck, (3, 4, 6, 3), 32, 4),
+    'resnext101_32x8d': (Bottleneck, (3, 4, 23, 3), 32, 8)
 }
 
 
@@ -59,10 +61,6 @@ class ResNetRecognizer(nn.Module, ABC):
                  layer_planes=(64, 128, 256, 512),
                  # 是否执行空间下采样
                  down_samples=(0, 1, 1, 1),
-                 # cardinality
-                 groups=1,
-                 # 每组的宽度
-                 width_per_group=64,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -77,7 +75,7 @@ class ResNetRecognizer(nn.Module, ABC):
         self.fix_bn = fix_bn
         self.partial_bn = partial_bn
 
-        block_layer, layer_blocks = arch_settings[arch]
+        block_layer, layer_blocks, groups, width_per_group = arch_settings[arch]
 
         self.backbone = ResNetBackbone(
             in_planes=in_planes,
@@ -226,8 +224,6 @@ def build_resnet(cfg):
         base_planes = cfg.MODEL.BACKBONE.BASE_PLANES
         layer_planes = cfg.MODEL.BACKBONE.LAYER_PLANES
         down_samples = cfg.MODEL.BACKBONE.DOWN_SAMPLES
-        groups = cfg.MODEL.BACKBONE.GROUPS
-        width_per_group = cfg.MODEL.BACKBONE.WIDTH_PER_GROUP
 
         return ResNetRecognizer(
             # for RECOGNIZER
@@ -244,8 +240,6 @@ def build_resnet(cfg):
             base_planes=base_planes,
             layer_planes=layer_planes,
             down_samples=down_samples,
-            groups=groups,
-            width_per_group=width_per_group,
             conv_layer=conv_layer,
             norm_layer=norm_layer,
             act_layer=act_layer,

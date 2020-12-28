@@ -28,12 +28,12 @@ def test_resnet3d_basicblock():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=False,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)
@@ -49,12 +49,12 @@ def test_resnet3d_basicblock():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=False,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)
@@ -78,13 +78,13 @@ def test_resnet3d_basicblock_3_1_1():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=True,
                                inflate_style=inflate_style,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)
@@ -105,13 +105,13 @@ def test_resnet3d_basicblock_3_1_1():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=True,
                                inflate_style=inflate_style,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)
@@ -132,13 +132,13 @@ def test_resnet3d_basicblock_3_1_1():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=True,
                                inflate_style=inflate_style,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)
@@ -162,13 +162,13 @@ def test_resnet3d_basicblock_3_3_3():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=True,
                                inflate_style=inflate_style,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)
@@ -189,13 +189,13 @@ def test_resnet3d_basicblock_3_3_3():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=True,
                                inflate_style=inflate_style,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)
@@ -216,13 +216,13 @@ def test_resnet3d_basicblock_3_3_3():
                   stride=(temporal_stride, spatial_stride, spatial_stride), bias=False),
         nn.BatchNorm3d(planes * expansion),
     )
-    model = ResNet3DBasicBlock(inplanes=inplanes,
-                               planes=planes,
+    model = ResNet3DBasicBlock(in_planes=inplanes,
+                               out_planes=planes,
                                spatial_stride=spatial_stride,
                                temporal_stride=temporal_stride,
                                inflate=True,
                                inflate_style=inflate_style,
-                               downsample=downsample)
+                               down_sample=downsample)
     print(model)
 
     outputs = model(data)

@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/rd50_custom_cifar100_224'
+OUTPUT_DIR: 'outputs/benchmarks/rdxt50_custom_cifar100_224'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -42,7 +42,7 @@ MODEL:
     TYPE: 'ReLU'
   BACKBONE:
     IN_PLANES: 3
-    ARCH: 'resnet50'
+    ARCH: 'resnext50_32x4d'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
     DOWN_SAMPLES: (0, 1, 1, 1)

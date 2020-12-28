@@ -74,16 +74,23 @@ def add_config(_C):
     _C.MODEL.BACKBONE.LAYER_PLANES = (64, 128, 256, 512)
     # 是否执行空间下采样
     _C.MODEL.BACKBONE.DOWN_SAMPLES = (0, 1, 1, 1)
-    # cardinality
-    _C.MODEL.BACKBONE.GROUPS = 1
-    # 每组的宽度
-    _C.MODEL.BACKBONE.WIDTH_PER_GROUP = 64
     # for MobileNetV1
     # 每层步长
     _C.MODEL.BACKBONE.STRIDES = (1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2)
     # for MobileNetV2
     # 输出特征维数
     _C.MODEL.BACKBONE.FEATURE_DIMS = 1280
+    # for ResNet3D
+    _C.MODEL.BACKBONE.CONV1_KERNEL = (1, 7, 7)
+    _C.MODEL.BACKBONE.CONV1_STRIDE = (1, 2, 2)
+    _C.MODEL.BACKBONE.CONV1_PADDING = (0, 3, 3)
+    _C.MODEL.BACKBONE.POOL1_KERNEL = (1, 3, 3)
+    _C.MODEL.BACKBONE.POOL1_STRIDE = (1, 2, 2)
+    _C.MODEL.BACKBONE.POOL1_PADDING = (0, 1, 1)
+    _C.MODEL.BACKBONE.WITH_POOL2 = False
+    _C.MODEL.BACKBONE.TEMPORAL_STRIDES = (1, 1, 1, 1)
+    _C.MODEL.BACKBONE.INFLATE_LIST = (0, 0, 0, 0)
+    _C.MODEL.BACKBONE.INFLATE_STYLE = '3x1x1'
 
     # ---------------------------------------------------------------------------- #
     # head

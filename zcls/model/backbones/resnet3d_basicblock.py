@@ -6,11 +6,12 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
 
-class ResNet3DBasicBlock(nn.Module):
+class ResNet3DBasicBlock(nn.Module, ABC):
     """
     使用两个Tx3x3卷积，如果进行下采样，那么使用第一个卷积层对输入时空尺寸进行减半操作
     如果执行膨胀操作，仅作用于第一个卷积层，第二个卷积层的kernel_size大小为1x3x3
@@ -19,15 +20,15 @@ class ResNet3DBasicBlock(nn.Module):
 
     def __init__(self,
                  # 输入通道数
-                 inplanes,
+                 in_planes,
                  # 输出通道数
-                 planes,
+                 out_planes,
                  # 空间步长
                  spatial_stride=1,
                  # 时间步长
                  temporal_stride=1,
                  # 下采样
-                 downsample=None,
+                 down_sample=None,
                  # 是否膨胀
                  inflate=False,
                  # 膨胀类型，作用于Bottleneck
@@ -64,16 +65,16 @@ class ResNet3DBasicBlock(nn.Module):
             conv1_stride = (1, spatial_stride, spatial_stride)
             conv1_padding = (0, 1, 1)
 
-        self.downsample = downsample
+        self.down_sample = down_sample
 
-        self.conv1 = conv_layer(inplanes, planes, kernel_size=conv1_kernel_size,
+        self.conv1 = conv_layer(in_planes, out_planes, kernel_size=conv1_kernel_size,
                                 stride=conv1_stride, padding=conv1_padding,
                                 bias=False)
-        self.bn1 = norm_layer(planes)
+        self.bn1 = norm_layer(out_planes)
 
-        self.conv2 = conv_layer(planes, planes, kernel_size=(1, 3, 3),
+        self.conv2 = conv_layer(out_planes, out_planes, kernel_size=(1, 3, 3),
                                 stride=(1, 1, 1), padding=(0, 1, 1), bias=False)
-        self.bn2 = norm_layer(planes)
+        self.bn2 = norm_layer(out_planes)
 
         self.relu = act_layer(inplace=True)
 
@@ -87,8 +88,8 @@ class ResNet3DBasicBlock(nn.Module):
         out = self.conv2(out)
         out = self.bn2(out)
 
-        if self.downsample is not None:
-            identity = self.downsample(x)
+        if self.down_sample is not None:
+            identity = self.down_sample(x)
 
         out += identity
         out = self.relu(out)
