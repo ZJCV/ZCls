@@ -16,12 +16,11 @@ from torch.nn.parallel import DistributedDataParallel
 from torch.cuda.amp import GradScaler
 from torch.cuda.amp import autocast
 
-from zcls.config.key_word import KEY_OUTPUT, KEY_LOSS
+from zcls.config.key_word import KEY_LOSS
 from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
 from zcls.util.precise_bn import calculate_and_update_precise_bn
 from zcls.util.distributed import is_master_proc, synchronize
 from zcls.util import logging
-from zcls.util.mixup_util import mixup_data, mixup_criterion
 from zcls.engine.inference import do_evaluation
 from zcls.data.build import shuffle_dataset
 
@@ -30,7 +29,7 @@ logger = logging.get_logger(__name__)
 
 def do_train(cfg, arguments,
              data_loader, model, criterion, optimizer, lr_scheduler,
-             checkpointer, device):
+             check_pointer, device):
     meters = MetricLogger()
     evaluator = data_loader.dataset.evaluator
     summary_writer = None
@@ -109,7 +108,7 @@ def do_train(cfg, arguments,
         arguments["cur_epoch"] = cur_epoch
         lr_scheduler.step()
         if is_master_proc() and save_epoch > 0 and cur_epoch % save_epoch == 0 and cur_epoch != max_epoch:
-            checkpointer.save("model_{:04d}".format(cur_epoch), **arguments)
+            check_pointer.save("model_{:04d}".format(cur_epoch), **arguments)
         if eval_epoch > 0 and cur_epoch % eval_epoch == 0 and cur_epoch != max_epoch:
             if cfg.MODEL.NORM.PRECISE_BN:
                 calculate_and_update_precise_bn(
@@ -135,7 +134,7 @@ def do_train(cfg, arguments,
                 summary_writer.add_scalar(f'eval/{key}', value, global_step=arguments["cur_epoch"])
             summary_writer.close()
     if is_master_proc():
-        checkpointer.save("model_final", **arguments)
+        check_pointer.save("model_final", **arguments)
     # compute training time
     total_training_time = int(time.time() - start_training_time)
     total_time_str = str(datetime.timedelta(seconds=total_training_time))

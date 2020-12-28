@@ -11,6 +11,7 @@ import torch
 from torchvision.models import resnet50
 
 from zcls.config import cfg
+from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.norm_helper import get_norm
 from zcls.model.recognizers.resnet_d_recognizer import ResNetDRecognizer
 
@@ -24,7 +25,7 @@ def test_resnet_d():
     print(model)
 
     data = torch.randn(1, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (1, 1000)
@@ -44,7 +45,7 @@ def test_resnetxt_d():
     print(model)
 
     data = torch.randn(1, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (1, 1000)
@@ -67,7 +68,7 @@ def test_resnet_d_gn():
     print(model)
 
     data = torch.randn(1, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (1, 1000)
@@ -89,7 +90,7 @@ def test_resnetxt_d_gn():
     print(model)
 
     data = torch.randn(1, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (1, 1000)

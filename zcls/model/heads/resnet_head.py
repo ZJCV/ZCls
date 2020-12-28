@@ -14,9 +14,17 @@ import torch.nn as nn
 
 class ResNetHead(nn.Module, ABC):
 
-    def __init__(self, feature_dims, num_classes):
+    def __init__(self,
+                 # 输入特征维度
+                 feature_dims=2048,
+                 # 类别数
+                 num_classes=1000,
+                 # 随机失活概率
+                 p=0.
+                 ):
         super(ResNetHead, self).__init__()
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.dropout = nn.Dropout(p=p)
         self.fc = nn.Linear(feature_dims, num_classes)
 
         self._init_weights()
@@ -28,6 +36,7 @@ class ResNetHead(nn.Module, ABC):
     def forward(self, x):
         x = self.pool(x)
         x = torch.flatten(x, 1)
+        x = self.dropout(x)
         x = self.fc(x)
 
         return x

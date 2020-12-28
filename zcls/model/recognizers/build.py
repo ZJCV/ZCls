@@ -16,6 +16,7 @@ from zcls.util import logging
 
 from .. import registry
 from .resnet_recognizer import build_resnet
+from .resnet_d_recognizer import build_resnet_d
 
 # from .resnet3d_recognizer import build_resnet3d
 # from .attention_resnet_recognizer import build_attention_resnet

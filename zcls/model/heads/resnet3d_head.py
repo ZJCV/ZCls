@@ -16,7 +16,7 @@ class ResNet3DHead(nn.Module, ABC):
 
     def __init__(self,
                  # 输入特征维度
-                 feature_dims=1536,
+                 feature_dims=2048,
                  # 类别数
                  num_classes=1000,
                  # 随机失活概率
