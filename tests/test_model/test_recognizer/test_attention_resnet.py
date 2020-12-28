@@ -9,6 +9,7 @@
 
 import torch
 
+from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.recognizers.attention_resnet_recognizer import AttentionResNetRecognizer
 
 
@@ -16,16 +17,15 @@ def test_attention_resnet():
     # gc
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='GlobalContextBlock2D'
     )
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)
@@ -33,15 +33,14 @@ def test_attention_resnet():
     # snl
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+        with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
         attention_type='SimplifiedNonLocal2DEmbeddedGaussian'
     )
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)
@@ -49,15 +48,14 @@ def test_attention_resnet():
     # nl
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+        with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
         attention_type='NonLocal2DEmbeddedGaussian',
     )
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)
@@ -65,16 +63,15 @@ def test_attention_resnet():
     # se
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='SqueezeAndExcitationBlock2D'
     )
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)
@@ -87,9 +84,8 @@ def test_attention_resnetxt():
     # gc
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='GlobalContextBlock2D',
         groups=groups,
@@ -98,7 +94,7 @@ def test_attention_resnetxt():
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)
@@ -106,9 +102,8 @@ def test_attention_resnetxt():
     # snl
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+        with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
         attention_type='SimplifiedNonLocal2DEmbeddedGaussian',
         groups=groups,
         width_per_group=width_per_group
@@ -116,7 +111,7 @@ def test_attention_resnetxt():
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)
@@ -124,9 +119,8 @@ def test_attention_resnetxt():
     # nl
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+        with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
         attention_type='NonLocal2DEmbeddedGaussian',
         groups=groups,
         width_per_group=width_per_group
@@ -134,7 +128,7 @@ def test_attention_resnetxt():
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)
@@ -142,9 +136,8 @@ def test_attention_resnetxt():
     # se
     model = AttentionResNetRecognizer(
         arch="resnet50",
-        feature_dims=2048,
         num_classes=1000,
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='SqueezeAndExcitationBlock2D',
         groups=groups,
@@ -153,7 +146,7 @@ def test_attention_resnetxt():
     print(model)
 
     data = torch.randn(10, 3, 224, 224)
-    outputs = model(data)['probs']
+    outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
     assert outputs.shape == (10, 1000)

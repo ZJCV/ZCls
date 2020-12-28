@@ -6,6 +6,7 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
@@ -13,11 +14,11 @@ from ..backbones.attentation_resnet_basicblock import AttentionResNetBasicBlock
 from ..backbones.attentation_resnet_bottleneck import AttentionResNetBottleneck
 
 
-class AttentionResNetBackbone(nn.Module):
+class AttentionResNetBackbone(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道数
-                 inplanes=3,
+                 in_planes=3,
                  # 基础通道数,
                  base_planes=64,
                  # 每一层通道数
@@ -25,17 +26,17 @@ class AttentionResNetBackbone(nn.Module):
                  # 每一层块个数
                  layer_blocks=(2, 2, 2, 2),
                  # 是否执行空间下采样
-                 downsamples=(0, 1, 1, 1),
-                 # 是否使用注意力模块
-                 with_attention=(1, 1, 1, 1),
-                 # 衰减率
-                 reduction=16,
-                 # 注意力模块类型
-                 attention_type='GlobalContextBlock2D',
+                 down_samples=(0, 1, 1, 1),
                  # cardinality
                  groups=1,
                  # 每组的宽度
                  width_per_group=64,
+                 # 是否使用注意力模块
+                 with_attentions=(1, 1, 1, 1),
+                 # 衰减率
+                 reduction=16,
+                 # 注意力模块类型
+                 attention_type='GlobalContextBlock2D',
                  # 块类型
                  block_layer=None,
                  # 卷积层类型
@@ -48,7 +49,6 @@ class AttentionResNetBackbone(nn.Module):
                  zero_init_residual=False
                  ):
         super(AttentionResNetBackbone, self).__init__()
-        assert len(layer_planes) == len(layer_blocks) == len(downsamples) == len(with_attention)
 
         if block_layer is None:
             block_layer = AttentionResNetBasicBlock
@@ -59,60 +59,60 @@ class AttentionResNetBackbone(nn.Module):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.inplanes = inplanes
-        self.base_planes = base_planes
-        self.layer_planes = layer_planes
-        self.layer_blocks = layer_blocks
-        self.downsamples = downsamples
-        self.with_attention = with_attention
-        self.reduction = reduction
-        self.attention_type = attention_type
-        self.groups = groups
-        self.width_per_group = width_per_group
-        self.block_layer = block_layer
-        self.conv_layer = conv_layer
-        self.norm_layer = norm_layer
-        self.act_layer = act_layer
-        self.zero_init_residual = zero_init_residual
-
-        self._make_stem()
-        self.inplanes = self.base_planes
-        for i in range(len(self.layer_blocks)):
-            res_layer = self._make_res_layer(self.inplanes,
-                                             self.layer_planes[i],
-                                             self.layer_blocks[i],
-                                             self.downsamples[i],
-                                             self.with_attention[i],
-                                             self.reduction,
-                                             self.attention_type,
-                                             self.block_layer,
-                                             self.conv_layer,
-                                             self.norm_layer,
-                                             self.act_layer
+        self._make_stem(in_planes, base_planes, conv_layer, norm_layer, act_layer)
+        in_planes = base_planes
+        for i in range(len(layer_blocks)):
+            res_layer = self._make_res_layer(in_planes,
+                                             layer_planes[i],
+                                             layer_blocks[i],
+                                             down_samples[i],
+                                             groups,
+                                             width_per_group,
+                                             with_attentions[i],
+                                             reduction,
+                                             attention_type,
+                                             block_layer,
+                                             conv_layer,
+                                             norm_layer,
+                                             act_layer
                                              )
-            self.inplanes = self.layer_planes[i] * self.block_layer.expansion
+            in_planes = layer_planes[i] * block_layer.expansion
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, res_layer)
 
-        self._init_weights(self.zero_init_residual)
+        self._init_weights(zero_init_residual)
 
-    def _make_stem(self):
-        self.conv1 = self.conv_layer(self.inplanes, self.base_planes, kernel_size=(7, 7), stride=2, padding=3,
-                                     bias=False)
-        self.bn1 = self.norm_layer(self.base_planes)
-        self.relu = self.act_layer(inplace=True)
+    def _make_stem(self,
+                   # 输入通道数
+                   in_planes,
+                   # 卷积层输出通道数
+                   base_planes,
+                   # 卷积层
+                   conv_layer,
+                   # 池化层
+                   norm_layer,
+                   # 激活层
+                   act_layer
+                   ):
+        self.conv1 = conv_layer(in_planes, base_planes, kernel_size=(7, 7), stride=2, padding=3, bias=False)
+        self.bn1 = norm_layer(base_planes)
+        self.relu = act_layer(inplace=True)
 
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.pool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
     def _make_res_layer(self,
                         # 输入通道数
-                        inplanes,
+                        in_planes,
                         # 输出通道数
-                        planes,
+                        out_planes,
                         # 块个数
                         block_num,
                         # 是否执行空间下采样
-                        is_downsample,
+                        with_sample,
+                        # cardinality
+                        groups,
+                        # 每组的宽度
+                        width_per_group,
                         # 是否使用注意力模块
                         with_attention,
                         # 衰减率
@@ -129,30 +129,35 @@ class AttentionResNetBackbone(nn.Module):
                         act_layer,
                         ):
         assert isinstance(with_attention, (int, tuple))
-        assert len(with_attention) == block_num if isinstance(with_attention, tuple) else with_attention in (0, 1)
-        with_attention = with_attention if isinstance(with_attention, tuple) else [with_attention] * block_num
+        assert with_attention in (0, 1) if isinstance(with_attention, int) else len(with_attention) == block_num
+        with_attentions = with_attention if isinstance(with_attention, tuple) else [with_attention] * block_num
 
-        stride = 2 if is_downsample else 1
-        expansion = self.block_layer.expansion
-        if is_downsample or inplanes != planes * expansion:
-            downsample = nn.Sequential(
-                conv_layer(inplanes, planes * expansion, kernel_size=1, stride=stride, bias=False),
-                norm_layer(planes * expansion),
+        stride = 2 if with_sample else 1
+        expansion = block_layer.expansion
+        if with_sample or in_planes != out_planes * expansion:
+            down_sample = nn.Sequential(
+                conv_layer(in_planes, out_planes * expansion, kernel_size=1, stride=stride, bias=False),
+                norm_layer(out_planes * expansion),
             )
         else:
-            downsample = None
+            down_sample = None
 
         blocks = list()
         blocks.append(block_layer(
-            inplanes, planes, stride, downsample, with_attention[0], reduction, attention_type,
-            self.groups, self.width_per_group,
+            in_planes, out_planes, stride, down_sample,
+            groups, width_per_group,
+            with_attentions[0], reduction, attention_type,
             conv_layer, norm_layer, act_layer))
-        inplanes = planes * expansion
+        in_planes = out_planes * expansion
 
+        stride = 1
+        down_sample = None
         for i in range(1, block_num):
-            blocks.append(block_layer(inplanes, planes, 1, None, with_attention[i], reduction, attention_type,
-                                      self.groups, self.width_per_group,
-                                      conv_layer, norm_layer, act_layer))
+            blocks.append(block_layer(
+                in_planes, out_planes, stride, down_sample,
+                groups, width_per_group,
+                with_attentions[i], reduction, attention_type,
+                conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
     def _init_weights(self, zero_init_residual):
@@ -168,16 +173,16 @@ class AttentionResNetBackbone(nn.Module):
         # This improves the model by 0.2~0.3% according to https://arxiv.org/abs/1706.02677
         if zero_init_residual:
             for m in self.modules():
-                if isinstance(m, AttentionResNetBasicBlock):
+                if isinstance(m, AttentionResNetBottleneck):
                     nn.init.constant_(m.bn3.weight, 0)
-                elif isinstance(m, AttentionResNetBottleneck):
+                elif isinstance(m, AttentionResNetBasicBlock):
                     nn.init.constant_(m.bn2.weight, 0)
 
     def _forward_impl(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
-        x = self.maxpool(x)
+        x = self.pool(x)
 
         x = self.layer1(x)
         x = self.layer2(x)

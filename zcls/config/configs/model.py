@@ -54,7 +54,7 @@ def add_config(_C):
     # attention
     # ---------------------------------------------------------------------------- #
     _C.MODEL.ATTENTION = CN()
-    _C.MODEL.ATTENTION.WITH_ATTENTION = (1, 1, 1, 1)
+    _C.MODEL.ATTENTION.WITH_ATTENTIONS = (1, 1, 1, 1)
     _C.MODEL.ATTENTION.REDUCTION = 16
     _C.MODEL.ATTENTION.ATTENTION_TYPE = 'GlobalContextBlock2D'
 

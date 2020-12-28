@@ -96,13 +96,11 @@ class ResNetDRecognizer(nn.Module, ABC):
             num_classes=pretrained_num_classes
         )
 
-        self._init_weights(arch=arch,
-                           pretrained=pretrained,
+        self._init_weights(pretrained=pretrained,
                            pretrained_num_classes=pretrained_num_classes,
                            num_classes=num_classes)
 
     def _init_weights(self,
-                      arch,
                       pretrained,
                       pretrained_num_classes,
                       num_classes

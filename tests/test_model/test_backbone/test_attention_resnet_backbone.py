@@ -18,7 +18,7 @@ def test_attention_resnet_backbone():
     # se
     model = AttentionResNetBackbone(
         layer_blocks=(2, 2, 2, 2),
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='SqueezeAndExcitationBlock2D',
         block_layer=AttentionResNetBasicBlock,
@@ -33,7 +33,7 @@ def test_attention_resnet_backbone():
     # nl
     model = AttentionResNetBackbone(
         layer_blocks=(2, 2, 2, 2),
-        with_attention=((0, 0), (1, 1), (1, 1), (0, 0)),
+        with_attentions=((0, 0), (1, 1), (1, 1), (0, 0)),
         attention_type='NonLocal2DEmbeddedGaussian',
         block_layer=AttentionResNetBasicBlock,
     )
@@ -47,7 +47,7 @@ def test_attention_resnet_backbone():
     # snl
     model = AttentionResNetBackbone(
         layer_blocks=(2, 2, 2, 2),
-        with_attention=((0, 0), (1, 1), (1, 1), (0, 0)),
+        with_attentions=((0, 0), (1, 1), (1, 1), (0, 0)),
         attention_type='SimplifiedNonLocal2DEmbeddedGaussian',
         block_layer=AttentionResNetBasicBlock,
     )
@@ -61,7 +61,7 @@ def test_attention_resnet_backbone():
     # gc
     model = AttentionResNetBackbone(
         layer_blocks=(2, 2, 2, 2),
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='GlobalContextBlock2D',
         block_layer=AttentionResNetBasicBlock,
@@ -77,7 +77,7 @@ def test_attention_resnet_backbone():
     # se
     model = AttentionResNetBackbone(
         layer_blocks=(3, 4, 6, 3),
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='SqueezeAndExcitationBlock2D',
         block_layer=AttentionResNetBottleneck,
@@ -92,7 +92,7 @@ def test_attention_resnet_backbone():
     # nl
     model = AttentionResNetBackbone(
         layer_blocks=(3, 4, 6, 3),
-        with_attention=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+        with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
         attention_type='NonLocal2DEmbeddedGaussian',
         block_layer=AttentionResNetBottleneck,
     )
@@ -106,7 +106,7 @@ def test_attention_resnet_backbone():
     # snl
     model = AttentionResNetBackbone(
         layer_blocks=(3, 4, 6, 3),
-        with_attention=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+        with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
         attention_type='SimplifiedNonLocal2DEmbeddedGaussian',
         block_layer=AttentionResNetBottleneck,
     )
@@ -120,7 +120,7 @@ def test_attention_resnet_backbone():
     # gc
     model = AttentionResNetBackbone(
         layer_blocks=(3, 4, 6, 3),
-        with_attention=(1, 1, 1, 1),
+        with_attentions=(1, 1, 1, 1),
         reduction=16,
         attention_type='GlobalContextBlock2D',
         block_layer=AttentionResNetBottleneck,
