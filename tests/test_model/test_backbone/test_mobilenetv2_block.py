@@ -15,18 +15,18 @@ from zcls.model.backbones.mobilenetv2_block import MobileNetV2Block
 def test_mobilenetv2_block():
     # 不进行下采样
     data = torch.randn(1, 32, 112, 112)
-    inplanes = 32
+    in_planes = 32
     planes = 16
     stride = 1
     model = MobileNetV2Block(
         # 输入通道数
-        inplanes,
+        in_planes,
         # 输出通道数
         planes,
         # 膨胀因子
-        t=1,
+        expansion_rate=1,
         # 重复次数
-        n=1,
+        repeat=1,
         # 卷积层步长
         stride=stride
     )
@@ -38,18 +38,18 @@ def test_mobilenetv2_block():
 
     # 进行下采样
     data = torch.randn(1, 16, 112, 112)
-    inplanes = 16
+    in_planes = 16
     planes = 24
     stride = 2
     model = MobileNetV2Block(
         # 输入通道数
-        inplanes,
+        in_planes,
         # 输出通道数
         planes,
         # 膨胀因子
-        t=6,
+        expansion_rate=6,
         # 重复次数
-        n=2,
+        repeat=2,
         # 卷积层步长
         stride=stride
     )

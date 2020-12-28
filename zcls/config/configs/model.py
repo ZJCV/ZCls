@@ -81,6 +81,9 @@ def add_config(_C):
     # for MobileNetV1
     # 每层步长
     _C.MODEL.BACKBONE.STRIDES = (1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2)
+    # for MobileNetV2
+    # 输出特征维数
+    _C.MODEL.BACKBONE.FEATURE_DIMS = 1280
 
     # ---------------------------------------------------------------------------- #
     # head

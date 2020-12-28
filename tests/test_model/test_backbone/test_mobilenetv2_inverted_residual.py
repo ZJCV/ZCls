@@ -21,7 +21,7 @@ def test_mobilenetv2_inverted_residual():
     model = MobileNetV2InvertedResidual(inplanes,
                                         planes,
                                         stride=stride,
-                                        t=1.0)
+                                        expansion_rate=1.0)
     print(model)
 
     outputs = model(data)
@@ -36,7 +36,7 @@ def test_mobilenetv2_inverted_residual():
     model = MobileNetV2InvertedResidual(inplanes,
                                         planes,
                                         stride=stride,
-                                        t=6.0)
+                                        expansion_rate=6.0)
     print(model)
 
     outputs = model(data)
@@ -51,7 +51,7 @@ def test_mobilenetv2_inverted_residual():
     model = MobileNetV2InvertedResidual(inplanes,
                                         planes,
                                         stride=stride,
-                                        t=6.0)
+                                        expansion_rate=6.0)
     print(model)
 
     outputs = model(data)

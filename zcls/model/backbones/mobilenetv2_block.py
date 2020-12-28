@@ -6,26 +6,27 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
 from .mobilenetv2_inverted_residual import MobileNetV2InvertedResidual
 
 
-class MobileNetV2Block(nn.Module):
+class MobileNetV2Block(nn.Module, ABC):
     """
     重复执行多个反向残差块，每个反向残差块拥有相同的膨胀率和通道数，其中，仅对第一个残差块执行下采样操作（如果有的话）
     """
 
     def __init__(self,
                  # 输入通道数
-                 inplanes,
+                 in_planes,
                  # 输出通道数
-                 planes,
+                 out_planes,
                  # 膨胀因子
-                 t=1,
+                 expansion_rate=1,
                  # 重复次数
-                 n=1,
+                 repeat=1,
                  # 卷积层步长
                  stride=1,
                  # 卷积层零填充
@@ -40,19 +41,19 @@ class MobileNetV2Block(nn.Module):
         super(MobileNetV2Block, self).__init__()
 
         features = list()
-        for i in range(n):
+        for i in range(repeat):
             if i != 0:
                 # 仅对第一个残差块执行下采样操作（如果有的话）
                 stride = 1
-            features.append(MobileNetV2InvertedResidual(inplanes,
-                                                        planes,
-                                                        t=t,
+            features.append(MobileNetV2InvertedResidual(in_planes,
+                                                        out_planes,
+                                                        expansion_rate=expansion_rate,
                                                         stride=stride,
                                                         padding=padding,
                                                         conv_layer=conv_layer,
                                                         norm_layer=norm_layer,
                                                         act_layer=act_layer))
-            inplanes = planes
+            in_planes = out_planes
 
         self.conv = nn.Sequential(*features)
 

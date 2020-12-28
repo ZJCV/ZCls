@@ -18,10 +18,10 @@ from .. import registry
 from .resnet_recognizer import build_resnet
 from .resnet_d_recognizer import build_resnet_d
 from .mobilenetv1_recognizer import build_mobilenet_v1
+from .mobilenetv2_recognizer import build_mobilenet_v2
 
 # from .resnet3d_recognizer import build_resnet3d
 # from .attention_resnet_recognizer import build_attention_resnet
-# from .mobilenetv2_recognizer import build_mobilenetv2
 
 logger = logging.get_logger(__name__)
 

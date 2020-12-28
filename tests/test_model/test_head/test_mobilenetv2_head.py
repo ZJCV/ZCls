@@ -11,7 +11,7 @@ import torch
 from zcls.model.heads.mobilenetv2_head import MobileNetV2Head
 
 
-def test_mobilenetv2_head():
+def test_mobilenet_v2_head():
     data = torch.randn(1, 1280, 7, 7)
 
     feature_dims = 1280
@@ -25,4 +25,4 @@ def test_mobilenetv2_head():
 
 
 if __name__ == '__main__':
-    test_mobilenetv2_head()
+    test_mobilenet_v2_head()

@@ -18,11 +18,11 @@ class MobileNetV2Backbone(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道数
-                 inplanes=3,
+                 in_planes=3,
                  # 输出通道数
-                 planes=1280,
+                 out_planes=1280,
                  # 第一个卷积层通道数
-                 base_channel=32,
+                 base_planes=32,
                  # 第一个卷积层步长
                  stride=2,
                  # 第一个卷积层零填充
@@ -59,69 +59,58 @@ class MobileNetV2Backbone(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU6
 
-        # 输入通道数
-        self.inplanes = inplanes
-        # 输出通道数
-        self.planes = planes
-        # 第一个卷积层通道数
-        self.base_channel = base_channel
-        # 第一个卷积层步长
-        self.stride = stride
-        # 第一个卷积层零填充
-        self.padding = padding
-        # 卷积层类型
-        self.conv_layer = conv_layer
-        # 归一化层类型
-        self.norm_layer = norm_layer
-        # 激活层类型
-        self.act_layer = act_layer
+        kernel_size = 3
+        stride = 2
+        self.first_stem = self._make_stem(in_planes,
+                                          base_planes,
+                                          kernel_size,
+                                          stride,
+                                          conv_layer,
+                                          norm_layer,
+                                          act_layer
+                                          )
 
-        inplanes = self.inplanes
-        planes = self.base_channel
-        self.first_stem = self._make_stem(inplanes,
-                                          planes,
-                                          kernet_size=3,
-                                          stride=stride,
-                                          padding=padding,
-                                          bias=False)
-
-        inplanes = planes
+        in_planes = base_planes
         for i, (t, c, n, s) in enumerate(inverted_residual_setting):
-            planes = c
-            layer = MobileNetV2Block(inplanes,
-                                     planes,
-                                     t=t,
-                                     n=n,
+            feature_dims = c
+            layer = MobileNetV2Block(in_planes,
+                                     feature_dims,
+                                     expansion_rate=t,
+                                     repeat=n,
                                      stride=s,
-                                     conv_layer=self.conv_layer,
-                                     norm_layer=self.norm_layer,
-                                     act_layer=self.act_layer)
+                                     conv_layer=conv_layer,
+                                     norm_layer=norm_layer,
+                                     act_layer=act_layer)
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, layer)
-            inplanes = planes
-        planes = self.planes
-        self.last_stem = self._make_stem(inplanes,
-                                         planes,
-                                         kernet_size=1,
-                                         stride=1,
-                                         padding=0,
-                                         bias=False)
+            in_planes = feature_dims
+        kernel_size = 1
+        stride = 1
+        self.last_stem = self._make_stem(in_planes,
+                                         out_planes,
+                                         kernel_size,
+                                         stride,
+                                         conv_layer,
+                                         norm_layer,
+                                         act_layer)
 
         self.layer_num = len(inverted_residual_setting)
         self._init_weights()
 
     def _make_stem(self,
-                   inplanes,
-                   planes,
-                   kernet_size=1,
-                   stride=1,
-                   padding=0,
-                   bias=False):
+                   in_planes,
+                   out_planes,
+                   kernel_size,
+                   stride,
+                   conv_layer,
+                   norm_layer,
+                   act_layer
+                   ):
+        padding = 1 if stride == 2 else 0
         return nn.Sequential(
-            self.conv_layer(inplanes, planes, kernel_size=kernet_size,
-                            stride=stride, padding=padding, bias=bias),
-            self.norm_layer(planes),
-            self.act_layer(inplace=True)
+            conv_layer(in_planes, out_planes, kernel_size=kernel_size, stride=stride, padding=padding, bias=False),
+            norm_layer(out_planes),
+            act_layer(inplace=True)
         )
 
     def _init_weights(self):

@@ -9,10 +9,11 @@
 
 import torch
 
+from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.recognizers.mobilenetv2_recognizer import MobileNetV2Recognizer
 
 
-def test_mobilenetv1():
+def test_mobilenet_v2():
     for s in [224, 192, 160, 128]:
         for wm in [1.0, 0.75, 0.5, 0.25]:
             print(f's: {s}, wn: {wm}')
@@ -22,11 +23,11 @@ def test_mobilenetv1():
             # print(model)
 
             data = torch.randn(1, 3, s, s)
-            outputs = model(data)['probs']
+            outputs = model(data)[KEY_OUTPUT]
             print(outputs.shape)
 
             assert outputs.shape == (1, 1000)
 
 
 if __name__ == '__main__':
-    test_mobilenetv1()
+    test_mobilenet_v2()
