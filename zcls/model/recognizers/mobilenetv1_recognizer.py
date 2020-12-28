@@ -6,6 +6,7 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
@@ -16,7 +17,7 @@ from ..norm_helper import get_norm, freezing_bn
 from ..act_helper import get_act
 
 
-class MobileNetV1Recognizer(nn.Module):
+class MobileNetV1Recognizer(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道数

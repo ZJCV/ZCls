@@ -6,6 +6,7 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 from torch.nn.modules.module import T
@@ -27,7 +28,7 @@ arch_settings = {
 }
 
 
-class ResNetDRecognizer(nn.Module):
+class ResNetDRecognizer(nn.Module, ABC):
 
     def __init__(self,
                  arch='resnet18',

@@ -6,6 +6,7 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 from torchvision.models import mobilenet_v2
@@ -37,7 +38,7 @@ def _make_divisible(v, divisor, min_value=None):
     return new_v
 
 
-class MobileNetV2Recognizer(nn.Module):
+class MobileNetV2Recognizer(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道数
