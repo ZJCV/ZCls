@@ -26,16 +26,17 @@ def get_norm(cfg):
     Returns:
         nn.Module: the normalization layer.
     """
-    if cfg.MODEL.NORM.TYPE == "BatchNorm2d":
+    norm_type = cfg.MODEL.NORM.TYPE
+    if norm_type == "BatchNorm2d":
         return nn.BatchNorm2d
-    elif cfg.MODEL.NORM.TYPE == 'BatchNorm3d':
+    elif norm_type == 'BatchNorm3d':
         return nn.BatchNorm3d
-    elif cfg.MODEL.NORM.TYPE == "GroupNorm":
+    elif norm_type == "GroupNorm":
         num_groups = cfg.MODEL.NORM.GROUPS
         return partial(GroupNormWrapper, num_groups=num_groups)
     else:
         raise NotImplementedError(
-            "Norm type {} is not supported".format(cfg.MODEL.NORM.TYPE)
+            "Norm type {} is not supported".format(norm_type)
         )
 
 

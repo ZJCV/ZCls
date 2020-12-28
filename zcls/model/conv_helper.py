@@ -10,20 +10,20 @@
 import torch.nn as nn
 
 
-def get_act(cfg):
+def get_conv(cfg):
     """
     Args:
         cfg (CfgNode): model building configs, details are in the comments of
             the config file.
     Returns:
-        nn.Module: the activation layer.
+        nn.Module: the conv layer.
     """
-    act_type = cfg.MODEL.ACT.TYPE
-    if act_type == "ReLU":
-        return nn.ReLU
-    elif act_type == "ReLU6":
-        return nn.ReLU6
+    conv_type = cfg.MODEL.CONV.TYPE
+    if conv_type == "Conv2d":
+        return nn.Conv2d
+    elif conv_type == "Conv3d":
+        return nn.Conv3d
     else:
         raise NotImplementedError(
-            "Activation type {} is not supported".format(act_type)
+            "Conv type {} is not supported".format(conv_type)
         )

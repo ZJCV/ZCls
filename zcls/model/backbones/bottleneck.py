@@ -6,11 +6,12 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
 
-class Bottleneck(nn.Module):
+class Bottleneck(nn.Module, ABC):
     """
     依次执行大小为1x1、3x3、1x1的卷积操作，如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
     参考Torchvision实现
@@ -19,9 +20,9 @@ class Bottleneck(nn.Module):
 
     def __init__(self,
                  # 输入通道数
-                 inplanes,
+                 in_planes,
                  # 输出通道数
-                 planes,
+                 out_planes,
                  # 步长
                  stride=1,
                  # 下采样
@@ -47,15 +48,15 @@ class Bottleneck(nn.Module):
 
         self.downsample = downsample
 
-        width = int(planes * (base_width / 64.)) * groups
-        self.conv1 = conv_layer(inplanes, width, kernel_size=1, stride=1, bias=False)
+        width = int(out_planes * (base_width / 64.)) * groups
+        self.conv1 = conv_layer(in_planes, width, kernel_size=1, stride=1, bias=False)
         self.bn1 = norm_layer(width)
 
         self.conv2 = conv_layer(width, width, kernel_size=3, stride=stride, padding=1, bias=False, groups=groups)
         self.bn2 = norm_layer(width)
 
-        self.conv3 = conv_layer(width, planes * self.expansion, kernel_size=1, stride=1, bias=False)
-        self.bn3 = norm_layer(planes * self.expansion)
+        self.conv3 = conv_layer(width, out_planes * self.expansion, kernel_size=1, stride=1, bias=False)
+        self.bn3 = norm_layer(out_planes * self.expansion)
 
         self.relu = act_layer(inplace=True)
 

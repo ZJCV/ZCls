@@ -7,14 +7,8 @@
 @description: 
 """
 
-from .defaults import _C
-from . import dataloader
-from . import dataset
-from . import lr_scheduler
-from . import model
-from . import optimizer
-from . import transform
-from . import custom_config
+from zcls.config.configs.defaults import _C
+from .configs import transform, dataloader, model, custom_config, dataset, lr_scheduler, optimizer
 
 dataloader.add_config(_C)
 dataset.add_config(_C)

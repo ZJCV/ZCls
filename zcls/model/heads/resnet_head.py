@@ -6,16 +6,17 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch
 import torch.nn as nn
 
 
-class ResNetHead(nn.Module):
+class ResNetHead(nn.Module, ABC):
 
     def __init__(self, feature_dims, num_classes):
         super(ResNetHead, self).__init__()
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.pool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(feature_dims, num_classes)
 
         self._init_weights()
@@ -25,7 +26,7 @@ class ResNetHead(nn.Module):
         nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
-        x = self.avgpool(x)
+        x = self.pool(x)
         x = torch.flatten(x, 1)
         x = self.fc(x)
 

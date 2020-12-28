@@ -6,11 +6,12 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
 
-class BasicBlock(nn.Module):
+class BasicBlock(nn.Module, ABC):
     """
     使用两个3x3卷积，如果进行下采样，那么使用第一个卷积层对输入空间尺寸进行减半操作
     参考Torchvision实现
@@ -19,13 +20,13 @@ class BasicBlock(nn.Module):
 
     def __init__(self,
                  # 输入通道数
-                 inplanes,
+                 in_planes,
                  # 输出通道数
-                 planes,
+                 out_planes,
                  # 步长
                  stride=1,
                  # 下采样
-                 downsample=None,
+                 down_sample=None,
                  # cardinality
                  groups=1,
                  # 基础宽度
@@ -48,13 +49,13 @@ class BasicBlock(nn.Module):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.downsample = downsample
+        self.downsample = down_sample
 
-        self.conv1 = conv_layer(inplanes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
-        self.bn1 = norm_layer(planes)
+        self.conv1 = conv_layer(in_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False)
+        self.bn1 = norm_layer(out_planes)
 
-        self.conv2 = conv_layer(planes, planes, kernel_size=3, stride=1, padding=1, bias=False)
-        self.bn2 = norm_layer(planes)
+        self.conv2 = conv_layer(out_planes, out_planes, kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn2 = norm_layer(out_planes)
 
         self.relu = act_layer(inplace=True)
 

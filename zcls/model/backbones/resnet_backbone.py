@@ -6,6 +6,7 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
@@ -13,14 +14,14 @@ from ..backbones.basicblock import BasicBlock
 from ..backbones.bottleneck import Bottleneck
 
 
-class ResNetBackbone(nn.Module):
+class ResNetBackbone(nn.Module, ABC):
     """
-    参考Torchvision实现
+    参考Torchvision实现，适用于torchvision预训练模型加载
     """
 
     def __init__(self,
                  # 输入通道数
-                 inplanes=3,
+                 in_planes=3,
                  # 基础通道数,
                  base_planes=64,
                  # 每一层通道数
@@ -28,7 +29,7 @@ class ResNetBackbone(nn.Module):
                  # 每一层块个数
                  layer_blocks=(2, 2, 2, 2),
                  # 是否执行空间下采样
-                 downsamples=(0, 1, 1, 1),
+                 down_samples=(0, 1, 1, 1),
                  # cardinality
                  groups=1,
                  # 每组的宽度
@@ -55,54 +56,57 @@ class ResNetBackbone(nn.Module):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.inplanes = inplanes
-        self.base_planes = base_planes
-        self.layer_planes = layer_planes
-        self.layer_blocks = layer_blocks
-        self.downsamples = downsamples
-        self.groups = groups
-        self.width_per_group = width_per_group
-        self.block_layer = block_layer
-        self.conv_layer = conv_layer
-        self.norm_layer = norm_layer
-        self.act_layer = act_layer
-        self.zero_init_residual = zero_init_residual
-
-        self._make_stem()
-        self.inplanes = self.base_planes
-        for i in range(len(self.layer_blocks)):
-            res_layer = self._make_res_layer(self.inplanes,
-                                             self.layer_planes[i],
-                                             self.layer_blocks[i],
-                                             self.downsamples[i],
-                                             self.block_layer,
-                                             self.conv_layer,
-                                             self.norm_layer,
-                                             self.act_layer
+        self._make_stem(in_planes, base_planes, conv_layer, norm_layer, act_layer)
+        in_planes = base_planes
+        for i in range(len(layer_blocks)):
+            res_layer = self._make_res_layer(in_planes,
+                                             layer_planes[i],
+                                             layer_blocks[i],
+                                             down_samples[i],
+                                             groups,
+                                             width_per_group,
+                                             block_layer,
+                                             conv_layer,
+                                             norm_layer,
+                                             act_layer
                                              )
-            self.inplanes = self.layer_planes[i] * self.block_layer.expansion
+            in_planes = layer_planes[i] * block_layer.expansion
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, res_layer)
 
-        self._init_weights(self.zero_init_residual)
+        self._init_weights(zero_init_residual)
 
-    def _make_stem(self):
-        self.conv1 = self.conv_layer(self.inplanes, self.base_planes, kernel_size=(7, 7), stride=2, padding=3,
-                                     bias=False)
-        self.bn1 = self.norm_layer(self.base_planes)
-        self.relu = self.act_layer(inplace=True)
+    def _make_stem(self,
+                   # 输入通道数
+                   in_planes,
+                   # 卷积层输出通道数
+                   base_planes,
+                   # 卷积层
+                   conv_layer,
+                   # 池化层
+                   norm_layer,
+                   # 激活层
+                   act_layer
+                   ):
+        self.conv1 = conv_layer(in_planes, base_planes, kernel_size=(7, 7), stride=2, padding=3, bias=False)
+        self.bn1 = norm_layer(base_planes)
+        self.relu = act_layer(inplace=True)
 
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.pool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 
     def _make_res_layer(self,
                         # 输入通道数
-                        inplanes,
+                        in_planes,
                         # 输出通道数
-                        planes,
+                        out_planes,
                         # 块个数
                         block_num,
                         # 是否执行空间下采样
-                        is_downsample,
+                        with_sample,
+                        # cardinality
+                        groups,
+                        # 每组的宽度
+                        width_per_group,
                         # 块类型
                         block_layer,
                         # 卷积层类型
@@ -112,24 +116,28 @@ class ResNetBackbone(nn.Module):
                         # 激活层类型
                         act_layer,
                         ):
-        stride = 2 if is_downsample else 1
-        expansion = self.block_layer.expansion
-        if is_downsample or inplanes != planes * expansion:
-            downsample = nn.Sequential(
-                conv_layer(inplanes, planes * expansion, kernel_size=1, stride=stride, bias=False),
-                norm_layer(planes * expansion),
+        stride = 2 if with_sample else 1
+        expansion = block_layer.expansion
+        if with_sample or in_planes != out_planes * expansion:
+            down_sample = nn.Sequential(
+                conv_layer(in_planes, out_planes * expansion, kernel_size=1, stride=stride, bias=False),
+                norm_layer(out_planes * expansion),
             )
         else:
-            downsample = None
+            down_sample = None
 
         blocks = list()
         blocks.append(block_layer(
-            inplanes, planes, stride, downsample, self.groups, self.width_per_group, conv_layer, norm_layer, act_layer))
-        inplanes = planes * expansion
+            in_planes, out_planes, stride, down_sample,
+            groups, width_per_group, conv_layer, norm_layer, act_layer))
+        in_planes = out_planes * expansion
 
+        stride = 1
+        down_sample = None
         for i in range(1, block_num):
             blocks.append(block_layer(
-                inplanes, planes, 1, None, self.groups, self.width_per_group, conv_layer, norm_layer, act_layer))
+                in_planes, out_planes, stride, down_sample,
+                groups, width_per_group, conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
     def _init_weights(self, zero_init_residual):
@@ -154,7 +162,7 @@ class ResNetBackbone(nn.Module):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
-        x = self.maxpool(x)
+        x = self.pool(x)
 
         x = self.layer1(x)
         x = self.layer2(x)
