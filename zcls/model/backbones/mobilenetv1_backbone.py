@@ -6,21 +6,22 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 
 from .mobilenetv1_block import MobileNetV1Block
 
 
-class MobileNetV1Backbone(nn.Module):
+class MobileNetV1Backbone(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道数
-                 inplanes=3,
+                 in_planes=3,
                  # 第一个卷积层通道数,
-                 base_channel=32,
+                 base_planes=32,
                  # 后续深度卷积层通道数
-                 channels=(64, 128, 128, 256, 256, 512, 512, 512, 512, 512, 512, 1024, 1024),
+                 layer_planes=(64, 128, 128, 256, 256, 512, 512, 512, 512, 512, 512, 1024, 1024),
                  # 卷积步长
                  strides=(1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2),
                  # 卷积层类型
@@ -31,7 +32,7 @@ class MobileNetV1Backbone(nn.Module):
                  act_layer=None
                  ):
         super(MobileNetV1Backbone, self).__init__()
-        assert len(strides) == len(channels)
+        assert len(strides) == len(layer_planes)
 
         if conv_layer is None:
             conv_layer = nn.Conv2d
@@ -40,45 +41,60 @@ class MobileNetV1Backbone(nn.Module):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.inplanes = inplanes
-        self.base_channel = base_channel
-        self.channels = channels
-        self.strides = strides
-        self.conv_layer = conv_layer
-        self.norm_layer = norm_layer
-        self.act_layer = act_layer
-
-        self._make_stem()
-        self._make_dw()
+        self._make_stem(in_planes,
+                        base_planes,
+                        conv_layer,
+                        norm_layer,
+                        act_layer)
+        self.layer_num = self._make_dw(base_planes,
+                                       layer_planes,
+                                       strides,
+                                       conv_layer,
+                                       norm_layer,
+                                       act_layer)
 
         self._init_weights()
 
-    def _make_stem(self):
-        self.conv1 = self.conv_layer(self.inplanes, self.base_channel, kernel_size=3,
-                                     stride=2, padding=1, bias=False)
-        self.bn1 = self.norm_layer(self.base_channel)
-        self.relu = self.act_layer(inplace=True)
+    def _make_stem(self,
+                   in_planes,
+                   base_planes,
+                   conv_layer,
+                   norm_layer,
+                   act_layer
+                   ):
+        self.conv1 = conv_layer(in_planes, base_planes, kernel_size=3, stride=2, padding=1, bias=False)
+        self.bn1 = norm_layer(base_planes)
+        self.relu = act_layer(inplace=True)
 
-    def _make_dw(self):
-        self.layer_num = len(self.channels)
+    def _make_dw(self,
+                 base_planes,
+                 layer_planes,
+                 strides,
+                 conv_layer,
+                 norm_layer,
+                 act_layer
+                 ):
+        layer_num = len(layer_planes)
 
-        inplanes = self.base_channel
+        in_planes = base_planes
         padding = 1
-        for i, (channel, stride) in enumerate(zip(self.channels, self.strides)):
-            if i == (self.layer_num - 1):
-                # 最后一次深度卷积操作不下采样空间尺寸
+        for i, (layer_plane, stride) in enumerate(zip(layer_planes, strides)):
+            if i == (layer_num - 1):
+                # 最后一次深度卷积操作不进行空间尺寸下采样
                 padding = 4
-            dw_layer = MobileNetV1Block(int(inplanes),
-                                        int(channel),
+            dw_layer = MobileNetV1Block(int(in_planes),
+                                        int(layer_plane),
                                         stride=stride,
                                         padding=padding,
-                                        conv_layer=self.conv_layer,
-                                        norm_layer=self.norm_layer,
-                                        act_layer=self.act_layer
+                                        conv_layer=conv_layer,
+                                        norm_layer=norm_layer,
+                                        act_layer=act_layer
                                         )
-            inplanes = channel
+            in_planes = layer_plane
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, dw_layer)
+
+        return layer_num
 
     def _init_weights(self):
         for m in self.modules():

@@ -49,6 +49,8 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.COMPRESSION = CN()
     _C.MODEL.COMPRESSION.WIDTH_MULTIPLIER = 1.0
+    # 设置每一层通道数均为8的倍数
+    _C.MODEL.COMPRESSION.ROUND_NEAREST = 8
 
     # ---------------------------------------------------------------------------- #
     # attention
@@ -76,11 +78,15 @@ def add_config(_C):
     _C.MODEL.BACKBONE.GROUPS = 1
     # 每组的宽度
     _C.MODEL.BACKBONE.WIDTH_PER_GROUP = 64
+    # for MobileNetV1
+    # 每层步长
+    _C.MODEL.BACKBONE.STRIDES = (1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2)
 
     # ---------------------------------------------------------------------------- #
     # head
     # ---------------------------------------------------------------------------- #
     _C.MODEL.HEAD = CN()
+    _C.MODEL.HEAD.DROPOUT = 0.
     _C.MODEL.HEAD.NUM_CLASSES = 1000
 
     # ---------------------------------------------------------------------------- #

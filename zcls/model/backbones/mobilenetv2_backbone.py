@@ -6,6 +6,7 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch.nn as nn
 from torchvision.models import mobilenet_v2
@@ -13,7 +14,7 @@ from torchvision.models import mobilenet_v2
 from .mobilenetv2_block import MobileNetV2Block
 
 
-class MobileNetV2Backbone(nn.Module):
+class MobileNetV2Backbone(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道数

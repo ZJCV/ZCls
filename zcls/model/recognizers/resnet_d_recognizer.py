@@ -17,7 +17,7 @@ from .. import registry
 from ..backbones.basicblock import BasicBlock
 from ..backbones.bottleneck import Bottleneck
 from ..backbones.resnet_d_backbone import ResNetDBackbone
-from ..heads.resnet_head import ResNetHead
+from ..heads.resnet_d_head import ResNetDHead
 from ..norm_helper import get_norm, freezing_bn
 from ..act_helper import get_act
 from ..conv_helper import get_conv
@@ -45,6 +45,8 @@ class ResNetDRecognizer(nn.Module, ABC):
                  # 仅训练第一层BN
                  partial_bn=False,
                  ##################### for HEAD
+                 # 随机失活概率
+                 dropout_rate=0.,
                  # 输出类别数
                  num_classes=1000,
                  ##################### for BACKBONE
@@ -91,8 +93,9 @@ class ResNetDRecognizer(nn.Module, ABC):
             zero_init_residual=zero_init_residual
         )
         feature_dims = block_layer.expansion * layer_planes[-1]
-        self.head = ResNetHead(
+        self.head = ResNetDHead(
             feature_dims=feature_dims,
+            dropout_rate=dropout_rate,
             num_classes=pretrained_num_classes
         )
 
@@ -152,6 +155,7 @@ def build_resnet_d(cfg):
     groups = cfg.MODEL.BACKBONE.GROUPS
     width_per_group = cfg.MODEL.BACKBONE.WIDTH_PER_GROUP
     # for head
+    dropout_rate = cfg.MODEL.HEAD.DROPOUT
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
 
     return ResNetDRecognizer(
@@ -162,6 +166,7 @@ def build_resnet_d(cfg):
         fix_bn=fix_bn,
         partial_bn=partial_bn,
         # for HEAD
+        drdropout_rate=dropout_rate,
         num_classes=num_classes,
         # for BACKBONE
         in_planes=in_planes,

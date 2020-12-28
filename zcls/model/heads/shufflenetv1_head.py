@@ -22,12 +22,12 @@ class ShuffleNetV1Head(nn.Module, ABC):
                  # 类别数
                  num_classes=1000,
                  # 随机失活概率
-                 p=0.
+                 dropout_rate=0.
                  ):
         super(ShuffleNetV1Head, self).__init__()
 
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
-        self.dropout = nn.Dropout(p=p)
+        self.dropout = nn.Dropout(p=dropout_rate)
         self.fc = nn.Linear(feature_dims, num_classes)
 
         self._init_weights()

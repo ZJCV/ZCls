@@ -12,7 +12,7 @@ import torch
 import torch.nn as nn
 
 
-class ResNet3DHead(nn.Module, ABC):
+class ResNetDHead(nn.Module, ABC):
 
     def __init__(self,
                  # 输入特征维度
@@ -22,8 +22,8 @@ class ResNet3DHead(nn.Module, ABC):
                  # 随机失活概率
                  dropout_rate=0.
                  ):
-        super(ResNet3DHead, self).__init__()
-        self.pool = nn.AdaptiveAvgPool3d((1, 1, 1))
+        super(ResNetDHead, self).__init__()
+        self.pool = nn.AdaptiveAvgPool2d((1, 1))
         self.dropout = nn.Dropout(p=dropout_rate)
         self.fc = nn.Linear(feature_dims, num_classes)
 

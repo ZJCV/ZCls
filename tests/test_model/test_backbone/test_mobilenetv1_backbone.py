@@ -13,7 +13,7 @@ import torch.nn as nn
 from zcls.model.backbones.mobilenetv1_backbone import MobileNetV1Backbone
 
 
-def test_basicblock():
+def test_mobilenet_v1_backbone():
     data = torch.randn(1, 3, 224, 224)
 
     model = MobileNetV1Backbone()
@@ -25,4 +25,4 @@ def test_basicblock():
 
 
 if __name__ == '__main__':
-    test_basicblock()
+    test_mobilenet_v1_backbone()
