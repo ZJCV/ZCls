@@ -6,16 +6,25 @@
 @author: zj
 @description: 
 """
+from abc import ABC
 
 import torch
 import torch.nn as nn
 
 
-class ResNet3DHead(nn.Module):
+class ResNet3DHead(nn.Module, ABC):
 
-    def __init__(self, feature_dims, num_classes):
+    def __init__(self,
+                 # 输入特征维度
+                 feature_dims=1536,
+                 # 类别数
+                 num_classes=1000,
+                 # 随机失活概率
+                 p=0.
+                 ):
         super(ResNet3DHead, self).__init__()
-        self.avgpool = nn.AdaptiveAvgPool3d((1, 1, 1))
+        self.pool = nn.AdaptiveAvgPool3d((1, 1, 1))
+        self.dropout = nn.Dropout(p=p)
         self.fc = nn.Linear(feature_dims, num_classes)
 
         self._init_weights()
@@ -25,8 +34,9 @@ class ResNet3DHead(nn.Module):
         nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
-        x = self.avgpool(x)
+        x = self.pool(x)
         x = torch.flatten(x, 1)
+        x = self.dropout(x)
         x = self.fc(x)
 
         return x

@@ -11,6 +11,8 @@ from abc import ABC
 import torch
 import torch.nn as nn
 
+from ..layers.place_holder import PlaceHolder
+
 
 class ShuffleNetV1Head(nn.Module, ABC):
 
@@ -19,10 +21,13 @@ class ShuffleNetV1Head(nn.Module, ABC):
                  feature_dims=1536,
                  # 类别数
                  num_classes=1000,
+                 # 随机失活概率
+                 p=0.
                  ):
         super(ShuffleNetV1Head, self).__init__()
 
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.dropout = nn.Dropout(p=p)
         self.fc = nn.Linear(feature_dims, num_classes)
 
         self._init_weights()
@@ -32,8 +37,9 @@ class ShuffleNetV1Head(nn.Module, ABC):
         nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
-        x = self.avgpool(x)
+        x = self.pool(x)
         x = torch.flatten(x, 1)
+        x = self.dropout(x)
         x = self.fc(x)
 
         return x
