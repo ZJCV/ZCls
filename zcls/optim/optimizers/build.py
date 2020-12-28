@@ -39,8 +39,8 @@ def group_weight(module):
             group_decay.append(m.weight)
             if m.bias is not None:
                 group_no_decay.append(m.bias)
-        elif isinstance(m, (nn.modules.batchnorm._BatchNorm, nn.GroupNorm)):
-            if m.bias is not None:
+        elif isinstance(m, (nn.modules.batchnorm._BatchNorm, nn.GroupNorm, nn.LayerNorm)):
+            if m.weight is not None:
                 group_no_decay.append(m.weight)
             if m.bias is not None:
                 group_no_decay.append(m.bias)
