@@ -32,9 +32,9 @@ DATALOADER:
   NUM_WORKERS: 8
 MODEL:
   CONV:
-    TYPE: 'Conv2d'
+    TYPE: 'Conv3d'
   NORM:
-    TYPE: 'BatchNorm2d'
+    TYPE: 'BatchNorm3d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
