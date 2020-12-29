@@ -12,7 +12,7 @@ import torch.nn as nn
 from zcls.model.backbones.shufflenetv1_unit import ShuffleNetV1Unit
 
 
-def test_shufflenetv1_unit():
+def test_shufflenet_v1_unit():
     data = torch.randn(1, 24, 56, 56)
     inplanes = 24
     planes = 384
@@ -40,4 +40,4 @@ def test_shufflenetv1_unit():
 
 
 if __name__ == '__main__':
-    test_shufflenetv1_unit()
+    test_shufflenet_v1_unit()

@@ -3,10 +3,10 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/nl_r50_custom_cifar100_224_bs32'
+OUTPUT_DIR: 'outputs/benchmarks/nl_r50_custom_cifar100_224_b32'
 TRAIN:
   LOG_STEP: 10
-  GRADIENT_ACCUMULATE_STEPS: 1
+  GRADIENT_ACCUMULATE_STEP: 1
   MAX_EPOCH: 200
   SAVE_EPOCH: 5
   EVAL_EPOCH: 5
@@ -16,8 +16,8 @@ DATASET:
   NAME: 'CIFAR100'
   DATA_DIR: './data/cifar'
 TRANSFORM:
-  MEAN: (0.485, 0.456, 0.406)
-  STD: (0.229, 0.224, 0.225)
+  MEAN: (0.45, 0.45, 0.45)
+  STD: (0.225, 0.225, 0.225)
   TRAIN:
     SHORTER_SIDE: 224
     CENTER_CROP: True
@@ -31,31 +31,40 @@ DATALOADER:
   TEST_BATCH_SIZE: 32
   NUM_WORKERS: 8
 MODEL:
-  NAME: 'AttentionResNet'
-  PRETRAINED: ''
-  TORCHVISION_PRETRAINED: False
+  CONV:
+    TYPE: 'Conv2d'
   NORM:
     TYPE: 'BatchNorm2d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
-    PRECISE_BN: False
+  ACT:
+    TYPE: 'ReLU'
   ATTENTION:
-    WITH_ATTENTION: (0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0)
+    WITH_ATTENTIONS: (0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0)
+    REDUCTION: 16
     ATTENTION_TYPE: 'NonLocal2DEmbeddedGaussian'
   BACKBONE:
+    IN_PLANES: 3
     ARCH: 'resnet50'
+    BASE_PLANES: 64
+    LAYER_PLANES: (64, 128, 256, 512)
+    DOWN_SAMPLES: (0, 1, 1, 1)
   HEAD:
-    FEATURE_DIMS: 2048
     NUM_CLASSES: 100
   RECOGNIZER:
-    NAME: 'AttentionResNetRecognizer'
+    TYPE: 'AttentionResNet'
+    PRELOADED: ""
+    PRETRAINED: ""
+    TORCHVISION_PRETRAINED: False
+    PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
   NAME: 'SGD'
-  LR: 1e-3
-  WEIGHT_DECAY: 1e-5
+  LR: 0.0125
+  WEIGHT_DECAY: 1e-4
   SGD:
     MOMENTUM: 0.9
 LR_SCHEDULER:
@@ -63,7 +72,7 @@ LR_SCHEDULER:
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [ 100, 150, 175 ]
+    MILESTONES: [ 80, 140, 170 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0

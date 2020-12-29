@@ -91,6 +91,8 @@ def add_config(_C):
     _C.MODEL.BACKBONE.TEMPORAL_STRIDES = (1, 1, 1, 1)
     _C.MODEL.BACKBONE.INFLATE_LIST = (0, 0, 0, 0)
     _C.MODEL.BACKBONE.INFLATE_STYLE = '3x1x1'
+    # for ShuffleNetV1
+    _C.MODEL.BACKBONE.WITH_GROUPS = (0, 1, 1)
 
     # ---------------------------------------------------------------------------- #
     # head

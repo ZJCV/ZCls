@@ -11,8 +11,6 @@ from abc import ABC
 import torch
 import torch.nn as nn
 
-from ..layers.place_holder import PlaceHolder
-
 
 class ShuffleNetV1Head(nn.Module, ABC):
 

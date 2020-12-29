@@ -63,7 +63,7 @@ MODEL:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
   NAME: 'SGD'
-  LR: 0.0125
+  LR: 0.00125
   WEIGHT_DECAY: 1e-4
   SGD:
     MOMENTUM: 0.9

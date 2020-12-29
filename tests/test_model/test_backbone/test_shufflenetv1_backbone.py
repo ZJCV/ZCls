@@ -12,13 +12,13 @@ from zcls.model.backbones.shufflenetv1_unit import ShuffleNetV1Unit
 from zcls.model.backbones.shufflenetv1_backbone import ShuffleNetV1Backbone
 
 
-def test_shufflenetv1_backbone():
+def test_shufflenet_v1_backbone():
     # g=1
     model = ShuffleNetV1Backbone(
         groups=1,
         layer_planes=(144, 288, 576),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -34,7 +34,7 @@ def test_shufflenetv1_backbone():
         groups=2,
         layer_planes=(200, 400, 800),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -50,7 +50,7 @@ def test_shufflenetv1_backbone():
         groups=3,
         layer_planes=(240, 480, 960),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -66,7 +66,7 @@ def test_shufflenetv1_backbone():
         groups=4,
         layer_planes=(272, 544, 1088),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -82,7 +82,7 @@ def test_shufflenetv1_backbone():
         groups=8,
         layer_planes=(384, 768, 1536),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -95,4 +95,4 @@ def test_shufflenetv1_backbone():
 
 
 if __name__ == '__main__':
-    test_shufflenetv1_backbone()
+    test_shufflenet_v1_backbone()

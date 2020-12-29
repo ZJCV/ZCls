@@ -18,7 +18,7 @@ class AttentionResNetBasicBlock(nn.Module, ABC):
     """
     使用两个3x3卷积，如果进行下采样，那么使用第一个卷积层对输入空间尺寸进行减半操作
     对于Squeeze-And-Excitation或者Global Context操作，在残差连接中（after1x1）嵌入；
-    对于NonLocal或者SimplifiedNonLoal，在Block完成计算后嵌入。
+    对于NonLocal或者SimplifiedNonLoal，在Block完成计算后（after add）嵌入。
     """
     expansion = 1
 

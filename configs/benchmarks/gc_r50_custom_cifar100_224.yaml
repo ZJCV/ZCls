@@ -41,8 +41,8 @@ MODEL:
   ACT:
     TYPE: 'ReLU'
   ATTENTION:
-    WITH_ATTENTIONS: (1, 1, 1, 1)
-    REDUCTION: 16
+    WITH_ATTENTIONS: (0, 1, 1, 1)
+    REDUCTION: 4
     ATTENTION_TYPE: 'GlobalContextBlock2D'
   BACKBONE:
     IN_PLANES: 3
@@ -63,7 +63,7 @@ MODEL:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
   NAME: 'SGD'
-  LR: 0.0125
+  LR: 0.00125
   WEIGHT_DECAY: 1e-4
   SGD:
     MOMENTUM: 0.9

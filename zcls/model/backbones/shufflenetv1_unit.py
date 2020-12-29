@@ -54,15 +54,15 @@ class ShuffleNetV1Unit(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道
-                 inplanes,
+                 in_planes,
                  # 输出通道
-                 planes,
+                 out_planes,
                  # 分组数
                  groups,
                  # 步长
                  stride,
                  # 作用于shortcut path
-                 downsample=None,
+                 down_sample=None,
                  # 是否对第一个1x1逐点卷积应用分组
                  with_group=True,
                  # 卷积层类型
@@ -73,7 +73,7 @@ class ShuffleNetV1Unit(nn.Module, ABC):
                  act_layer=None,
                  ):
         super().__init__()
-        assert planes % groups == 0
+        assert out_planes % groups == 0
 
         if conv_layer is None:
             conv_layer = nn.Conv2d
@@ -82,28 +82,23 @@ class ShuffleNetV1Unit(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.conv_layer = conv_layer
-        self.norm_layer = norm_layer
-        self.act_layer = act_layer
+        out_planes = out_planes if stride == 1 else out_planes - in_planes
+        groups = groups if with_group else 1
+        self.conv1 = conv_layer(in_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False, groups=groups)
+        self.norm1 = norm_layer(out_planes)
+
+        self.conv2 = conv_layer(out_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False,
+                                groups=out_planes)
+        self.norm2 = norm_layer(out_planes)
+
+        self.conv3 = conv_layer(out_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False,
+                                groups=groups)
+        self.norm3 = norm_layer(out_planes)
+
+        self.act = act_layer(inplace=True)
+        self.down_sample = down_sample
         self.groups = groups
         self.stride = stride
-        self.downsample = downsample
-        self.with_group = with_group
-
-        planes = planes if stride == 1 else planes - inplanes
-        groups = self.groups if self.with_group else 1
-        self.conv1 = self.conv_layer(inplanes, planes, kernel_size=1, stride=1, padding=0, bias=False, groups=groups)
-        self.norm1 = self.norm_layer(planes)
-
-        self.conv2 = self.conv_layer(planes, planes, kernel_size=3, stride=self.stride, padding=1, bias=False,
-                                     groups=planes)
-        self.norm2 = self.norm_layer(planes)
-
-        self.conv3 = self.conv_layer(planes, planes, kernel_size=1, stride=1, padding=0, bias=False,
-                                     groups=self.groups)
-        self.norm3 = self.norm_layer(planes)
-
-        self.act = self.act_layer(inplace=True)
 
     def forward(self, x):
         identity = x
@@ -120,8 +115,8 @@ class ShuffleNetV1Unit(nn.Module, ABC):
         out = self.conv3(out)
         out = self.norm3(out)
 
-        if self.downsample is not None:
-            identity = self.downsample(x)
+        if self.down_sample is not None:
+            identity = self.down_sample(x)
 
         if self.stride == 2:
             out = torch.cat((out, identity), dim=1)
