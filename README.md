@@ -80,6 +80,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{ma2018shufflenet,
+      title={ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design}, 
+      author={Ningning Ma and Xiangyu Zhang and Hai-Tao Zheng and Jian Sun},
+      year={2018},
+      eprint={1807.11164},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{wu2018group,
       title={Group Normalization}, 
       author={Yuxin Wu and Kaiming He},
@@ -105,6 +114,15 @@
       eprint={1710.03740},
       archivePrefix={arXiv},
       primaryClass={cs.AI}
+}
+
+@misc{zhang2017shufflenet,
+      title={ShuffleNet: An Extremely Efficient Convolutional Neural Network for Mobile Devices}, 
+      author={Xiangyu Zhang and Xinyu Zhou and Mengxiao Lin and Jian Sun},
+      year={2017},
+      eprint={1707.01083},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }
 
 @misc{goyal2018accurate,
