@@ -105,14 +105,14 @@ class AttentionResNetRecognizer(nn.Module, ABC):
         )
 
         self.init_weights(pretrained=pretrained,
-                           pretrained_num_classes=pretrained_num_classes,
-                           num_classes=num_classes)
+                          pretrained_num_classes=pretrained_num_classes,
+                          num_classes=num_classes)
 
     def init_weights(self,
-                      pretrained,
-                      pretrained_num_classes,
-                      num_classes
-                      ):
+                     pretrained,
+                     pretrained_num_classes,
+                     num_classes
+                     ):
         if pretrained != "":
             state_dict = load_state_dict_from_url(pretrained, progress=True)
             self.backbone.load_state_dict(state_dict, strict=False)
@@ -178,9 +178,11 @@ def build_attention_resnet(cfg):
         base_planes=base_planes,
         layer_planes=layer_planes,
         down_samples=down_samples,
+        # for attention
         with_attentions=with_attentions,
         reduction=reduction,
         attention_type=attention_type,
+        # other
         conv_layer=conv_layer,
         norm_layer=norm_layer,
         act_layer=act_layer,

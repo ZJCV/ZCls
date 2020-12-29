@@ -11,10 +11,7 @@ from abc import ABC
 import torch.nn as nn
 
 from zcls.model.layers.place_holder import PlaceHolder
-from zcls.model.layers.global_context_block import GlobalContextBlock2D
-from zcls.model.layers.squeeze_and_excitation_block import SqueezeAndExcitationBlock2D
-from zcls.model.layers.non_local_embedded_gaussian import NonLocal2DEmbeddedGaussian
-from zcls.model.layers.simplified_non_local_embedded_gaussian import SimplifiedNonLocal2DEmbeddedGaussian
+from .attentation_resnet_bottleneck import make_attention_block
 
 
 class AttentionResNetBasicBlock(nn.Module, ABC):
@@ -77,28 +74,16 @@ class AttentionResNetBasicBlock(nn.Module, ABC):
 
         self.relu = act_layer(inplace=True)
 
-        if with_attention == 0:
+        if not with_attention:
             self.attention1 = PlaceHolder()
             self.attention2 = PlaceHolder()
         else:
             if attention_type in ['SqueezeAndExcitationBlock2D', 'GlobalContextBlock2D']:
-                self.attention1 = self._make_attention_block(out_planes * self.expansion, reduction, attention_type)
+                self.attention1 = make_attention_block(out_planes * self.expansion, reduction, attention_type)
                 self.attention2 = PlaceHolder()
             if attention_type in ['NonLocal2DEmbeddedGaussian', 'SimplifiedNonLocal2DEmbeddedGaussian']:
                 self.attention1 = PlaceHolder()
-                self.attention2 = self._make_attention_block(out_planes * self.expansion, reduction, attention_type)
-
-    def _make_attention_block(self, in_planes, reduction, attention_type):
-        if attention_type == 'GlobalContextBlock2D':
-            return GlobalContextBlock2D(in_channels=in_planes, reduction=reduction)
-        elif attention_type == 'SqueezeAndExcitationBlock2D':
-            return SqueezeAndExcitationBlock2D(in_channels=in_planes, reduction=reduction)
-        elif attention_type == 'NonLocal2DEmbeddedGaussian':
-            return NonLocal2DEmbeddedGaussian(in_channels=in_planes)
-        elif attention_type == 'SimplifiedNonLocal2DEmbeddedGaussian':
-            return SimplifiedNonLocal2DEmbeddedGaussian(in_channels=in_planes)
-        else:
-            raise ValueError('no matching type')
+                self.attention2 = make_attention_block(out_planes * self.expansion, reduction, attention_type)
 
     def forward(self, x):
         identity = x

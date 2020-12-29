@@ -17,6 +17,19 @@ from zcls.model.layers.non_local_embedded_gaussian import NonLocal2DEmbeddedGaus
 from zcls.model.layers.simplified_non_local_embedded_gaussian import SimplifiedNonLocal2DEmbeddedGaussian
 
 
+def make_attention_block(in_planes, reduction, attention_type):
+    if attention_type == 'GlobalContextBlock2D':
+        return GlobalContextBlock2D(in_channels=in_planes, reduction=reduction)
+    elif attention_type == 'SqueezeAndExcitationBlock2D':
+        return SqueezeAndExcitationBlock2D(in_channels=in_planes, reduction=reduction)
+    elif attention_type == 'NonLocal2DEmbeddedGaussian':
+        return NonLocal2DEmbeddedGaussian(in_channels=in_planes)
+    elif attention_type == 'SimplifiedNonLocal2DEmbeddedGaussian':
+        return SimplifiedNonLocal2DEmbeddedGaussian(in_channels=in_planes)
+    else:
+        raise ValueError('no matching type')
+
+
 class AttentionResNetBottleneck(nn.Module, ABC):
     """
     使用两个3x3卷积，如果进行下采样，那么使用第一个卷积层对输入空间尺寸进行减半操作
@@ -79,28 +92,16 @@ class AttentionResNetBottleneck(nn.Module, ABC):
 
         self.relu = act_layer(inplace=True)
 
-        if with_attention == 0:
+        if not with_attention:
             self.attention1 = PlaceHolder()
             self.attention2 = PlaceHolder()
         else:
             if attention_type in ['SqueezeAndExcitationBlock2D', 'GlobalContextBlock2D']:
-                self.attention1 = self._make_attention_block(out_planes * self.expansion, reduction, attention_type)
+                self.attention1 = make_attention_block(out_planes * self.expansion, reduction, attention_type)
                 self.attention2 = PlaceHolder()
             if attention_type in ['NonLocal2DEmbeddedGaussian', 'SimplifiedNonLocal2DEmbeddedGaussian']:
                 self.attention1 = PlaceHolder()
-                self.attention2 = self._make_attention_block(out_planes * self.expansion, reduction, attention_type)
-
-    def _make_attention_block(self, in_planes, reduction, attention_type):
-        if attention_type == 'GlobalContextBlock2D':
-            return GlobalContextBlock2D(in_channels=in_planes, reduction=reduction)
-        elif attention_type == 'SqueezeAndExcitationBlock2D':
-            return SqueezeAndExcitationBlock2D(in_channels=in_planes, reduction=reduction)
-        elif attention_type == 'NonLocal2DEmbeddedGaussian':
-            return NonLocal2DEmbeddedGaussian(in_channels=in_planes)
-        elif attention_type == 'SimplifiedNonLocal2DEmbeddedGaussian':
-            return SimplifiedNonLocal2DEmbeddedGaussian(in_channels=in_planes)
-        else:
-            raise ValueError('no matching type')
+                self.attention2 = make_attention_block(out_planes * self.expansion, reduction, attention_type)
 
     def forward(self, x):
         identity = x

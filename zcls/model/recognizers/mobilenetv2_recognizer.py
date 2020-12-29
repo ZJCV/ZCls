@@ -115,14 +115,14 @@ class MobileNetV2Recognizer(nn.Module, ABC):
         )
 
         self.init_weights(pretrained=pretrained,
-                           pretrained_num_classes=pretrained_num_classes,
-                           num_classes=num_classes)
+                          pretrained_num_classes=pretrained_num_classes,
+                          num_classes=num_classes)
 
     def init_weights(self,
-                      pretrained,
-                      pretrained_num_classes,
-                      num_classes
-                      ):
+                     pretrained,
+                     pretrained_num_classes,
+                     num_classes
+                     ):
         if pretrained != "":
             state_dict = load_state_dict_from_url(pretrained, progress=True)
             self.backbone.load_state_dict(state_dict, strict=False)
