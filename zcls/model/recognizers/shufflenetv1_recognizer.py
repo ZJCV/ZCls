@@ -142,6 +142,7 @@ class ShuffleNetV1Recognizer(nn.Module, ABC):
         feature_dims = layer_planes[-1]
         self.head = ShuffleNetV1Head(
             feature_dims=feature_dims,
+            dropout_rate=dropout_rate,
             num_classes=pretrained_num_classes
         )
 

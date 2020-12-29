@@ -57,13 +57,13 @@ class ShuffleNetV2Unit(nn.Module, ABC):
 
     def __init__(self,
                  # 输入通道
-                 inplanes,
+                 in_planes,
                  # 输出通道
-                 planes,
+                 out_planes,
                  # 步长
                  stride,
                  # 作用于shortcut path
-                 downsample=None,
+                 down_sample=None,
                  # 卷积层类型
                  conv_layer=None,
                  # 归一化层类型
@@ -80,23 +80,19 @@ class ShuffleNetV2Unit(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.conv_layer = conv_layer
-        self.norm_layer = norm_layer
-        self.act_layer = act_layer
+        self.conv1 = conv_layer(in_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False)
+        self.norm1 = norm_layer(out_planes)
+
+        self.conv2 = conv_layer(out_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False,
+                                     groups=out_planes)
+        self.norm2 = norm_layer(out_planes)
+
+        self.conv3 = conv_layer(out_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False)
+        self.norm3 = norm_layer(out_planes)
+
+        self.act = act_layer(inplace=True)
         self.stride = stride
-        self.downsample = downsample
-
-        self.conv1 = self.conv_layer(inplanes, planes, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm1 = self.norm_layer(planes)
-
-        self.conv2 = self.conv_layer(planes, planes, kernel_size=3, stride=self.stride, padding=1, bias=False,
-                                     groups=planes)
-        self.norm2 = self.norm_layer(planes)
-
-        self.conv3 = self.conv_layer(planes, planes, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm3 = self.norm_layer(planes)
-
-        self.act = self.act_layer(inplace=True)
+        self.down_sample = down_sample
 
     def forward(self, x):
         if self.stride == 1:
@@ -116,8 +112,8 @@ class ShuffleNetV2Unit(nn.Module, ABC):
         out = self.norm3(out)
         out = self.act(out)
 
-        if self.downsample is not None:
-            x2 = self.downsample(x2)
+        if self.down_sample is not None:
+            x2 = self.down_sample(x2)
 
         out = torch.cat((out, x2), dim=1)
 

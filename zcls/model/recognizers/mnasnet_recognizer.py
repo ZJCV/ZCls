@@ -96,8 +96,8 @@ class ShuffleNetV2Recognizer(nn.Module, ABC):
         out_planes = _make_divisible(out_planes, round_nearest)
 
         self.backbone = ShuffleNetV2Backbone(
-            inplanes=inplanes,
-            base_channel=base_channel,
+            in_planes=inplanes,
+            base_planes=base_channel,
             out_planes=out_planes,
             layer_planes=layer_planes,
             layer_blocks=layer_blocks,

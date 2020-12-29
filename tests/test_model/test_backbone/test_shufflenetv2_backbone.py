@@ -12,13 +12,13 @@ from zcls.model.backbones.shufflenetv2_unit import ShuffleNetV2Unit
 from zcls.model.backbones.shufflenetv2_backbone import ShuffleNetV2Backbone
 
 
-def test_shufflenetv2_backbone():
+def test_shufflenet_v2_backbone():
     # 1x
     model = ShuffleNetV2Backbone(
         out_planes=1024,
         layer_planes=(116, 232, 464),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)
@@ -33,7 +33,7 @@ def test_shufflenetv2_backbone():
         out_planes=1024,
         layer_planes=(48, 96, 192),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)
@@ -48,7 +48,7 @@ def test_shufflenetv2_backbone():
         out_planes=1024,
         layer_planes=(176, 352, 704),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)
@@ -63,7 +63,7 @@ def test_shufflenetv2_backbone():
         out_planes=2048,
         layer_planes=(244, 488, 976),
         layer_blocks=(4, 8, 4),
-        downsamples=(1, 1, 1),
+        down_samples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)
@@ -75,4 +75,4 @@ def test_shufflenetv2_backbone():
 
 
 if __name__ == '__main__':
-    test_shufflenetv2_backbone()
+    test_shufflenet_v2_backbone()
