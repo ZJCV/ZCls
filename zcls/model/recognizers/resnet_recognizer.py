@@ -97,19 +97,19 @@ class ResNetRecognizer(nn.Module, ABC):
             num_classes=pretrained_num_classes
         )
 
-        self._init_weights(arch=arch,
-                           pretrained=pretrained,
-                           torchvision_pretrained=torchvision_pretrained,
-                           pretrained_num_classes=pretrained_num_classes,
-                           num_classes=num_classes)
+        self.init_weights(arch=arch,
+                          pretrained=pretrained,
+                          torchvision_pretrained=torchvision_pretrained,
+                          pretrained_num_classes=pretrained_num_classes,
+                          num_classes=num_classes)
 
-    def _init_weights(self,
-                      arch,
-                      pretrained,
-                      torchvision_pretrained,
-                      pretrained_num_classes,
-                      num_classes
-                      ):
+    def init_weights(self,
+                     arch,
+                     pretrained,
+                     torchvision_pretrained,
+                     pretrained_num_classes,
+                     num_classes
+                     ):
         if torchvision_pretrained:
             state_dict = load_state_dict_from_url(model_urls[arch], progress=True)
             self.backbone.load_state_dict(state_dict, strict=False)
@@ -122,9 +122,7 @@ class ResNetRecognizer(nn.Module, ABC):
             fc = self.head.fc
             fc_features = fc.in_features
             self.head.fc = nn.Linear(fc_features, num_classes)
-
-            nn.init.normal_(self.head.fc.weight, 0, 0.01)
-            nn.init.zeros_(self.head.fc.bias)
+            self.head.init_weights()
 
     def train(self, mode: bool = True) -> T:
         super(ResNetRecognizer, self).train(mode=mode)
@@ -165,9 +163,9 @@ class TorchvisionResNet(nn.Module, ABC):
         else:
             raise ValueError('no such value')
 
-        self._init_weights(num_classes, pretrained_num_classes)
+        self.init_weights(num_classes, pretrained_num_classes)
 
-    def _init_weights(self, num_classes, pretrained_num_classes):
+    def init_weights(self, num_classes, pretrained_num_classes):
         if num_classes != pretrained_num_classes:
             fc = self.model.fc
             fc_features = fc.in_features

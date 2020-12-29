@@ -80,7 +80,7 @@ class AttentionResNetBackbone(nn.Module, ABC):
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, res_layer)
 
-        self._init_weights(zero_init_residual)
+        self.init_weights(zero_init_residual)
 
     def _make_stem(self,
                    # 输入通道数
@@ -160,7 +160,7 @@ class AttentionResNetBackbone(nn.Module, ABC):
                 conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
-    def _init_weights(self, zero_init_residual):
+    def init_weights(self, zero_init_residual):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')

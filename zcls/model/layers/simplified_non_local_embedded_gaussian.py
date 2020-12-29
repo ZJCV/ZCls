@@ -48,7 +48,7 @@ class _SimplifiedNonLocalNDEmbeddedGaussian(nn.Module):
                 self.norm_layer = nn.BatchNorm3d
 
         self._construct_nonlocal()
-        self._init_weights()
+        self.init_weights()
 
     def _construct_nonlocal(self):
         self.w_k = self.conv_layer(self.in_channels, 1, kernel_size=1, stride=1, padding=0)
@@ -57,7 +57,7 @@ class _SimplifiedNonLocalNDEmbeddedGaussian(nn.Module):
             self.norm_layer(self.in_channels)
         )
 
-    def _init_weights(self):
+    def init_weights(self):
         for m in self.modules():
             if isinstance(m, (nn.Conv1d, nn.Conv2d, nn.Conv3d)):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')

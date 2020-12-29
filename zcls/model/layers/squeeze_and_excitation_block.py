@@ -44,9 +44,9 @@ class _SqueezeAndExcitationBlockND(nn.Module):
             nn.Sigmoid()
         )
 
-        self._init_weights()
+        self.init_weights()
 
-    def _init_weights(self):
+    def init_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Linear):
                 nn.init.normal_(m.weight, 0, 0.01)

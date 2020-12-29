@@ -109,7 +109,7 @@ class ResNet3DBackbone(nn.Module, ABC):
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, res_layer)
 
-        self._init_weights(zero_init_residual, state_dict_2d)
+        self.init_weights(zero_init_residual, state_dict_2d)
 
     def _make_stem(self,
                    in_planes,
@@ -201,7 +201,7 @@ class ResNet3DBackbone(nn.Module, ABC):
                                       conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
-    def _init_weights(self, zero_init_residual, state_dict_2d):
+    def init_weights(self, zero_init_residual, state_dict_2d):
         for m in self.modules():
             if isinstance(m, nn.Conv3d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')

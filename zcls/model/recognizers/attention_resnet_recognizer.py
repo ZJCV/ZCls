@@ -104,11 +104,11 @@ class AttentionResNetRecognizer(nn.Module, ABC):
             num_classes=pretrained_num_classes
         )
 
-        self._init_weights(pretrained=pretrained,
+        self.init_weights(pretrained=pretrained,
                            pretrained_num_classes=pretrained_num_classes,
                            num_classes=num_classes)
 
-    def _init_weights(self,
+    def init_weights(self,
                       pretrained,
                       pretrained_num_classes,
                       num_classes

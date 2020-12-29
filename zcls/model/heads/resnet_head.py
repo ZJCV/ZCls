@@ -24,9 +24,9 @@ class ResNetHead(nn.Module, ABC):
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(feature_dims, num_classes)
 
-        self._init_weights()
+        self.init_weights()
 
-    def _init_weights(self):
+    def init_weights(self):
         nn.init.normal_(self.fc.weight, 0, 0.01)
         nn.init.zeros_(self.fc.bias)
 

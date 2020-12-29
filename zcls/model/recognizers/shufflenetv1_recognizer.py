@@ -124,9 +124,9 @@ class ShuffleNetV1Recognizer(nn.Module, ABC):
             num_classes=pretrained_num_classes
         )
 
-        self._init_weights(pretrained=zcls_pretrained, pretrained_num_classes=pretrained_num_classes)
+        self.init_weights(pretrained=zcls_pretrained, pretrained_num_classes=pretrained_num_classes)
 
-    def _init_weights(self, pretrained="", pretrained_num_classes=1000):
+    def init_weights(self, pretrained="", pretrained_num_classes=1000):
         if pretrained != "":
             state_dict = load_state_dict_from_url(pretrained, progress=True)
             self.load_state_dict(state_dict=state_dict, strict=False)

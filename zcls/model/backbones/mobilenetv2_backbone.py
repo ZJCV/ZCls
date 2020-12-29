@@ -95,7 +95,7 @@ class MobileNetV2Backbone(nn.Module, ABC):
                                          act_layer)
 
         self.layer_num = len(inverted_residual_setting)
-        self._init_weights()
+        self.init_weights()
 
     def _make_stem(self,
                    in_planes,
@@ -113,7 +113,7 @@ class MobileNetV2Backbone(nn.Module, ABC):
             act_layer(inplace=True)
         )
 
-    def _init_weights(self):
+    def init_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')

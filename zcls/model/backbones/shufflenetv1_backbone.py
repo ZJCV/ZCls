@@ -91,7 +91,7 @@ class ShuffleNetV1Backbone(nn.Module, ABC):
             self.inplanes = self.layer_planes[i]
             layer_name = f'stage{i + 1}'
             self.add_module(layer_name, res_layer)
-        self._init_weights()
+        self.init_weights()
 
     def _make_stem(self, inplanes, planes):
         self.conv1 = self.conv_layer(inplanes, planes, kernel_size=3, stride=2, padding=1, bias=False)
@@ -137,7 +137,7 @@ class ShuffleNetV1Backbone(nn.Module, ABC):
                 inplanes, planes, 1, 1, None, with_groups[i], conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
-    def _init_weights(self):
+    def init_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')

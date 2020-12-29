@@ -39,7 +39,7 @@ class _GlobalContextBlockND(nn.Module):
             self.conv_layer = nn.Conv3d
 
         self._construct_gc()
-        self._init_weights()
+        self.init_weights()
 
     def _construct_gc(self):
         self.w_k = self.conv_layer(self.in_channels, 1, kernel_size=1, stride=1, padding=0)
@@ -50,7 +50,7 @@ class _GlobalContextBlockND(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.w_v2 = self.conv_layer(reduction_channel, self.in_channels, kernel_size=1, stride=1, padding=0)
 
-    def _init_weights(self):
+    def init_weights(self):
         for m in self.modules():
             if isinstance(m, (nn.Conv1d, nn.Conv2d, nn.Conv3d)):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
