@@ -80,6 +80,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{tan2019mnasnet,
+      title={MnasNet: Platform-Aware Neural Architecture Search for Mobile}, 
+      author={Mingxing Tan and Bo Chen and Ruoming Pang and Vijay Vasudevan and Mark Sandler and Andrew Howard and Quoc V. Le},
+      year={2019},
+      eprint={1807.11626},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{ma2018shufflenet,
       title={ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design}, 
       author={Ningning Ma and Xiangyu Zhang and Hai-Tao Zheng and Jian Sun},
