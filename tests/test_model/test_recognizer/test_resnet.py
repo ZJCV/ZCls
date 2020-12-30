@@ -12,7 +12,7 @@ import torch
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.norm_helper import get_norm
-from zcls.model.recognizers.resnet_recognizer import TorchvisionResNet, ResNetRecognizer
+from zcls.model.recognizers.resnet_recognizer import TorchvisionResNet, ResNetRecognizer, build_resnet
 
 
 def test_data(model, input_shape, output_shape):
@@ -56,6 +56,23 @@ def test_resnet_gn():
     test_data(model, (1, 3, 224, 224), (1, 1000))
 
 
+def test_config():
+    config_file = 'configs/benchmarks/r50_custom_cifar100_224_e50.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = build_resnet(cfg)
+    print(model)
+    test_data(model, (1, 3, 224, 224), (1, 100))
+
+    config_file = 'configs/benchmarks/r50_torchvision_cifar100_224_e50.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = build_resnet(cfg)
+    print(model)
+    test_data(model, (1, 3, 224, 224), (1, 100))
+
+
 if __name__ == '__main__':
-    test_resnet()
-    test_resnet_gn()
+    # test_resnet()
+    # test_resnet_gn()
+    test_config()

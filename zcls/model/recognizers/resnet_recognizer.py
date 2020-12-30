@@ -147,7 +147,8 @@ class TorchvisionResNet(nn.Module, ABC):
                  torchvision_pretrained=False,
                  pretrained_num_classes=1000,
                  fix_bn=False,
-                 partial_bn=False):
+                 partial_bn=False,
+                 zero_init_residual=False):
         super(TorchvisionResNet, self).__init__()
 
         self.num_classes = num_classes
@@ -155,11 +156,14 @@ class TorchvisionResNet(nn.Module, ABC):
         self.partial_bn = partial_bn
 
         if arch == 'resnet18':
-            self.model = resnet18(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = resnet18(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+                                  zero_init_residual=zero_init_residual)
         elif arch == 'resnet50':
-            self.model = resnet50(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = resnet50(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+                                  zero_init_residual=zero_init_residual)
         elif arch == 'resnext50_32x4d':
-            self.model = resnext50_32x4d(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = resnext50_32x4d(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+                                         zero_init_residual=zero_init_residual)
         else:
             raise ValueError('no such value')
 
@@ -196,6 +200,7 @@ def build_resnet(cfg):
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
+    zero_init_residual = cfg.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL
     # for backbone
     arch = cfg.MODEL.BACKBONE.ARCH
     # for head
@@ -208,7 +213,8 @@ def build_resnet(cfg):
             torchvision_pretrained=torchvision_pretrained,
             pretrained_num_classes=pretrained_num_classes,
             fix_bn=fix_bn,
-            partial_bn=partial_bn
+            partial_bn=partial_bn,
+            zero_init_residual=zero_init_residual
         )
     elif recognizer_name == 'CustomResNet':
         # for recognizer
@@ -216,7 +222,6 @@ def build_resnet(cfg):
         conv_layer = get_conv(cfg)
         norm_layer = get_norm(cfg)
         act_layer = get_act(cfg)
-        zero_init_residual = cfg.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL
         # for backbone
         in_planes = cfg.MODEL.BACKBONE.IN_PLANES
         base_planes = cfg.MODEL.BACKBONE.BASE_PLANES
