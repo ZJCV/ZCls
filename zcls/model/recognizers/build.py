@@ -23,6 +23,7 @@ from .resnet3d_recognizer import build_resnet3d
 from .attention_resnet_recognizer import build_attention_resnet
 from .shufflenetv1_recognizer import build_shufflenet_v1
 from .shufflenetv2_recognizer import build_shufflenet_v2
+from .mnasnet_recognizer import build_mnasnet
 
 logger = logging.get_logger(__name__)
 
