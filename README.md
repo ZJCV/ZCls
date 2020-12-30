@@ -44,11 +44,29 @@
   year =         {2020}
 }
 
+@misc{howard2019searching,
+      title={Searching for MobileNetV3}, 
+      author={Andrew Howard and Mark Sandler and Grace Chu and Liang-Chieh Chen and Bo Chen and Mingxing Tan and Weijun Wang and Yukun Zhu and Ruoming Pang and Vijay Vasudevan and Quoc V. Le and Hartwig Adam},
+      year={2019},
+      eprint={1905.02244},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{cao2019gcnet,
       title={GCNet: Non-local Networks Meet Squeeze-Excitation Networks and Beyond}, 
       author={Yue Cao and Jiarui Xu and Stephen Lin and Fangyun Wei and Han Hu},
       year={2019},
       eprint={1904.11492},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@misc{tan2019mnasnet,
+      title={MnasNet: Platform-Aware Neural Architecture Search for Mobile}, 
+      author={Mingxing Tan and Bo Chen and Ruoming Pang and Vijay Vasudevan and Mark Sandler and Andrew Howard and Quoc V. Le},
+      year={2019},
+      eprint={1807.11626},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
@@ -76,15 +94,6 @@
       author={Tong He and Zhi Zhang and Hang Zhang and Zhongyue Zhang and Junyuan Xie and Mu Li},
       year={2018},
       eprint={1812.01187},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-
-@misc{tan2019mnasnet,
-      title={MnasNet: Platform-Aware Neural Architecture Search for Mobile}, 
-      author={Mingxing Tan and Bo Chen and Ruoming Pang and Vijay Vasudevan and Mark Sandler and Andrew Howard and Quoc V. Le},
-      year={2019},
-      eprint={1807.11626},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
