@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/snl_r50_custom_cifar100_224_b32'
+OUTPUT_DIR: 'outputs/benchmarks/r503d_custom_cifar100_224_e200'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -32,28 +32,35 @@ DATALOADER:
   NUM_WORKERS: 8
 MODEL:
   CONV:
-    TYPE: 'Conv2d'
+    TYPE: 'Conv3d'
   NORM:
-    TYPE: 'BatchNorm2d'
+    TYPE: 'BatchNorm3d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
   ACT:
     TYPE: 'ReLU'
-  ATTENTION:
-    WITH_ATTENTIONS: (0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0)
-    REDUCTION: 16
-    ATTENTION_TYPE: 'SimplifiedNonLocal2DEmbeddedGaussian'
   BACKBONE:
     IN_PLANES: 3
     ARCH: 'resnet50'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
     DOWN_SAMPLES: (0, 1, 1, 1)
+    CONV1_KERNEL: (1, 7, 7)
+    CONV1_STRIDE: (1, 2, 2)
+    CONV1_PADDING: (0, 3, 3)
+    POOL1_KERNEL: (1, 3, 3)
+    POOL1_STRIDE: (1, 2, 2)
+    POOL1_PADDING: (0, 1, 1)
+    WITH_POOL2: False
+    TEMPORAL_STRIDES: (1, 1, 1, 1)
+    INFLATE_LIST: (0, 0, 0, 0)
+    INFLATE_STYLE: '3x1x1'
   HEAD:
+    DROPOUT: 0.
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'AttentionResNet'
+    TYPE: 'ResNet3D'
     PRELOADED: ""
     PRETRAINED: ""
     TORCHVISION_PRETRAINED: False
@@ -72,7 +79,7 @@ LR_SCHEDULER:
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [ 80, 140, 170 ]
+    MILESTONES: [ 80, 140, 175 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0

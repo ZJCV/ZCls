@@ -107,7 +107,7 @@ def add_config(_C):
     _C.MODEL.RECOGNIZER = CN()
     _C.MODEL.RECOGNIZER.TYPE = 'ResNet'
     _C.MODEL.RECOGNIZER.NAME = 'CustomResNet'
-    # zcls框架训练的模型，用于训练阶段
+    # zcls框架训练的模型，用于测试阶段
     _C.MODEL.RECOGNIZER.PRELOADED = ""
     # zcls框架训练的模型，用于训练阶段
     _C.MODEL.RECOGNIZER.PRETRAINED = ""

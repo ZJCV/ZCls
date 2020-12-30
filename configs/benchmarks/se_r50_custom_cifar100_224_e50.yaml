@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/r50_custom_cifar100_224'
+OUTPUT_DIR: 'outputs/benchmarks/se_r50_custom_cifar100_224_e50'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -40,6 +40,10 @@ MODEL:
     PARTIAL_BN: False
   ACT:
     TYPE: 'ReLU'
+  ATTENTION:
+    WITH_ATTENTIONS: (1, 1, 1, 1)
+    REDUCTION: 16
+    ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
   BACKBONE:
     IN_PLANES: 3
     ARCH: 'resnet50'
@@ -49,8 +53,7 @@ MODEL:
   HEAD:
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'ResNet'
-    NAME: 'CustomResNet'
+    TYPE: 'AttentionResNet'
     PRELOADED: ""
     PRETRAINED: ""
     TORCHVISION_PRETRAINED: False
@@ -60,7 +63,7 @@ MODEL:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
   NAME: 'SGD'
-  LR: 0.0125
+  LR: 0.00125
   WEIGHT_DECAY: 1e-4
   SGD:
     MOMENTUM: 0.9

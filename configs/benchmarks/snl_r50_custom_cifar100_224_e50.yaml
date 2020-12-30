@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/gc_r50_custom_cifar100_224'
+OUTPUT_DIR: 'outputs/benchmarks/snl_r50_custom_cifar100_224_e50'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -41,9 +41,9 @@ MODEL:
   ACT:
     TYPE: 'ReLU'
   ATTENTION:
-    WITH_ATTENTIONS: (0, 1, 1, 1)
-    REDUCTION: 4
-    ATTENTION_TYPE: 'GlobalContextBlock2D'
+    WITH_ATTENTIONS: (0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0)
+    REDUCTION: 16
+    ATTENTION_TYPE: 'SimplifiedNonLocal2DEmbeddedGaussian'
   BACKBONE:
     IN_PLANES: 3
     ARCH: 'resnet50'

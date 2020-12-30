@@ -3,11 +3,11 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/gc_r50_custom_cifar100_224_b32'
+OUTPUT_DIR: 'outputs/benchmarks/rdxt50_custom_cifar100_224_e50'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
-  MAX_EPOCH: 200
+  MAX_EPOCH: 50
   SAVE_EPOCH: 5
   EVAL_EPOCH: 5
   RESUME: False
@@ -40,23 +40,19 @@ MODEL:
     PARTIAL_BN: False
   ACT:
     TYPE: 'ReLU'
-  ATTENTION:
-    WITH_ATTENTIONS: (1, 1, 1, 1)
-    REDUCTION: 16
-    ATTENTION_TYPE: 'GlobalContextBlock2D'
   BACKBONE:
     IN_PLANES: 3
-    ARCH: 'resnet50'
+    ARCH: 'resnext50_32x4d'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
     DOWN_SAMPLES: (0, 1, 1, 1)
   HEAD:
+    DROPOUT: 0.2
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'AttentionResNet'
+    TYPE: 'ResNetD'
     PRELOADED: ""
     PRETRAINED: ""
-    TORCHVISION_PRETRAINED: False
     PRETRAINED_NUM_CLASSES: 1000
     ZERO_INIT_RESIDUAL: True
   CRITERION:
@@ -72,7 +68,7 @@ LR_SCHEDULER:
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [ 80, 140, 170 ]
+    MILESTONES: [ 30, 40 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0

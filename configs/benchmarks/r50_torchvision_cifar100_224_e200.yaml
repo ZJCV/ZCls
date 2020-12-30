@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/nl_r50_custom_cifar100_224_b32'
+OUTPUT_DIR: 'outputs/benchmarks/r50_torchvision_cifar100_224_e200'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -31,29 +31,18 @@ DATALOADER:
   TEST_BATCH_SIZE: 32
   NUM_WORKERS: 8
 MODEL:
-  CONV:
-    TYPE: 'Conv2d'
   NORM:
     TYPE: 'BatchNorm2d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
-  ACT:
-    TYPE: 'ReLU'
-  ATTENTION:
-    WITH_ATTENTIONS: (0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0)
-    REDUCTION: 16
-    ATTENTION_TYPE: 'NonLocal2DEmbeddedGaussian'
   BACKBONE:
-    IN_PLANES: 3
     ARCH: 'resnet50'
-    BASE_PLANES: 64
-    LAYER_PLANES: (64, 128, 256, 512)
-    DOWN_SAMPLES: (0, 1, 1, 1)
   HEAD:
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'AttentionResNet'
+    TYPE: 'ResNet'
+    NAME: 'TorchvisionResNet'
     PRELOADED: ""
     PRETRAINED: ""
     TORCHVISION_PRETRAINED: False
@@ -72,7 +61,7 @@ LR_SCHEDULER:
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [ 80, 140, 170 ]
+    MILESTONES: [ 80, 140, 175 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0
