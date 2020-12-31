@@ -116,5 +116,6 @@ class MobileNetV3Uint(nn.Module, ABC):
             identity = self.down_sample(identity)
 
         out = out + identity
-        out = self.act(out)
+        # Linear pointwise. Note that there's no activation.
+        # out = self.act(out)
         return out

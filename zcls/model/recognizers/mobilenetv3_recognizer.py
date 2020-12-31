@@ -14,7 +14,7 @@ from torchvision.models.utils import load_state_dict_from_url
 
 from zcls.config.key_word import KEY_OUTPUT
 from .. import registry
-from ..backbones.mobilenetv3_backbone import MobileNetV3Backbone, _round_to_multiple_of
+from ..backbones.mobilenetv3_backbone import MobileNetV3Backbone
 from ..heads.mobilenetv3_head import MobileNetV3Head
 from ..norm_helper import get_norm, freezing_bn
 from ..conv_helper import get_conv
@@ -69,6 +69,8 @@ class MobileNetV3Recognizer(nn.Module, ABC):
                  width_multiplier=1.,
                  # 设置每一层通道数均为8的倍数
                  round_nearest=8,
+                 # 是否使用注意力模块
+                 with_attention=True,
                  # 衰减率
                  reduction=4,
                  # 注意力模块类型
@@ -102,6 +104,7 @@ class MobileNetV3Recognizer(nn.Module, ABC):
             out_planes=feature_dims,
             width_multiplier=width_multiplier,
             round_nearest=round_nearest,
+            with_attention=with_attention,
             reduction=reduction,
             attention_type=attention_type,
             conv_layer=conv_layer,
@@ -109,8 +112,8 @@ class MobileNetV3Recognizer(nn.Module, ABC):
             act_layer=act_layer
         )
         self.head = MobileNetV3Head(
-            feature_dims=_round_to_multiple_of(feature_dims * width_multiplier, round_nearest),
-            inner_dims=_round_to_multiple_of(inner_dims * width_multiplier, round_nearest),
+            feature_dims=feature_dims,
+            inner_dims=inner_dims,
             num_classes=pretrained_num_classes,
             conv_layer=conv_layer,
             act_layer=act_layer
@@ -160,6 +163,7 @@ def build_mobilenet_v3(cfg):
     width_multiplier = cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER
     round_nearest = cfg.MODEL.COMPRESSION.ROUND_NEAREST
     # attention
+    with_attention = cfg.MODEL.ATTENTION.WITH_ATTENTION
     reduction = cfg.MODEL.ATTENTION.REDUCTION
     attention_type = cfg.MODEL.ATTENTION.ATTENTION_TYPE
     # conv
@@ -173,6 +177,7 @@ def build_mobilenet_v3(cfg):
         width_multiplier=width_multiplier,
         round_nearest=round_nearest,
         reduction=reduction,
+        with_attention=with_attention,
         attention_type=attention_type,
         num_classes=num_classes,
         zcls_pretrained=zcls_pretrained,

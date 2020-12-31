@@ -22,22 +22,46 @@ from ..conv_helper import get_conv
 from ..act_helper import get_act
 
 arch_settings = {
-    'mnasnet0_5': 0.5,
-    'mnasnet0_75': 0.75,
-    'mnasnet1_0': 1.0,
-    'mnasnet1_3': 1.3
+    'mnasnet_a1': [
+        # kernel_size, stride, expansion_rate, with_attention_2, repeated, out_planes
+        [3, 1, 1, 0, 1, 16],
+        [3, 2, 6, 0, 2, 24],
+        [5, 2, 3, 1, 3, 40],
+        [3, 2, 6, 0, 4, 80],
+        [3, 1, 6, 1, 2, 112],
+        [5, 2, 6, 1, 3, 160],
+        [3, 1, 6, 0, 1, 320],
+    ],
+    'mnasnet_b1': [
+        # 参考Torchvision实现
+        # kernel_size, stride, expansion_rate, with_attention_2, repeated, out_planes
+        [3, 1, 1, 0, 1, 16],
+        [3, 2, 3, 0, 3, 24],
+        [5, 2, 3, 0, 3, 40],
+        [5, 2, 6, 0, 3, 80],
+        [3, 1, 6, 0, 2, 96],
+        [5, 2, 6, 0, 4, 192],
+        [3, 1, 6, 0, 1, 320],
+    ]
 }
 
 
 class MNASNetRecognizer(nn.Module, ABC):
+    """
+    参考Torchvision实现
+    """
 
     def __init__(self,
+                 # 架构
+                 arch='mnasnet_a1',
                  # 输入通道数
                  in_planes=3,
                  # 宽度乘法器
                  width_multiplier=1.,
                  # 设置每一层通道数均为8的倍数
                  round_nearest=8,
+                 # 是否使用注意力模块
+                 with_attention=True,
                  # 衰减率
                  reduction=4,
                  # 注意力模块类型
@@ -65,10 +89,15 @@ class MNASNetRecognizer(nn.Module, ABC):
         self.fix_bn = fix_bn
         self.partial_bn = partial_bn
 
+        out_planes = 1280
+        stage_setting = arch_settings[arch]
         self.backbone = MNASNetBackbone(
             in_planes=in_planes,
+            out_planes=out_planes,
+            stage_setting=stage_setting,
             width_multiplier=width_multiplier,
             round_nearest=round_nearest,
+            with_attention=with_attention,
             reduction=reduction,
             attention_type=attention_type,
             conv_layer=conv_layer,
@@ -76,7 +105,7 @@ class MNASNetRecognizer(nn.Module, ABC):
             act_layer=act_layer
         )
         self.head = GeneralHead2D(
-            feature_dims=self.backbone.get_feature_dims(),
+            feature_dims=out_planes,
             dropout_rate=dropout_rate,
             num_classes=pretrained_num_classes
         )
@@ -108,11 +137,11 @@ class MNASNetRecognizer(nn.Module, ABC):
         return {KEY_OUTPUT: x}
 
 
-class TorchvisionMNASNet(nn.Module):
+class TorchvisionMNASNet(nn.Module, ABC):
 
     def __init__(self,
-                 # 架构
-                 arch='mnasnet0_5',
+                 # 宽度乘法器
+                 width_multiplier=1.,
                  # 类别数
                  num_classes=1000,
                  # 预训练模型
@@ -129,13 +158,13 @@ class TorchvisionMNASNet(nn.Module):
         self.fix_bn = fix_bn
         self.partial_bn = partial_bn
 
-        if arch == 'mnasnet0_5':
+        if width_multiplier == 0.5:
             self.model = mnasnet0_5(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
-        elif arch == 'mnasnet0_75':
+        elif width_multiplier == 0.75:
             self.model = mnasnet0_75(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
-        elif arch == 'mnasnet1_0':
+        elif width_multiplier == 1.0:
             self.model = mnasnet1_0(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
-        elif arch == 'mnasnet1_3':
+        elif width_multiplier == 1.3:
             self.model = mnasnet1_3(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
         else:
             raise ValueError('no such value')
@@ -188,6 +217,7 @@ def build_mnasnet(cfg):
     width_multiplier = cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER
     round_nearest = cfg.MODEL.COMPRESSION.ROUND_NEAREST
     # attention
+    with_attention = cfg.MODEL.ATTENTION.WITH_ATTENTION
     reduction = cfg.MODEL.ATTENTION.REDUCTION
     attention_type = cfg.MODEL.ATTENTION.ATTENTION_TYPE
     # conv
@@ -197,7 +227,7 @@ def build_mnasnet(cfg):
 
     if recognizer_name == 'TorchvisionMNASNet':
         return TorchvisionMNASNet(
-            arch=arch,
+            width_multiplier=width_multiplier,
             num_classes=num_classes,
             torchvision_pretrained=torchvision_pretrained,
             pretrained_num_classes=pretrained_num_classes,
@@ -206,9 +236,11 @@ def build_mnasnet(cfg):
         )
     elif recognizer_name == 'CustomMNASNet':
         return MNASNetRecognizer(
+            arch=arch,
             in_planes=in_planes,
             width_multiplier=width_multiplier,
             round_nearest=round_nearest,
+            with_attention=with_attention,
             reduction=reduction,
             attention_type=attention_type,
             dropout_rate=dropout_rate,

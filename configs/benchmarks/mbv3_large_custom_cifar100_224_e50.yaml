@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/mnasnet_custom_cifar100_224'
+OUTPUT_DIR: 'outputs/benchmarks/mbv3_large_custom_cifar100_224_e50'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -39,21 +39,19 @@ MODEL:
     FIX_BN: False
     PARTIAL_BN: False
   ACT:
-    TYPE: 'ReLU'
+    TYPE: 'HSwish'
   COMPRESSION:
-    WIDTH_MULTIPLIER: 1.3
+    WIDTH_MULTIPLIER: 1.0
     ROUND_NEAREST: 8
   ATTENTION:
-    REDUCTION: 4
-    ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
+    WITH_ATTENTION: False
   BACKBONE:
+    ARCH: 'mobilenetv3-large'
     IN_PLANES: 3
   HEAD:
-    DROPOUT: 0.2
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'MNASNet'
-    NAME: 'CustomMNASNet'
+    TYPE: 'MobileNetV3'
     PRELOADED: ""
     PRETRAINED: ""
     PRETRAINED_NUM_CLASSES: 1000

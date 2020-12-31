@@ -104,6 +104,8 @@ class MNASNetUint(nn.Module, ABC):
 
         if self.apply_residual:
             out = out + identity
-        out = self.act(out)
+        # 参考Torchvision.
+        # Linear pointwise. Note that there's no activation.
+        # out = self.act(out)
 
         return out

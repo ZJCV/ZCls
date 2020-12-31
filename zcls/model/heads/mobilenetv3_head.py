@@ -11,6 +11,8 @@ from abc import ABC
 import torch
 import torch.nn as nn
 
+from ..layers.hard_swish_wrapper import HardswishWrapper
+
 
 class MobileNetV3Head(nn.Module, ABC):
 
@@ -31,12 +33,12 @@ class MobileNetV3Head(nn.Module, ABC):
         if conv_layer is None:
             conv_layer = nn.Conv2d
         if act_layer is None:
-            act_layer = nn.Hardswish
+            act_layer = HardswishWrapper
 
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
         self.conv1 = conv_layer(feature_dims, inner_dims, kernel_size=1, stride=1, padding=0, bias=True)
         self.conv2 = conv_layer(inner_dims, num_classes, kernel_size=1, stride=1, padding=0, bias=True)
-        self.act = act_layer()
+        self.act = act_layer(inplace=True)
 
         self.init_weights()
 

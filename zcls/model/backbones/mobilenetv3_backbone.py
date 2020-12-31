@@ -45,6 +45,8 @@ class MobileNetV3Backbone(nn.Module, ABC):
                  width_multiplier=1.,
                  # 设置每一层通道数均为8的倍数
                  round_nearest=8,
+                 # 是否使用注意力模块
+                 with_attention=True,
                  # 衰减率
                  reduction=4,
                  # 注意力模块类型
@@ -67,7 +69,7 @@ class MobileNetV3Backbone(nn.Module, ABC):
         block_layer = MobileNetV3Uint
 
         layer_setting = [
-            # kernel_size, stride, inner_planes, with_attention, non-linearity, out_planes
+            # kernel_size, stride, inner_planes, with_attention_2, non-linearity, out_planes
             [3, 1, 16, 0, 'RE', 16],
             [3, 2, 64, 0, 'RE', 24],
             [3, 1, 72, 0, 'RE', 24],
@@ -86,7 +88,8 @@ class MobileNetV3Backbone(nn.Module, ABC):
         ]
 
         base_planes = _round_to_multiple_of(base_planes * width_multiplier, round_nearest)
-        out_planes = _round_to_multiple_of(out_planes * width_multiplier, round_nearest)
+        # 参考Torchvision MnasNet实现，不对输出特征维度进行缩放
+        # out_planes = _round_to_multiple_of(out_planes * width_multiplier, round_nearest)
         for i in range(len(layer_setting)):
             # 缩放膨胀通道数
             layer_setting[i][2] = _round_to_multiple_of(layer_setting[i][2] * width_multiplier, round_nearest)
@@ -103,7 +106,7 @@ class MobileNetV3Backbone(nn.Module, ABC):
 
         features = list()
         in_planes = base_planes
-        for i, (kernel_size, stride, inner_planes, with_attention, non_linearity, out_planes) in enumerate(
+        for i, (kernel_size, stride, inner_planes, with_attention_2, non_linearity, out_planes) in enumerate(
                 layer_setting):
             act_layer = relu_or_hswish(non_linearity)
             features.append(block_layer(in_planes,
@@ -111,7 +114,7 @@ class MobileNetV3Backbone(nn.Module, ABC):
                                         out_planes,
                                         stride=stride,
                                         kernel_size=kernel_size,
-                                        with_attention=with_attention,
+                                        with_attention=with_attention_2 and with_attention,
                                         reduction=reduction,
                                         attention_type=attention_type,
                                         conv_layer=conv_layer,
