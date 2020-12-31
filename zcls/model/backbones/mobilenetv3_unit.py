@@ -45,7 +45,9 @@ class MobileNetV3Uint(nn.Module, ABC):
                  # 归一化层类型
                  norm_layer=None,
                  # 激活层类型
-                 act_layer=None
+                 act_layer=None,
+                 # sigmoid类型
+                 sigmoid_type=None
                  ):
         super(MobileNetV3Uint, self).__init__()
 
@@ -55,6 +57,8 @@ class MobileNetV3Uint(nn.Module, ABC):
             norm_layer = nn.BatchNorm2d
         if act_layer is None:
             act_layer = HardswishWrapper
+        if sigmoid_type is None:
+            sigmoid_type = 'HSigmoid'
 
         self.with_attention = with_attention
 
@@ -79,23 +83,9 @@ class MobileNetV3Uint(nn.Module, ABC):
         self.norm2 = norm_layer(out_planes, momentum=BN_MOMENTUM)
 
         if self.with_attention:
-            self.attention = make_attention_block(inner_planes, reduction, attention_type)
+            self.attention = make_attention_block(inner_planes, reduction, attention_type, sigmoid_type=sigmoid_type)
 
-        if stride > 1:
-            # AvgPool + Conv1x1
-            self.down_sample = nn.Sequential(
-                nn.AvgPool2d(kernel_size=2, stride=2),
-                conv_layer(in_planes, out_planes, kernel_size=1, stride=1, bias=False),
-                norm_layer(out_planes),
-            )
-        elif in_planes != out_planes:
-            # Conv1x1
-            self.down_sample = nn.Sequential(
-                conv_layer(in_planes, out_planes, kernel_size=1, stride=1, bias=False),
-                norm_layer(out_planes),
-            )
-        else:
-            self.down_sample = None
+        self.apply_residual = (in_planes == out_planes and stride == 1)
 
     def forward(self, x):
         identity = x
@@ -112,10 +102,8 @@ class MobileNetV3Uint(nn.Module, ABC):
         out = self.conv2(out)
         out = self.norm2(out)
 
-        if self.down_sample is not None:
-            identity = self.down_sample(identity)
-
-        out = out + identity
+        if self.apply_residual:
+            out = out + identity
         # Linear pointwise. Note that there's no activation.
         # out = self.act(out)
         return out

@@ -18,7 +18,7 @@ from ..backbones.mobilenetv3_backbone import MobileNetV3Backbone
 from ..heads.mobilenetv3_head import MobileNetV3Head
 from ..norm_helper import get_norm, freezing_bn
 from ..conv_helper import get_conv
-from ..act_helper import get_act
+from ..act_helper import get_act, get_sigmoid
 
 arch_settings = {
     'mobilenetv3-large': [16, 960, 1280,
@@ -90,7 +90,9 @@ class MobileNetV3Recognizer(nn.Module, ABC):
                  # 归一化层类型
                  norm_layer=None,
                  # 激活层类型
-                 act_layer=None
+                 act_layer=None,
+                 # sigmoid类型
+                 sigmoid_type=None
                  ):
         super(MobileNetV3Recognizer, self).__init__()
         self.fix_bn = fix_bn
@@ -109,7 +111,8 @@ class MobileNetV3Recognizer(nn.Module, ABC):
             attention_type=attention_type,
             conv_layer=conv_layer,
             norm_layer=norm_layer,
-            act_layer=act_layer
+            act_layer=act_layer,
+            sigmoid_type=sigmoid_type
         )
         self.head = MobileNetV3Head(
             feature_dims=feature_dims,
@@ -170,6 +173,7 @@ def build_mobilenet_v3(cfg):
     conv_layer = get_conv(cfg)
     # act
     act_layer = get_act(cfg)
+    sigmoid_type = cfg.MODEL.ACT.SIGMOID_TYPE
 
     return MobileNetV3Recognizer(
         arch=arch,
@@ -186,5 +190,6 @@ def build_mobilenet_v3(cfg):
         partial_bn=partial_bn,
         conv_layer=conv_layer,
         norm_layer=norm_layer,
-        act_layer=act_layer
+        act_layer=act_layer,
+        sigmoid_type=sigmoid_type
     )

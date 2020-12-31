@@ -31,3 +31,12 @@ def get_act(cfg):
         raise NotImplementedError(
             "Activation type {} is not supported".format(act_type)
         )
+
+
+def get_sigmoid(sigmoid_type):
+    if sigmoid_type == 'Sigmoid':
+        return nn.Sigmoid
+    elif sigmoid_type == 'HSigmoid':
+        return nn.Hardsigmoid
+    else:
+        raise IOError(f'{sigmoid_type} doesn\'t exists')

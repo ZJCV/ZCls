@@ -9,6 +9,8 @@
 
 import torch.nn as nn
 
+from ..act_helper import get_sigmoid
+
 
 class _SqueezeAndExcitationBlockND(nn.Module):
     """
@@ -24,7 +26,10 @@ class _SqueezeAndExcitationBlockND(nn.Module):
                  # 中间层衰减率
                  reduction=16,
                  # 数据维度
-                 dimension=2):
+                 dimension=2,
+                 # sigmoid类型
+                 sigmoid_type='Sigmoid'
+                 ):
         super(_SqueezeAndExcitationBlockND, self).__init__()
         assert dimension in [1, 2, 3]
         assert in_channels % reduction == 0, f'in_channels = {in_channels}, reduction = {reduction}'
@@ -37,11 +42,12 @@ class _SqueezeAndExcitationBlockND(nn.Module):
         else:
             self.squeeze = nn.AdaptiveAvgPool3d((1, 1, 1))
 
+        sigmoid_layer = get_sigmoid(sigmoid_type)
         self.excitation = nn.Sequential(
             nn.Linear(in_channels, inner_channel, bias=False),
             nn.ReLU(inplace=True),
             nn.Linear(inner_channel, in_channels, bias=False),
-            nn.Sigmoid()
+            sigmoid_layer()
         )
 
         self.init_weights()
@@ -70,8 +76,8 @@ class _SqueezeAndExcitationBlockND(nn.Module):
 
 class SqueezeAndExcitationBlock1D(_SqueezeAndExcitationBlockND):
 
-    def __init__(self, in_channels, reduction=16, dimension=1):
-        super().__init__(in_channels, reduction, dimension)
+    def __init__(self, in_channels, reduction=16, dimension=1, **kwargs):
+        super().__init__(in_channels, reduction, dimension, **kwargs)
 
     def _check_input_dim(self, input):
         if input.dim() != 2 and input.dim() != 3:
@@ -81,8 +87,8 @@ class SqueezeAndExcitationBlock1D(_SqueezeAndExcitationBlockND):
 
 class SqueezeAndExcitationBlock2D(_SqueezeAndExcitationBlockND):
 
-    def __init__(self, in_channels, reduction=16, dimension=2):
-        super().__init__(in_channels, reduction, dimension)
+    def __init__(self, in_channels, reduction=16, dimension=2, **kwargs):
+        super().__init__(in_channels, reduction, dimension, **kwargs)
 
     def _check_input_dim(self, input):
         if input.dim() != 4:
@@ -92,8 +98,8 @@ class SqueezeAndExcitationBlock2D(_SqueezeAndExcitationBlockND):
 
 class SqueezeAndExcitationBlock3D(_SqueezeAndExcitationBlockND):
 
-    def __init__(self, in_channels, reduction=16, dimension=3):
-        super().__init__(in_channels, reduction, dimension)
+    def __init__(self, in_channels, reduction=16, dimension=3, **kwargs):
+        super().__init__(in_channels, reduction, dimension, **kwargs)
 
     def _check_input_dim(self, input):
         if input.dim() != 5:

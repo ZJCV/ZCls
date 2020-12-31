@@ -13,11 +13,11 @@ from zcls.model.layers.non_local_embedded_gaussian import NonLocal2DEmbeddedGaus
 from zcls.model.layers.simplified_non_local_embedded_gaussian import SimplifiedNonLocal2DEmbeddedGaussian
 
 
-def make_attention_block(in_planes, reduction, attention_type):
+def make_attention_block(in_planes, reduction, attention_type, **kwargs):
     if attention_type == 'GlobalContextBlock2D':
         return GlobalContextBlock2D(in_channels=in_planes, reduction=reduction)
     elif attention_type == 'SqueezeAndExcitationBlock2D':
-        return SqueezeAndExcitationBlock2D(in_channels=in_planes, reduction=reduction)
+        return SqueezeAndExcitationBlock2D(in_channels=in_planes, reduction=reduction, **kwargs)
     elif attention_type == 'NonLocal2DEmbeddedGaussian':
         return NonLocal2DEmbeddedGaussian(in_channels=in_planes)
     elif attention_type == 'SimplifiedNonLocal2DEmbeddedGaussian':

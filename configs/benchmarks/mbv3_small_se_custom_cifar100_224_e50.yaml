@@ -40,6 +40,7 @@ MODEL:
     PARTIAL_BN: False
   ACT:
     TYPE: 'HSwish'
+    SIGMOID_TYPE: 'HSigmoid'
   COMPRESSION:
     WIDTH_MULTIPLIER: 1.0
     ROUND_NEAREST: 8

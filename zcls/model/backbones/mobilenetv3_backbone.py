@@ -56,7 +56,9 @@ class MobileNetV3Backbone(nn.Module, ABC):
                  # 归一化层类型
                  norm_layer=None,
                  # 激活层类型
-                 act_layer=None
+                 act_layer=None,
+                 # sigmoid类型
+                 sigmoid_type=None
                  ):
         super(MobileNetV3Backbone, self).__init__()
 
@@ -66,6 +68,8 @@ class MobileNetV3Backbone(nn.Module, ABC):
             norm_layer = nn.BatchNorm2d
         if act_layer is None:
             act_layer = HardswishWrapper
+        if sigmoid_type is None:
+            sigmoid_type = 'HSigmoid'
         block_layer = MobileNetV3Uint
 
         layer_setting = [
@@ -119,7 +123,8 @@ class MobileNetV3Backbone(nn.Module, ABC):
                                         attention_type=attention_type,
                                         conv_layer=conv_layer,
                                         norm_layer=norm_layer,
-                                        act_layer=act_layer
+                                        act_layer=act_layer,
+                                        sigmoid_type=sigmoid_type
                                         ))
             in_planes = out_planes
         self.add_module('features', nn.Sequential(*features))
