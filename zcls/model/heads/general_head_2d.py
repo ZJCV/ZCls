@@ -25,7 +25,7 @@ class GeneralHead2D(nn.Module, ABC):
         super(GeneralHead2D, self).__init__()
 
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
-        self.dropout = nn.Dropout(p=dropout_rate)
+        self.dropout = nn.Dropout(p=dropout_rate, inplace=True)
         self.fc = nn.Linear(feature_dims, num_classes)
 
         self.init_weights()
