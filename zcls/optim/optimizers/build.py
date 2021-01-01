@@ -12,6 +12,7 @@ import torch.nn as nn
 from .. import registry
 from .sgd import build_sgd
 from .adam import build_adam
+from .rmsprop import build_rmsprop
 
 
 def build_optimizer(cfg, model):
