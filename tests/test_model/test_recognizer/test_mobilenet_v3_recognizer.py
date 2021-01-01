@@ -76,6 +76,16 @@ def test_config():
 
     assert outputs.shape == (1, 100)
 
+    config_file = 'configs/benchmarks/mbv3_large_se_hsigmoid_custom_cifar100_224_e50.yaml'
+    cfg.merge_from_file(config_file)
+    model = build_mobilenet_v3(cfg)
+    print(model)
+    outputs = model(data)
+    outputs = model(data)[KEY_OUTPUT]
+    print(outputs.shape)
+
+    assert outputs.shape == (1, 100)
+
     config_file = 'configs/benchmarks/mbv3_large_custom_cifar100_224_e50.yaml'
     cfg.merge_from_file(config_file)
     model = build_mobilenet_v3(cfg)
@@ -87,6 +97,16 @@ def test_config():
     assert outputs.shape == (1, 100)
 
     config_file = 'configs/benchmarks/mbv3_small_se_custom_cifar100_224_e50.yaml'
+    cfg.merge_from_file(config_file)
+    model = build_mobilenet_v3(cfg)
+    print(model)
+    outputs = model(data)
+    outputs = model(data)[KEY_OUTPUT]
+    print(outputs.shape)
+
+    assert outputs.shape == (1, 100)
+
+    config_file = 'configs/benchmarks/mbv3_small_se_hsigmoid_custom_cifar100_224_e50.yaml'
     cfg.merge_from_file(config_file)
     model = build_mobilenet_v3(cfg)
     print(model)

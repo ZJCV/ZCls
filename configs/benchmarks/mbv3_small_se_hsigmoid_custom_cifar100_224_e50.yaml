@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/mbv3_large_se_custom_cifar100_224_e50'
+OUTPUT_DIR: 'outputs/benchmarks/mbv3_small_se_hsigmoid_custom_cifar100_224_e50'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -40,6 +40,7 @@ MODEL:
     PARTIAL_BN: False
   ACT:
     TYPE: 'HSwish'
+    SIGMOID_TYPE: 'HSigmoid'
   COMPRESSION:
     WIDTH_MULTIPLIER: 1.0
     ROUND_NEAREST: 8
@@ -48,7 +49,7 @@ MODEL:
     REDUCTION: 4
     ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
   BACKBONE:
-    ARCH: 'mobilenetv3-large'
+    ARCH: 'mobilenetv3-small'
     IN_PLANES: 3
   HEAD:
     NUM_CLASSES: 100
