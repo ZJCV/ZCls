@@ -61,10 +61,9 @@ MODEL:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
   NAME: 'RMSProp'
-  LR: 0.00125
+  LR: 3e-4
   WEIGHT_DECAY: 1e-5
-  SGD:
-    MOMENTUM: 0.9
+  MOMENTUM: 0.9
 LR_SCHEDULER:
   NAME: 'MultiStepLR'
   IS_WARMUP: True
