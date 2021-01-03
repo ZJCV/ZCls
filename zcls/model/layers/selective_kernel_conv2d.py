@@ -20,9 +20,13 @@ class SelectiveKernelConv2d(nn.Module, ABC):
     """
 
     def __init__(self,
+                 # 输入通道数
                  in_channels: int,
+                 # 输出通道数
                  out_channels: int,
+                 # 步长
                  stride: int,
+                 # 分组数
                  groups: int,
                  # 中间层衰减率
                  reduction_rate: int,
