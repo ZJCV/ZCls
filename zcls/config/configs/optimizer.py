@@ -18,6 +18,4 @@ def add_config(_C):
     _C.OPTIMIZER.NAME = 'SGD'
     _C.OPTIMIZER.LR = 1e-3
     _C.OPTIMIZER.WEIGHT_DECAY = 1e-4
-    # for sgd
-    _C.OPTIMIZER.SGD = CN()
-    _C.OPTIMIZER.SGD.MOMENTUM = 0.9
+    _C.OPTIMIZER.MOMENTUM = 0.9

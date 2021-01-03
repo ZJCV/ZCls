@@ -18,6 +18,6 @@ def build_sgd(cfg, groups):
     lr = cfg.OPTIMIZER.LR
     weight_decay = cfg.OPTIMIZER.WEIGHT_DECAY
 
-    momentum = cfg.OPTIMIZER.SGD.MOMENTUM
+    momentum = cfg.OPTIMIZER.MOMENTUM
 
     return optim.SGD(groups, lr=lr, momentum=momentum, weight_decay=weight_decay)
