@@ -31,7 +31,7 @@ class Bottleneck(nn.Module, ABC):
                  # 步长
                  stride=1,
                  # 下采样
-                 downsample=None,
+                 down_sample=None,
                  # cardinality
                  groups=1,
                  # 基础宽度
@@ -63,7 +63,7 @@ class Bottleneck(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.down_sample = downsample
+        self.down_sample = down_sample
 
         width = int(out_planes * (base_width / 64.)) * groups
         self.conv1 = conv_layer(in_planes, width, kernel_size=1, stride=1, bias=False)

@@ -30,7 +30,7 @@ def test_resnet():
         num_classes=1000
     )
     print(model)
-    test_data(model, (1, 3, 224, 224), (1, 1000))
+    test_data(model, (3, 3, 224, 224), (3, 1000))
 
     # for custom
     model = ResNetRecognizer(
@@ -38,7 +38,15 @@ def test_resnet():
         num_classes=1000
     )
     print(model)
-    test_data(model, (1, 3, 224, 224), (1, 1000))
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+    # resnetxt_32x4d
+    model = ResNetRecognizer(
+        arch="resnext50_32x4d",
+        num_classes=1000
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
 
 
 def test_resnet_gn():
@@ -54,6 +62,15 @@ def test_resnet_gn():
     )
     print(model)
     test_data(model, (1, 3, 224, 224), (1, 1000))
+
+    # resnetxt_32x4d
+    model = ResNetRecognizer(
+        arch="resnext50_32x4d",
+        num_classes=1000,
+        norm_layer=norm_layer
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
 
 
 def test_config():
@@ -72,7 +89,98 @@ def test_config():
     test_data(model, (1, 3, 224, 224), (1, 100))
 
 
+def test_attention_resnet(
+        with_attentions=(1, 1, 1, 1),
+        reduction=16,
+        attention_type='SqueezeAndExcitationBlock2D'
+):
+    # for custom
+    model = ResNetRecognizer(
+        arch="resnet50",
+        with_attentions=with_attentions,
+        reduction=reduction,
+        attention_type=attention_type,
+        num_classes=1000
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+    # resnetxt_32x4d
+    model = ResNetRecognizer(
+        arch="resnext50_32x4d",
+        with_attentions=with_attentions,
+        reduction=reduction,
+        attention_type=attention_type,
+        num_classes=1000
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+
+def test_attention_resnetd(
+        with_attentions=(1, 1, 1, 1),
+        reduction=16,
+        attention_type='SqueezeAndExcitationBlock2D'
+):
+    # for custom
+    model = ResNetRecognizer(
+        arch="resnetd50",
+        with_attentions=with_attentions,
+        reduction=reduction,
+        attention_type=attention_type,
+        num_classes=1000
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+    # resnetxt_32x4d
+    model = ResNetRecognizer(
+        arch="resnedxt50_32x4d",
+        with_attentions=with_attentions,
+        reduction=reduction,
+        attention_type=attention_type,
+        num_classes=1000
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+
 if __name__ == '__main__':
-    # test_resnet()
-    # test_resnet_gn()
-    test_config()
+    print('*' * 10 + ' resnet')
+    test_resnet()
+    print('*' * 10 + ' resnet gn')
+    test_resnet_gn()
+    print('*' * 10 + ' se resnet')
+    test_attention_resnet(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                          reduction=16,
+                          attention_type='SqueezeAndExcitationBlock2D')
+    print('*' * 10 + ' nl resnet')
+    test_attention_resnet(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                          reduction=16,
+                          attention_type='NonLocal2DEmbeddedGaussian')
+    print('*' * 10 + ' snl resnet')
+    test_attention_resnet(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                          reduction=16,
+                          attention_type='SimplifiedNonLocal2DEmbeddedGaussian')
+    print('*' * 10 + ' gc resnet')
+    test_attention_resnet(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                          reduction=16,
+                          attention_type='GlobalContextBlock2D')
+    # test_config()
+
+    print('*' * 10 + ' se resnetd')
+    test_attention_resnetd(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                           reduction=16,
+                           attention_type='SqueezeAndExcitationBlock2D')
+    print('*' * 10 + ' nl resnetd')
+    test_attention_resnetd(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                           reduction=16,
+                           attention_type='NonLocal2DEmbeddedGaussian')
+    print('*' * 10 + ' snl resnetd')
+    test_attention_resnetd(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                           reduction=16,
+                           attention_type='SimplifiedNonLocal2DEmbeddedGaussian')
+    print('*' * 10 + ' gc resnetd')
+    test_attention_resnetd(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
+                           reduction=16,
+                           attention_type='GlobalContextBlock2D')
