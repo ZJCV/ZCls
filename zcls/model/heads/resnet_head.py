@@ -18,7 +18,9 @@ class ResNetHead(nn.Module, ABC):
                  # 输入特征维度
                  feature_dims=2048,
                  # 类别数
-                 num_classes=1000
+                 num_classes=1000,
+                 # 随机失活概率
+                 dropout_rate=0.
                  ):
         super(ResNetHead, self).__init__()
         self.pool = nn.AdaptiveAvgPool2d((1, 1))

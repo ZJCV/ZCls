@@ -35,6 +35,12 @@ class ResNetDBackbone(nn.Module, ABC):
                  groups=1,
                  # 每组的宽度
                  width_per_group=64,
+                 # 是否使用注意力模块
+                 with_attentions=(0, 0, 0, 0),
+                 # 衰减率
+                 reduction=16,
+                 # 注意力模块类型
+                 attention_type='SqueezeAndExcitationBlock2D',
                  # 块类型
                  block_layer=None,
                  # 卷积层类型
@@ -47,6 +53,7 @@ class ResNetDBackbone(nn.Module, ABC):
                  zero_init_residual=False
                  ):
         super(ResNetDBackbone, self).__init__()
+        assert len(layer_planes) == len(layer_blocks) == len(down_samples) == len(with_attentions)
 
         if block_layer is None:
             block_layer = BasicBlock
@@ -66,6 +73,9 @@ class ResNetDBackbone(nn.Module, ABC):
                                              down_samples[i],
                                              groups,
                                              width_per_group,
+                                             with_attentions[i],
+                                             reduction,
+                                             attention_type,
                                              block_layer,
                                              conv_layer,
                                              norm_layer,
@@ -113,6 +123,12 @@ class ResNetDBackbone(nn.Module, ABC):
                         groups,
                         # 每组的宽度
                         width_per_group,
+                        # 是否使用注意力模块
+                        with_attention,
+                        # 衰减率
+                        reduction,
+                        # 注意力模块类型
+                        attention_type,
                         # 块类型
                         block_layer,
                         # 卷积层类型
@@ -122,6 +138,10 @@ class ResNetDBackbone(nn.Module, ABC):
                         # 激活层类型
                         act_layer,
                         ):
+        assert isinstance(with_attention, (int, tuple))
+        assert with_attention in (0, 1) if isinstance(with_attention, int) else len(with_attention) == block_num
+        with_attentions = with_attention if isinstance(with_attention, tuple) else [with_attention] * block_num
+
         stride = 2 if with_sample else 1
         expansion = block_layer.expansion
         if with_sample:
@@ -141,7 +161,9 @@ class ResNetDBackbone(nn.Module, ABC):
         blocks = list()
         blocks.append(block_layer(
             in_planes, out_planes, stride, down_sample,
-            groups, width_per_group, conv_layer, norm_layer, act_layer))
+            groups, width_per_group,
+            with_attentions[0], reduction, attention_type,
+            conv_layer, norm_layer, act_layer))
         in_planes = out_planes * expansion
 
         stride = 1
@@ -149,7 +171,9 @@ class ResNetDBackbone(nn.Module, ABC):
         for i in range(1, block_num):
             blocks.append(block_layer(
                 in_planes, out_planes, stride, down_sample,
-                groups, width_per_group, conv_layer, norm_layer, act_layer))
+                groups, width_per_group,
+                with_attentions[i], reduction, attention_type,
+                conv_layer, norm_layer, act_layer))
         return nn.Sequential(*blocks)
 
     def init_weights(self, zero_init_residual):
