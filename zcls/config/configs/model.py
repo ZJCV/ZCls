@@ -58,9 +58,9 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.ATTENTION = CN()
     _C.MODEL.ATTENTION.WITH_ATTENTION = False
-    _C.MODEL.ATTENTION.WITH_ATTENTIONS = (1, 1, 1, 1)
+    _C.MODEL.ATTENTION.WITH_ATTENTIONS = (0, 0, 0, 0)
     _C.MODEL.ATTENTION.REDUCTION = 16
-    _C.MODEL.ATTENTION.ATTENTION_TYPE = 'GlobalContextBlock2D'
+    _C.MODEL.ATTENTION.ATTENTION_TYPE = 'SqueezeAndExcitationBlock2D'
 
     # ---------------------------------------------------------------------------- #
     # backbone
@@ -108,7 +108,7 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.RECOGNIZER = CN()
     _C.MODEL.RECOGNIZER.TYPE = 'ResNet'
-    _C.MODEL.RECOGNIZER.NAME = 'CustomResNet'
+    _C.MODEL.RECOGNIZER.NAME = 'ZClsResNet'
     # zcls框架训练的模型，用于测试阶段
     _C.MODEL.RECOGNIZER.PRELOADED = ""
     # zcls框架训练的模型，用于训练阶段
@@ -118,7 +118,7 @@ def add_config(_C):
     # 预训练模型类别数
     _C.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES = 1000
     # 零初始化残差连接
-    _C.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL = True
+    _C.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL = False
 
     # ---------------------------------------------------------------------------- #
     # criterion
