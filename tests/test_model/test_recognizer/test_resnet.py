@@ -145,6 +145,24 @@ def test_attention_resnetd(
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
 
+def test_sknet():
+    # resnet
+    model = ResNetRecognizer(
+        arch="sknet50",
+        num_classes=1000
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+    # resnetd
+    model = ResNetRecognizer(
+        arch="sknetd50",
+        num_classes=1000
+    )
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+
 if __name__ == '__main__':
     print('*' * 10 + ' resnet')
     test_resnet()
@@ -184,3 +202,6 @@ if __name__ == '__main__':
     test_attention_resnetd(with_attentions=(0, (1, 0, 1, 0), (1, 0, 1, 0, 1, 0), 0),
                            reduction=16,
                            attention_type='GlobalContextBlock2D')
+
+    print('*' * 10 + ' sknet')
+    test_sknet()

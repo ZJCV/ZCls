@@ -47,7 +47,9 @@ class Bottleneck(nn.Module, ABC):
                  # 归一化层类型
                  norm_layer=None,
                  # 激活层类型
-                 act_layer=None
+                 act_layer=None,
+                 # 其他参数
+                 **kwargs
                  ):
         super(Bottleneck, self).__init__()
         assert with_attention in (0, 1)

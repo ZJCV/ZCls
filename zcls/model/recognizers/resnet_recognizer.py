@@ -17,6 +17,7 @@ from zcls.config.key_word import KEY_OUTPUT
 from .. import registry
 from ..backbones.basicblock import BasicBlock
 from ..backbones.bottleneck import Bottleneck
+from ..backbones.sknet_bottleneck import SKNetBottleneck
 from ..backbones.resnet_backbone import ResNetBackbone
 from ..backbones.resnet_d_backbone import ResNetDBackbone
 from ..heads.resnet_head import ResNetHead
@@ -33,13 +34,17 @@ arch_settings = {
     'resnet152': (ResNetBackbone, ResNetHead, Bottleneck, (3, 8, 36, 3), 1, 64),
     'resnext50_32x4d': (ResNetBackbone, ResNetHead, Bottleneck, (3, 4, 6, 3), 32, 4),
     'resnext101_32x8d': (ResNetBackbone, ResNetHead, Bottleneck, (3, 4, 23, 3), 32, 8),
+
     'resnetd18': (ResNetDBackbone, ResNetDHead, BasicBlock, (2, 2, 2, 2), 1, 64),
     'resnetd34': (ResNetDBackbone, ResNetDHead, BasicBlock, (3, 4, 6, 3), 1, 64),
     'resnetd50': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 1, 64),
     'resnetd101': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 1, 64),
     'resnetd152': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 8, 36, 3), 1, 64),
     'resnedxt50_32x4d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 32, 4),
-    'resnedxt101_32x8d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 32, 8)
+    'resnedxt101_32x8d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 32, 8),
+
+    'sknet50': (ResNetBackbone, ResNetHead, SKNetBottleneck, (3, 4, 6, 3), 1, 64),
+    'sknetd50': (ResNetDBackbone, ResNetDHead, SKNetBottleneck, (3, 4, 6, 3), 1, 64),
 }
 
 

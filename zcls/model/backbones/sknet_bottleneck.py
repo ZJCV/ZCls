@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-@date: 2020/11/21 下午2:38
-@file: basicblock.py
+@date: 2020/11/21 下午3:15
+@file: bottleneck.py
 @author: zj
 @description: 
 """
@@ -11,17 +11,19 @@ from abc import ABC
 import torch.nn as nn
 
 from zcls.model.attention_helper import make_attention_block
+from zcls.model.layers.selective_kernel_conv2d import SelectiveKernelConv2d
 
 
-class BasicBlock(nn.Module, ABC):
+class SKNetBottleneck(nn.Module, ABC):
     """
-    使用两个3x3卷积，如果进行下采样，那么使用第一个卷积层对输入空间尺寸进行减半操作
+    依次执行大小为1x1、3x3、1x1的卷积操作，如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
     参考Torchvision实现
     对于注意力模块，有两种嵌入方式：
     1. 对于Squeeze-And-Excitation或者Global Context操作，在残差连接中（after 1x1）嵌入；
     2. 对于NonLocal或者SimplifiedNonLoal，在Block完成计算后（after add）嵌入。
+    对于Selective Kernel Conv2d，替换3x3卷积层
     """
-    expansion = 1
+    expansion = 4
 
     def __init__(self,
                  # 输入通道数
@@ -51,14 +53,12 @@ class BasicBlock(nn.Module, ABC):
                  # 其他参数
                  **kwargs
                  ):
-        super(BasicBlock, self).__init__()
+        super(SKNetBottleneck, self).__init__()
         assert with_attention in (0, 1)
         assert attention_type in ['GlobalContextBlock2D',
                                   'SimplifiedNonLocal2DEmbeddedGaussian',
                                   'NonLocal2DEmbeddedGaussian',
                                   'SqueezeAndExcitationBlock2D']
-        if groups != 1 or base_width != 64:
-            raise ValueError('BasicBlock only supports groups=1 and base_width=64')
 
         if conv_layer is None:
             conv_layer = nn.Conv2d
@@ -69,11 +69,16 @@ class BasicBlock(nn.Module, ABC):
 
         self.down_sample = down_sample
 
-        self.conv1 = conv_layer(in_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False)
-        self.bn1 = norm_layer(out_planes)
+        width = int(out_planes * (base_width / 64.)) * groups
+        self.conv1 = conv_layer(in_planes, width, kernel_size=1, stride=1, bias=False)
+        self.bn1 = norm_layer(width)
 
-        self.conv2 = conv_layer(out_planes, out_planes, kernel_size=3, stride=1, padding=1, bias=False)
-        self.bn2 = norm_layer(out_planes)
+        self.conv2 = SelectiveKernelConv2d(width, width, stride=stride, groups=groups,
+                                           reduction_rate=reduction)
+        self.bn2 = norm_layer(width)
+
+        self.conv3 = conv_layer(width, out_planes * self.expansion, kernel_size=1, stride=1, bias=False)
+        self.bn3 = norm_layer(out_planes * self.expansion)
 
         self.relu = act_layer(inplace=True)
 
@@ -95,6 +100,10 @@ class BasicBlock(nn.Module, ABC):
 
         out = self.conv2(out)
         out = self.bn2(out)
+        out = self.relu(out)
+
+        out = self.conv3(out)
+        out = self.bn3(out)
 
         if self.attention_after_1x1 is not None:
             out = self.attention_after_1x1(out)
