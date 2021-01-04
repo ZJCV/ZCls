@@ -44,6 +44,15 @@
   year =         {2020}
 }
 
+@misc{zhang2020resnest,
+      title={ResNeSt: Split-Attention Networks}, 
+      author={Hang Zhang and Chongruo Wu and Zhongyue Zhang and Yi Zhu and Haibin Lin and Zhi Zhang and Yue Sun and Tong He and Jonas Mueller and R. Manmatha and Mu Li and Alexander Smola},
+      year={2020},
+      eprint={2004.08955},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{howard2019searching,
       title={Searching for MobileNetV3}, 
       author={Andrew Howard and Mark Sandler and Grace Chu and Liang-Chieh Chen and Bo Chen and Mingxing Tan and Weijun Wang and Yukun Zhu and Ruoming Pang and Vijay Vasudevan and Quoc V. Le and Hartwig Adam},
@@ -58,6 +67,15 @@
       author={Yue Cao and Jiarui Xu and Stephen Lin and Fangyun Wei and Han Hu},
       year={2019},
       eprint={1904.11492},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@misc{li2019selective,
+      title={Selective Kernel Networks}, 
+      author={Xiang Li and Wenhai Wang and Xiaolin Hu and Jian Yang},
+      year={2019},
+      eprint={1903.06586},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
