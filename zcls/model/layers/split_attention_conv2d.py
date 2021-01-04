@@ -32,7 +32,7 @@ class SplitAttentionConv2d(nn.Module, ABC):
                  # cardinality
                  groups=1,
                  # 中间层衰减率
-                 reduction_rate=16,
+                 reduction_rate=4,
                  # 默认中间层最小通道数
                  default_channels: int = 32,
                  # 维度

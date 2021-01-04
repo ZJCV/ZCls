@@ -55,7 +55,7 @@ class ResNetStBlock(nn.Module, ABC):
                  # 是否使用注意力模块
                  with_attention=False,
                  # 衰减率
-                 reduction=16,
+                 reduction=4,
                  # 注意力模块类型
                  attention_type='SqueezeAndExcitationBlock2D',
                  # 卷积层类型

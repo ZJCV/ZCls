@@ -3,11 +3,11 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/r503d_custom_cifar100_224_e200'
+OUTPUT_DIR: 'outputs/benchmarks/rd50_custom_cifar100_224_e100_rtsprop'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
-  MAX_EPOCH: 200
+  MAX_EPOCH: 100
   SAVE_EPOCH: 5
   EVAL_EPOCH: 5
   RESUME: False
@@ -32,9 +32,9 @@ DATALOADER:
   NUM_WORKERS: 8
 MODEL:
   CONV:
-    TYPE: 'Conv3d'
+    TYPE: 'Conv2d'
   NORM:
-    TYPE: 'BatchNorm3d'
+    TYPE: 'BatchNorm2d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
@@ -42,44 +42,33 @@ MODEL:
     TYPE: 'ReLU'
   BACKBONE:
     IN_PLANES: 3
-    ARCH: 'resnet50'
+    ARCH: 'resnetd50'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
     DOWN_SAMPLES: (0, 1, 1, 1)
-    CONV1_KERNEL: (1, 7, 7)
-    CONV1_STRIDE: (1, 2, 2)
-    CONV1_PADDING: (0, 3, 3)
-    POOL1_KERNEL: (1, 3, 3)
-    POOL1_STRIDE: (1, 2, 2)
-    POOL1_PADDING: (0, 1, 1)
-    WITH_POOL2: False
-    TEMPORAL_STRIDES: (1, 1, 1, 1)
-    INFLATE_LIST: (0, 0, 0, 0)
-    INFLATE_STYLE: '3x1x1'
   HEAD:
-    DROPOUT: 0.
+    DROPOUT: 0.2
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'ResNet3D'
+    TYPE: 'ResNet'
+    NAME: 'ZClsResNet'
     PRELOADED: ""
     PRETRAINED: ""
-    TORCHVISION_PRETRAINED: False
     PRETRAINED_NUM_CLASSES: 1000
     ZERO_INIT_RESIDUAL: True
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
-  NAME: 'SGD'
-  LR: 0.0125
+  NAME: 'RMSProp'
+  LR: 3e-4
   WEIGHT_DECAY: 1e-4
-  SGD:
-    MOMENTUM: 0.9
+  MOMENTUM: 0.9
 LR_SCHEDULER:
   NAME: 'MultiStepLR'
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [ 80, 140, 175 ]
+    MILESTONES: [ 40, 70 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0
