@@ -284,9 +284,7 @@ def build_resnet(cfg):
             conv_layer=conv_layer,
             norm_layer=norm_layer,
             act_layer=act_layer,
-            zero_init_residual=zero_init_residual,
-            radix=radix,
-            fast_avg=fast_avg
+            zero_init_residual=zero_init_residual
         )
     else:
         raise ValueError(f'{recognizer_name} does not exist')

@@ -81,7 +81,8 @@ class ResNetDBackbone(nn.Module, ABC):
                                              block_layer,
                                              conv_layer,
                                              norm_layer,
-                                             act_layer
+                                             act_layer,
+                                             **kwargs
                                              )
             in_planes = layer_planes[i] * block_layer.expansion
             layer_name = f'layer{i + 1}'
