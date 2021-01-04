@@ -65,7 +65,6 @@ class SelectiveKernelConv2d(nn.Module, ABC):
         self.softmax = nn.Softmax(dim=0)
         self.dimension = dimension
         self.out_channels = out_channels
-
         self._init_weights()
 
     def _init_weights(self):

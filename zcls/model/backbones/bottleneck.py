@@ -37,7 +37,7 @@ class Bottleneck(nn.Module, ABC):
                  # 基础宽度
                  base_width=64,
                  # 是否使用注意力模块
-                 with_attention=True,
+                 with_attention=False,
                  # 衰减率
                  reduction=16,
                  # 注意力模块类型
@@ -81,10 +81,10 @@ class Bottleneck(nn.Module, ABC):
 
         self.attention_after_1x1 = None
         self.attention_after_add = None
-        if attention_type in ['SqueezeAndExcitationBlock2D', 'GlobalContextBlock2D']:
+        if with_attention and attention_type in ['SqueezeAndExcitationBlock2D', 'GlobalContextBlock2D']:
             self.attention_after_1x1 = make_attention_block(out_planes * self.expansion, reduction, attention_type)
             self.attention_after_add = None
-        if attention_type in ['NonLocal2DEmbeddedGaussian', 'SimplifiedNonLocal2DEmbeddedGaussian']:
+        if with_attention and attention_type in ['NonLocal2DEmbeddedGaussian', 'SimplifiedNonLocal2DEmbeddedGaussian']:
             self.attention_after_1x1 = None
             self.attention_after_add = make_attention_block(out_planes * self.expansion, reduction, attention_type)
 

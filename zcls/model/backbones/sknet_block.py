@@ -14,7 +14,7 @@ from zcls.model.attention_helper import make_attention_block
 from zcls.model.layers.selective_kernel_conv2d import SelectiveKernelConv2d
 
 
-class SKNetBottleneck(nn.Module, ABC):
+class SKNetBlock(nn.Module, ABC):
     """
     依次执行大小为1x1、3x3、1x1的卷积操作，如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
     参考Torchvision实现
@@ -39,7 +39,7 @@ class SKNetBottleneck(nn.Module, ABC):
                  # 基础宽度
                  base_width=64,
                  # 是否使用注意力模块
-                 with_attention=True,
+                 with_attention=False,
                  # 衰减率
                  reduction=16,
                  # 注意力模块类型
@@ -53,7 +53,7 @@ class SKNetBottleneck(nn.Module, ABC):
                  # 其他参数
                  **kwargs
                  ):
-        super(SKNetBottleneck, self).__init__()
+        super(SKNetBlock, self).__init__()
         assert with_attention in (0, 1)
         assert attention_type in ['GlobalContextBlock2D',
                                   'SimplifiedNonLocal2DEmbeddedGaussian',
@@ -84,10 +84,10 @@ class SKNetBottleneck(nn.Module, ABC):
 
         self.attention_after_1x1 = None
         self.attention_after_add = None
-        if attention_type in ['SqueezeAndExcitationBlock2D', 'GlobalContextBlock2D']:
+        if with_attention and attention_type in ['SqueezeAndExcitationBlock2D', 'GlobalContextBlock2D']:
             self.attention_after_1x1 = make_attention_block(out_planes * self.expansion, reduction, attention_type)
             self.attention_after_add = None
-        if attention_type in ['NonLocal2DEmbeddedGaussian', 'SimplifiedNonLocal2DEmbeddedGaussian']:
+        if with_attention and attention_type in ['NonLocal2DEmbeddedGaussian', 'SimplifiedNonLocal2DEmbeddedGaussian']:
             self.attention_after_1x1 = None
             self.attention_after_add = make_attention_block(out_planes * self.expansion, reduction, attention_type)
 

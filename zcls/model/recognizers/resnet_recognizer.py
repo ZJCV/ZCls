@@ -17,7 +17,8 @@ from zcls.config.key_word import KEY_OUTPUT
 from .. import registry
 from ..backbones.basicblock import BasicBlock
 from ..backbones.bottleneck import Bottleneck
-from ..backbones.sknet_bottleneck import SKNetBottleneck
+from ..backbones.sknet_block import SKNetBlock
+from ..backbones.resnetst_block import ResNetStBlock
 from ..backbones.resnet_backbone import ResNetBackbone
 from ..backbones.resnet_d_backbone import ResNetDBackbone
 from ..heads.resnet_head import ResNetHead
@@ -27,6 +28,7 @@ from ..act_helper import get_act
 from ..conv_helper import get_conv
 
 arch_settings = {
+    # name: (Backbone, Head, Block, Layer_planes, groups, width_per_group)
     'resnet18': (ResNetBackbone, ResNetHead, BasicBlock, (2, 2, 2, 2), 1, 64),
     'resnet34': (ResNetBackbone, ResNetHead, BasicBlock, (3, 4, 6, 3), 1, 64),
     'resnet50': (ResNetBackbone, ResNetHead, Bottleneck, (3, 4, 6, 3), 1, 64),
@@ -43,8 +45,8 @@ arch_settings = {
     'resnedxt50_32x4d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 32, 4),
     'resnedxt101_32x8d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 32, 8),
 
-    'sknet50': (ResNetBackbone, ResNetHead, SKNetBottleneck, (3, 4, 6, 3), 1, 64),
-    'sknetd50': (ResNetDBackbone, ResNetDHead, SKNetBottleneck, (3, 4, 6, 3), 1, 64),
+    'sknet50': (ResNetDBackbone, ResNetDHead, SKNetBlock, (3, 4, 6, 3), 1, 64),
+    'resnetst50': (ResNetDBackbone, ResNetDHead, ResNetStBlock, (3, 4, 6, 3), 1, 64),
 }
 
 
@@ -89,7 +91,12 @@ class ResNetRecognizer(nn.Module, ABC):
                  # 激活层类型
                  act_layer=None,
                  # 零初始化残差连接
-                 zero_init_residual=False
+                 zero_init_residual=False,
+                 # for resnetst
+                 # 每个group中的分离数
+                 radix=1,
+                 # 在3x3之前执行下采样操作
+                 fast_avg=False,
                  ):
         super(ResNetRecognizer, self).__init__()
         assert arch in arch_settings.keys()
@@ -113,7 +120,9 @@ class ResNetRecognizer(nn.Module, ABC):
             conv_layer=conv_layer,
             norm_layer=norm_layer,
             act_layer=act_layer,
-            zero_init_residual=zero_init_residual
+            zero_init_residual=zero_init_residual,
+            radix=radix,
+            fast_avg=fast_avg
         )
         feature_dims = block_layer.expansion * layer_planes[-1]
         self.head = head_layer(
@@ -228,6 +237,8 @@ def build_resnet(cfg):
     norm_layer = get_norm(cfg)
     act_layer = get_act(cfg)
     zero_init_residual = cfg.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL
+    radix = cfg.MODEL.BACKBONE.RADIX
+    fast_avg = cfg.MODEL.BACKBONE.FAST_AVG
     # for head
     dropout_rate = cfg.MODEL.HEAD.DROPOUT
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
@@ -268,7 +279,9 @@ def build_resnet(cfg):
             conv_layer=conv_layer,
             norm_layer=norm_layer,
             act_layer=act_layer,
-            zero_init_residual=zero_init_residual
+            zero_init_residual=zero_init_residual,
+            radix=radix,
+            fast_avg=fast_avg
         )
     else:
         raise ValueError(f'{recognizer_name} does not exist')
