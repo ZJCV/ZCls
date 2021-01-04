@@ -16,11 +16,9 @@ from zcls.util import logging
 
 from .. import registry
 from .resnet_recognizer import build_resnet
-from .resnet_d_recognizer import build_resnet_d
 from .mobilenetv1_recognizer import build_mobilenet_v1
 from .mobilenetv2_recognizer import build_mobilenet_v2
 from .resnet3d_recognizer import build_resnet3d
-from .attention_resnet_recognizer import build_attention_resnet
 from .shufflenetv1_recognizer import build_shufflenet_v1
 from .shufflenetv2_recognizer import build_shufflenet_v2
 from .mnasnet_recognizer import build_mnasnet
