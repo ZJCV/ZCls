@@ -76,11 +76,6 @@ def add_config(_C):
     _C.MODEL.BACKBONE.LAYER_PLANES = (64, 128, 256, 512)
     # 是否执行空间下采样
     _C.MODEL.BACKBONE.DOWN_SAMPLES = (0, 1, 1, 1)
-    # for ResNetSt
-    # 每个group中的分离数
-    _C.MODEL.BACKBONE.RADIX = 1
-    # 在3x3之前执行下采样操作
-    _C.MODEL.BACKBONE.FAST_AVG = False
     # for MobileNetV1
     # 每层步长
     _C.MODEL.BACKBONE.STRIDES = (1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2)
