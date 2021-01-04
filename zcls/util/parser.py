@@ -145,7 +145,7 @@ def load_test_config(args):
         raise ValueError('需要输入配置文件和预训练模型路径')
 
     cfg.merge_from_file(args.config_file)
-    cfg.MODEL.PRETRAINED = args.pretrained
+    cfg.MODEL.RECOGNIZER.PRELOADED = args.pretrained
     cfg.OUTPUT_DIR = args.output
 
     if args.gpus != -1:
