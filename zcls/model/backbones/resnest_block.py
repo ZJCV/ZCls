@@ -22,7 +22,7 @@ from 《ResNeSt: Split-Attention Networks》 Appendix
 """
 
 
-class ResNetStBlock(nn.Module, ABC):
+class ResNeStBlock(nn.Module, ABC):
     """
     依次执行大小为1x1、3x3、1x1的卷积操作，如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
     参考Torchvision实现
@@ -71,7 +71,7 @@ class ResNetStBlock(nn.Module, ABC):
                  # 其他参数
                  **kwargs
                  ):
-        super(ResNetStBlock, self).__init__()
+        super(ResNeStBlock, self).__init__()
         assert with_attention in (0, 1)
         assert attention_type in ['GlobalContextBlock2D',
                                   'SimplifiedNonLocal2DEmbeddedGaussian',

@@ -23,6 +23,7 @@ from .shufflenetv1_recognizer import build_shufflenet_v1
 from .shufflenetv2_recognizer import build_shufflenet_v2
 from .mnasnet_recognizer import build_mnasnet
 from .mobilenetv3_recognizer import build_mobilenet_v3
+from .resnest_recognizer import build_resnest
 
 logger = logging.get_logger(__name__)
 

@@ -18,7 +18,7 @@ from .. import registry
 from ..backbones.basicblock import BasicBlock
 from ..backbones.bottleneck import Bottleneck
 from ..backbones.sknet_block import SKNetBlock
-from ..backbones.resnetst_block import ResNetStBlock
+from ..backbones.resnest_block import ResNeStBlock
 from ..backbones.resnet_backbone import ResNetBackbone
 from ..backbones.resnet_d_backbone import ResNetDBackbone
 from ..heads.resnet_head import ResNetHead
@@ -42,16 +42,16 @@ arch_settings = {
     'resnetd50': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 1, 64),
     'resnetd101': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 1, 64),
     'resnetd152': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 8, 36, 3), 1, 64),
-    'resnedxt50_32x4d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 32, 4),
-    'resnedxt101_32x8d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 32, 8),
+    'resnextd50_32x4d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 32, 4),
+    'resnedxdt101_32x8d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 32, 8),
     # name: (Backbone, Head, Block, Layer_planes, groups, width_per_group)
     'sknet50': (ResNetDBackbone, ResNetDHead, SKNetBlock, (3, 4, 6, 3), 1, 64),
     # name: (Backbone, Head, Block, Layer_planes, radix, groups, width_per_group)
-    'resnetst50_1s1x64d': (ResNetDBackbone, ResNetDHead, ResNetStBlock, (3, 4, 6, 3), 1, 1, 64),
-    'resnetst50_2s1x64d': (ResNetDBackbone, ResNetDHead, ResNetStBlock, (3, 4, 6, 3), 2, 1, 64),
-    'resnetst50_4s1x64d': (ResNetDBackbone, ResNetDHead, ResNetStBlock, (3, 4, 6, 3), 4, 1, 64),
-    'resnetst50_2s2x40d': (ResNetDBackbone, ResNetDHead, ResNetStBlock, (3, 4, 6, 3), 2, 2, 40),
-    'resnetst50_2s2x40d_fast': (ResNetDBackbone, ResNetDHead, ResNetStBlock, (3, 4, 6, 3), 2, 2, 40)
+    'resnest50_1s1x64d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 1, 1, 64),
+    'resnest50_2s1x64d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 2, 1, 64),
+    'resnest50_4s1x64d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 4, 1, 64),
+    'resnest50_2s2x40d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 2, 2, 40),
+    'resnest50_2s2x40d_fast': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 2, 2, 40)
 }
 
 
@@ -105,7 +105,7 @@ class ResNetRecognizer(nn.Module, ABC):
 
         radix = 1
         fast_avg = False
-        if 'resnetst' in arch:
+        if 'resnest' in arch:
             backbone_layer, head_layer, block_layer, layer_blocks, radix, groups, width_per_group = arch_settings[arch]
             if 'fast' in arch:
                 fast_avg = True
