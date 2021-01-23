@@ -1,11 +1,13 @@
 
 # 基准测试
 
-## 基准配置
+## 轻量级模型
 
-针对不同分类模型进行基准测试，相同训练配置如下：
+当前已实现的轻量级模型有：`MobileNetV1/V2/V3、MNasNet、ShuffleNetV1/V2`
 
-1. 训练次数：`50`轮
+相同训练配置如下：
+
+1. 训练次数：`100`轮
 2. 数据集：`CIFAR100`
 3. 图像预处理：
    1. 较短边扩展到`224`，然后中心裁剪`224x224`
@@ -13,955 +15,230 @@
    3. 标准差：`(0.225, 0.225, 0.225)`
 4. 批量大小：`32`
 5. 损失函数：`CrossEntropyLoss`
-6. 优化器：`SGD + Momentum（0.9）`
-7. 学习率调度：`WarmUP`（共`5`轮） + `MultiStepLR`（第`30`轮和第`40`轮衰减一次，因子大小为`0.1`）
-8. `GPU/CPU：Nvidia GeForce RTX 2080 Ti`
-9.  训练加速：混合精度训练
+6. 学习率调度：`WarmUP`（前`5`轮） + `MultiStepLR`（第`40/70`轮衰减一次，衰减因子为`0.1`）
+7. 训练加速：混合精度训练
+8. `GPU/CPU：GeForce RTX 2080 Ti + Intel(R) Xeon(R) Silver 4114 CPU @ 2.20GHz`
 
-## 测试结果
-
-<table>
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-7btt{border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-fymr{border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
+</style>
+<table class="tg">
 <thead>
   <tr>
-    <th>recognizer</th>
-    <th>custom</th>
-    <th>attention</th>
-    <th>conv</th>
-    <th>norm</th>
-    <th>act</th>
-    <th>dropout</th>
-    <th>zero_init_resisual</th>
-    <th>resolution(CxHxW)</th>
-    <th>gpus</th>
-    <th>batchs</th>
-    <th>learning rate/weight decay</th>
-    <th>top1-acc/top5-acc</th>
-    <th>model_size(MB)</th>
-    <th>GFlops</th>
-    <th>gpu infer(s)</th>
-    <th>cpu infer(s)</th>
-    <th>config</th>
-    <th>log</th>
+    <th class="tg-7btt">model</th>
+    <th class="tg-7btt">custom</th>
+    <th class="tg-7btt">optimizer</th>
+    <th class="tg-7btt">top1 acc</th>
+    <th class="tg-7btt">top5 acc</th>
+    <th class="tg-7btt">model size(MB)</th>
+    <th class="tg-7btt">gflops</th>
+    <th class="tg-7btt">gpu infer(s)</th>
+    <th class="tg-7btt">cpu infer(s)</th>
+    <th class="tg-7btt">config/log</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td>resnet-50</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>/</td>
-    <td>True</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-4</td>
-    <td>58.956/84.595</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv1_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">66.474</td>
+    <td class="tg-0pky">88.309</td>
+    <td class="tg-0pky">12.625</td>
+    <td class="tg-0pky">1.156</td>
+    <td class="tg-fymr">0.006</td>
+    <td class="tg-fymr">0.030</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/eJ5soxokHqDY9ni" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>resnet-50</td>
-    <td>torchvision</td>
-    <td>/</td>
-    <td>Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>/</td>
-    <td>True</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-4</td>
-    <td>58.187/83.956</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv2_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">69.069</td>
+    <td class="tg-0pky">90.915</td>
+    <td class="tg-0pky">8.972</td>
+    <td class="tg-0pky">0.626</td>
+    <td class="tg-0pky">0.009</td>
+    <td class="tg-0pky">0.049</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/rPSjTiK2XdPwkPB" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>resnet-50</td>
-    <td>torchvision</td>
-    <td>/</td>
-    <td>Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>/</td>
-    <td>False</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-4</td>
-    <td>61.701/86.102</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv2_torchvision_cifar100_224_e100</td>
+    <td class="tg-0pky">torchvision</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">68.940</td>
+    <td class="tg-0pky">91.114</td>
+    <td class="tg-0pky">8.972</td>
+    <td class="tg-0pky">0.626</td>
+    <td class="tg-0pky">0.008</td>
+    <td class="tg-0pky">0.060</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/obJLoRRsoH8CJzT" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>resnet3d-50</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Conv3d</td>
-    <td>BatchNorm3d</td>
-    <td>ReLU</td>
-    <td>/</td>
-    <td>True</td>
-    <td>3x1x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-4</td>
-    <td>58.776/84.075</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mnasnet_a1_1_3_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">67.762</td>
+    <td class="tg-0pky">89.587</td>
+    <td class="tg-0pky">14.811</td>
+    <td class="tg-0pky">1.083</td>
+    <td class="tg-0pky">0.009</td>
+    <td class="tg-0pky">0.058</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/JkkRqw2j4NQjsGd" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>resnet_d-50</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>True</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-4</td>
-    <td>71.655/91.384</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mnasnet_a1_1_3_se_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">70.098</td>
+    <td class="tg-fymr">91.504</td>
+    <td class="tg-0pky">65.567</td>
+    <td class="tg-0pky">2.857</td>
+    <td class="tg-0pky">0.015</td>
+    <td class="tg-0pky">0.124</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/nKP2ExeiDrnR4N6" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>resnetxt_d-50</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>True</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-4</td>
-    <td>71.895/91.763</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mnasnet_b1_1_3_custom_cifar100_224_e100_sgd</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">sgd</td>
+    <td class="tg-0pky">69.119</td>
+    <td class="tg-0pky">89.687</td>
+    <td class="tg-0pky">19.567</td>
+    <td class="tg-0pky">1.080</td>
+    <td class="tg-0pky">0.011</td>
+    <td class="tg-0pky">0.062</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/2xR6RTmcj8Son9E" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mobilenet_v1</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Depthwise Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>62.630/86.741</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mnasnet_b1_1_3_torchvision_cifar100_224_e100_sgd</td>
+    <td class="tg-0pky">torchvision</td>
+    <td class="tg-0pky">sgd</td>
+    <td class="tg-0pky">69.119</td>
+    <td class="tg-0pky">89.726</td>
+    <td class="tg-0pky">19.567</td>
+    <td class="tg-0pky">1.080</td>
+    <td class="tg-0pky">0.009</td>
+    <td class="tg-0pky">0.058</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/jdKcfs4tznERdHA" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mobilenet_v2</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>66.484/89.297</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv3_large_custom_cifar100_224_e100_sgd</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">sgd</td>
+    <td class="tg-0pky">66.304</td>
+    <td class="tg-0pky">88.349</td>
+    <td class="tg-0pky">10.750</td>
+    <td class="tg-0pky">0.453</td>
+    <td class="tg-0pky">0.009</td>
+    <td class="tg-0pky">0.040</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/SfmNT8E8an99xWa" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mobilenet_v2</td>
-    <td>torchvision</td>
-    <td>/</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU6</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>66.713/89.347</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv3_large_se_custom_cifar100_224_e100_sgd</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">sgd</td>
+    <td class="tg-0pky">68.031</td>
+    <td class="tg-0pky">89.607</td>
+    <td class="tg-0pky">16.493</td>
+    <td class="tg-0pky">0.457</td>
+    <td class="tg-0pky">0.010</td>
+    <td class="tg-0pky">0.046</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/JttoQzK6X59fAdA" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mnasnet_a1_1_3</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>67.432/89.417</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv3_large_se_hsigmoid_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">68.151</td>
+    <td class="tg-0pky">89.287</td>
+    <td class="tg-0pky">16.493</td>
+    <td class="tg-0pky">0.457</td>
+    <td class="tg-0pky">0.010</td>
+    <td class="tg-0pky">0.050</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/tm5ZL9qHrsC7s4W" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mnasnet_a1_1_3</td>
-    <td>custom</td>
-    <td>SE</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>68.051/89.756</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv3_small_custom_cifar100_224_e100_sgd</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">sgd</td>
+    <td class="tg-0pky">66.364</td>
+    <td class="tg-0pky">88.688</td>
+    <td class="tg-fymr">7.977</td>
+    <td class="tg-0pky">0.445</td>
+    <td class="tg-0pky">0.008</td>
+    <td class="tg-0pky">0.042</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/j9t5bkn2XSX89eZ" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mnasnet_b1_1_3</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>68.680/89.687</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv3_small_se_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">67.891</td>
+    <td class="tg-0pky">89.467</td>
+    <td class="tg-0pky">13.719</td>
+    <td class="tg-fymr">0.450</td>
+    <td class="tg-0pky">0.010</td>
+    <td class="tg-0pky">0.054</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/eJ5soxokHqDY9ni" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mnasnet_b1_1_3</td>
-    <td>torchvision</td>
-    <td>/</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>68.770/89.886</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">mbv3_small_se_hsigmoid_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">68.411</td>
+    <td class="tg-0pky">89.517</td>
+    <td class="tg-0pky">13.719</td>
+    <td class="tg-fymr">0.450</td>
+    <td class="tg-0pky">0.010</td>
+    <td class="tg-0pky">0.044</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/FAHGmWCQkf587ea" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mobilenet_v3_large</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU+HSwish</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>65.895/88.139</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">sfv1_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-fymr">71.715</td>
+    <td class="tg-0pky">91.334</td>
+    <td class="tg-0pky">36.461</td>
+    <td class="tg-0pky">2.608</td>
+    <td class="tg-0pky">0.010</td>
+    <td class="tg-0pky">0.062</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/osWkJZyst4wD8B8" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mobilenet_v3_large</td>
-    <td>custom</td>
-    <td>SE</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU+HSwish</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>67.023/89.237</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
+    <td class="tg-0pky">sfv2_custom_cifar100_224_e100</td>
+    <td class="tg-0pky">zcls</td>
+    <td class="tg-0pky">rmsprop</td>
+    <td class="tg-0pky">70.457</td>
+    <td class="tg-0pky">90.645</td>
+    <td class="tg-0pky">27.356</td>
+    <td class="tg-0pky">1.571</td>
+    <td class="tg-0pky">0.013</td>
+    <td class="tg-0pky">0.056</td>
+    <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/6Gbj9GfNc7tjM9c" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
-    <td>mobilenet_v3_large</td>
-    <td>custom</td>
-    <td>SE+HSigmoid</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU+HSwish</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>66.494/89.087</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-  </tr>
-  <tr>
-    <td>mobilenet_v3_small</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU+HSwish</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>66.044/88.359</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-  </tr>
-    <tr>
-    <td>mobilenet_v3_small</td>
-    <td>custom</td>
-    <td>SE</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU+HSwish</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>67.103/89.387</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-  </tr>
-  </tr>
-    <tr>
-    <td>mobilenet_v3_small</td>
-    <td>custom</td>
-    <td>SE+HSigmoid</td>
-    <td>Bottleneck Depth-Separable Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU+HSwish</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>67.173/89.067</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-  </tr>
-  </tr>
-    <tr>
-    <td>shufflenet_v1</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>PointWise Group Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>67.821/89.367</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-  </tr>
-  </tr>
-    <tr>
-    <td>shufflenet_v2</td>
-    <td>custom</td>
-    <td>/</td>
-    <td>Depthwise Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>0.2</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>64.267/87.181</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-  </tr>
-  </tr>
-    <tr>
-    <td>shufflenet_v2</td>
-    <td>torchvision</td>
-    <td>/</td>
-    <td>Depthwise Conv2d</td>
-    <td>BatchNorm2d</td>
-    <td>ReLU</td>
-    <td>/</td>
-    <td>/</td>
-    <td>3x224x224</td>
-    <td>1</td>
-    <td>32</td>
-    <td>0.0125/1e-5</td>
-    <td>63.029/86.871</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-  </tr>
+  <td class="tg-0pky">sfv2_torchvision_cifar100_224_e100</td>
+  <td class="tg-0pky">torchvision</td>
+  <td class="tg-0pky">rmsprop</td>
+  <td class="tg-0pky">70.148</td>
+  <td class="tg-0pky">91.314</td>
+  <td class="tg-0pky">21.171</td>
+  <td class="tg-0pky">1.178</td>
+  <td class="tg-0pky">0.011</td>
+  <td class="tg-0pky">0.062</td>
+  <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/cpeJREKmyRsxBko" target="_blank" rel="noopener noreferrer">link</a></td>
+</tr>
 </tbody>
 </table>
 
-## ResNet
+<!-- ## ResNet系列 -->
 
-<table>
-<thead>
-  <tr>
-    <th>config</th>
-    <th>backbone</th>
-    <th>pretrain</th>
-    <th>custom</th>
-    <th>gpus</th>
-    <th>batchs</th>
-    <th>top1 acc</th>
-    <th>top5 acc</th>
-    <th>resolution(TxHxW)</th>
-    <th>model_size(MB)</th>
-    <th>GFlops</th>
-    <th>inference_time(s)</th>
-    <th>log</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/RFnPtJ4WsgryrbB" target="_blank" rel="noopener noreferrer">r50_custom_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>96</td>
-    <td>40.665</td>
-    <td>68.403</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.010</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/nLBNPH9pR5ZDrEr" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/4ADbnYzsgk2SQfi" target="_blank" rel="noopener noreferrer">r50_custom_pretrained_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>torchvision pretrained</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>96</td>
-    <td>82.500</td>
-    <td>97.381</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.011</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/wjx27CMPFMFpyNm" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/bMoXAjTcxtnmjCw" target="_blank" rel="noopener noreferrer">r50_pytorch_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>from scratch</td>
-    <td>torchvision</td>
-    <td>1</td>
-    <td>96</td>
-    <td>40.813</td>
-    <td>69.147</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.010</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/Htifk7XR3TrWEnk" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/KTjK4LsoPMayBFY" target="_blank" rel="noopener noreferrer">r50_pytorch_pretrained_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>torchvision pretrained</td>
-    <td>torchvision</td>
-    <td>1</td>
-    <td>96</td>
-    <td>82.351</td>
-    <td>97.450</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.010</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/CxoaLWEsQJ6QSMo" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-</tbody>
-</table>
-
-## Norm
-
-<table>
-<thead>
-  <tr>
-    <th>config</th>
-    <th>backbone</th>
-    <th>norm_layer</th>
-    <th>pretrain</th>
-    <th>custom</th>
-    <th>gpus</th>
-    <th>batchs</th>
-    <th>top1 acc</th>
-    <th>top5 acc</th>
-    <th>resolution(TxHxW)</th>
-    <th>model_size(MB)</th>
-    <th>GFlops</th>
-    <th>inference_time(s)</th>
-    <th>log</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/aqfxmEGEBJjCAdE" target="_blank" rel="noopener noreferrer">r50_gn_custom_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>gn</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>96</td>
-    <td>45.992</td>
-    <td>74.266</td>
-    <td>3x224x224</td>
-    <td>90.255</td>
-    <td>8.175</td>
-    <td>0.009</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/TLzdegHpHjzDWA7" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/7CwaqdfyBETRqEr" target="_blank" rel="noopener noreferrer">r50_gn_custom_pretrained_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>gn</td>
-    <td>torchvision pretrained BN</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>96</td>
-    <td>76.597</td>
-    <td>94.633</td>
-    <td>3x224x224</td>
-    <td>90.255</td>
-    <td>8.175</td>
-    <td>0.010</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/kwpgXGgdbM2sCFn" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/fgnmCpyH8w3YpPQ" target="_blank" rel="noopener noreferrer">r50_partial_bn_custom_pretrained_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>partial bn</td>
-    <td>torchvision pretrained</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>96</td>
-    <td>84.286</td>
-    <td>97.708</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.009</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/5PTbRiT8G2QN2ok" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/N4aXzZRRb9MtMom" target="_blank" rel="noopener noreferrer">r50_fix_bn_custom_pretrained_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>fix bn</td>
-    <td>torchvision pretrained</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>96</td>
-    <td>84.325</td>
-    <td>97.639</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.008</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/FmscE4jeHkLtp9H" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/kyz2HKrEf5H3ifE" target="_blank" rel="noopener noreferrer">r50_custom_cifar100_224_g2</a></td>
-    <td>resnet50</td>
-    <td>bn</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>2</td>
-    <td>96</td>
-    <td>40.035</td>
-    <td>67.934</td>
-    <td>3x224x224</td>
-    <td>/</td>
-    <td>/</td>
-    <td>/</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/nLBNPH9pR5ZDrEr" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/oz7rg4Lex5kgYwP" target="_blank" rel="noopener noreferrer">r50_sync_bn_custom_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>sync bn</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>2</td>
-    <td>96</td>
-    <td>38.443</td>
-    <td>66.637</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.010</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/GwdxDsR7dq7kkDb" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-</tbody>
-</table>
-
-## Non-Local
-
-<table>
-<thead>
-  <tr>
-    <th>config</th>
-    <th>backbone</th>
-    <th>pretrain</th>
-    <th>custom</th>
-    <th>gpus</th>
-    <th>batchs</th>
-    <th>top1 acc</th>
-    <th>top5 acc</th>
-    <th>resolution(TxHxW)</th>
-    <th>model_size(MB)</th>
-    <th>GFlops</th>
-    <th>inference_time(s)</th>
-    <th>log</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/NqesXsAJdPzK4e8" target="_blank" rel="noopener noreferrer">r50_nl_gn_custom_cifar100_224</a></td>
-    <td>resnet50</td>
-    <td>pretrained</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>72</td>
-    <td>47.982</td>
-    <td>77.022</td>
-    <td>3x224x224</td>
-    <td>118.325</td>
-    <td>12.298</td>
-    <td>0.016</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/jRbMccFLDX7eRjo" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-</tbody>
-</table>
-
-## MobileNet
-
-<table>
-<thead>
-  <tr>
-    <th>config</th>
-    <th>backbone</th>
-    <th>act</th>
-    <th>pretrain</th>
-    <th>custom</th>
-    <th>gpus</th>
-    <th>batchs</th>
-    <th>top1 acc</th>
-    <th>top5 acc</th>
-    <th>resolution(TxHxW)</th>
-    <th>model_size(MB)</th>
-    <th>GFlops</th>
-    <th>inference_time(s)</th>
-    <th>log</th>
-  </tr>
-</thead>
-<tbody>
-<tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/WHKdiXn89TqmwdD" target="_blank" rel="noopener noreferrer">mbv1_0.25x_cifar100_224</a></td>
-    <td>mobilenetv1</td>
-    <td>ReLU</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>34.464</td>
-    <td>65.467</td>
-    <td>3x224x224</td>
-    <td>1.793</td>
-    <td>0.087</td>
-    <td>0.006</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/qi8ETx2n8kCz24k" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-<tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/ZWztqQEgioEa6oz" target="_blank" rel="noopener noreferrer">mbv1_0.5x_cifar100_224</a></td>
-    <td>mobilenetv1</td>
-    <td>ReLU</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>37.718</td>
-    <td>69.195</td>
-    <td>3x224x224</td>
-    <td>5.080</td>
-    <td>0.309</td>
-    <td>0.005</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/A89zy857erXd8FZ" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/XHDY2aCTyQdbwWZ" target="_blank" rel="noopener noreferrer">mbv1_0.75x_cifar100_224</a></td>
-    <td>mobilenetv1</td>
-    <td>ReLU</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>40.012</td>
-    <td>69.660</td>
-    <td>3x224x224</td>
-    <td>9.863</td>
-    <td>0.666</td>
-    <td>0.005</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/oQbY2FgxpKHTF29" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/pd5EfXtpFpRgHfT" target="_blank" rel="noopener noreferrer">mbv1_1x_cifar100_224</a></td>
-    <td>mobilenetv1</td>
-    <td>ReLU</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>41.970</td>
-    <td>73.012</td>
-    <td>3x224x224</td>
-    <td>16.144</td>
-    <td>1.158</td>
-    <td>0.005</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/mgLQr3Ad4eYPeT4" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/SFT8QqafeMyHWPd" target="_blank" rel="noopener noreferrer">mbv2_custom_0.25x_relu6_cifar100_224</a></td>
-    <td>mobilenetv2</td>
-    <td>ReLU6</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>40.358</td>
-    <td>71.865</td>
-    <td>3x224x224</td>
-    <td>1.833</td>
-    <td>0.074</td>
-    <td>0.009</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/iBpbDWLYyBbdmzb" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/PJr3fSoTPTeZ72T" target="_blank" rel="noopener noreferrer">mbv2_custom_0.5x_relu6_cifar100_224</a></td>
-    <td>mobilenetv2</td>
-    <td>ReLU6</td>
-    <td>from scratch </td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>42.573</td>
-    <td>72.656</td>
-    <td>3x224x224</td>
-    <td>4.673</td>
-    <td>0.197</td>
-    <td>0.010</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/tMP4i2KTaXm9wst" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/t3P96ayHngKF8HG" target="_blank" rel="noopener noreferrer">mbv2_custom_0.75x_relu6_cifar100_224</a></td>
-    <td>mobilenetv2</td>
-    <td>ReLU6</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>45.342</td>
-    <td>74.219</td>
-    <td>3x224x224</td>
-    <td>8.541</td>
-    <td>0.433</td>
-    <td>0.010</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/jePrMzLiq6Cmdsb" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/4YPcMJtwaHetSPr" target="_blank" rel="noopener noreferrer">mbv2_custom_1x_relu6_cifar100_224</a></td>
-    <td>mobilenetv2</td>
-    <td>ReLU6</td>
-    <td>from scratch</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>128</td>
-    <td>46.746</td>
-    <td>75.781</td>
-    <td>3x224x224</td>
-    <td>13.370</td>
-    <td>0.628</td>
-    <td>0.009</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/qoNQwAW7DJWJj44" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-  <tr>
-      <td><a href="https://cloud.zhujian.tech:9300/s/t3jiDqjCngAEtYN" target="_blank" rel="noopener noreferrer">mbv2_pytorch_1x_relu6_cifar100_224</a></td>
-      <td>mobilenetv2</td>
-      <td>ReLU6</td>
-      <td>from scratch</td>
-      <td>torchvision</td>
-      <td>1</td>
-      <td>128</td>
-      <td>46.143</td>
-      <td>74.733</td>
-      <td>3x224x224</td>
-      <td>8.972</td>
-      <td>0.62</td>
-      <td>0.010</td>
-      <td><a href="https://cloud.zhujian.tech:9300/s/37bJT6eXz7D6aiN" target="_blank" rel="noopener noreferrer">log</a></td>
-    </tr>
-</tbody>
-</table>
-
-## resnet3d
-
-<table>
-<thead>
-  <tr>
-    <th>config</th>
-    <th>backbone</th>
-    <th>pretrain</th>
-    <th>custom</th>
-    <th>gpus</th>
-    <th>batchs</th>
-    <th>top1 acc</th>
-    <th>top5 acc</th>
-    <th>resolution(TxHxW)</th>
-    <th>model_size(MB)</th>
-    <th>GFlops</th>
-    <th>inference_time(s)</th>
-    <th>log</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td><a href="https://cloud.zhujian.tech:9300/s/EsnY8RwggqrBJzn" target="_blank" rel="noopener noreferrer">r3d50_custom_pretrained_cifar100_224</a></td>
-    <td>resnet3d50</td>
-    <td>pretrained</td>
-    <td>custom</td>
-    <td>1</td>
-    <td>96</td>
-    <td>82.242</td>
-    <td>97.034</td>
-    <td>3x224x224</td>
-    <td>90.458</td>
-    <td>8.219</td>
-    <td>0.014</td>
-    <td><a href="https://cloud.zhujian.tech:9300/s/9K7QR3Zi2RAwBxS" target="_blank" rel="noopener noreferrer">log</a></td>
-  </tr>
-</tbody>
-</table>
