@@ -19,7 +19,7 @@
 7. 训练加速：混合精度训练
 8. `GPU/CPU：GeForce RTX 2080 Ti + Intel(R) Xeon(R) Silver 4114 CPU @ 2.20GHz`
 
-<style type="text/css">
+<!-- <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;}
 .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
   overflow:hidden;padding:10px 5px;word-break:normal;}
@@ -28,7 +28,7 @@
 .tg .tg-7btt{border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
 .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
 .tg .tg-fymr{border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
-</style>
+</style> -->
 <table class="tg">
 <thead>
   <tr>
@@ -53,8 +53,8 @@
     <td class="tg-0pky">88.309</td>
     <td class="tg-0pky">12.625</td>
     <td class="tg-0pky">1.156</td>
-    <td class="tg-fymr">0.006</td>
-    <td class="tg-fymr">0.030</td>
+    <td class="tg-fymr">*0.006</td>
+    <td class="tg-fymr">*0.030</td>
     <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/eJ5soxokHqDY9ni" target="_blank" rel="noopener noreferrer">link</a></td>
   </tr>
   <tr>
@@ -98,7 +98,7 @@
     <td class="tg-0pky">zcls</td>
     <td class="tg-0pky">rmsprop</td>
     <td class="tg-0pky">70.098</td>
-    <td class="tg-fymr">91.504</td>
+    <td class="tg-fymr">*91.504</td>
     <td class="tg-0pky">65.567</td>
     <td class="tg-0pky">2.857</td>
     <td class="tg-0pky">0.015</td>
@@ -171,7 +171,7 @@
     <td class="tg-0pky">sgd</td>
     <td class="tg-0pky">66.364</td>
     <td class="tg-0pky">88.688</td>
-    <td class="tg-fymr">7.977</td>
+    <td class="tg-fymr">*7.977</td>
     <td class="tg-0pky">0.445</td>
     <td class="tg-0pky">0.008</td>
     <td class="tg-0pky">0.042</td>
@@ -184,7 +184,7 @@
     <td class="tg-0pky">67.891</td>
     <td class="tg-0pky">89.467</td>
     <td class="tg-0pky">13.719</td>
-    <td class="tg-fymr">0.450</td>
+    <td class="tg-fymr">*0.450</td>
     <td class="tg-0pky">0.010</td>
     <td class="tg-0pky">0.054</td>
     <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/eJ5soxokHqDY9ni" target="_blank" rel="noopener noreferrer">link</a></td>
@@ -196,7 +196,7 @@
     <td class="tg-0pky">68.411</td>
     <td class="tg-0pky">89.517</td>
     <td class="tg-0pky">13.719</td>
-    <td class="tg-fymr">0.450</td>
+    <td class="tg-fymr">*0.450</td>
     <td class="tg-0pky">0.010</td>
     <td class="tg-0pky">0.044</td>
     <td class="tg-0pky"><a href="https://cloud.zhujian.tech:9300/s/FAHGmWCQkf587ea" target="_blank" rel="noopener noreferrer">link</a></td>
@@ -205,7 +205,7 @@
     <td class="tg-0pky">sfv1_custom_cifar100_224_e100</td>
     <td class="tg-0pky">zcls</td>
     <td class="tg-0pky">rmsprop</td>
-    <td class="tg-fymr">71.715</td>
+    <td class="tg-fymr">*71.715</td>
     <td class="tg-0pky">91.334</td>
     <td class="tg-0pky">36.461</td>
     <td class="tg-0pky">2.608</td>
