@@ -33,6 +33,11 @@ def compute_model_time(data_shape, model, device):
 
 
 def main(data_shape, config_file, mobile_name):
+    np.random.seed(cfg.RNG_SEED)
+    torch.manual_seed(cfg.RNG_SEED)
+    torch.backends.cudnn.deterministic = False
+    torch.backends.cudnn.benchmark = True
+
     cfg.merge_from_file(config_file)
 
     gpu_device = torch.device('cuda:0')
@@ -54,6 +59,9 @@ def main(data_shape, config_file, mobile_name):
     compute_model_time(data_shape, model, cpu_device)
     print(f'compute gpu infer time')
     compute_model_time(data_shape, model, gpu_device)
+
+    del model
+    torch.cuda.empty_cache()
 
 
 def mobilenet():
@@ -128,11 +136,82 @@ def shufflenet():
     main(data_shape, cfg_file, name)
 
 
-if __name__ == '__main__':
-    np.random.seed(cfg.RNG_SEED)
-    torch.manual_seed(cfg.RNG_SEED)
-    torch.backends.cudnn.deterministic = False
-    torch.backends.cudnn.benchmark = True
+def resnet():
+    data_shape = (1, 3, 224, 224)
 
-    mobilenet()
-    shufflenet()
+    cfg_file = 'configs/benchmarks/resnet/r50_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNet50'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/r50_torchvision_cifar100_224_e100_rmsprop.yaml'
+    name = 'Torchvision_ResNet50'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rd50_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNetD50'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rd50_custom_cifar100_224_e100_sgd.yaml'
+    name = 'ResNetD50'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxd50_32x4d_avg_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNeXtD50_32x4d_avg'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxd50_32x4d_fast_avg_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNeXtD50_32x4d_fast_avg'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNeXt50_32x4d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_custom_cifar100_224_e100_sgd.yaml'
+    name = 'ResNeXt50_32x4d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_torchvision_cifar100_224_e100_rmsprop.yaml'
+    name = 'Torchvisoin_ResNeXt_32x4d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_torchvision_cifar100_224_e100_sgd.yaml'
+    name = 'Torchvision_ResNeXt50_32x4d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNeXtD50_32x4d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_custom_cifar100_224_e100_sgd.yaml'
+    name = 'ResNeXtD50_32x4d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/sknet50_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'SKNet50'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rst50_2s2x40d_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNeSt50_2s2x40d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rst50_2s2x40d_fast_custom_cifar100_224_e100_rmsprop.yaml'
+    name = 'ResNeSt50_fast_2s2x40d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rst50_2s2x40d_official_cifar100_224_e100_rmsprop.yaml'
+    name = 'Torchvision_ResNeSt50_2s2x40d'
+    main(data_shape, cfg_file, name)
+
+    cfg_file = 'configs/benchmarks/resnet/rst50_2s2x40d_fast_official_cifar100_224_e100_rmsprop.yaml'
+    name = 'Torchvision_ResNeSt50_fast_2s2x40d'
+    main(data_shape, cfg_file, name)
+
+
+if __name__ == '__main__':
+    # print('#' * 30)
+    # mobilenet()
+    # print('#' * 30)
+    # shufflenet()
+    print('#' * 30)
+    resnet()
