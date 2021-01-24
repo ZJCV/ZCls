@@ -2,7 +2,7 @@
 
 """
 @date: 2020/11/4 下午2:06
-@file: compute_flops.py
+@file: benchmarks.py
 @author: zj
 @description: 
 """
