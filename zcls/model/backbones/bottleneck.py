@@ -20,6 +20,7 @@ class Bottleneck(nn.Module, ABC):
     对于注意力模块，有两种嵌入方式：
     1. 对于Squeeze-And-Excitation或者Global Context操作，在残差连接中（after 1x1）嵌入；
     2. 对于NonLocal或者SimplifiedNonLoal，在Block完成计算后（after add）嵌入。
+    参考ResNeSt实现，使用AvgPool替代Conv进行下采样操作，当前仅对Bottleneck进行实现
     """
     expansion = 4
 
@@ -48,6 +49,10 @@ class Bottleneck(nn.Module, ABC):
                  norm_layer=None,
                  # 激活层类型
                  act_layer=None,
+                 # 是否使用AvgPool进行下采样
+                 use_avg=False,
+                 # 在3x3之前执行下采样操作
+                 fast_avg=False,
                  # 其他参数
                  **kwargs
                  ):
@@ -70,6 +75,12 @@ class Bottleneck(nn.Module, ABC):
         width = int(out_planes * (base_width / 64.)) * groups
         self.conv1 = conv_layer(in_planes, width, kernel_size=1, stride=1, bias=False)
         self.bn1 = norm_layer(width)
+
+        self.fast_avg = fast_avg
+        self.avg = None
+        if use_avg and stride > 1:
+            self.avg = nn.AvgPool2d(kernel_size=3, stride=stride, padding=1)
+            stride = 1
 
         self.conv2 = conv_layer(width, width, kernel_size=3, stride=stride, padding=1, bias=False, groups=groups)
         self.bn2 = norm_layer(width)
@@ -95,7 +106,14 @@ class Bottleneck(nn.Module, ABC):
         out = self.bn1(out)
         out = self.relu(out)
 
+        if self.avg is not None and self.fast_avg:
+            out = self.avg(out)
+
         out = self.conv2(out)
+
+        if self.avg is not None and not self.fast_avg:
+            out = self.avg(out)
+
         out = self.bn2(out)
         out = self.relu(out)
 

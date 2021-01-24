@@ -72,6 +72,7 @@ class ResNeStBlock(nn.Module, ABC):
                  **kwargs
                  ):
         super(ResNeStBlock, self).__init__()
+        assert radix > 0
         assert with_attention in (0, 1)
         assert attention_type in ['GlobalContextBlock2D',
                                   'SimplifiedNonLocal2DEmbeddedGaussian',
@@ -85,6 +86,7 @@ class ResNeStBlock(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
+        self.radix = radix
         self.down_sample = down_sample
 
         width = int(out_planes * (base_width / 64.)) * groups
@@ -92,7 +94,8 @@ class ResNeStBlock(nn.Module, ABC):
         self.bn1 = norm_layer(width)
 
         self.conv2 = SplitAttentionConv2d(width, width, groups, radix, reduction_rate=reduction)
-        self.bn2 = norm_layer(width)
+        if self.radix == 0:
+            self.bn2 = norm_layer(width)
 
         self.conv3 = conv_layer(width, out_planes * self.expansion, kernel_size=1, stride=1, bias=False)
         self.bn3 = norm_layer(out_planes * self.expansion)
@@ -124,8 +127,9 @@ class ResNeStBlock(nn.Module, ABC):
             out = self.avg(out)
 
         out = self.conv2(out)
-        out = self.bn2(out)
-        out = self.relu(out)
+        if self.radix == 0:
+            out = self.bn2(out)
+            out = self.relu(out)
 
         if not self.fast_avg and self.avg is not None:
             out = self.avg(out)

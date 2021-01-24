@@ -74,14 +74,14 @@ def test_resnet_gn():
 
 
 def test_config():
-    config_file = 'configs/benchmarks/r50_custom_cifar100_224_e100_rmsprop.yaml'
+    config_file = 'configs/benchmarks/rxd50_32x4d_avg_custom_cifar100_224_e100_rmsprop.yaml'
     cfg.merge_from_file(config_file)
 
     model = build_resnet(cfg)
     print(model)
     test_data(model, (1, 3, 224, 224), (1, 100))
 
-    config_file = 'configs/benchmarks/r50_torchvision_cifar100_224_e100_rmsprop.yaml'
+    config_file = 'configs/benchmarks/rxd50_32x4d_fast_avg_custom_cifar100_224_e100_rmsprop.yaml'
     cfg.merge_from_file(config_file)
 
     model = build_resnet(cfg)

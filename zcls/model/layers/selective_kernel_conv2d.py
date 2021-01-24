@@ -11,7 +11,8 @@ from abc import ABC
 import torch
 import torch.nn as nn
 from torch import Tensor
-from torch.nn.common_types import _size_2_t
+
+from ..init_helper import init_weights
 
 
 class SelectiveKernelConv2d(nn.Module, ABC):
@@ -65,19 +66,8 @@ class SelectiveKernelConv2d(nn.Module, ABC):
         self.softmax = nn.Softmax(dim=0)
         self.dimension = dimension
         self.out_channels = out_channels
-        self._init_weights()
 
-    def _init_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
-            elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
-                nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
-            elif isinstance(m, nn.Linear):
-                nn.init.normal_(m.weight, 0, 0.01)
-                if m.bias is not None:
-                    nn.init.zeros_(m.bias)
+        init_weights(self.modules())
 
     def forward(self, x: Tensor) -> Tensor:
         N, C = x.shape[:2]

@@ -51,6 +51,10 @@ class ResNetDBackbone(nn.Module, ABC):
                  act_layer=None,
                  # 零初始化残差连接
                  zero_init_residual=False,
+                 # 是否使用AvgPool进行下采样
+                 use_avg=False,
+                 # 在3x3之前执行下采样操作
+                 fast_avg=False,
                  # 其他参数
                  **kwargs
                  ):
@@ -82,6 +86,8 @@ class ResNetDBackbone(nn.Module, ABC):
                                              conv_layer,
                                              norm_layer,
                                              act_layer,
+                                             use_avg,
+                                             fast_avg,
                                              **kwargs
                                              )
             in_planes = layer_planes[i] * block_layer.expansion
@@ -140,6 +146,10 @@ class ResNetDBackbone(nn.Module, ABC):
                         norm_layer,
                         # 激活层类型
                         act_layer,
+                        # 是否使用AvgPool进行下采样
+                        use_avg,
+                        # 在3x3之前执行下采样操作
+                        fast_avg,
                         # 其他参数
                         **kwargs
                         ):
@@ -168,7 +178,9 @@ class ResNetDBackbone(nn.Module, ABC):
             in_planes, out_planes, stride, down_sample,
             groups, width_per_group,
             with_attentions[0], reduction, attention_type,
-            conv_layer, norm_layer, act_layer, **kwargs))
+            conv_layer, norm_layer, act_layer,
+            use_avg=use_avg, fast_avg=fast_avg,
+            **kwargs))
         in_planes = out_planes * expansion
 
         stride = 1
@@ -178,7 +190,9 @@ class ResNetDBackbone(nn.Module, ABC):
                 in_planes, out_planes, stride, down_sample,
                 groups, width_per_group,
                 with_attentions[i], reduction, attention_type,
-                conv_layer, norm_layer, act_layer, **kwargs))
+                conv_layer, norm_layer, act_layer,
+                use_avg=use_avg, fast_avg=fast_avg,
+                **kwargs))
         return nn.Sequential(*blocks)
 
     def init_weights(self, zero_init_residual):

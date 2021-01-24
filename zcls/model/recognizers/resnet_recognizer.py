@@ -97,6 +97,10 @@ class ResNetRecognizer(nn.Module, ABC):
                  act_layer=None,
                  # 零初始化残差连接
                  zero_init_residual=False,
+                 # 是否使用AvgPool进行下采样
+                 use_avg=False,
+                 # 在3x3之前执行下采样操作
+                 fast_avg=False
                  ):
         super(ResNetRecognizer, self).__init__()
         assert arch in arch_settings.keys()
@@ -104,7 +108,6 @@ class ResNetRecognizer(nn.Module, ABC):
         self.partial_bn = partial_bn
 
         radix = 1
-        fast_avg = False
         if 'resnest' in arch:
             backbone_layer, head_layer, block_layer, layer_blocks, radix, groups, width_per_group = arch_settings[arch]
             if 'fast' in arch:
@@ -129,6 +132,7 @@ class ResNetRecognizer(nn.Module, ABC):
             act_layer=act_layer,
             zero_init_residual=zero_init_residual,
             radix=radix,
+            use_avg=use_avg,
             fast_avg=fast_avg
         )
         feature_dims = block_layer.expansion * layer_planes[-1]
@@ -244,6 +248,8 @@ def build_resnet(cfg):
     norm_layer = get_norm(cfg)
     act_layer = get_act(cfg)
     zero_init_residual = cfg.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL
+    use_avg = cfg.MODEL.BACKBONE.USE_AVG
+    fast_avg = cfg.MODEL.BACKBONE.FAST_AVG
     # for head
     dropout_rate = cfg.MODEL.HEAD.DROPOUT
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
@@ -284,7 +290,9 @@ def build_resnet(cfg):
             conv_layer=conv_layer,
             norm_layer=norm_layer,
             act_layer=act_layer,
-            zero_init_residual=zero_init_residual
+            zero_init_residual=zero_init_residual,
+            use_avg=use_avg,
+            fast_avg=fast_avg
         )
     else:
         raise ValueError(f'{recognizer_name} does not exist')
