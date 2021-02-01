@@ -53,6 +53,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{ding2019acnet,
+      title={ACNet: Strengthening the Kernel Skeletons for Powerful CNN via Asymmetric Convolution Blocks}, 
+      author={Xiaohan Ding and Yuchen Guo and Guiguang Ding and Jungong Han},
+      year={2019},
+      eprint={1908.03930},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{howard2019searching,
       title={Searching for MobileNetV3}, 
       author={Andrew Howard and Mark Sandler and Grace Chu and Liang-Chieh Chen and Bo Chen and Mingxing Tan and Weijun Wang and Yukun Zhu and Ruoming Pang and Vijay Vasudevan and Quoc V. Le and Hartwig Adam},
