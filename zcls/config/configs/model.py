@@ -21,6 +21,8 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.CONV = CN()
     _C.MODEL.CONV.TYPE = 'Conv2d'
+    # 是否嵌入AsymmetricConvolutionBlock
+    _C.MODEL.CONV.ACBLOCK = False
 
     # ---------------------------------------------------------------------------- #
     # Normalization

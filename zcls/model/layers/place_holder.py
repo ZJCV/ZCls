@@ -12,6 +12,9 @@ import torch.nn as nn
 
 
 class PlaceHolder(nn.Module, ABC):
+    """
+    @deprecated. pytorch已实现，使用nn.Identity()
+    """
 
     def __init__(self):
         super().__init__()

@@ -9,6 +9,7 @@
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
+from zcls.model.acb_helper import insert_acblock
 from zcls.model.norm_helper import convert_sync_bn
 import zcls.util.distributed as du
 from zcls.util.checkpoint import CheckPointer
@@ -42,6 +43,8 @@ def build_recognizer(cfg, device):
         check_pointer = CheckPointer(model)
         check_pointer.load(preloaded, map_location=device)
         logger.info("finish loading model weights")
+    if cfg.MODEL.CONV.ACBLOCK is True:
+        insert_acblock(model)
 
     model = model.to(device=device)
     if du.get_world_size() > 1:
