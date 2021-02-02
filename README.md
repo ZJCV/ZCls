@@ -36,6 +36,15 @@
 ## 致谢
 
 ```
+@misc{ding2021repvgg,
+      title={RepVGG: Making VGG-style ConvNets Great Again}, 
+      author={Xiaohan Ding and Xiangyu Zhang and Ningning Ma and Jungong Han and Guiguang Ding and Jian Sun},
+      year={2021},
+      eprint={2101.03697},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{fan2020pyslowfast,
   author =       {Haoqi Fan and Yanghao Li and Bo Xiong and Wan-Yen Lo and
                   Christoph Feichtenhofer},
