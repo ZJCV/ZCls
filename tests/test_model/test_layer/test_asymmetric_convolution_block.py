@@ -100,19 +100,23 @@ def test_acb_helper():
         nn.BatchNorm2d(out_channels),
         nn.ReLU(inplace=True)
     )
+    model.eval()
     print(model)
 
     data = torch.randn(1, in_channels, 56, 56)
     insert_acblock(model)
+    model.eval()
     train_outputs = model(data)
     print(model)
 
     fuse_acblock(model, eps=1e-5)
+    model.eval()
     eval_outputs = model(data)
     print(model)
 
-    print(torch.sum(train_outputs), torch.sum(eval_outputs))
-    assert torch.allclose(train_outputs, eval_outputs)
+    print(torch.sum((train_outputs - eval_outputs) ** 2))
+    print(torch.allclose(train_outputs, eval_outputs, atol=1e-6))
+    assert torch.allclose(train_outputs, eval_outputs, atol=1e-6)
 
 
 if __name__ == '__main__':

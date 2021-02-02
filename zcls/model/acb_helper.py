@@ -48,7 +48,7 @@ def fuse_acblock(model: nn.Module, eps=1e-5):
             square_bn_bias = module.square_bn.bias
             square_bn_running_mean = module.square_bn.running_mean
             square_bn_running_std = torch.sqrt(module.square_bn.running_var + eps)
-            # 获取1xN卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
+            # 获取Nx1卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
             vertical_conv_weight = module.ver_conv.weight
             vertical_bn_weight = module.ver_bn.weight
             vertical_bn_bias = module.ver_bn.bias
