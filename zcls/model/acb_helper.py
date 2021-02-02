@@ -13,7 +13,10 @@ from .layers.asymmetric_convolution_block import AsymmetricConvolutionBlock
 
 
 def insert_acblock(model: nn.Module):
-    for name, module in model.named_children():
+    items = list(model.named_children())
+    idx = 0
+    while idx < len(items):
+        name, module = items[idx]
         if isinstance(module, nn.Conv2d) and module.kernel_size[0] > 1:
             # 将标准卷积替换为ACBlock
             in_channels = module.in_channels
@@ -34,8 +37,14 @@ def insert_acblock(model: nn.Module):
                                                  dilation=dilation,
                                                  groups=groups)
             model.add_module(name, acblock)
+            # 如果conv层之后跟随着BN层，那么删除该BN层
+            # 参考[About BN layer #35](https://github.com/DingXiaoH/ACNet/issues/35)
+            if (idx + 1) < len(items) and isinstance(items[idx + 1][1], nn.BatchNorm2d):
+                new_layer = nn.Identity()
+                model.add_module(items[idx + 1][0], new_layer)
         else:
             insert_acblock(module)
+        idx += 1
 
 
 def fuse_acblock(model: nn.Module, eps=1e-5):
