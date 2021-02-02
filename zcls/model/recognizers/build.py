@@ -9,7 +9,7 @@
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from zcls.model.acb_helper import insert_acblock
+from zcls.model.conv_helper import insert_acblock
 from zcls.model.norm_helper import convert_sync_bn
 import zcls.util.distributed as du
 from zcls.util.checkpoint import CheckPointer

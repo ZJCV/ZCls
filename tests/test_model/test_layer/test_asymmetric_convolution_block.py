@@ -9,9 +9,10 @@
 
 import torch
 import torch.nn as nn
+from torchvision.models import resnet50
 
 from zcls.model.layers.asymmetric_convolution_block import AsymmetricConvolutionBlock
-from zcls.model.acb_helper import insert_acblock, fuse_acblock
+from zcls.model.conv_helper import insert_acblock, fuse_acblock
 
 
 def test_asymmetric_convolution_block():
@@ -119,6 +120,28 @@ def test_acb_helper():
     assert torch.allclose(train_outputs, eval_outputs, atol=1e-6)
 
 
+def test_resnet50_acb():
+    model = resnet50()
+    model.eval()
+    print(model)
+
+    data = torch.randn(1, 3, 224, 224)
+    insert_acblock(model)
+    model.eval()
+    train_outputs = model(data)
+    print(model)
+
+    fuse_acblock(model, eps=1e-5)
+    model.eval()
+    eval_outputs = model(data)
+    print(model)
+
+    print(torch.sum((train_outputs - eval_outputs) ** 2))
+    print(torch.allclose(train_outputs, eval_outputs, atol=1e-5))
+    assert torch.allclose(train_outputs, eval_outputs, atol=1e-5)
+
+
 if __name__ == '__main__':
     test_asymmetric_convolution_block()
     test_acb_helper()
+    test_resnet50_acb()
