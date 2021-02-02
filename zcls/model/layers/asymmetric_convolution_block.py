@@ -9,6 +9,8 @@
 
 import torch.nn as nn
 
+from ..init_helper import init_weights
+
 
 class AsymmetricConvolutionBlock(nn.Module):
     """
@@ -70,6 +72,8 @@ class AsymmetricConvolutionBlock(nn.Module):
         if gamma_init is not None:
             assert not reduce_gamma
             self.init_gamma(gamma_init)
+
+        init_weights(self.modules())
 
     def init_gamma(self, gamma_value):
         nn.init.constant_(self.square_bn.weight, gamma_value)

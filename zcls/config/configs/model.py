@@ -23,6 +23,8 @@ def add_config(_C):
     _C.MODEL.CONV.TYPE = 'Conv2d'
     # 是否嵌入AsymmetricConvolutionBlock
     _C.MODEL.CONV.ACBLOCK = False
+    # 是否嵌入RepVGGBlock
+    _C.MODEL.CONV.RepVGGBlock = False
 
     # ---------------------------------------------------------------------------- #
     # Normalization

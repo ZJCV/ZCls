@@ -9,13 +9,14 @@
 
 import torch
 import torch.nn as nn
-from torchvision.models import resnet50
 
-from zcls.model.layers.asymmetric_convolution_block import AsymmetricConvolutionBlock
-from zcls.model.conv_helper import insert_acblock, fuse_acblock
+from zcls.config.key_word import KEY_OUTPUT
+from zcls.model.recognizers.repvgg_recognizer import RepVGGRecognizer
+from zcls.model.layers.repvgg_block import RepVGGBlock
+from zcls.model.conv_helper import insert_repvgg_block, fuse_repvgg_block
 
 
-def test_asymmetric_convolution_block():
+def test_repvgg_block():
     in_channels = 32
     out_channels = 64
     dilation = 1
@@ -25,13 +26,13 @@ def test_asymmetric_convolution_block():
     kernel_size = 3
     stride = 1
     padding = 1
-    acblock = AsymmetricConvolutionBlock(in_channels,
-                                         out_channels,
-                                         kernel_size,
-                                         stride=stride,
-                                         padding=padding,
-                                         dilation=dilation,
-                                         groups=groups)
+    acblock = RepVGGBlock(in_channels,
+                          out_channels,
+                          kernel_size,
+                          stride=stride,
+                          padding=padding,
+                          dilation=dilation,
+                          groups=groups)
 
     data = torch.randn(1, in_channels, 56, 56)
     outputs = acblock.forward(data)
@@ -44,13 +45,13 @@ def test_asymmetric_convolution_block():
     kernel_size = 3
     stride = 2
     padding = 1
-    acblock = AsymmetricConvolutionBlock(in_channels,
-                                         out_channels,
-                                         kernel_size,
-                                         stride=stride,
-                                         padding=padding,
-                                         dilation=dilation,
-                                         groups=groups)
+    acblock = RepVGGBlock(in_channels,
+                          out_channels,
+                          kernel_size,
+                          stride=stride,
+                          padding=padding,
+                          dilation=dilation,
+                          groups=groups)
 
     data = torch.randn(1, in_channels, 56, 56)
     outputs = acblock.forward(data)
@@ -64,13 +65,13 @@ def test_asymmetric_convolution_block():
     stride = 2
     padding = 1
     groups = 8
-    acblock = AsymmetricConvolutionBlock(in_channels,
-                                         out_channels,
-                                         kernel_size,
-                                         stride=stride,
-                                         padding=padding,
-                                         dilation=dilation,
-                                         groups=groups)
+    acblock = RepVGGBlock(in_channels,
+                          out_channels,
+                          kernel_size,
+                          stride=stride,
+                          padding=padding,
+                          dilation=dilation,
+                          groups=groups)
 
     data = torch.randn(1, in_channels, 56, 56)
     outputs = acblock.forward(data)
@@ -80,7 +81,7 @@ def test_asymmetric_convolution_block():
     assert h / 2 == h2 and w / 2 == w2
 
 
-def test_acb_helper():
+def test_conv_helper():
     in_channels = 32
     out_channels = 64
     dilation = 1
@@ -105,12 +106,12 @@ def test_acb_helper():
     print(model)
 
     data = torch.randn(1, in_channels, 56, 56)
-    insert_acblock(model)
+    insert_repvgg_block(model)
     model.eval()
     train_outputs = model(data)
     print(model)
 
-    fuse_acblock(model, eps=1e-5)
+    fuse_repvgg_block(model)
     model.eval()
     eval_outputs = model(data)
     print(model)
@@ -120,31 +121,31 @@ def test_acb_helper():
     assert torch.allclose(train_outputs, eval_outputs, atol=1e-6)
 
 
-def test_resnet50_acb():
-    model = resnet50()
+def test_regvgg():
+    model = RepVGGRecognizer()
     model.eval()
-    # print(model)
+    print(model)
 
     data = torch.randn(1, 3, 224, 224)
-    insert_acblock(model)
+    insert_repvgg_block(model)
     model.eval()
-    train_outputs = model(data)
-    # print(model)
+    train_outputs = model(data)[KEY_OUTPUT]
+    print(model)
 
-    fuse_acblock(model, eps=1e-5)
+    fuse_repvgg_block(model)
     model.eval()
-    eval_outputs = model(data)
-    # print(model)
+    eval_outputs = model(data)[KEY_OUTPUT]
+    print(model)
 
     print(torch.sum((train_outputs - eval_outputs) ** 2))
-    print(torch.allclose(train_outputs, eval_outputs, atol=1e-5))
-    assert torch.allclose(train_outputs, eval_outputs, atol=1e-5)
+    print(torch.allclose(train_outputs, eval_outputs, atol=1e-3))
+    assert torch.allclose(train_outputs, eval_outputs, atol=1e-3)
 
 
 if __name__ == '__main__':
     print('*' * 10)
-    test_asymmetric_convolution_block()
+    test_repvgg_block()
     print('*' * 10)
-    test_acb_helper()
+    test_conv_helper()
     print('*' * 10)
-    test_resnet50_acb()
+    test_regvgg()

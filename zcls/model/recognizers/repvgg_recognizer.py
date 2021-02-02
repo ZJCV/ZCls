@@ -117,7 +117,7 @@ class RepVGGRecognizer(nn.Module):
 
 
 @registry.RECOGNIZER.register('RepVGG')
-def build_resnet(cfg):
+def build_repvgg(cfg):
     # for recognizer
     pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES

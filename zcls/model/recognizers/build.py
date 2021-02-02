@@ -9,7 +9,7 @@
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from zcls.model.conv_helper import insert_acblock
+from zcls.model.conv_helper import insert_acblock, insert_repvgg_block
 from zcls.model.norm_helper import convert_sync_bn
 import zcls.util.distributed as du
 from zcls.util.checkpoint import CheckPointer
@@ -25,6 +25,7 @@ from .shufflenetv2_recognizer import build_shufflenet_v2
 from .mnasnet_recognizer import build_mnasnet
 from .mobilenetv3_recognizer import build_mobilenet_v3
 from .resnest_recognizer import build_resnest
+from .repvgg_recognizer import build_repvgg
 
 logger = logging.get_logger(__name__)
 
@@ -43,6 +44,8 @@ def build_recognizer(cfg, device):
         check_pointer = CheckPointer(model)
         check_pointer.load(preloaded, map_location=device)
         logger.info("finish loading model weights")
+    if cfg.MODEL.CONV.RepVGGBlock is True:
+        insert_repvgg_block(model)
     if cfg.MODEL.CONV.ACBLOCK is True:
         insert_acblock(model)
 

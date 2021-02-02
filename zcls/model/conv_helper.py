@@ -7,9 +7,13 @@
 @description: 
 """
 
+import numpy as np
 import torch
 import torch.nn as nn
 from .layers.asymmetric_convolution_block import AsymmetricConvolutionBlock
+from .layers.acb_util import _fuse_kernel, _add_to_square_kernel
+from .layers.repvgg_block import RepVGGBlock
+from .layers.repvgg_util import get_equivalent_kernel_bias
 
 
 def get_conv(cfg):
@@ -50,7 +54,7 @@ def insert_acblock(model: nn.Module):
             acblock = AsymmetricConvolutionBlock(in_channels,
                                                  out_channels,
                                                  kernel_size[0],
-                                                 stride,
+                                                 stride[0],
                                                  padding=padding[0],
                                                  padding_mode=padding_mode,
                                                  dilation=dilation,
@@ -109,25 +113,69 @@ def fuse_acblock(model: nn.Module, eps=1e-5):
                                    groups=module.groups,
                                    padding_mode=module.padding_mode
                                    )
-            fused_conv.weight = nn.Parameter(fused_kernel)
-            fused_conv.bias = nn.Parameter(fused_bias)
+            fused_conv.weight = nn.Parameter(fused_kernel.detach().cpu())
+            fused_conv.bias = nn.Parameter(fused_bias.detach().cpu())
             model.add_module(name, fused_conv)
         else:
             fuse_acblock(module, eps=eps)
 
 
-def _fuse_kernel(kernel, gamma, std):
-    b_gamma = torch.reshape(gamma, (kernel.shape[0], 1, 1, 1))
-    b_gamma = b_gamma.repeat(1, kernel.shape[1], kernel.shape[2], kernel.shape[3])
-    b_std = torch.reshape(std, (kernel.shape[0], 1, 1, 1))
-    b_std = b_std.repeat(1, kernel.shape[1], kernel.shape[2], kernel.shape[3])
-    return kernel * b_gamma / b_std
+def insert_repvgg_block(model: nn.Module):
+    items = list(model.named_children())
+    idx = 0
+    while idx < len(items):
+        name, module = items[idx]
+        if isinstance(module, nn.Conv2d) and module.kernel_size[0] > 1:
+            # 将标准卷积替换为RepVGGBlock
+            in_channels = module.in_channels
+            out_channels = module.out_channels
+            kernel_size = module.kernel_size
+            stride = module.stride
+            padding = module.padding
+            dilation = module.dilation
+            groups = module.groups
+            padding_mode = module.padding_mode
+
+            acblock = RepVGGBlock(in_channels,
+                                  out_channels,
+                                  kernel_size[0],
+                                  stride[0],
+                                  padding=padding[0],
+                                  padding_mode=padding_mode,
+                                  dilation=dilation,
+                                  groups=groups)
+            model.add_module(name, acblock)
+            # 如果conv层之后跟随着BN层，那么删除该BN层
+            # 参考[About BN layer #35](https://github.com/DingXiaoH/ACNet/issues/35)
+            if (idx + 1) < len(items) and isinstance(items[idx + 1][1], nn.BatchNorm2d):
+                new_layer = nn.Identity()
+                model.add_module(items[idx + 1][0], new_layer)
+        else:
+            insert_repvgg_block(module)
+        idx += 1
 
 
-def _add_to_square_kernel(square_kernel, asym_kernel):
-    asym_h = asym_kernel.shape[2]
-    asym_w = asym_kernel.shape[3]
-    square_h = square_kernel.shape[2]
-    square_w = square_kernel.shape[3]
-    square_kernel[:, :, square_h // 2 - asym_h // 2: square_h // 2 - asym_h // 2 + asym_h,
-    square_w // 2 - asym_w // 2: square_w // 2 - asym_w // 2 + asym_w] += asym_kernel
+def fuse_repvgg_block(model: nn.Module):
+    for name, module in model.named_children():
+        if isinstance(module, RepVGGBlock):
+            # 将RepVGGBlock替换为标准卷积
+            kernel, bias = get_equivalent_kernel_bias(module.rbr_dense,
+                                                      module.rbr_1x1,
+                                                      module.rbr_identity,
+                                                      module.in_channels,
+                                                      module.groups)
+            # 新建标准卷积，赋值权重和偏差后重新插入模型
+            fused_conv = nn.Conv2d(module.in_channels,
+                                   module.out_channels,
+                                   module.kernel_size,
+                                   stride=module.stride,
+                                   padding=module.padding,
+                                   dilation=module.dilation,
+                                   groups=module.groups,
+                                   padding_mode=module.padding_mode
+                                   )
+            fused_conv.weight = nn.Parameter(kernel.detach().cpu())
+            fused_conv.bias = nn.Parameter(bias.detach().cpu())
+            model.add_module(name, fused_conv)
+        else:
+            fuse_repvgg_block(module)
