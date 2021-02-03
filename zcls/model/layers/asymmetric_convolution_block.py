@@ -61,31 +61,25 @@ class AsymmetricConvolutionBlock(nn.Module):
         self.ver_bn = nn.BatchNorm2d(num_features=out_channels, affine=use_affine)
         self.hor_bn = nn.BatchNorm2d(num_features=out_channels, affine=use_affine)
 
-        if reduce_gamma:
-            assert not use_last_bn
-            self.init_gamma(1.0 / 3)
-
         if use_last_bn:
             assert not reduce_gamma
             self.last_bn = nn.BatchNorm2d(num_features=out_channels, affine=True)
 
+        init_weights(self.modules())
+
+        if reduce_gamma:
+            assert not use_last_bn
+            self.init_gamma(1.0 / 3)
+
         if gamma_init is not None:
             assert not reduce_gamma
             self.init_gamma(gamma_init)
-
-        init_weights(self.modules())
 
     def init_gamma(self, gamma_value):
         nn.init.constant_(self.square_bn.weight, gamma_value)
         nn.init.constant_(self.ver_bn.weight, gamma_value)
         nn.init.constant_(self.hor_bn.weight, gamma_value)
         print('init gamma of square, ver and hor as ', gamma_value)
-
-    def single_init(self):
-        nn.init.constant_(self.square_bn.weight, 1.0)
-        nn.init.constant_(self.ver_bn.weight, 0.0)
-        nn.init.constant_(self.hor_bn.weight, 0.0)
-        print('init gamma of square as 1, ver and hor as 0')
 
     def forward(self, input):
         square_outputs = self.square_conv(input)

@@ -41,15 +41,12 @@ class RepVGGBlock(nn.Module):
 
         padding_11 = padding - kernel_size // 2
 
-        # self.nonlinearity = nn.ReLU()
-
         self.rbr_identity = nn.BatchNorm2d(
             num_features=in_channels) if out_channels == in_channels and stride == 1 else None
         self.rbr_dense = conv_bn(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size,
                                  stride=stride, padding=padding, groups=groups)
         self.rbr_1x1 = conv_bn(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=stride,
                                padding=padding_11, groups=groups)
-        # print('RepVGG Block, identity = ', self.rbr_identity)
 
         init_weights(self.modules())
 
@@ -59,7 +56,6 @@ class RepVGGBlock(nn.Module):
         else:
             id_out = self.rbr_identity(inputs)
 
-        # return self.nonlinearity(self.rbr_dense(inputs) + self.rbr_1x1(inputs) + id_out)
         return self.rbr_dense(inputs) + self.rbr_1x1(inputs) + id_out
 
     def repvgg_convert(self):
