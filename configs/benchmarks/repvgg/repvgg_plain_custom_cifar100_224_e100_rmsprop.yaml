@@ -55,16 +55,16 @@ MODEL:
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
-  NAME: 'RMSProp'
-  LR: 3e-4
+  NAME: 'SGD'
+  LR: 1.5625e-3
   WEIGHT_DECAY: 1e-4
   MOMENTUM: 0.9
 LR_SCHEDULER:
-  NAME: 'MultiStepLR'
+  NAME: 'CosineAnnearlingLR'
   IS_WARMUP: True
   GAMMA: 0.1
-  MULTISTEP_LR:
-    MILESTONES: [ 40, 70 ]
+  COSINE_ANNEALING_LR:
+    MINIMAL_LR: 1e-5
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0
