@@ -50,7 +50,7 @@ class RepVGGBackbone(nn.Module):
 
         width_multiplier_a, width_multiplier_b = width_multipliers
         base_channels = min(int(base_channels), int(base_channels * width_multiplier_a))
-        self._make_stem(in_channels, base_channels, conv_layer, cur_groups)
+        self._make_stem(in_channels, base_channels, cur_groups, conv_layer, act_layer)
 
         in_planes = base_channels
         for i in range(len(layer_blocks)):
@@ -74,14 +74,18 @@ class RepVGGBackbone(nn.Module):
                    in_planes,
                    # 卷积层输出通道数
                    base_planes,
-                   # 卷积层
-                   conv_layer,
                    # 分组数
                    groups,
+                   # 卷积层
+                   conv_layer,
+                   # 激活层类型
+                   act_layer
                    ):
-        self.stage0 = conv_layer(in_channels=in_planes, out_channels=base_planes,
-                                 kernel_size=3, stride=2, padding=1,
-                                 groups=groups)
+        self.stage0 = nn.Sequential(
+            conv_layer(in_channels=in_planes, out_channels=base_planes, kernel_size=3, stride=2, padding=1,
+                       groups=groups, bias=True),
+            act_layer(inplace=True)
+        )
 
     def _make_stage(self,
                     # 输入通道数
