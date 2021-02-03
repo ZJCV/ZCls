@@ -34,6 +34,10 @@ def _fuse_bn_tensor(branch, in_channels, groups):
     if branch is None:
         return 0, 0
     if isinstance(branch, nn.Sequential):
+        layer_list = list(branch)
+        if len(layer_list) == 2 and isinstance(layer_list[1], nn.Identity):
+            # conv/bn已经在acb中进行了融合
+            return branch.conv.weight, branch.conv.bias
         kernel = branch.conv.weight
         running_mean = branch.bn.running_mean
         running_var = branch.bn.running_var
