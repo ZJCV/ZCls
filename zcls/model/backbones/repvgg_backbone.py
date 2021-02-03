@@ -44,12 +44,14 @@ class RepVGGBackbone(nn.Module):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        width_multiplier_a, width_multiplier_b = width_multipliers
-        base_channels = min(int(base_channels), int(base_channels * width_multiplier_a))
-        self._make_stem(in_channels, base_channels, conv_layer)
-
         self.cur_layer_idx = 1
         self.override_groups_map = groups
+        cur_groups = self.override_groups_map.get(self.cur_layer_idx, 1)
+
+        width_multiplier_a, width_multiplier_b = width_multipliers
+        base_channels = min(int(base_channels), int(base_channels * width_multiplier_a))
+        self._make_stem(in_channels, base_channels, conv_layer, cur_groups)
+
         in_planes = base_channels
         for i in range(len(layer_blocks)):
             width_multiplier = width_multiplier_a if i != (len(layer_blocks) - 1) else width_multiplier_b
@@ -73,9 +75,13 @@ class RepVGGBackbone(nn.Module):
                    # 卷积层输出通道数
                    base_planes,
                    # 卷积层
-                   conv_layer
+                   conv_layer,
+                   # 分组数
+                   groups,
                    ):
-        self.stage0 = conv_layer(in_channels=in_planes, out_channels=base_planes, kernel_size=3, stride=2, padding=1)
+        self.stage0 = conv_layer(in_channels=in_planes, out_channels=base_planes,
+                                 kernel_size=3, stride=2, padding=1,
+                                 groups=groups)
 
     def _make_stage(self,
                     # 输入通道数
@@ -93,6 +99,7 @@ class RepVGGBackbone(nn.Module):
                     ):
         stride = 2 if with_sample else 1
         padding = 1 if stride == 2 else 0
+        self.cur_layer_idx += 1
         cur_groups = self.override_groups_map.get(self.cur_layer_idx, 1)
 
         blocks = list()

@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/rxtd50_32x4d_acb_custom_cifar100_224_e100_rmsprop'
+OUTPUT_DIR: 'outputs/benchmarks/repvgg_b2g4_acb_custom_cifar100_224_e100_sgd'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -34,25 +34,20 @@ MODEL:
   CONV:
     TYPE: 'Conv2d'
     ACBLOCK: True
-  NORM:
-    TYPE: 'BatchNorm2d'
-    SYNC_BN: False
-    FIX_BN: False
-    PARTIAL_BN: False
+    RepVGGBlock: True
   ACT:
     TYPE: 'ReLU'
   BACKBONE:
+    ARCH: 'repvgg_b2g4'
     IN_PLANES: 3
-    ARCH: 'resnext50_32x4d'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
-    DOWN_SAMPLES: (0, 1, 1, 1)
+    DOWN_SAMPLES: (1, 1, 1, 1)
   HEAD:
-    DROPOUT: 0.2
+    DROPOUT: 0.
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'ResNet'
-    NAME: 'ZClsResNet'
+    TYPE: 'RepVGG'
     PRELOADED: ""
     PRETRAINED: ""
     PRETRAINED_NUM_CLASSES: 1000
