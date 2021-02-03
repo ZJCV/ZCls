@@ -9,8 +9,6 @@
 
 import torch.nn as nn
 
-from ..init_helper import init_weights
-
 
 def conv_bn(in_channels, out_channels, kernel_size, stride, padding, groups=1):
     result = nn.Sequential()
@@ -48,7 +46,15 @@ class RepVGGBlock(nn.Module):
         self.rbr_1x1 = conv_bn(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=stride,
                                padding=padding_11, groups=groups)
 
-        init_weights(self.modules())
+        self._init_weights()
+
+    def _init_weights(self, gamma=0.01):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+            elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
+                nn.init.constant_(m.weight, gamma)
+                nn.init.constant_(m.bias, gamma)
 
     def forward(self, inputs):
         if self.rbr_identity is None:

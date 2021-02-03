@@ -9,8 +9,6 @@
 
 import torch.nn as nn
 
-from ..init_helper import init_weights
-
 
 class AsymmetricConvolutionBlock(nn.Module):
     """
@@ -65,7 +63,7 @@ class AsymmetricConvolutionBlock(nn.Module):
             assert not reduce_gamma
             self.last_bn = nn.BatchNorm2d(num_features=out_channels, affine=True)
 
-        init_weights(self.modules())
+        self._init_weights()
 
         if reduce_gamma:
             assert not use_last_bn
@@ -74,6 +72,14 @@ class AsymmetricConvolutionBlock(nn.Module):
         if gamma_init is not None:
             assert not reduce_gamma
             self.init_gamma(gamma_init)
+
+    def _init_weights(self, gamma=0.01):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+            elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
+                nn.init.constant_(m.weight, gamma)
+                nn.init.constant_(m.bias, gamma)
 
     def init_gamma(self, gamma_value):
         nn.init.constant_(self.square_bn.weight, gamma_value)
