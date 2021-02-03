@@ -14,16 +14,49 @@ from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.recognizers.build import build_recognizer
 from zcls.model.recognizers.repvgg_recognizer import RepVGGRecognizer
 from zcls.model.recognizers.repvgg_recognizer import arch_settings
-from zcls.model.conv_helper import fuse_repvgg_block, fuse_acblock
+from zcls.model.conv_helper import insert_repvgg_block, insert_acblock, fuse_repvgg_block, fuse_acblock
 
 
 def test_regvgg_recognizer():
     data = torch.randn(1, 3, 224, 224)
     for key in arch_settings.keys():
+        print('*' * 10, key)
         model = RepVGGRecognizer(arch=key)
-        print(model)
+        # print(model)
         outputs = model(data)[KEY_OUTPUT]
         assert outputs.shape == (1, 1000)
+
+        print('insert_regvgg_block -> fuse_regvgg_block')
+        insert_repvgg_block(model)
+        # print(model)
+        model.eval()
+        outputs_insert = model(data)[KEY_OUTPUT]
+        fuse_repvgg_block(model)
+        # print(model)
+        model.eval()
+        outputs_fuse = model(data)[KEY_OUTPUT]
+
+        # print(outputs_insert)
+        # print(outputs_fuse)
+        print(torch.sqrt(torch.sum((outputs_insert - outputs_fuse) ** 2)))
+        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-8))
+        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-8)
+
+        print('insert_regvgg_block -> insert_acblock -> fuse_acblock -> fuse_regvgg_block')
+        insert_repvgg_block(model)
+        insert_acblock(model)
+        # print(model)
+        model.eval()
+        outputs_insert = model(data)[KEY_OUTPUT]
+        fuse_acblock(model)
+        fuse_repvgg_block(model)
+        # print(model)
+        model.eval()
+        outputs_fuse = model(data)[KEY_OUTPUT]
+
+        print(torch.sqrt(torch.sum((outputs_insert - outputs_fuse) ** 2)))
+        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-8))
+        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-8)
 
 
 def test_config_file():
@@ -77,5 +110,5 @@ def test_config_file():
 
 
 if __name__ == '__main__':
-    # test_regvgg_recognizer()
+    test_regvgg_recognizer()
     test_config_file()

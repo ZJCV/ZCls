@@ -115,7 +115,7 @@ def test_acb_helper():
     eval_outputs = model(data)
     print(model)
 
-    print(torch.sum((train_outputs - eval_outputs) ** 2))
+    print(torch.sqrt(torch.sum((train_outputs - eval_outputs) ** 2)))
     print(torch.allclose(train_outputs, eval_outputs, atol=1e-6))
     assert torch.allclose(train_outputs, eval_outputs, atol=1e-6)
 
@@ -136,9 +136,9 @@ def test_resnet50_acb():
     eval_outputs = model(data)
     # print(model)
 
-    print(torch.sum((train_outputs - eval_outputs) ** 2))
-    print(torch.allclose(train_outputs, eval_outputs, atol=1e-5))
-    assert torch.allclose(train_outputs, eval_outputs, atol=1e-5)
+    print(torch.sqrt(torch.sum((train_outputs - eval_outputs) ** 2)))
+    print(torch.allclose(train_outputs, eval_outputs, atol=1e-7))
+    assert torch.allclose(train_outputs, eval_outputs, atol=1e-7)
 
 
 if __name__ == '__main__':

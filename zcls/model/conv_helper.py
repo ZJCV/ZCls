@@ -172,7 +172,8 @@ def fuse_repvgg_block(model: nn.Module):
                                    padding=module.padding,
                                    dilation=module.dilation,
                                    groups=module.groups,
-                                   padding_mode=module.padding_mode
+                                   padding_mode=module.padding_mode,
+                                   bias=True
                                    )
             fused_conv.weight = nn.Parameter(kernel.detach().cpu())
             fused_conv.bias = nn.Parameter(bias.detach().cpu())

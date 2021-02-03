@@ -137,7 +137,7 @@ def test_regvgg():
     eval_outputs = model(data)[KEY_OUTPUT]
     print(model)
 
-    print(torch.sum((train_outputs - eval_outputs) ** 2))
+    print(torch.sqrt(torch.sum((train_outputs - eval_outputs) ** 2)))
     print(torch.allclose(train_outputs, eval_outputs, atol=1e-3))
     assert torch.allclose(train_outputs, eval_outputs, atol=1e-3)
 
