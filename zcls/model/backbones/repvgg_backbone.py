@@ -28,7 +28,7 @@ class RepVGGBackbone(nn.Module):
                  # 是否执行空间下采样
                  down_samples=(1, 1, 1, 1),
                  # cardinality
-                 groups=dict,
+                 groups=dict(),
                  # 卷积层类型
                  conv_layer=None,
                  # 激活层类型

@@ -34,8 +34,8 @@ class RepVGGBlock(nn.Module):
         self.groups = groups
         self.padding_mode = padding_mode
 
-        assert kernel_size == 3
-        assert padding == 1
+        # assert kernel_size == 3
+        # assert padding == 1
 
         padding_11 = padding - kernel_size // 2
 

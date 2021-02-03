@@ -44,10 +44,13 @@ def build_recognizer(cfg, device):
         check_pointer = CheckPointer(model)
         check_pointer.load(preloaded, map_location=device)
         logger.info("finish loading model weights")
-    if cfg.MODEL.CONV.RepVGGBlock is True:
-        insert_repvgg_block(model)
-    if cfg.MODEL.CONV.ACBLOCK is True:
-        insert_acblock(model)
+    if cfg.MODEL.CONV.ADD_BLOCKS is not None:
+        assert isinstance(cfg.MODEL.CONV.ADD_BLOCKS, tuple)
+        for add_block in cfg.MODEL.CONV.ADD_BLOCKS:
+            if add_block == 'RepVGGBlock':
+                insert_repvgg_block(model)
+            if add_block == 'ACBlock':
+                insert_acblock(model)
 
     model = model.to(device=device)
     if du.get_world_size() > 1:

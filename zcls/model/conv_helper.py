@@ -74,12 +74,6 @@ def fuse_acblock(model: nn.Module, eps=1e-5):
     for name, module in model.named_children():
         if isinstance(module, AsymmetricConvolutionBlock):
             # 将ACBlock替换为标准卷积
-            # 获取NxN卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
-            square_conv_weight = module.square_conv.weight
-            square_bn_weight = module.square_bn.weight
-            square_bn_bias = module.square_bn.bias
-            square_bn_running_mean = module.square_bn.running_mean
-            square_bn_running_std = torch.sqrt(module.square_bn.running_var + eps)
             # 获取Nx1卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
             vertical_conv_weight = module.ver_conv.weight
             vertical_bn_weight = module.ver_bn.weight
@@ -92,13 +86,31 @@ def fuse_acblock(model: nn.Module, eps=1e-5):
             horizontal_bn_bias = module.hor_bn.bias
             horizontal_bn_running_mean = module.hor_bn.running_mean
             horizontal_bn_running_std = torch.sqrt(module.hor_bn.running_var + eps)
-            # 计算偏差
-            fused_bias = square_bn_bias + vertical_bn_bias + horizontal_bn_bias \
-                         - square_bn_running_mean * square_bn_weight / square_bn_running_std \
-                         - vertical_bn_running_mean * vertical_bn_weight / vertical_bn_running_std \
-                         - horizontal_bn_running_mean * horizontal_bn_weight / horizontal_bn_running_std
+            if isinstance(module.square_bn, nn.Identity):
+                # 获取NxN卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
+                # 在insert_repvgg_block过程中将Conv后面的BN设置nn.Identity
+                square_weight = module.square_conv.weight
+                square_bias = module.square_conv.bias
+                # 计算偏差
+                fused_bias = square_bias + vertical_bn_bias + horizontal_bn_bias \
+                             - vertical_bn_running_mean * vertical_bn_weight / vertical_bn_running_std \
+                             - horizontal_bn_running_mean * horizontal_bn_weight / horizontal_bn_running_std
+                # 计算权重
+                fused_kernel = square_weight
+            else:
+                square_conv_weight = module.square_conv.weight
+                square_bn_weight = module.square_bn.weight
+                square_bn_bias = module.square_bn.bias
+                square_bn_running_mean = module.square_bn.running_mean
+                square_bn_running_std = torch.sqrt(module.square_bn.running_var + eps)
+                # 计算偏差
+                fused_bias = square_bn_bias + vertical_bn_bias + horizontal_bn_bias \
+                             - square_bn_running_mean * square_bn_weight / square_bn_running_std \
+                             - vertical_bn_running_mean * vertical_bn_weight / vertical_bn_running_std \
+                             - horizontal_bn_running_mean * horizontal_bn_weight / horizontal_bn_running_std
+                # 计算权重
+                fused_kernel = _fuse_kernel(square_conv_weight, square_bn_weight, square_bn_running_std)
             # 计算权重
-            fused_kernel = _fuse_kernel(square_conv_weight, square_bn_weight, square_bn_running_std)
             _add_to_square_kernel(fused_kernel,
                                   _fuse_kernel(vertical_conv_weight, vertical_bn_weight, vertical_bn_running_std))
             _add_to_square_kernel(fused_kernel,
@@ -163,7 +175,8 @@ def fuse_repvgg_block(model: nn.Module):
                                                       module.rbr_1x1,
                                                       module.rbr_identity,
                                                       module.in_channels,
-                                                      module.groups)
+                                                      module.groups,
+                                                      module.padding)
             # 新建标准卷积，赋值权重和偏差后重新插入模型
             fused_conv = nn.Conv2d(module.in_channels,
                                    module.out_channels,

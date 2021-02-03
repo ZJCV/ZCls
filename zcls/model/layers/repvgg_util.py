@@ -16,18 +16,19 @@ import numpy as np
 #   You can get the equivalent kernel and bias at any time and do whatever you want,
 #   for example, apply some penalties or constraints during training, just like you do to the other models.
 #   May be useful for quantization or pruning.
-def get_equivalent_kernel_bias(rbr_dense, rbr_1x1, rbr_identity, in_channels, groups):
+def get_equivalent_kernel_bias(rbr_dense, rbr_1x1, rbr_identity, in_channels, groups, padding_11):
     kernel3x3, bias3x3 = _fuse_bn_tensor(rbr_dense, in_channels, groups)
     kernel1x1, bias1x1 = _fuse_bn_tensor(rbr_1x1, in_channels, groups)
     kernelid, biasid = _fuse_bn_tensor(rbr_identity, in_channels, groups)
-    return kernel3x3 + _pad_1x1_to_3x3_tensor(kernel1x1) + kernelid, bias3x3 + bias1x1 + biasid
+    return kernel3x3 + _pad_1x1_to_3x3_tensor(kernel1x1, padding_11) + kernelid, bias3x3 + bias1x1 + biasid
 
 
-def _pad_1x1_to_3x3_tensor(kernel1x1):
+def _pad_1x1_to_3x3_tensor(kernel1x1, padding_11=1):
     if kernel1x1 is None:
         return 0
     else:
-        return torch.nn.functional.pad(kernel1x1, [1, 1, 1, 1])
+        # return torch.nn.functional.pad(kernel1x1, [1, 1, 1, 1])
+        return torch.nn.functional.pad(kernel1x1, [padding_11] * 4)
 
 
 def _fuse_bn_tensor(branch, in_channels, groups):

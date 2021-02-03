@@ -55,8 +55,25 @@ def test_regvgg_recognizer():
         outputs_fuse = model(data)[KEY_OUTPUT]
 
         print(torch.sqrt(torch.sum((outputs_insert - outputs_fuse) ** 2)))
-        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-8))
-        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-8)
+        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-7))
+        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-7)
+
+        print('insert_acblock -> insert_regvgg_block -> fuse_regvgg_block -> fuse_acblock')
+        insert_repvgg_block(model)
+        insert_acblock(model)
+        # print(model)
+        model.eval()
+        outputs_insert = model(data)[KEY_OUTPUT]
+        fuse_acblock(model)
+        fuse_repvgg_block(model)
+        # print(model)
+        model.eval()
+        outputs_fuse = model(data)[KEY_OUTPUT]
+
+        print(torch.sqrt(torch.sum((outputs_insert - outputs_fuse) ** 2)))
+        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-7))
+        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-7)
+
 
 
 def test_config_file():
@@ -100,6 +117,63 @@ def test_config_file():
 
     assert outputs.shape == (3, 100)
     # 注意：如果在RepVGG中嵌入了ACBlock，融合时应该先acb再regvgg
+    fuse_acblock(model)
+    print(model)
+    fuse_repvgg_block(model)
+    print(model)
+    outputs = model(data)[KEY_OUTPUT]
+
+    assert outputs.shape == (3, 100)
+
+    print('acb_repvgg_b2g4_custom_cifar100_224_e100_sgd')
+    config_file = "configs/benchmarks/repvgg/acb_repvgg_b2g4_custom_cifar100_224_e100_sgd.yaml"
+    cfg.merge_from_file(config_file)
+
+    device = torch.device('cpu')
+    model = build_recognizer(cfg, device)
+    print(model)
+    outputs = model(data)[KEY_OUTPUT]
+
+    assert outputs.shape == (3, 100)
+    # 注意：如果先嵌入ACBlock再嵌入RepVGGBlock，那么融合时应该先repvgg_block再acblock
+    fuse_repvgg_block(model)
+    print(model)
+    fuse_acblock(model)
+    print(model)
+    outputs = model(data)[KEY_OUTPUT]
+
+    assert outputs.shape == (3, 100)
+
+    print('rxtd50_32x4d_acb_rvb_custom_cifar100_224_e100_sgd')
+    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_acb_rvb_custom_cifar100_224_e100_sgd.yaml"
+    cfg.merge_from_file(config_file)
+
+    device = torch.device('cpu')
+    model = build_recognizer(cfg, device)
+    print(model)
+    outputs = model(data)[KEY_OUTPUT]
+
+    assert outputs.shape == (3, 100)
+    # 注意：如果先嵌入ACBlock再嵌入RepVGGBlock，那么融合时应该先repvgg_block再acblock
+    fuse_repvgg_block(model)
+    print(model)
+    fuse_acblock(model)
+    print(model)
+    outputs = model(data)[KEY_OUTPUT]
+
+    assert outputs.shape == (3, 100)
+
+    print('rxtd50_32x4d_rvb_acb_custom_cifar100_224_e100_sgd')
+    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_rvb_acb_custom_cifar100_224_e100_sgd.yaml"
+    cfg.merge_from_file(config_file)
+
+    device = torch.device('cpu')
+    model = build_recognizer(cfg, device)
+    print(model)
+    outputs = model(data)[KEY_OUTPUT]
+
+    assert outputs.shape == (3, 100)
+    # 注意：如果先嵌入RepVGGBlock再嵌入ACBlock，那么逆序融合
     fuse_acblock(model)
     print(model)
     fuse_repvgg_block(model)

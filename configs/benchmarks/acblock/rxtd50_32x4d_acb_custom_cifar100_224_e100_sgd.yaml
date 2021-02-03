@@ -33,7 +33,7 @@ DATALOADER:
 MODEL:
   CONV:
     TYPE: 'Conv2d'
-    ACBLOCK: True
+    ADD_BLOCKS: ("ACBlock",)
   NORM:
     TYPE: 'BatchNorm2d'
     SYNC_BN: False

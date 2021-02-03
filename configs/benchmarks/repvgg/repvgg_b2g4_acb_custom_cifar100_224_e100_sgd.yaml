@@ -33,8 +33,7 @@ DATALOADER:
 MODEL:
   CONV:
     TYPE: 'Conv2d'
-    ACBLOCK: True
-    RepVGGBlock: True
+    ADD_BLOCKS: ("RepVGGBlock", "ACBlock")
   ACT:
     TYPE: 'ReLU'
   BACKBONE:
