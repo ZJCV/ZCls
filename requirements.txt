@@ -7,12 +7,14 @@ Pillow == 8.1.0
 # ZCls/tools/compute_flops.py: 11
 # ZCls/tools/test.py: 10
 # ZCls/tools/train.py: 10
+# ZCls/zcls/model/conv_helper.py: 10
+# ZCls/zcls/model/layers/repvgg_util.py: 12
 # ZCls/zcls/util/collect_env.py: 3
 # ZCls/zcls/util/metric_logger.py: 2
 numpy == 1.19.5
 
 # ZCls/zcls/util/collect_env.py: 165
-opencv_python == 4.5.1.48
+opencv_contrib_python == 4.5.1.48
 
 # ZCls/zcls/util/misc.py: 10
 psutil == 5.8.0
@@ -38,6 +40,7 @@ thop == 0.0.31.post2005241907
 # ZCls/tests/test_model/test_backbone/test_mobilenetv2_inverted_residual.py: 10
 # ZCls/tests/test_model/test_backbone/test_mobilenetv3_backbone.py: 10,11
 # ZCls/tests/test_model/test_backbone/test_mobilenetv3_unit.py: 10,11
+# ZCls/tests/test_model/test_backbone/test_repvgg_backbone.py: 10
 # ZCls/tests/test_model/test_backbone/test_resnest_block.py: 10,11
 # ZCls/tests/test_model/test_backbone/test_resnet3d_backbone.py: 10
 # ZCls/tests/test_model/test_backbone/test_resnet3d_basicblock.py: 10,11
@@ -54,9 +57,11 @@ thop == 0.0.31.post2005241907
 # ZCls/tests/test_model/test_head/test_mobilenetv2_head.py: 10
 # ZCls/tests/test_model/test_head/test_resnet3d_head.py: 10
 # ZCls/tests/test_model/test_head/test_resnet_head.py: 10
+# ZCls/tests/test_model/test_layer/test_asymmetric_convolution_block.py: 10,11
 # ZCls/tests/test_model/test_layer/test_global_context_block.py: 10
 # ZCls/tests/test_model/test_layer/test_non_local_embedded_gaussian.py: 10
 # ZCls/tests/test_model/test_layer/test_place_holder.py: 10
+# ZCls/tests/test_model/test_layer/test_repvgg_block.py: 10,11
 # ZCls/tests/test_model/test_layer/test_selective_kernel_conv2d.py: 10
 # ZCls/tests/test_model/test_layer/test_simplified_non_local_embedded_gaussian.py: 10
 # ZCls/tests/test_model/test_layer/test_split_attention_conv2d.py: 11,12
@@ -65,6 +70,7 @@ thop == 0.0.31.post2005241907
 # ZCls/tests/test_model/test_recognizer/test_mobilenet_v3_recognizer.py: 10
 # ZCls/tests/test_model/test_recognizer/test_mobilenetv1_recognizer.py: 10
 # ZCls/tests/test_model/test_recognizer/test_mobilenetv2_recognizer.py: 10
+# ZCls/tests/test_model/test_recognizer/test_regvgg_recognizer.py: 10
 # ZCls/tests/test_model/test_recognizer/test_resnest.py: 10
 # ZCls/tests/test_model/test_recognizer/test_resnet.py: 10
 # ZCls/tests/test_model/test_recognizer/test_shufflenetv2_recognizer.py: 10
@@ -94,6 +100,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/backbones/mobilenetv2_inverted_residual.py: 11
 # ZCls/zcls/model/backbones/mobilenetv3_backbone.py: 11
 # ZCls/zcls/model/backbones/mobilenetv3_unit.py: 11
+# ZCls/zcls/model/backbones/repvgg_backbone.py: 10
 # ZCls/zcls/model/backbones/resnest_block.py: 11
 # ZCls/zcls/model/backbones/resnet3d_backbone.py: 11
 # ZCls/zcls/model/backbones/resnet3d_basicblock.py: 11
@@ -105,7 +112,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/backbones/shufflenetv2_backbone.py: 11
 # ZCls/zcls/model/backbones/shufflenetv2_unit.py: 11,13
 # ZCls/zcls/model/backbones/sknet_block.py: 11
-# ZCls/zcls/model/conv_helper.py: 10
+# ZCls/zcls/model/conv_helper.py: 11,12
 # ZCls/zcls/model/criterions/crossentropy_loss.py: 11
 # ZCls/zcls/model/criterions/label_smoothing_loss.py: 10,11
 # ZCls/zcls/model/heads/general_head_2d.py: 11,12
@@ -118,6 +125,8 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/heads/shufflenetv1_head.py: 11,12
 # ZCls/zcls/model/heads/shufflenetv2_head.py: 11,12
 # ZCls/zcls/model/init_helper.py: 11,12
+# ZCls/zcls/model/layers/acb_util.py: 10
+# ZCls/zcls/model/layers/asymmetric_convolution_block.py: 10
 # ZCls/zcls/model/layers/batch_norm_2d.py: 11,12
 # ZCls/zcls/model/layers/global_context_block.py: 10,11
 # ZCls/zcls/model/layers/group_norm.py: 10,11
@@ -126,6 +135,8 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/layers/layer_norm.py: 10,11
 # ZCls/zcls/model/layers/non_local_embedded_gaussian.py: 10,11
 # ZCls/zcls/model/layers/place_holder.py: 11
+# ZCls/zcls/model/layers/repvgg_block.py: 10
+# ZCls/zcls/model/layers/repvgg_util.py: 10,11
 # ZCls/zcls/model/layers/selective_kernel_conv2d.py: 11,12,13
 # ZCls/zcls/model/layers/simplified_non_local_embedded_gaussian.py: 10,11
 # ZCls/zcls/model/layers/split_attention_conv2d.py: 11,13,14
@@ -136,12 +147,14 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/recognizers/mobilenetv1_recognizer.py: 11
 # ZCls/zcls/model/recognizers/mobilenetv2_recognizer.py: 11
 # ZCls/zcls/model/recognizers/mobilenetv3_recognizer.py: 11,12
+# ZCls/zcls/model/recognizers/repvgg_recognizer.py: 10
 # ZCls/zcls/model/recognizers/resnest_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/resnet3d_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/resnet_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/shufflenetv1_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/shufflenetv2_recognizer.py: 11,12
 # ZCls/zcls/optim/lr_schedulers/build.py: 10
+# ZCls/zcls/optim/lr_schedulers/cosine_annearling_lr.py: 10,11
 # ZCls/zcls/optim/lr_schedulers/gradual_warmup.py: 10,11
 # ZCls/zcls/optim/lr_schedulers/multistep_lr.py: 10,11
 # ZCls/zcls/optim/optimizers/adam.py: 10,11
@@ -158,6 +171,7 @@ thop == 0.0.31.post2005241907
 torch == 1.7.1
 
 # ZCls/tests/test_model/test_backbone/test_resnet3d_backbone.py: 59,78,111,144
+# ZCls/tests/test_model/test_layer/test_asymmetric_convolution_block.py: 12
 # ZCls/tools/compute_mean_std.py: 12,14
 # ZCls/zcls/data/datasets/cifar.py: 11
 # ZCls/zcls/data/transforms/build.py: 10
@@ -166,6 +180,7 @@ torch == 1.7.1
 # ZCls/zcls/model/recognizers/mobilenetv1_recognizer.py: 12
 # ZCls/zcls/model/recognizers/mobilenetv2_recognizer.py: 12,13
 # ZCls/zcls/model/recognizers/mobilenetv3_recognizer.py: 13
+# ZCls/zcls/model/recognizers/repvgg_recognizer.py: 11
 # ZCls/zcls/model/recognizers/resnet3d_recognizer.py: 13,14
 # ZCls/zcls/model/recognizers/resnet_recognizer.py: 13,14
 # ZCls/zcls/model/recognizers/shufflenetv1_recognizer.py: 13
