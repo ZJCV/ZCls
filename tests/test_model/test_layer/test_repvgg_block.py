@@ -116,9 +116,9 @@ def test_conv_helper():
     eval_outputs = model(data)
     print(model)
 
-    print(torch.sum((train_outputs - eval_outputs) ** 2))
-    print(torch.allclose(train_outputs, eval_outputs, atol=1e-6))
-    assert torch.allclose(train_outputs, eval_outputs, atol=1e-6)
+    print(torch.sqrt(torch.sum((train_outputs - eval_outputs) ** 2)))
+    print(torch.allclose(train_outputs, eval_outputs, atol=1e-8))
+    assert torch.allclose(train_outputs, eval_outputs, atol=1e-8)
 
 
 def test_regvgg():
@@ -138,8 +138,8 @@ def test_regvgg():
     print(model)
 
     print(torch.sqrt(torch.sum((train_outputs - eval_outputs) ** 2)))
-    print(torch.allclose(train_outputs, eval_outputs, atol=1e-3))
-    assert torch.allclose(train_outputs, eval_outputs, atol=1e-3)
+    print(torch.allclose(train_outputs, eval_outputs, atol=1e-8))
+    assert torch.allclose(train_outputs, eval_outputs, atol=1e-8)
 
 
 if __name__ == '__main__':
