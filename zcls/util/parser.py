@@ -150,6 +150,10 @@ def load_test_config(args):
 
     if args.gpus != -1:
         cfg.NUM_GPUS = args.gpus
+        # 在多gpu训练/测试中，同步增加学习率和批量大小
+        cfg.OPTIMIZER.LR *= args.gpus
+        cfg.DATALOADER.TRAIN_BATCH_SIZE *= args.gpus
+        cfg.DATALOADER.TEST_BATCH_SIZE *= args.gpus
     if args.nodes != -1:
         cfg.NODES = args.nodes
     if args.nr != -1:
