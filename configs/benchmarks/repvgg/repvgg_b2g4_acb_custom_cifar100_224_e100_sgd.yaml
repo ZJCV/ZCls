@@ -56,8 +56,11 @@ MODEL:
 OPTIMIZER:
   NAME: 'SGD'
   LR: 1.5625e-3
-  WEIGHT_DECAY: 1e-4
   MOMENTUM: 0.9
+  WEIGHT_DECAY:
+    DECAY: 1e-4
+    NO_BIAS: True
+    NO_NORM: True
 LR_SCHEDULER:
   NAME: 'CosineAnnearlingLR'
   IS_WARMUP: True

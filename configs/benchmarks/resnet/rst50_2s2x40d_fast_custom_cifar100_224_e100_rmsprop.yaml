@@ -64,8 +64,11 @@ MODEL:
 OPTIMIZER:
   NAME: 'RMSProp'
   LR: 3e-4
-  WEIGHT_DECAY: 1e-4
   MOMENTUM: 0.9
+  WEIGHT_DECAY:
+    DECAY: 1e-4
+    NO_BIAS: True
+    NO_NORM: True
 LR_SCHEDULER:
   NAME: 'MultiStepLR'
   IS_WARMUP: True
