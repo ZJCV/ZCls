@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/rxtd50_32x4d_acb_custom_cifar100_224_e100_sgd_lr_1.25e-2'
+OUTPUT_DIR: 'outputs/benchmarks/rxtd50_32x4d_acb_custom_cifar100_224_e100_sgd_calr'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -48,7 +48,7 @@ MODEL:
     LAYER_PLANES: (64, 128, 256, 512)
     DOWN_SAMPLES: (0, 1, 1, 1)
   HEAD:
-    DROPOUT: 0.2
+    DROPOUT: 0.
     NUM_CLASSES: 100
   RECOGNIZER:
     TYPE: 'ResNet'
@@ -61,9 +61,12 @@ MODEL:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
   NAME: 'SGD'
-  LR: 1.25e-2
-  WEIGHT_DECAY: 1e-4
+  LR: 0.0125
   MOMENTUM: 0.9
+  WEIGHT_DECAY:
+    DECAY: 5e-4
+    NO_DECAY: True
+    NO_NORM: True
 LR_SCHEDULER:
   NAME: 'CosineAnnearlingLR'
   IS_WARMUP: True
