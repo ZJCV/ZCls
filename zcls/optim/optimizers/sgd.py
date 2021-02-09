@@ -16,7 +16,7 @@ from .. import registry
 @registry.OPTIMIZERS.register('SGD')
 def build_sgd(cfg, groups):
     lr = cfg.OPTIMIZER.LR
-    weight_decay = cfg.OPTIMIZER.WEIGHT_DECAY
+    weight_decay = cfg.OPTIMIZER.WEIGHT_DECAY.DECAY
 
     momentum = cfg.OPTIMIZER.MOMENTUM
 

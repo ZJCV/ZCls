@@ -15,7 +15,7 @@ from .. import registry
 @registry.OPTIMIZERS.register('RMSProp')
 def build_rmsprop(cfg, groups):
     lr = cfg.OPTIMIZER.LR
-    weight_decay = cfg.OPTIMIZER.WEIGHT_DECAY
+    weight_decay = cfg.OPTIMIZER.WEIGHT_DECAY.DECAY
 
     momentum = cfg.OPTIMIZER.MOMENTUM
 
