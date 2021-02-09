@@ -17,5 +17,11 @@ def add_config(_C):
     _C.OPTIMIZER = CN()
     _C.OPTIMIZER.NAME = 'SGD'
     _C.OPTIMIZER.LR = 1e-3
-    _C.OPTIMIZER.WEIGHT_DECAY = 1e-4
     _C.OPTIMIZER.MOMENTUM = 0.9
+    # ---------------------------------------------------------------------------- #
+    # Weight Decay
+    # ---------------------------------------------------------------------------- #
+    _C.OPTIMIZER.WEIGHT_DECAY = CN()
+    _C.OPTIMIZER.WEIGHT_DECAY.DECAY = 1e-4
+    _C.OPTIMIZER.WEIGHT_DECAY.NO_BIAS = False
+    _C.OPTIMIZER.WEIGHT_DECAY.NO_NORM = False

@@ -9,6 +9,7 @@
 
 import torch.nn as nn
 
+from zcls.config import cfg
 from zcls.optim.optimizers.build import group_weight
 
 
@@ -33,7 +34,7 @@ def test_group_weight():
     model = TestA()
     print(model)
 
-    groups = group_weight(model)
+    groups = group_weight(cfg, model)
     print(groups)
 
 
