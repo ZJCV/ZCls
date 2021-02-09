@@ -65,7 +65,7 @@ OPTIMIZER:
   MOMENTUM: 0.9
   WEIGHT_DECAY:
     DECAY: 5e-4
-    NO_DECAY: True
+    NO_BIAS: True
     NO_NORM: True
 LR_SCHEDULER:
   NAME: 'MultiStepLR'
