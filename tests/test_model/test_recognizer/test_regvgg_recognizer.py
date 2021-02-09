@@ -55,8 +55,8 @@ def test_regvgg_recognizer():
         outputs_fuse = model(data)[KEY_OUTPUT]
 
         print(torch.sqrt(torch.sum((outputs_insert - outputs_fuse) ** 2)))
-        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-7))
-        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-7)
+        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-6))
+        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-6)
 
         print('insert_acblock -> insert_regvgg_block -> fuse_regvgg_block -> fuse_acblock')
         insert_repvgg_block(model)
@@ -71,8 +71,8 @@ def test_regvgg_recognizer():
         outputs_fuse = model(data)[KEY_OUTPUT]
 
         print(torch.sqrt(torch.sum((outputs_insert - outputs_fuse) ** 2)))
-        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-7))
-        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-7)
+        print(torch.allclose(outputs_insert, outputs_fuse, atol=1e-6))
+        assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-6)
 
 
 

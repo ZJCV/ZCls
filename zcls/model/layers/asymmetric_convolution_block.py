@@ -16,7 +16,7 @@ class AsymmetricConvolutionBlock(nn.Module):
     """
 
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1,
-                 padding_mode='zeros', use_affine=True, reduce_gamma=False, use_last_bn=False, gamma_init=None):
+                 padding_mode='zeros', use_affine=True, use_last_bn=False):
         super(AsymmetricConvolutionBlock, self).__init__()
 
         self.in_channels = in_channels
@@ -60,32 +60,17 @@ class AsymmetricConvolutionBlock(nn.Module):
         self.hor_bn = nn.BatchNorm2d(num_features=out_channels, affine=use_affine)
 
         if use_last_bn:
-            assert not reduce_gamma
             self.last_bn = nn.BatchNorm2d(num_features=out_channels, affine=True)
 
         self._init_weights()
 
-        if reduce_gamma:
-            assert not use_last_bn
-            self.init_gamma(1.0 / 3)
-
-        if gamma_init is not None:
-            assert not reduce_gamma
-            self.init_gamma(gamma_init)
-
-    def _init_weights(self, gamma=0.01):
+    def _init_weights(self, gamma=1.0 / 3):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm)):
                 nn.init.constant_(m.weight, gamma)
                 nn.init.constant_(m.bias, gamma)
-
-    def init_gamma(self, gamma_value):
-        nn.init.constant_(self.square_bn.weight, gamma_value)
-        nn.init.constant_(self.ver_bn.weight, gamma_value)
-        nn.init.constant_(self.hor_bn.weight, gamma_value)
-        print('init gamma of square, ver and hor as ', gamma_value)
 
     def forward(self, input):
         square_outputs = self.square_conv(input)
