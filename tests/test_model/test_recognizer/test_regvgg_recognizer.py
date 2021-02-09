@@ -91,7 +91,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('repvgg_b2g4_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_custom_cifar100_224_e100_sgd.yaml"
+    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_custom_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -107,7 +107,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('repvgg_b2g4_acb_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_acb_custom_cifar100_224_e100_sgd.yaml"
+    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_acb_custom_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -126,7 +126,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('acb_repvgg_b2g4_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/acb_repvgg_b2g4_custom_cifar100_224_e100_sgd.yaml"
+    config_file = "configs/benchmarks/repvgg/acb_repvgg_b2g4_custom_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -145,7 +145,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('rxtd50_32x4d_acb_rvb_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_acb_rvb_custom_cifar100_224_e100_sgd.yaml"
+    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_acb_rvb_custom_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -164,7 +164,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('rxtd50_32x4d_rvb_acb_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_rvb_acb_custom_cifar100_224_e100_sgd_lr_1.25e-2.yaml"
+    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_rvb_acb_custom_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')

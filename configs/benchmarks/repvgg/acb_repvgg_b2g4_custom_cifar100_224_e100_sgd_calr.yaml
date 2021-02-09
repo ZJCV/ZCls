@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/repvgg_b2g4_custom_cifar100_224_e100_sgd'
+OUTPUT_DIR: 'outputs/benchmarks/acb_repvgg_b2g4_custom_cifar100_224_e100_sgd_calr'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -33,7 +33,7 @@ DATALOADER:
 MODEL:
   CONV:
     TYPE: 'Conv2d'
-    ADD_BLOCKS: ("RepVGGBlock",)
+    ADD_BLOCKS: ("ACBlock", "RepVGGBlock")
   ACT:
     TYPE: 'ReLU'
   BACKBONE:
@@ -55,10 +55,10 @@ MODEL:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
   NAME: 'SGD'
-  LR: 1.5625e-3
+  LR: 0.0125
   MOMENTUM: 0.9
   WEIGHT_DECAY:
-    DECAY: 1e-4
+    DECAY: 5e-4
     NO_BIAS: True
     NO_NORM: True
 LR_SCHEDULER:
