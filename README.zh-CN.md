@@ -1,13 +1,13 @@
 <div align="right">
-  Language:
+  语言:
     🇺🇸
-  <a title="Chinese" href="./README.zh-CN.md">🇨🇳</a>
+  <a title="英语" href="./README.md">🇨🇳</a>
 </div>
 
  <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
-  «ZCls» is a classification model benchmark code base
+  «ZCls»是一个分类模型基准代码库
 <br>
 <br>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square"></a>
@@ -15,24 +15,24 @@
   <a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"></a>
 </p>
 
-## Table of Contents
+## 内容列表
 
-- [Table of Contents](#table-of-contents)
-- [Background](#background)
-- [Maintainers](#maintainers)
-- [Thanks](#thanks)
-- [Contributing](#contributing)
-- [License](#license)
+- [内容列表](#内容列表)
+- [背景](#背景)
+- [主要维护人员](#主要维护人员)
+- [致谢](#致谢)
+- [参与贡献方式](#参与贡献方式)
+- [许可证](#许可证)
 
-## Background
+## 背景
 
-In order to further improve the algorithm performance, it is usually necessary to improve the existing model, which inevitably involves code refactoring. Creating this repo, on the one hand, serves as the CodeBase of the new model/optimization method, on the other hand, it also records the comparison between the custom model and the existing implementation (such as Torchvision Models)
+为了进一步提高算法性能，通常需要对已有模型进行改进，不可避免的就涉及到代码重构。创建本仓库，一方面作为新的模型/优化方法的`CodeBase`，另一方面也记录下自定义模型与已有实现（比如`Torchvision Models`）之间的比较
 
-## Maintainers
+## 主要维护人员
 
 * zhujian - *Initial work* - [zjykzj](https://github.com/zjykzj)
 
-## Thanks
+## 致谢
 
 ```
 @misc{ding2021repvgg,
@@ -224,16 +224,16 @@ In order to further improve the algorithm performance, it is usually necessary t
 }
 ```
 
-## Contributing
+## 参与贡献方式
 
-Anyone's participation is welcome! Open an [issue](https://github.com/zjykzj/ZCls/issues) or submit PRs.
+欢迎任何人的参与！打开[issue](https://github.com/zjykzj/ZCls/issues)或提交合并请求。
 
-Small note:
+注意:
 
-* Git submission specifications should be complied with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/)
-* If versioned, please conform to the [Semantic Versioning 2.0.0](https://semver.org) specification
-* If editing the README, please conform to the[standard-readme](https://github.com/RichardLitt/standard-readme) specification.
+* `GIT`提交，请遵守[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.4/)规范
+* 语义版本化，请遵守[Semantic Versioning 2.0.0](https://semver.org)规范
+* `README`编写，请遵守[standard-readme](https://github.com/RichardLitt/standard-readme)规范
 
-## License
+## 许可证
 
 [Apache License 2.0](LICENSE) © 2020 zjykzj
