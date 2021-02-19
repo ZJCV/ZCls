@@ -18,34 +18,34 @@ BN_MOMENTUM = 1 - 0.9997
 
 
 class MNASNetUint(nn.Module, ABC):
-    """
-    整合了MBConv3(3x3/5x5/SE)、MBConv6(3x3/5x5/SE)、SepConv(k3x3)实现
-    """
 
     def __init__(self,
-                 # 输入通道数
                  in_planes,
-                 # 输出通道数
                  out_planes,
-                 # 步长
                  stride=1,
-                 # 卷积核大小
                  kernel_size=3,
-                 # 膨胀因子，适用于mbv2的反向残差块
                  expansion_rate=1,
-                 # 是否使用注意力模块
                  with_attention=True,
-                 # 衰减率
                  reduction=4,
-                 # 注意力模块类型
                  attention_type='SqueezeAndExcitationBlock2D',
-                 # 卷积层类型
                  conv_layer=None,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 激活层类型
                  act_layer=None
                  ):
+        """
+        整合了MBConv3(3x3/5x5/SE)、MBConv6(3x3/5x5/SE)、SepConv(k3x3)实现
+        :param in_planes: 输入通道数
+        :param out_planes: 输出通道数
+        :param stride: 步长
+        :param kernel_size: 卷积核大小
+        :param expansion_rate: 膨胀因子，适用于mbv2的反向残差块
+        :param with_attention: 是否使用注意力模块
+        :param reduction: 衰减率
+        :param attention_type: 注意力模块类型
+        :param conv_layer: 卷积层类型
+        :param norm_layer: 归一化层类型
+        :param act_layer: 激活层类型
+        """
         super(MNASNetUint, self).__init__()
         assert isinstance(expansion_rate, int) and expansion_rate >= 1
 

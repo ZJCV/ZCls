@@ -13,7 +13,7 @@ from .shufflenet.shufflenetv1_backbone import build_sfv1_backbone
 from .shufflenet.shufflenetv2_backbone import build_sfv2_backbone
 from .mobilenet.mobilenetv1_backbone import build_mbv1_backbone
 from .mobilenet.mobilenetv2_backbone import build_mbv2_backbone
-
+from .mobilenet.mnasnet_backbone import build_mnasnet
 
 def build_backbone(cfg):
     return registry.Backbone[cfg.MODEL.BACKBONE.NAME](cfg)

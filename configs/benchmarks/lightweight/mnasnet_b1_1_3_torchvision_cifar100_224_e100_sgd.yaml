@@ -42,7 +42,6 @@ MODEL:
   HEAD:
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'MNASNet'
     NAME: 'TorchvisionMNASNet'
     PRELOADED: ""
     TORCHVISION_PRETRAINED: False

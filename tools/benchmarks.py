@@ -79,15 +79,15 @@ def mobilenet():
     name = 'Torchvision_MobileNetV2_1.0x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_cifar100_224_e100.yaml'
     name = 'MNasNet_a1_1.3x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_se_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_se_cifar100_224_e100.yaml'
     name = 'MNasNet_SE_a1_1.3x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mnasnet_b1_1_3_custom_cifar100_224_e100_sgd.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mnasnet_b1_1_3_cifar100_224_e100_sgd.yaml'
     name = 'MNasNet_b1_1.3x'
     main(data_shape, cfg_file, name)
 

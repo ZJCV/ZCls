@@ -10,6 +10,7 @@
 import torch
 
 from zcls.model.backbones.mobilenet.mnasnet_backbone import MNASNetBackbone
+from zcls.model.backbones.misc import round_to_multiple_of
 
 
 def test_mnasnet_backbone():
@@ -17,12 +18,17 @@ def test_mnasnet_backbone():
 
     for wm in [0.5, 0.75, 1.0, 1.3]:
         model = MNASNetBackbone(width_multiplier=wm)
-        print(model)
+        # print(model)
         outputs = model(data)
-        print(outputs.shape)
+        print(wm, outputs.shape)
 
         assert outputs.shape == (1, int(1280 * wm), 7, 7)
 
 
+def test():
+    print(round_to_multiple_of(320 * 1.3, 8))
+
+
 if __name__ == '__main__':
     test_mnasnet_backbone()
+    test()
