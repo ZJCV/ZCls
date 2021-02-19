@@ -19,7 +19,9 @@ from .. import registry
 from .shufflenet.shufflenetv1 import build_sfv1
 from .shufflenet.shufflenetv2 import build_sfv2
 from .shufflenet.torchvision_sfv2 import build_torchvision_sfv2
-from .mobilenet.mobilenetv1_recognizer import build_mobilenet_v1
+from .mobilenet.mobilenetv1 import build_mobilenet_v1
+from .mobilenet.mobilenetv2 import build_mobilenet_v2
+from .mobilenet.torchvision_mobilenetv2 import build_torchvision_mbv2
 
 logger = logging.get_logger(__name__)
 

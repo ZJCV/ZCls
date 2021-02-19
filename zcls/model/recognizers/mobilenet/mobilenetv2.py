@@ -2,26 +2,26 @@
 
 """
 @date: 2020/12/2 下午9:38
-@file: mobilenetv1_recognizer.py
+@file: mobilenetv1.py
 @author: zj
 @description: 
 """
-from abc import ABC
 
+from abc import ABC
 import torch.nn as nn
 from torchvision.models.utils import load_state_dict_from_url
 
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model import registry
-from zcls.model.heads.build import build_head
 from zcls.model.backbones.build import build_backbone
+from zcls.model.heads.build import build_head
 from zcls.model.norm_helper import freezing_bn
 
 
-class MobileNetV1(nn.Module, ABC):
+class MobileNetV2(nn.Module, ABC):
 
     def __init__(self, cfg):
-        super(MobileNetV1, self).__init__()
+        super(MobileNetV2, self).__init__()
         self.fix_bn = cfg.MODEL.NORM.FIX_BN
         self.partial_bn = cfg.MODEL.NORM.PARTIAL_BN
 
@@ -53,7 +53,7 @@ class MobileNetV1(nn.Module, ABC):
             nn.init.zeros_(self.head.fc.bias)
 
     def train(self, mode: bool = True):
-        super(MobileNetV1, self).train(mode=mode)
+        super(MobileNetV2, self).train(mode=mode)
 
         if mode and (self.partial_bn or self.fix_bn):
             freezing_bn(self, partial_bn=self.partial_bn)
@@ -67,6 +67,6 @@ class MobileNetV1(nn.Module, ABC):
         return {KEY_OUTPUT: x}
 
 
-@registry.RECOGNIZER.register('MobileNetV1')
-def build_mobilenet_v1(cfg):
-    return MobileNetV1(cfg)
+@registry.RECOGNIZER.register('MobileNetV2')
+def build_mobilenet_v2(cfg):
+    return MobileNetV2(cfg)

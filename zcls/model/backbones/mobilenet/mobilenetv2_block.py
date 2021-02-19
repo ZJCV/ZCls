@@ -14,30 +14,30 @@ from .mobilenetv2_inverted_residual import MobileNetV2InvertedResidual
 
 
 class MobileNetV2Block(nn.Module, ABC):
-    """
-    重复执行多个反向残差块，每个反向残差块拥有相同的膨胀率和通道数，其中，仅对第一个残差块执行下采样操作（如果有的话）
-    """
 
     def __init__(self,
-                 # 输入通道数
-                 in_planes,
-                 # 输出通道数
-                 out_planes,
-                 # 膨胀因子
+                 in_channels,
+                 out_channels,
                  expansion_rate=1,
-                 # 重复次数
                  repeat=1,
-                 # 卷积层步长
                  stride=1,
-                 # 卷积层零填充
                  padding=1,
-                 # 卷积层类型
                  conv_layer=None,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 激活层类型
                  act_layer=None,
                  ):
+        """
+        repeat InvertedResidualUnit. if stride>1, make downsample to the first Unit
+        :param in_channels: 输入通道数
+        :param out_channels: 输出通道数
+        :param expansion_rate: 膨胀因子
+        :param repeat: 重复次数
+        :param stride: 卷积层步长
+        :param padding: 卷积层零填充
+        :param conv_layer: 卷积层类型
+        :param norm_layer: 归一化层类型
+        :param act_layer: 激活层类型
+        """
         super(MobileNetV2Block, self).__init__()
 
         features = list()
@@ -45,15 +45,15 @@ class MobileNetV2Block(nn.Module, ABC):
             if i != 0:
                 # 仅对第一个残差块执行下采样操作（如果有的话）
                 stride = 1
-            features.append(MobileNetV2InvertedResidual(in_planes,
-                                                        out_planes,
+            features.append(MobileNetV2InvertedResidual(in_channels,
+                                                        out_channels,
                                                         expansion_rate=expansion_rate,
                                                         stride=stride,
                                                         padding=padding,
                                                         conv_layer=conv_layer,
                                                         norm_layer=norm_layer,
                                                         act_layer=act_layer))
-            in_planes = out_planes
+            in_channels = out_channels
 
         self.conv = nn.Sequential(*features)
 

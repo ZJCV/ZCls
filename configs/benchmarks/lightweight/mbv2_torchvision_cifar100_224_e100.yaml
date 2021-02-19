@@ -43,7 +43,6 @@ MODEL:
   HEAD:
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'MobileNetV2'
     NAME: 'TorchvisionMobileNetV2'
     PRELOADED: ""
     TORCHVISION_PRETRAINED: False
