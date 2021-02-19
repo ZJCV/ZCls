@@ -9,7 +9,7 @@
 
 import torch
 
-from zcls.model.backbones.mobilenetv2_backbone import MobileNetV2Backbone
+from zcls.model.backbones.mobilenet.mobilenetv2_backbone import MobileNetV2Backbone
 
 
 def test_mobilenet_v2_backbone():

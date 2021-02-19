@@ -67,7 +67,7 @@ def main(data_shape, config_file, mobile_name):
 def mobilenet():
     data_shape = (1, 3, 224, 224)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv1_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mbv1_cifar100_224_e100.yaml'
     name = 'MobileNetV1_1.0x'
     main(data_shape, cfg_file, name)
 

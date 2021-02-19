@@ -9,7 +9,7 @@
 
 import torch
 
-from zcls.model.backbones.mobilenetv2_inverted_residual import MobileNetV2InvertedResidual
+from zcls.model.backbones.mobilenet.mobilenetv2_inverted_residual import MobileNetV2InvertedResidual
 
 
 def test_mobilenetv2_inverted_residual():

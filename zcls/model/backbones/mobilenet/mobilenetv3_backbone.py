@@ -10,7 +10,7 @@ from abc import ABC
 
 import torch.nn as nn
 
-from ..layers.hard_swish_wrapper import HardswishWrapper
+from zcls.model.layers.hard_swish_wrapper import HardswishWrapper
 from .mobilenetv3_unit import MobileNetV3Uint, BN_MOMENTUM
 
 

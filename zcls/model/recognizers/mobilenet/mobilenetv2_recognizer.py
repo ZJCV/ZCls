@@ -13,12 +13,12 @@ from torchvision.models.utils import load_state_dict_from_url
 from torchvision.models import mobilenet_v2
 
 from zcls.config.key_word import KEY_OUTPUT
-from .. import registry
-from ..backbones.mobilenetv2_backbone import MobileNetV2Backbone
-from ..heads.mobilenetv2_head import MobileNetV2Head
-from ..norm_helper import get_norm, freezing_bn
-from ..act_helper import get_act
-from ..conv_helper import get_conv
+from zcls.model import registry
+from zcls.model.backbones.mobilenet.mobilenetv2_backbone import MobileNetV2Backbone
+from zcls.model.heads.mobilenetv2_head import MobileNetV2Head
+from zcls.model.norm_helper import get_norm, freezing_bn
+from zcls.model.act_helper import get_act
+from zcls.model.conv_helper import get_conv
 
 
 def _make_divisible(v, divisor, min_value=None):

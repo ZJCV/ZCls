@@ -10,7 +10,7 @@
 import torch
 
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.mobilenetv2_recognizer import MobileNetV2Recognizer
+from zcls.model.recognizers.mobilenet.mobilenetv2_recognizer import MobileNetV2Recognizer
 
 
 def test_mobilenet_v2():

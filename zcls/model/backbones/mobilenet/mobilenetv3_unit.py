@@ -10,8 +10,8 @@ from abc import ABC
 
 import torch.nn as nn
 
-from ..attention_helper import make_attention_block
-from ..layers.hard_swish_wrapper import HardswishWrapper
+from zcls.model.attention_helper import make_attention_block
+from zcls.model.layers.hard_swish_wrapper import HardswishWrapper
 
 # Paper suggests 0.9997 momentum, for TensorFlow. Equivalent PyTorch momentum is
 # 1.0 - tensorflow.

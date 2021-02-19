@@ -11,7 +11,7 @@ import torch
 
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.mnasnet_recognizer import MNASNetRecognizer, TorchvisionMNASNet, build_mnasnet
+from zcls.model.recognizers.mobilenet.mnasnet_recognizer import MNASNetRecognizer, TorchvisionMNASNet, build_mnasnet
 
 
 def test_mnasnet():

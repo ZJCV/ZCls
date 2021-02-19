@@ -10,7 +10,7 @@
 import torch
 import torch.nn as nn
 
-from zcls.model.backbones.mobilenetv3_unit import MobileNetV3Uint
+from zcls.model.backbones.mobilenet.mobilenetv3_unit import MobileNetV3Uint
 
 
 def test_mobilenet_v3_unit():

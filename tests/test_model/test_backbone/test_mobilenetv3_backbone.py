@@ -8,9 +8,8 @@
 """
 
 import torch
-import torch.nn as nn
 
-from zcls.model.backbones.mobilenetv3_backbone import MobileNetV3Backbone
+from zcls.model.backbones.mobilenet.mobilenetv3_backbone import MobileNetV3Backbone
 
 
 def test_mobilenet_v3_backbone():

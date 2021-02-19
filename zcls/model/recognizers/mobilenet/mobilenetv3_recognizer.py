@@ -13,12 +13,12 @@ from torch.nn.modules.module import T
 from torchvision.models.utils import load_state_dict_from_url
 
 from zcls.config.key_word import KEY_OUTPUT
-from .. import registry
-from ..backbones.mobilenetv3_backbone import MobileNetV3Backbone
-from ..heads.mobilenetv3_head import MobileNetV3Head
-from ..norm_helper import get_norm, freezing_bn
-from ..conv_helper import get_conv
-from ..act_helper import get_act, get_sigmoid
+from zcls.model import registry
+from zcls.model.backbones.mobilenet.mobilenetv3_backbone import MobileNetV3Backbone
+from zcls.model.heads.mobilenetv3_head import MobileNetV3Head
+from zcls.model.norm_helper import get_norm, freezing_bn
+from zcls.model.conv_helper import get_conv
+from zcls.model.act_helper import get_act
 
 arch_settings = {
     'mobilenetv3-large': [16, 960, 1280,

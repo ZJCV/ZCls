@@ -9,7 +9,7 @@
 
 import torch
 
-from zcls.model.backbones.mnasnet_backbone import MNASNetBackbone
+from zcls.model.backbones.mobilenet.mnasnet_backbone import MNASNetBackbone
 
 
 def test_mnasnet_backbone():

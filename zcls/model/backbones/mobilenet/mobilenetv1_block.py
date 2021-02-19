@@ -12,27 +12,26 @@ import torch.nn as nn
 
 
 class MobileNetV1Block(nn.Module, ABC):
-    """
-    每个Block由一个逐通道卷积（depth-wise convolution）和一个逐点卷积（point-wise convolution）组成
-    其输出通道数保持不变，由逐通道卷积决定是否进行空间下采样
-    """
 
     def __init__(self,
-                 # 输入通道数
-                 in_planes,
-                 # 输出通道数
-                 planes,
-                 # 卷积层步长
+                 in_channels,
+                 out_channels,
                  stride=1,
-                 # 卷积层零填充
                  padding=1,
-                 # 卷积层类型
                  conv_layer=None,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 激活层类型
                  act_layer=None,
                  ) -> None:
+        """
+        Block = depth-wise convolution + point-wise convolution
+        :param in_channels: 输入通道数
+        :param out_channels: 输出通道数
+        :param stride: 卷积层步长
+        :param padding: 卷积层零填充
+        :param conv_layer: 卷积层类型
+        :param norm_layer: 归一化层类型
+        :param act_layer: 激活层类型
+        """
         super(MobileNetV1Block, self).__init__()
 
         if conv_layer is None:
@@ -42,13 +41,13 @@ class MobileNetV1Block(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.conv1 = conv_layer(in_planes, in_planes, kernel_size=3, stride=stride, padding=padding,
-                                groups=in_planes, bias=False)
-        self.bn1 = norm_layer(in_planes)
+        self.conv1 = conv_layer(in_channels, in_channels, kernel_size=3, stride=stride, padding=padding,
+                                groups=in_channels, bias=False)
+        self.bn1 = norm_layer(in_channels)
         self.relu = act_layer(inplace=True)
 
-        self.conv2 = conv_layer(in_planes, planes, kernel_size=1, stride=1, bias=False)
-        self.bn2 = norm_layer(planes)
+        self.conv2 = conv_layer(in_channels, out_channels, kernel_size=1, stride=1, bias=False)
+        self.bn2 = norm_layer(out_channels)
 
     def forward(self, x):
         x = self.conv1(x)

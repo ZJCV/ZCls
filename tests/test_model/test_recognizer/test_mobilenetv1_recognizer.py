@@ -11,8 +11,8 @@ import torch
 
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.mobilenetv1_recognizer import build_mobilenet_v1
-from zcls.model.recognizers.mobilenetv1_recognizer import MobileNetV1Recognizer
+from zcls.model.recognizers.mobilenet.mobilenetv1_recognizer import build_mobilenet_v1
+from zcls.model.recognizers.mobilenet.mobilenetv1_recognizer import MobileNetV1Recognizer
 
 
 def test_mobilenetv1():

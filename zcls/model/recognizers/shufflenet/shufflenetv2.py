@@ -27,10 +27,10 @@ G4) Element-wise operations are non-negligible.
 """
 
 
-class ShuffleNetV2Recognizer(nn.Module, ABC):
+class ShuffleNetV2(nn.Module, ABC):
 
     def __init__(self, cfg):
-        super(ShuffleNetV2Recognizer, self).__init__()
+        super(ShuffleNetV2, self).__init__()
         self.fix_bn = cfg.MODEL.NORM.FIX_BN
         self.partial_bn = cfg.MODEL.NORM.PARTIAL_BN
 
@@ -55,7 +55,7 @@ class ShuffleNetV2Recognizer(nn.Module, ABC):
             self.head.init_weights()
 
     def train(self, mode: bool = True) -> T:
-        super(ShuffleNetV2Recognizer, self).train(mode=mode)
+        super(ShuffleNetV2, self).train(mode=mode)
 
         if mode and (self.partial_bn or self.fix_bn):
             freezing_bn(self, partial_bn=self.partial_bn)
@@ -71,4 +71,4 @@ class ShuffleNetV2Recognizer(nn.Module, ABC):
 
 @registry.RECOGNIZER.register('ShuffleNetV2')
 def build_sfv2(cfg):
-    return ShuffleNetV2Recognizer(cfg)
+    return ShuffleNetV2(cfg)

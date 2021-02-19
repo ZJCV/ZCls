@@ -14,12 +14,12 @@ from torch.nn.modules.module import T
 from torchvision.models.utils import load_state_dict_from_url
 
 from zcls.config.key_word import KEY_OUTPUT
-from .. import registry
-from ..backbones.mnasnet_backbone import MNASNetBackbone, _round_to_multiple_of
-from ..heads.general_head_2d import GeneralHead2D
-from ..norm_helper import get_norm, freezing_bn
-from ..conv_helper import get_conv
-from ..act_helper import get_act
+from zcls.model import registry
+from zcls.model.backbones.mobilenet.mnasnet_backbone import MNASNetBackbone
+from zcls.model.heads.general_head_2d import GeneralHead2D
+from zcls.model.norm_helper import get_norm, freezing_bn
+from zcls.model.conv_helper import get_conv
+from zcls.model.act_helper import get_act
 
 arch_settings = {
     'mnasnet_a1': [
