@@ -15,10 +15,10 @@ from zcls.model.backbones.shufflenet.shufflenetv2_backbone import ShuffleNetV2Ba
 def test_shufflenet_v2_backbone():
     # 1x
     model = ShuffleNetV2Backbone(
-        out_planes=1024,
-        layer_planes=(116, 232, 464),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        out_channels=1024,
+        stage_channels=(116, 232, 464),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)
@@ -30,10 +30,10 @@ def test_shufflenet_v2_backbone():
 
     # 0.5x
     model = ShuffleNetV2Backbone(
-        out_planes=1024,
-        layer_planes=(48, 96, 192),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        out_channels=1024,
+        stage_channels=(48, 96, 192),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)
@@ -45,10 +45,10 @@ def test_shufflenet_v2_backbone():
 
     # 1.5x
     model = ShuffleNetV2Backbone(
-        out_planes=1024,
-        layer_planes=(176, 352, 704),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        out_channels=1024,
+        stage_channels=(176, 352, 704),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)
@@ -60,10 +60,10 @@ def test_shufflenet_v2_backbone():
 
     # 2x
     model = ShuffleNetV2Backbone(
-        out_planes=2048,
-        layer_planes=(244, 488, 976),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        out_channels=2048,
+        stage_channels=(244, 488, 976),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         block_layer=ShuffleNetV2Unit,
     )
     print(model)

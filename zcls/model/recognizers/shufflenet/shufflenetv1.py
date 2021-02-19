@@ -13,10 +13,10 @@ from torch.nn.modules.module import T
 from torchvision.models.utils import load_state_dict_from_url
 
 from zcls.config.key_word import KEY_OUTPUT
-from .. import registry
-from ..norm_helper import freezing_bn
-from ..backbones.build import build_backbone
-from ..heads.build import build_head
+from zcls.model import registry
+from zcls.model.norm_helper import freezing_bn
+from zcls.model.backbones.build import build_backbone
+from zcls.model.heads.build import build_head
 
 """
 Note 1: Empirically g = 3 usually has a proper trade-off between accuracy and actual inference time

@@ -123,11 +123,11 @@ def mobilenet():
 def shufflenet():
     data_shape = (1, 3, 224, 224)
 
-    cfg_file = 'configs/benchmarks/lightweight/sfv1_3g1x_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/sfv1_3g1x_cifar100_224_e100.yaml'
     name = 'ShuffleNetV1_1.0x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/sfv2_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/sfv2_x2_0_cifar100_224_e100.yaml'
     name = 'ShuffleNetV2_1.0x'
     main(data_shape, cfg_file, name)
 

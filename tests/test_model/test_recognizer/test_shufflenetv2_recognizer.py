@@ -10,7 +10,7 @@
 import torch
 
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.shufflenetv2_recognizer import ShuffleNetV2Recognizer, TorchvisionShuffleNetV2
+from zcls.model.recognizers.shufflenet.shufflenetv2 import ShuffleNetV2Recognizer, TorchvisionShuffleNetV2
 
 
 def test_data(model):

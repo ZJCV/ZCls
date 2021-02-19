@@ -6,71 +6,36 @@
 @author: zj
 @description: 
 """
+
 from abc import ABC
-
 import torch
-
 import torch.nn as nn
 
-
-def channel_shuffle(x, groups):
-    """
-    # >>> a = torch.arange(12)
-    # >>> b = a.reshape(3,4)
-    # >>> c = b.transpose(1,0).contiguous()
-    # >>> d = c.view(3,4)
-    # >>> a
-    # tensor([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11])
-    # >>> b
-    # tensor([[ 0,  1,  2,  3],
-    #         [ 4,  5,  6,  7],
-    #         [ 8,  9, 10, 11]])
-    # >>> c
-    # tensor([[ 0,  4,  8],
-    #         [ 1,  5,  9],
-    #         [ 2,  6, 10],
-    #         [ 3,  7, 11]])
-    # >>> d
-    # tensor([[ 0,  4,  8,  1],
-    #         [ 5,  9,  2,  6],
-    #         [10,  3,  7, 11]])
-    """
-    batchsize, num_channels, height, width = x.data.size()
-    channels_per_group = num_channels // groups
-
-    # reshape
-    x = x.view(batchsize, groups,
-               channels_per_group, height, width)
-
-    x = torch.transpose(x, 1, 2).contiguous()
-
-    # flatten
-    x = x.view(batchsize, -1, height, width)
-
-    return x
+from ..misc import channel_shuffle
 
 
 class ShuffleNetV2Unit(nn.Module, ABC):
-    """
-    通道分块 + MobileNetV2的反向残差块（由一个膨胀卷积和一个深度可分离卷积组成）+ 通道重排（shortcut path + residual path）
-    """
 
     def __init__(self,
-                 # 输入通道
-                 in_planes,
-                 # 输出通道
-                 out_planes,
-                 # 步长
+                 in_channels,
+                 out_channels,
                  stride,
-                 # 作用于shortcut path
-                 down_sample=None,
-                 # 卷积层类型
+                 downsample=None,
                  conv_layer=None,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 激活层类型
                  act_layer=None,
                  ):
+        """
+        when stride = 1, Unit = Channel Shuffle(Concat(Channel Split(Input), Conv(DWConv(Conv(Channel Split(Input))))));
+        when stride = 2, Unit = Channel Shuffle(Concat(Conv(DWConv(Input)), Conv(DWConv(Conv(Input)))));
+        :param in_channels: 输入通道
+        :param out_channels: 输出通道
+        :param stride: 步长
+        :param downsample: 作用于shortcut path
+        :param conv_layer: 卷积层类型
+        :param norm_layer: 归一化层类型
+        :param act_layer: 激活层类型
+        """
         super().__init__()
 
         if conv_layer is None:
@@ -80,19 +45,19 @@ class ShuffleNetV2Unit(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.conv1 = conv_layer(in_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm1 = norm_layer(out_planes)
+        self.conv1 = conv_layer(in_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
+        self.norm1 = norm_layer(out_channels)
 
-        self.conv2 = conv_layer(out_planes, out_planes, kernel_size=3, stride=stride, padding=1, bias=False,
-                                     groups=out_planes)
-        self.norm2 = norm_layer(out_planes)
+        self.conv2 = conv_layer(out_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False,
+                                groups=out_channels)
+        self.norm2 = norm_layer(out_channels)
 
-        self.conv3 = conv_layer(out_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm3 = norm_layer(out_planes)
+        self.conv3 = conv_layer(out_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
+        self.norm3 = norm_layer(out_channels)
 
         self.act = act_layer(inplace=True)
         self.stride = stride
-        self.down_sample = down_sample
+        self.down_sample = downsample
 
     def forward(self, x):
         if self.stride == 1:

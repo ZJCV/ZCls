@@ -43,7 +43,6 @@ MODEL:
   HEAD:
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'ShuffleNetV2'
     NAME: "TorchvisionShuffleNetV2"
     PRELOADED: ""
     TORCHVISION_PRETRAINED: False
