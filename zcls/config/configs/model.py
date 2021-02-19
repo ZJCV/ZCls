@@ -68,11 +68,9 @@ def add_config(_C):
     # backbone
     # ---------------------------------------------------------------------------- #
     _C.MODEL.BACKBONE = CN()
-    # 输入通道数
+    _C.MODEL.BACKBONE.NAME = 'ShuffleNetV1'
     _C.MODEL.BACKBONE.IN_PLANES = 3
-    # for ResNet series
     _C.MODEL.BACKBONE.ARCH = 'resnet18'
-    # stem通道数,
     _C.MODEL.BACKBONE.BASE_PLANES = 64
     # 每一层基础通道数
     _C.MODEL.BACKBONE.LAYER_PLANES = (64, 128, 256, 512)
@@ -106,15 +104,17 @@ def add_config(_C):
     # head
     # ---------------------------------------------------------------------------- #
     _C.MODEL.HEAD = CN()
-    _C.MODEL.HEAD.DROPOUT = 0.
+    _C.MODEL.HEAD.NAME = 'GeneralHead2D'
+    _C.MODEL.HEAD.FEATURE_DIMS = 1024
+    _C.MODEL.HEAD.DROPOUT_RATE = 0.
     _C.MODEL.HEAD.NUM_CLASSES = 1000
 
     # ---------------------------------------------------------------------------- #
     # recognizer
     # ---------------------------------------------------------------------------- #
     _C.MODEL.RECOGNIZER = CN()
+    _C.MODEL.RECOGNIZER.NAME = 'ShuffleNetV1'
     _C.MODEL.RECOGNIZER.TYPE = 'ResNet'
-    _C.MODEL.RECOGNIZER.NAME = 'ZClsResNet'
     # zcls框架训练的模型，用于测试阶段
     _C.MODEL.RECOGNIZER.PRELOADED = ""
     # zcls框架训练的模型，用于训练阶段

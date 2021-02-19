@@ -2,7 +2,7 @@
 
 """
 @date: 2020/12/24 下午7:38
-@file: shufflenetv1_recognizer.py
+@file: shufflenetv1.py
 @author: zj
 @description: 
 """

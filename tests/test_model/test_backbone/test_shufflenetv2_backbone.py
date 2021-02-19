@@ -8,8 +8,8 @@
 """
 
 import torch
-from zcls.model.backbones.shufflenetv2_unit import ShuffleNetV2Unit
-from zcls.model.backbones.shufflenetv2_backbone import ShuffleNetV2Backbone
+from zcls.model.backbones.shufflenet.shufflenetv2_unit import ShuffleNetV2Unit
+from zcls.model.backbones.shufflenet.shufflenetv2_backbone import ShuffleNetV2Backbone
 
 
 def test_shufflenet_v2_backbone():

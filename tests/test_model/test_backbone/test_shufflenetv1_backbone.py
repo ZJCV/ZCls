@@ -8,17 +8,17 @@
 """
 
 import torch
-from zcls.model.backbones.shufflenetv1_unit import ShuffleNetV1Unit
-from zcls.model.backbones.shufflenetv1_backbone import ShuffleNetV1Backbone
+from zcls.model.backbones.shufflenet.shufflenetv1_unit import ShuffleNetV1Unit
+from zcls.model.backbones.shufflenet.shufflenetv1_backbone import ShuffleNetV1Backbone
 
 
 def test_shufflenet_v1_backbone():
     # g=1
     model = ShuffleNetV1Backbone(
         groups=1,
-        layer_planes=(144, 288, 576),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        stage_channels=(144, 288, 576),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -32,9 +32,9 @@ def test_shufflenet_v1_backbone():
     # g=2
     model = ShuffleNetV1Backbone(
         groups=2,
-        layer_planes=(200, 400, 800),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        stage_channels=(200, 400, 800),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -48,9 +48,9 @@ def test_shufflenet_v1_backbone():
     # g=3
     model = ShuffleNetV1Backbone(
         groups=3,
-        layer_planes=(240, 480, 960),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        stage_channels=(240, 480, 960),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -64,9 +64,9 @@ def test_shufflenet_v1_backbone():
     # g=4
     model = ShuffleNetV1Backbone(
         groups=4,
-        layer_planes=(272, 544, 1088),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        stage_channels=(272, 544, 1088),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )
@@ -80,9 +80,9 @@ def test_shufflenet_v1_backbone():
     # g=8
     model = ShuffleNetV1Backbone(
         groups=8,
-        layer_planes=(384, 768, 1536),
-        layer_blocks=(4, 8, 4),
-        down_samples=(1, 1, 1),
+        stage_channels=(384, 768, 1536),
+        stage_blocks=(4, 8, 4),
+        downsamples=(1, 1, 1),
         with_groups=(0, 1, 1),
         block_layer=ShuffleNetV1Unit,
     )

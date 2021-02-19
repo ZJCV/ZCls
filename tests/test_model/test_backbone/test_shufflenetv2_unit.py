@@ -9,7 +9,7 @@
 
 import torch
 import torch.nn as nn
-from zcls.model.backbones.shufflenetv2_unit import ShuffleNetV2Unit
+from zcls.model.backbones.shufflenet.shufflenetv2_unit import ShuffleNetV2Unit
 
 
 def test_shufflenetv2_unit():

@@ -2,7 +2,7 @@
 
 """
 @date: 2020/12/24 下午7:38
-@file: shufflenetv1_recognizer.py
+@file: shufflenetv1.py
 @author: zj
 @description: 
 """
@@ -16,8 +16,8 @@ from torchvision.models.shufflenetv2 import shufflenet_v2_x0_5, shufflenet_v2_x1
 
 from zcls.config.key_word import KEY_OUTPUT
 from .. import registry
-from ..backbones.shufflenetv2_unit import ShuffleNetV2Unit
-from ..backbones.shufflenetv2_backbone import ShuffleNetV2Backbone
+from zcls.model.backbones.shufflenet.shufflenetv2_unit import ShuffleNetV2Unit
+from zcls.model.backbones.shufflenet.shufflenetv2_backbone import ShuffleNetV2Backbone
 from ..heads.shufflenetv2_head import ShuffleNetV2Head
 from ..norm_helper import get_norm, freezing_bn
 from ..conv_helper import get_conv

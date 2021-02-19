@@ -38,11 +38,13 @@ class AsymmetricConvolutionBlock(nn.Module):
         ver_pad_or_crop = (padding, center_offset_from_origin_border)
         hor_pad_or_crop = (center_offset_from_origin_border, padding)
         if center_offset_from_origin_border >= 0:
+            # padding
             self.ver_conv_crop_layer = nn.Identity()
             ver_conv_padding = ver_pad_or_crop
             self.hor_conv_crop_layer = nn.Identity()
             hor_conv_padding = hor_pad_or_crop
         else:
+            # crop
             self.ver_conv_crop_layer = CropLayer(crop_set=ver_pad_or_crop)
             ver_conv_padding = (0, 0)
             self.hor_conv_crop_layer = CropLayer(crop_set=hor_pad_or_crop)

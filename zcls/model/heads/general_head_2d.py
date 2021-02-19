@@ -11,17 +11,22 @@ from abc import ABC
 import torch
 import torch.nn as nn
 
+from .. import registry
+
 
 class GeneralHead2D(nn.Module, ABC):
 
     def __init__(self,
-                 # 输入特征维度
                  feature_dims=1024,
-                 # 类别数
-                 num_classes=1000,
-                 # 随机失活概率
-                 dropout_rate=0.
+                 dropout_rate=0.,
+                 num_classes=1000
                  ):
+        """
+        AvgPool + Dropout + FC
+        :param feature_dims: 输入特征维度
+        :param dropout_rate: 随机失活概率
+        :param num_classes: 类别数
+        """
         super(GeneralHead2D, self).__init__()
 
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
@@ -41,3 +46,14 @@ class GeneralHead2D(nn.Module, ABC):
         x = self.fc(x)
 
         return x
+
+
+@registry.HEAD.register('GeneralHead2D')
+def build_general_head_2d(cfg):
+    feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
+    num_classes = cfg.MODEL.HEAD.NUM_CLASSES
+    dropout_rate = cfg.MODEL.HEAD.DROPOUT_RATE
+
+    return GeneralHead2D(feature_dims=feature_dims,
+                         num_classes=num_classes,
+                         dropout_rate=dropout_rate)
