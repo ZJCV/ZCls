@@ -4,7 +4,7 @@
 Pillow == 8.1.0
 
 # ZCls/tests/test_model/test_layer/test_split_attention_conv2d.py: 10
-# ZCls/tools/compute_flops.py: 11
+# ZCls/tools/benchmarks.py: 11
 # ZCls/tools/test.py: 10
 # ZCls/tools/train.py: 10
 # ZCls/zcls/model/conv_helper.py: 10
@@ -78,7 +78,7 @@ thop == 0.0.31.post2005241907
 # ZCls/tests/test_normalization/test_groupnorm.py: 10,11
 # ZCls/tests/test_normalization/test_layernorm.py: 10,11
 # ZCls/tests/test_optim/test_optimizer/test_group_weight.py: 10
-# ZCls/tools/compute_flops.py: 12
+# ZCls/tools/benchmarks.py: 12
 # ZCls/tools/compute_mean_std.py: 10,13
 # ZCls/tools/test.py: 11
 # ZCls/tools/train.py: 11
@@ -91,6 +91,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/act_helper.py: 10
 # ZCls/zcls/model/backbones/basicblock.py: 11
 # ZCls/zcls/model/backbones/bottleneck.py: 11
+# ZCls/zcls/model/backbones/misc.py: 10
 # ZCls/zcls/model/backbones/mnasnet_backbone.py: 11
 # ZCls/zcls/model/backbones/mnasnet_unit.py: 11
 # ZCls/zcls/model/backbones/mobilenetv1_backbone.py: 11
@@ -107,10 +108,10 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/backbones/resnet3d_bottleneck.py: 11
 # ZCls/zcls/model/backbones/resnet_backbone.py: 11
 # ZCls/zcls/model/backbones/resnet_d_backbone.py: 11
-# ZCls/zcls/model/backbones/shufflenetv1_backbone.py: 11
-# ZCls/zcls/model/backbones/shufflenetv1_unit.py: 11,13
-# ZCls/zcls/model/backbones/shufflenetv2_backbone.py: 11
-# ZCls/zcls/model/backbones/shufflenetv2_unit.py: 11,13
+# ZCls/zcls/model/backbones/shufflenet/shufflenetv1_backbone.py: 11
+# ZCls/zcls/model/backbones/shufflenet/shufflenetv1_unit.py: 11,12
+# ZCls/zcls/model/backbones/shufflenet/shufflenetv2_backbone.py: 11
+# ZCls/zcls/model/backbones/shufflenet/shufflenetv2_unit.py: 11,12
 # ZCls/zcls/model/backbones/sknet_block.py: 11
 # ZCls/zcls/model/conv_helper.py: 11,12
 # ZCls/zcls/model/criterions/crossentropy_loss.py: 11
@@ -122,8 +123,6 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/heads/resnet3d_head.py: 11,12
 # ZCls/zcls/model/heads/resnet_d_head.py: 11,12
 # ZCls/zcls/model/heads/resnet_head.py: 11,12
-# ZCls/zcls/model/heads/shufflenetv1_head.py: 11,12
-# ZCls/zcls/model/heads/shufflenetv2_head.py: 11,12
 # ZCls/zcls/model/init_helper.py: 11,12
 # ZCls/zcls/model/layers/acb_util.py: 10
 # ZCls/zcls/model/layers/asymmetric_convolution_block.py: 10
@@ -151,8 +150,9 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/recognizers/resnest_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/resnet3d_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/resnet_recognizer.py: 11,12
-# ZCls/zcls/model/recognizers/shufflenetv1.py: 11,12
-# ZCls/zcls/model/recognizers/shufflenetv2_recognizer.py: 11,12
+# ZCls/zcls/model/recognizers/shufflenet/shufflenetv1.py: 11,12
+# ZCls/zcls/model/recognizers/shufflenet/shufflenetv2.py: 11,12
+# ZCls/zcls/model/recognizers/shufflenet/torchvision_sfv2.py: 12,13
 # ZCls/zcls/optim/lr_schedulers/build.py: 10
 # ZCls/zcls/optim/lr_schedulers/cosine_annearling_lr.py: 10,11
 # ZCls/zcls/optim/lr_schedulers/gradual_warmup.py: 10,11
@@ -174,7 +174,6 @@ torch == 1.7.1
 # ZCls/tests/test_model/test_layer/test_asymmetric_convolution_block.py: 12
 # ZCls/tools/compute_mean_std.py: 12,14
 # ZCls/zcls/data/datasets/cifar.py: 11
-# ZCls/zcls/data/transforms/build.py: 10
 # ZCls/zcls/model/backbones/mobilenetv2_backbone.py: 12
 # ZCls/zcls/model/recognizers/mnasnet_recognizer.py: 12,14
 # ZCls/zcls/model/recognizers/mobilenetv1_recognizer.py: 12
@@ -183,8 +182,9 @@ torch == 1.7.1
 # ZCls/zcls/model/recognizers/repvgg_recognizer.py: 11
 # ZCls/zcls/model/recognizers/resnet3d_recognizer.py: 13,14
 # ZCls/zcls/model/recognizers/resnet_recognizer.py: 13,14
-# ZCls/zcls/model/recognizers/shufflenetv1.py: 13
-# ZCls/zcls/model/recognizers/shufflenetv2_recognizer.py: 14
+# ZCls/zcls/model/recognizers/shufflenet/shufflenetv1.py: 13
+# ZCls/zcls/model/recognizers/shufflenet/shufflenetv2.py: 13
+# ZCls/zcls/model/recognizers/shufflenet/torchvision_sfv2.py: 14
 # ZCls/zcls/util/collect_env.py: 11
 torchvision == 0.8.2
 
@@ -200,3 +200,7 @@ tqdm == 4.56.0
 # ZCls/zcls/config/configs/optimizer.py: 10
 # ZCls/zcls/config/configs/transform.py: 10
 yacs == 0.1.8
+
+# ZCls/zcls/config/configs/transform.py: 11
+# ZCls/zcls/data/transforms/build.py: 10,11
+ztransforms == 0.2.0
