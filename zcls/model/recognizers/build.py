@@ -28,6 +28,7 @@ from .mobilenet.mobilenetv3 import build_mobilenet_v3
 from .vgg.repvgg import build_repvgg
 from .resnet.resnet import build_resnet
 from .resnet.torchvision_resnet import build_torchvision_resnet
+from .resnet.official_resnest import build_official_resnest
 
 logger = logging.get_logger(__name__)
 

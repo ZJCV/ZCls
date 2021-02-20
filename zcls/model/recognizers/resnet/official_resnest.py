@@ -2,7 +2,7 @@
 
 """
 @date: 2021/1/7 下午7:51
-@file: resnest_recognizer.py
+@file: official_resnest.py
 @author: zj
 @description: 
 """
@@ -18,7 +18,7 @@ from zcls.model import registry
 from zcls.model.norm_helper import freezing_bn
 
 
-class ResNeStRecognizer(nn.Module, ABC):
+class OfficialResNeSt(nn.Module, ABC):
 
     def __init__(self,
                  arch='resnest50_2s2x40d',
@@ -26,7 +26,7 @@ class ResNeStRecognizer(nn.Module, ABC):
                  num_classes=1000,
                  fix_bn=False,
                  partial_bn=False):
-        super(ResNeStRecognizer, self).__init__()
+        super(OfficialResNeSt, self).__init__()
 
         self.num_classes = num_classes
         self.fix_bn = fix_bn
@@ -76,7 +76,7 @@ class ResNeStRecognizer(nn.Module, ABC):
             raise ValueError('no such value')
 
     def train(self, mode: bool = True) -> T:
-        super(ResNeStRecognizer, self).train(mode=mode)
+        super(OfficialResNeSt, self).train(mode=mode)
 
         if mode and (self.partial_bn or self.fix_bn):
             freezing_bn(self, partial_bn=self.partial_bn)
@@ -89,20 +89,20 @@ class ResNeStRecognizer(nn.Module, ABC):
         return {KEY_OUTPUT: x}
 
 
-@registry.RECOGNIZER.register('ResNeSt')
-def build_resnest(cfg):
+@registry.RECOGNIZER.register('OfficialResNeSt')
+def build_official_resnest(cfg):
     # for recognizer
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
     # for backbone
     arch = cfg.MODEL.BACKBONE.ARCH
     # for head
-    dropout_rate = cfg.MODEL.HEAD.DROPOUT
+    dropout_rate = cfg.MODEL.HEAD.DROPOUT_RATE
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
 
-    return ResNeStRecognizer(arch=arch,
-                             dropout_rate=dropout_rate,
-                             num_classes=num_classes,
-                             fix_bn=fix_bn,
-                             partial_bn=partial_bn
-                             )
+    return OfficialResNeSt(arch=arch,
+                           dropout_rate=dropout_rate,
+                           num_classes=num_classes,
+                           fix_bn=fix_bn,
+                           partial_bn=partial_bn
+                           )

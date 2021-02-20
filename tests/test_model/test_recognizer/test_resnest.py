@@ -10,7 +10,7 @@
 import torch
 
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.resnet.resnest_recognizer import ResNeStRecognizer
+from zcls.model.recognizers.resnet.official_resnest import OfficialResNeSt
 
 
 def test_data(model, input_shape, output_shape):
@@ -23,7 +23,7 @@ def test_data(model, input_shape, output_shape):
 
 def test_resnest():
     # resnetd
-    model = ResNeStRecognizer(
+    model = OfficialResNeSt(
         arch="resnest50_2s2x40d",
         num_classes=1000
     )
@@ -31,7 +31,7 @@ def test_resnest():
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
     # resnetd
-    model = ResNeStRecognizer(
+    model = OfficialResNeSt(
         arch="resnest50_2s2x40d_fast",
         num_classes=1000
     )

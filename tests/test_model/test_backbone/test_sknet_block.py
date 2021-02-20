@@ -88,10 +88,10 @@ def test_attention_bottleneck(attention_type='SqueezeAndExcitationBlock2D'):
         nn.Conv2d(in_planes, out_planes * expansion, kernel_size=1, stride=stride, bias=False),
         nn.BatchNorm2d(out_planes * expansion),
     )
-    model = SKNetBlock(in_planes=in_planes,
-                       out_planes=out_planes,
+    model = SKNetBlock(in_channels=in_planes,
+                       out_channels=out_planes,
                        stride=stride,
-                       down_sample=down_sample,
+                       downsample=down_sample,
                        with_attention=with_attention,
                        reduction=reduction,
                        attention_type=attention_type
@@ -109,10 +109,10 @@ def test_attention_bottleneck(attention_type='SqueezeAndExcitationBlock2D'):
         nn.Conv2d(in_planes, out_planes * expansion, kernel_size=1, stride=stride, bias=False),
         nn.BatchNorm2d(out_planes * expansion),
     )
-    model = SKNetBlock(in_planes=in_planes,
-                       out_planes=out_planes,
+    model = SKNetBlock(in_channels=in_planes,
+                       out_channels=out_planes,
                        stride=stride,
-                       down_sample=down_sample,
+                       downsample=down_sample,
                        groups=32,
                        base_width=4,
                        with_attention=with_attention,

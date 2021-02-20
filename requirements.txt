@@ -20,7 +20,7 @@ opencv_contrib_python == 4.5.1.48
 psutil == 5.8.0
 
 # ZCls/tests/test_model/test_layer/test_split_attention_conv2d.py: 13
-# ZCls/zcls/model/recognizers/resnest_recognizer.py: 14
+# ZCls/zcls/model/recognizers/official_resnest.py: 14
 resnest == 0.0.6b20210114
 
 # ZCls/zcls/util/collect_env.py: 12
@@ -147,7 +147,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/recognizers/mobilenetv2.py: 11
 # ZCls/zcls/model/recognizers/mobilenetv3.py: 11,12
 # ZCls/zcls/model/recognizers/repvgg.py: 10
-# ZCls/zcls/model/recognizers/resnest_recognizer.py: 11,12
+# ZCls/zcls/model/recognizers/official_resnest.py: 11,12
 # ZCls/zcls/model/recognizers/resnet3d_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/resnet.py: 11,12
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv1.py: 11,12
