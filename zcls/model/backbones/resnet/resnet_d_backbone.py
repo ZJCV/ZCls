@@ -13,6 +13,32 @@ import torch.nn as nn
 from zcls.model.backbones.resnet.basicblock import BasicBlock
 from zcls.model.backbones.resnet.bottleneck import Bottleneck
 
+arch_settings = {
+    # name: (Backbone, Head, Block, Layer_planes, groups, width_per_group)
+    'resnet18': (ResNetBackbone, ResNetHead, BasicBlock, (2, 2, 2, 2), 1, 64),
+    'resnet34': (ResNetBackbone, ResNetHead, BasicBlock, (3, 4, 6, 3), 1, 64),
+    'resnet50': (ResNetBackbone, ResNetHead, Bottleneck, (3, 4, 6, 3), 1, 64),
+    'resnet101': (ResNetBackbone, ResNetHead, Bottleneck, (3, 4, 23, 3), 1, 64),
+    'resnet152': (ResNetBackbone, ResNetHead, Bottleneck, (3, 8, 36, 3), 1, 64),
+    'resnext50_32x4d': (ResNetBackbone, ResNetHead, Bottleneck, (3, 4, 6, 3), 32, 4),
+    'resnext101_32x8d': (ResNetBackbone, ResNetHead, Bottleneck, (3, 4, 23, 3), 32, 8),
+    # name: (Backbone, Head, Block, Layer_planes, groups, width_per_group)
+    'resnetd18': (ResNetDBackbone, ResNetDHead, BasicBlock, (2, 2, 2, 2), 1, 64),
+    'resnetd34': (ResNetDBackbone, ResNetDHead, BasicBlock, (3, 4, 6, 3), 1, 64),
+    'resnetd50': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 1, 64),
+    'resnetd101': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 1, 64),
+    'resnetd152': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 8, 36, 3), 1, 64),
+    'resnextd50_32x4d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 6, 3), 32, 4),
+    'resnedxdt101_32x8d': (ResNetDBackbone, ResNetDHead, Bottleneck, (3, 4, 23, 3), 32, 8),
+    # name: (Backbone, Head, Block, Layer_planes, groups, width_per_group)
+    'sknet50': (ResNetDBackbone, ResNetDHead, SKNetBlock, (3, 4, 6, 3), 1, 64),
+    # name: (Backbone, Head, Block, Layer_planes, radix, groups, width_per_group)
+    'resnest50_1s1x64d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 1, 1, 64),
+    'resnest50_2s1x64d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 2, 1, 64),
+    'resnest50_4s1x64d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 4, 1, 64),
+    'resnest50_2s2x40d': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 2, 2, 40),
+    'resnest50_2s2x40d_fast': (ResNetDBackbone, ResNetDHead, ResNeStBlock, (3, 4, 6, 3), 2, 2, 40)
+}
 
 class ResNetDBackbone(nn.Module, ABC):
     """

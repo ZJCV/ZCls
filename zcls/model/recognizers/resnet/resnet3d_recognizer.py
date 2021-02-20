@@ -2,7 +2,7 @@
 
 """
 @date: 2020/11/21 下午2:37
-@file: resnet_recognizer.py
+@file: resnet.py
 @author: zj
 @description: 
 """

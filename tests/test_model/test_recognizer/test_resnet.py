@@ -12,7 +12,7 @@ import torch
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.norm_helper import get_norm
-from zcls.model.recognizers.resnet.resnet_recognizer import TorchvisionResNet, ResNetRecognizer, build_resnet
+from zcls.model.recognizers.resnet.resnet import TorchvisionResNet, ResNet, build_resnet
 
 
 def test_data(model, input_shape, output_shape):
@@ -33,7 +33,7 @@ def test_resnet():
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
     # for custom
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnet50",
         num_classes=1000
     )
@@ -41,7 +41,7 @@ def test_resnet():
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
     # resnetxt_32x4d
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnext50_32x4d",
         num_classes=1000
     )
@@ -55,7 +55,7 @@ def test_resnet_gn():
     print(norm_layer)
 
     # for custom
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnet50",
         num_classes=1000,
         norm_layer=norm_layer
@@ -64,7 +64,7 @@ def test_resnet_gn():
     test_data(model, (1, 3, 224, 224), (1, 1000))
 
     # resnetxt_32x4d
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnext50_32x4d",
         num_classes=1000,
         norm_layer=norm_layer
@@ -95,7 +95,7 @@ def test_attention_resnet(
         attention_type='SqueezeAndExcitationBlock2D'
 ):
     # for custom
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnet50",
         with_attentions=with_attentions,
         reduction=reduction,
@@ -106,7 +106,7 @@ def test_attention_resnet(
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
     # resnetxt_32x4d
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnext50_32x4d",
         with_attentions=with_attentions,
         reduction=reduction,
@@ -123,7 +123,7 @@ def test_attention_resnetd(
         attention_type='SqueezeAndExcitationBlock2D'
 ):
     # for custom
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnetd50",
         with_attentions=with_attentions,
         reduction=reduction,
@@ -134,7 +134,7 @@ def test_attention_resnetd(
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
     # resnetxt_32x4d
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnext50_32x4d",
         with_attentions=with_attentions,
         reduction=reduction,
@@ -147,7 +147,7 @@ def test_attention_resnetd(
 
 def test_sknet():
     # resnetd
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="sknet50",
         num_classes=1000
     )
@@ -157,7 +157,7 @@ def test_sknet():
 
 def test_resnest():
     # resnetd
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnest50_2s2x40d",
         num_classes=1000
     )
@@ -165,7 +165,7 @@ def test_resnest():
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
     # resnetd
-    model = ResNetRecognizer(
+    model = ResNet(
         arch="resnest50_2s2x40d_fast",
         num_classes=1000
     )

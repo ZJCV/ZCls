@@ -149,7 +149,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/recognizers/repvgg.py: 10
 # ZCls/zcls/model/recognizers/resnest_recognizer.py: 11,12
 # ZCls/zcls/model/recognizers/resnet3d_recognizer.py: 11,12
-# ZCls/zcls/model/recognizers/resnet_recognizer.py: 11,12
+# ZCls/zcls/model/recognizers/resnet.py: 11,12
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv1.py: 11,12
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv2.py: 11,12
 # ZCls/zcls/model/recognizers/shufflenet/torchvision_sfv2.py: 12,13
@@ -181,7 +181,7 @@ torch == 1.7.1
 # ZCls/zcls/model/recognizers/mobilenetv3.py: 13
 # ZCls/zcls/model/recognizers/repvgg.py: 11
 # ZCls/zcls/model/recognizers/resnet3d_recognizer.py: 13,14
-# ZCls/zcls/model/recognizers/resnet_recognizer.py: 13,14
+# ZCls/zcls/model/recognizers/resnet.py: 13,14
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv1.py: 13
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv2.py: 13
 # ZCls/zcls/model/recognizers/shufflenet/torchvision_sfv2.py: 14

@@ -25,10 +25,10 @@ def test_basicblock():
         nn.Conv2d(in_planes, out_planes * expansion, kernel_size=1, stride=stride, bias=False),
         nn.BatchNorm2d(out_planes * expansion),
     )
-    model = BasicBlock(in_planes=in_planes,
-                       out_planes=out_planes,
+    model = BasicBlock(in_channels=in_planes,
+                       out_channels=out_planes,
                        stride=stride,
-                       down_sample=down_sample)
+                       downsample=down_sample)
     print(model)
 
     outputs = model(data)
@@ -41,10 +41,10 @@ def test_basicblock():
         nn.Conv2d(in_planes, out_planes * expansion, kernel_size=1, stride=stride, bias=False),
         nn.BatchNorm2d(out_planes * expansion),
     )
-    model = BasicBlock(in_planes=in_planes,
-                       out_planes=out_planes,
+    model = BasicBlock(in_channels=in_planes,
+                       out_channels=out_planes,
                        stride=stride,
-                       down_sample=down_sample)
+                       downsample=down_sample)
     print(model)
 
     outputs = model(data)

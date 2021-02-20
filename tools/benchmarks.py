@@ -139,7 +139,7 @@ def shufflenet():
 def resnet():
     data_shape = (1, 3, 224, 224)
 
-    cfg_file = 'configs/benchmarks/resnet/r50_custom_cifar100_224_e100_rmsprop.yaml'
+    cfg_file = 'configs/benchmarks/resnet/r50_cifar100_224_e100_rmsprop.yaml'
     name = 'ResNet50'
     main(data_shape, cfg_file, name)
 
@@ -163,11 +163,11 @@ def resnet():
     name = 'ResNeXtD50_32x4d_fast_avg'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_custom_cifar100_224_e100_rmsprop.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_cifar100_224_e100_rmsprop.yaml'
     name = 'ResNeXt50_32x4d'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_custom_cifar100_224_e100_sgd.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_cifar100_224_e100_sgd.yaml'
     name = 'ResNeXt50_32x4d'
     main(data_shape, cfg_file, name)
 

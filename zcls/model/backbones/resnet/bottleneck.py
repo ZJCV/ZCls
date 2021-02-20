@@ -14,48 +14,46 @@ from zcls.model.attention_helper import make_attention_block
 
 
 class Bottleneck(nn.Module, ABC):
-    """
-    依次执行大小为1x1、3x3、1x1的卷积操作，如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
-    参考Torchvision实现
-    对于注意力模块，有两种嵌入方式：
-    1. 对于Squeeze-And-Excitation或者Global Context操作，在残差连接中（after 1x1）嵌入；
-    2. 对于NonLocal或者SimplifiedNonLoal，在Block完成计算后（after add）嵌入。
-    参考ResNeSt实现，使用AvgPool替代Conv进行下采样操作，当前仅对Bottleneck进行实现
-    """
     expansion = 4
 
     def __init__(self,
-                 # 输入通道数
                  in_planes,
-                 # 输出通道数
                  out_planes,
-                 # 步长
                  stride=1,
-                 # 下采样
                  down_sample=None,
-                 # cardinality
                  groups=1,
-                 # 基础宽度
                  base_width=64,
-                 # 是否使用注意力模块
                  with_attention=False,
-                 # 衰减率
                  reduction=16,
-                 # 注意力模块类型
                  attention_type='SqueezeAndExcitationBlock2D',
-                 # 卷积层类型
                  conv_layer=None,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 激活层类型
                  act_layer=None,
-                 # 是否使用AvgPool进行下采样
                  use_avg=False,
-                 # 在3x3之前执行下采样操作
                  fast_avg=False,
-                 # 其他参数
                  **kwargs
                  ):
+        """
+        依次执行大小为1x1、3x3、1x1的卷积操作，如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
+        参考Torchvision实现
+        对于注意力模块，有两种嵌入方式：
+        1. 对于Squeeze-And-Excitation或者Global Context操作，在残差连接中（after 1x1）嵌入；
+        2. 对于NonLocal或者SimplifiedNonLoal，在Block完成计算后（after add）嵌入。
+        参考ResNeSt实现，使用AvgPool替代Conv进行下采样操作，当前仅对Bottleneck进行实现
+        :param in_channels:　输入通道数
+        :param out_channels:　输出通道数
+        :param stride:　步长
+        :param downsample:　下采样
+        :param groups:　cardinality
+        :param base_width:　基础宽度
+        :param with_attention:　是否使用注意力模块
+        :param reduction:　衰减率
+        :param attention_type:　注意力模块类型
+        :param conv_layer:　卷积层类型
+        :param norm_layer:　归一化层类型
+        :param act_layer:　激活层类型
+        :param kwargs:　其他参数
+        """
         super(Bottleneck, self).__init__()
         assert with_attention in (0, 1)
         assert attention_type in ['GlobalContextBlock2D',

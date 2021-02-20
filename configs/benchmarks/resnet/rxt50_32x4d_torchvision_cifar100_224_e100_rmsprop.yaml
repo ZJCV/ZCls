@@ -43,7 +43,6 @@ MODEL:
   HEAD:
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'ResNet'
     NAME: 'TorchvisionResNet'
     PRELOADED: ""
     TORCHVISION_PRETRAINED: False

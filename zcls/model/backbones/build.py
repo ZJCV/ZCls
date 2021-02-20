@@ -16,6 +16,8 @@ from .mobilenet.mobilenetv2_backbone import build_mbv2_backbone
 from .mobilenet.mnasnet_backbone import build_mnasnet
 from .mobilenet.mobilenetv3_backbone import build_mbv3_backbone
 from .vgg.repvgg_backbone import build_repvgg_backbone
+from .resnet.resnet_backbone import build_resnet_backbone
+
 
 def build_backbone(cfg):
     return registry.Backbone[cfg.MODEL.BACKBONE.NAME](cfg)
