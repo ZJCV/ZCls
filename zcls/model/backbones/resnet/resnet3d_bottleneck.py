@@ -12,39 +12,39 @@ import torch.nn as nn
 
 
 class ResNet3DBottleneck(nn.Module, ABC):
-    """
-    依次执行大小为Tx1x1、Tx3x3、1x1x1的卷积操作，
-    如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
-    分两种膨胀类型：3x1x1和3x3x3
-    """
     expansion = 4
 
     def __init__(self,
-                 # 输入通道数
                  in_planes,
-                 # 输出通道数
                  out_planes,
-                 # 空间步长
                  spatial_stride=1,
-                 # 时间步长
                  temporal_stride=1,
-                 # 下采样
                  down_sample=None,
-                 # 是否膨胀
                  inflate=False,
-                 # 膨胀类型，作用于Bottleneck
                  inflate_style='3x1x1',
-                 # cardinality
                  groups=1,
-                 # 基础宽度
                  base_width=64,
-                 # 卷积层类型
                  conv_layer=None,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 激活层类型
                  act_layer=None
                  ):
+        """
+        依次执行大小为Tx1x1、Tx3x3、1x1x1的卷积操作，
+        如果进行下采样，那么使用第二个卷积层对输入空间尺寸进行减半操作
+        分两种膨胀类型：3x1x1和3x3x3
+        :param in_planes: 输入通道数
+        :param out_planes: 输出通道数
+        :param spatial_stride: 空间步长
+        :param temporal_stride: 时间步长
+        :param down_sample: 下采样
+        :param inflate: 是否膨胀
+        :param inflate_style: 膨胀类型，作用于Bottleneck
+        :param groups: cardinality
+        :param base_width: 基础宽度
+        :param conv_layer: 卷积层类型
+        :param norm_layer: 归一化层类型
+        :param act_layer: 激活层类型
+        """
         super(ResNet3DBottleneck, self).__init__()
         assert inflate_style in ("3x1x1", "3x3x3")
 

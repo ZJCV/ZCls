@@ -6,13 +6,29 @@
 @author: zj
 @description: 
 """
+
 from abc import ABC
-
 import torch.nn as nn
+from torchvision.models.resnet import model_urls
+from torchvision.models.utils import load_state_dict_from_url
 
+from zcls.model import registry
+from zcls.model.conv_helper import get_conv
+from zcls.model.norm_helper import get_norm
+from zcls.model.act_helper import get_act
 from zcls.model.layers.place_holder import PlaceHolder
-from zcls.model.backbones.resnet.resnet3d_basicblock import ResNet3DBasicBlock
-from zcls.model.backbones.resnet.resnet3d_bottleneck import ResNet3DBottleneck
+from .resnet3d_basicblock import ResNet3DBasicBlock
+from .resnet3d_bottleneck import ResNet3DBottleneck
+
+arch_settings = {
+    'resnet18': (ResNet3DBasicBlock, (2, 2, 2, 2), 1, 64),
+    'resnet34': (ResNet3DBasicBlock, (3, 4, 6, 3), 1, 64),
+    'resnet50': (ResNet3DBottleneck, (3, 4, 6, 3), 1, 64),
+    'resnet101': (ResNet3DBottleneck, (3, 4, 23, 3), 1, 64),
+    'resnet152': (ResNet3DBottleneck, (3, 8, 36, 3), 1, 64),
+    'resnext50_32x4d': (ResNet3DBottleneck, (3, 4, 6, 3), 32, 4),
+    'resnext101_32x8d': (ResNet3DBottleneck, (3, 4, 23, 3), 32, 8)
+}
 
 
 class ResNet3DBackbone(nn.Module, ABC):
@@ -305,3 +321,58 @@ class ResNet3DBackbone(nn.Module, ABC):
 
     def forward(self, x):
         return self._forward_impl(x)
+
+
+@registry.Backbone.register('ResNet3D')
+def build_resnet3d_backbone(cfg):
+    arch = cfg.MODEL.BACKBONE.ARCH
+    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
+    conv_layer = get_conv(cfg)
+    norm_layer = get_norm(cfg)
+    act_layer = get_act(cfg)
+    zero_init_residual = cfg.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL
+    # for backbone
+    in_planes = cfg.MODEL.BACKBONE.IN_PLANES
+    base_planes = cfg.MODEL.BACKBONE.BASE_PLANES
+    conv1_kernel = cfg.MODEL.BACKBONE.CONV1_KERNEL
+    conv1_stride = cfg.MODEL.BACKBONE.CONV1_STRIDE
+    conv1_padding = cfg.MODEL.BACKBONE.CONV1_PADDING
+    pool1_kernel = cfg.MODEL.BACKBONE.POOL1_KERNEL
+    pool1_stride = cfg.MODEL.BACKBONE.POOL1_STRIDE
+    pool1_padding = cfg.MODEL.BACKBONE.POOL1_PADDING
+    with_pool2 = cfg.MODEL.BACKBONE.WITH_POOL2
+    layer_planes = cfg.MODEL.BACKBONE.LAYER_PLANES
+    down_samples = cfg.MODEL.BACKBONE.DOWNSAMPLES
+    temporal_strides = cfg.MODEL.BACKBONE.TEMPORAL_STRIDES
+    inflate_list = cfg.MODEL.BACKBONE.INFLATE_LIST
+    inflate_style = cfg.MODEL.BACKBONE.INFLATE_STYLE
+
+    block_layer, layer_blocks, groups, width_per_group = arch_settings[arch]
+    state_dict_2d = load_state_dict_from_url(model_urls[arch], progress=True) \
+        if torchvision_pretrained else None
+
+    return ResNet3DBackbone(
+        in_planes=in_planes,
+        base_planes=base_planes,
+        conv1_kernel=conv1_kernel,
+        conv1_stride=conv1_stride,
+        conv1_padding=conv1_padding,
+        pool1_kernel=pool1_kernel,
+        pool1_stride=pool1_stride,
+        pool1_padding=pool1_padding,
+        with_pool2=with_pool2,
+        layer_planes=layer_planes,
+        layer_blocks=layer_blocks,
+        down_samples=down_samples,
+        temporal_strides=temporal_strides,
+        inflate_list=inflate_list,
+        inflate_style=inflate_style,
+        groups=groups,
+        width_per_group=width_per_group,
+        block_layer=block_layer,
+        conv_layer=conv_layer,
+        norm_layer=norm_layer,
+        act_layer=act_layer,
+        zero_init_residual=zero_init_residual,
+        state_dict_2d=state_dict_2d
+    )
