@@ -146,7 +146,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/recognizers/mobilenet/torchvision_mobilenetv2.py: 11
 # ZCls/zcls/model/recognizers/resnet/official_resnest.py: 11,12
 # ZCls/zcls/model/recognizers/resnet/resnet.py: 11,12
-# ZCls/zcls/model/recognizers/resnet/resnet3d_recognizer.py: 11,12
+# ZCls/zcls/model/recognizers/resnet/resnet3d.py: 11,12
 # ZCls/zcls/model/recognizers/resnet/torchvision_resnet.py: 12,13
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv1.py: 11,12
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv2.py: 11,12
@@ -173,6 +173,7 @@ torch == 1.7.1
 # ZCls/tests/test_model/test_layer/test_asymmetric_convolution_block.py: 12
 # ZCls/tools/compute_mean_std.py: 12,14
 # ZCls/zcls/data/datasets/cifar.py: 11
+# ZCls/zcls/model/backbones/resnet/resnet3d_backbone.py: 12,13
 # ZCls/zcls/model/recognizers/mobilenet/mnasnet.py: 13
 # ZCls/zcls/model/recognizers/mobilenet/mobilenetv1.py: 12
 # ZCls/zcls/model/recognizers/mobilenet/mobilenetv2.py: 12
@@ -180,7 +181,7 @@ torch == 1.7.1
 # ZCls/zcls/model/recognizers/mobilenet/torchvision_mnasnet.py: 13
 # ZCls/zcls/model/recognizers/mobilenet/torchvision_mobilenetv2.py: 12
 # ZCls/zcls/model/recognizers/resnet/resnet.py: 13
-# ZCls/zcls/model/recognizers/resnet/resnet3d_recognizer.py: 13,14
+# ZCls/zcls/model/recognizers/resnet/resnet3d.py: 13
 # ZCls/zcls/model/recognizers/resnet/torchvision_resnet.py: 14
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv1.py: 13
 # ZCls/zcls/model/recognizers/shufflenet/shufflenetv2.py: 13
