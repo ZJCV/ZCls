@@ -19,36 +19,36 @@ BN_MOMENTUM = 1 - 0.9997
 
 
 class MobileNetV3Uint(nn.Module, ABC):
-    """
-    MobileNetV2的反向残差构建块 + Squeeze-and-Excite + h-swish
-    """
 
     def __init__(self,
-                 # 输入通道数
-                 in_planes,
-                 # 中间膨胀块大小
-                 inner_planes,
-                 # 输出通道数
-                 out_planes,
-                 # 步长
+                 in_channels,
+                 inner_channels,
+                 out_channels,
                  stride=1,
-                 # 卷积核大小
                  kernel_size=3,
-                 # 是否使用注意力模块
                  with_attention=True,
-                 # 衰减率
                  reduction=4,
-                 # 注意力模块类型
                  attention_type='SqueezeAndExcitationBlock2D',
-                 # 卷积层类型
                  conv_layer=None,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 激活层类型
                  act_layer=None,
-                 # sigmoid类型
                  sigmoid_type=None
                  ):
+        """
+        MobileNetV2的反向残差构建块 + Squeeze-and-Excite + h-swish
+        :param in_channels: 输入通道数
+        :param inner_channels: 中间膨胀块大小
+        :param out_channels: 输出通道数
+        :param stride: 步长
+        :param kernel_size: 卷积核大小
+        :param with_attention: 是否使用注意力模块
+        :param reduction: 衰减率
+        :param attention_type: 注意力模块类型
+        :param conv_layer: 卷积层类型
+        :param norm_layer: 归一化层类型
+        :param act_layer: 激活层类型
+        :param sigmoid_type: sigmoid类型
+        """
         super(MobileNetV3Uint, self).__init__()
 
         if conv_layer is None:
@@ -63,8 +63,8 @@ class MobileNetV3Uint(nn.Module, ABC):
         self.with_attention = with_attention
 
         self.expansion = nn.Sequential(
-            conv_layer(in_planes, inner_planes, kernel_size=1, stride=1, padding=0, bias=False),
-            norm_layer(inner_planes, momentum=BN_MOMENTUM),
+            conv_layer(in_channels, inner_channels, kernel_size=1, stride=1, padding=0, bias=False),
+            norm_layer(inner_channels, momentum=BN_MOMENTUM),
             act_layer(inplace=True)
         )
 
@@ -74,18 +74,18 @@ class MobileNetV3Uint(nn.Module, ABC):
             padding = 2
         else:
             padding = 0
-        self.conv1 = conv_layer(inner_planes, inner_planes, kernel_size=kernel_size, stride=stride, padding=padding,
-                                bias=False, groups=inner_planes)
-        self.norm1 = norm_layer(inner_planes, momentum=BN_MOMENTUM)
+        self.conv1 = conv_layer(inner_channels, inner_channels, kernel_size=kernel_size, stride=stride, padding=padding,
+                                bias=False, groups=inner_channels)
+        self.norm1 = norm_layer(inner_channels, momentum=BN_MOMENTUM)
         self.act = act_layer(inplace=True)
 
-        self.conv2 = conv_layer(inner_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm2 = norm_layer(out_planes, momentum=BN_MOMENTUM)
+        self.conv2 = conv_layer(inner_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
+        self.norm2 = norm_layer(out_channels, momentum=BN_MOMENTUM)
 
         if self.with_attention:
-            self.attention = make_attention_block(inner_planes, reduction, attention_type, sigmoid_type=sigmoid_type)
+            self.attention = make_attention_block(inner_channels, reduction, attention_type, sigmoid_type=sigmoid_type)
 
-        self.apply_residual = (in_planes == out_planes and stride == 1)
+        self.apply_residual = (in_channels == out_channels and stride == 1)
 
     def forward(self, x):
         identity = x

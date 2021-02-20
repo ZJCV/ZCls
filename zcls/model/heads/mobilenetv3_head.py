@@ -6,28 +6,33 @@
 @author: zj
 @description: 
 """
-from abc import ABC
 
+from abc import ABC
 import torch
 import torch.nn as nn
 
+from zcls.model.conv_helper import get_conv
+from zcls.model.act_helper import get_act
+from .. import registry
 from ..layers.hard_swish_wrapper import HardswishWrapper
 
 
 class MobileNetV3Head(nn.Module, ABC):
 
     def __init__(self,
-                 # 输入特征维度
                  feature_dims=960,
-                 # 中间特征维度
                  inner_dims=1280,
-                 # 类别数
                  num_classes=1000,
-                 # 卷积层类型
                  conv_layer=None,
-                 # 激活层类型
                  act_layer=None
                  ):
+        """
+        :param feature_dims: 输入特征维度
+        :param inner_dims: 中间特征维度
+        :param num_classes: 类别数
+        :param conv_layer: 卷积层类型
+        :param act_layer: 激活层类型
+        """
         super(MobileNetV3Head, self).__init__()
 
         if conv_layer is None:
@@ -57,3 +62,18 @@ class MobileNetV3Head(nn.Module, ABC):
         x = self.conv2(x)
         x = torch.flatten(x, 1)
         return x
+
+
+@registry.HEAD.register('MobileNetV3')
+def build_mbv3_head(cfg):
+    feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
+    inner_dims = cfg.MODEL.HEAD.INNER_DIMS
+    num_classes = cfg.MODEL.HEAD.NUM_CLASSES
+    conv_layer = get_conv(cfg)
+    act_layer = get_act(cfg)
+
+    return MobileNetV3Head(feature_dims=feature_dims,
+                           inner_dims=inner_dims,
+                           num_classes=num_classes,
+                           conv_layer=conv_layer,
+                           act_layer=act_layer)

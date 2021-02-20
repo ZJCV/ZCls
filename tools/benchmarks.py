@@ -95,27 +95,27 @@ def mobilenet():
     name = 'Torchvision_MNasNet_b1_1.3x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_custom_cifar100_224_e100_sgd.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_cifar100_224_e100_sgd.yaml'
     name = 'MobileNetV3_Large_1.0x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_se_custom_cifar100_224_e100_sgd.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_se_cifar100_224_e100_sgd.yaml'
     name = 'MobileNetV3_SE_Large_1.0x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_se_hsigmoid_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_se_hsigmoid_cifar100_224_e100.yaml'
     name = 'MobileNetV3_SE_HSigmoid_Large_1.0x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_custom_cifar100_224_e100_sgd.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_cifar100_224_e100_sgd.yaml'
     name = 'MobileNetV3_Small_1.0x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_se_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_se_cifar100_224_e100.yaml'
     name = 'MobileNetV3_SE_Small_1.0x'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_se_hsigmoid_custom_cifar100_224_e100.yaml'
+    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_se_hsigmoid_cifar100_224_e100.yaml'
     name = 'MobileNetV3_SE_HSigmoid_Small_1.0x'
     main(data_shape, cfg_file, name)
 

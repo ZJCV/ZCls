@@ -11,7 +11,7 @@ import torch
 
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.mobilenet.mobilenetv3_recognizer import MobileNetV3Recognizer, build_mobilenet_v3
+from zcls.model.recognizers.mobilenet.mobilenetv3 import MobileNetV3Recognizer, build_mobilenet_v3
 
 
 def test_mobilenet_v3():

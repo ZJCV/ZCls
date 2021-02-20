@@ -15,9 +15,9 @@ from zcls.model.backbones.mobilenet.mobilenetv3_backbone import MobileNetV3Backb
 def test_mobilenet_v3_backbone():
     data = torch.randn(1, 3, 224, 224)
     model = MobileNetV3Backbone(
-        in_planes=3,
-        base_planes=16,
-        out_planes=960,
+        in_channels=3,
+        base_channels=16,
+        out_channels=960,
         width_multiplier=1.,
         round_nearest=8,
         reduction=4,

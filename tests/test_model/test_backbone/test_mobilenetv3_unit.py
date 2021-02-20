@@ -16,9 +16,9 @@ from zcls.model.backbones.mobilenet.mobilenetv3_unit import MobileNetV3Uint
 def test_mobilenet_v3_unit():
     # 3x3, 不进行下采样
     data = torch.randn(1, 16, 112, 112)
-    model = MobileNetV3Uint(in_planes=16,
-                            inner_planes=16,
-                            out_planes=16,
+    model = MobileNetV3Uint(in_channels=16,
+                            inner_channels=16,
+                            out_channels=16,
                             stride=1,
                             kernel_size=3,
                             with_attention=False,
@@ -32,9 +32,9 @@ def test_mobilenet_v3_unit():
 
     # 5x5, 进行下采样
     data = torch.randn(1, 24, 56, 56)
-    model = MobileNetV3Uint(in_planes=24,
-                            inner_planes=72,
-                            out_planes=40,
+    model = MobileNetV3Uint(in_channels=24,
+                            inner_channels=72,
+                            out_channels=40,
                             stride=2,
                             kernel_size=5,
                             with_attention=True,

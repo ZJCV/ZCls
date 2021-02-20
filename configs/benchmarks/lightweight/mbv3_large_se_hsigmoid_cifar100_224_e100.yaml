@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/mbv3_large_custom_cifar100_224_e100_sgd'
+OUTPUT_DIR: 'outputs/benchmarks/mbv3_large_se_hsigmoid_cifar100_224_e100'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -42,26 +42,33 @@ MODEL:
     PARTIAL_BN: False
   ACT:
     TYPE: 'HSwish'
+    SIGMOID_TYPE: 'HSigmoid'
   COMPRESSION:
     WIDTH_MULTIPLIER: 1.0
     ROUND_NEAREST: 8
   ATTENTION:
-    WITH_ATTENTION: False
+    WITH_ATTENTION: True
+    REDUCTION: 4
+    ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
   BACKBONE:
+    NAME: 'MobileNetV3'
     ARCH: 'mobilenetv3-large'
     IN_PLANES: 3
   HEAD:
+    NAME: 'MobileNetV3'
+    FEATURE_DIMS: 960
+    INNER_DIMS: 1280
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'MobileNetV3'
+    NAME: 'MobileNetV3'
     PRELOADED: ""
     PRETRAINED: ""
     PRETRAINED_NUM_CLASSES: 1000
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
-  NAME: 'SGD'
-  LR: 0.0125
+  NAME: 'RMSProp'
+  LR: 3e-4
   MOMENTUM: 0.9
   WEIGHT_DECAY:
     DECAY: 1e-5

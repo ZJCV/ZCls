@@ -10,7 +10,7 @@
 from .. import registry
 
 from .general_head_2d import build_general_head_2d
-
+from .mobilenetv3_head import build_mbv3_head
 
 def build_head(cfg):
     return registry.HEAD[cfg.MODEL.HEAD.NAME](cfg)
