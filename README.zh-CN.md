@@ -15,6 +15,30 @@
   <a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"></a>
 </p>
 
+当前已实现
+
+* `ResNet`
+    * [ResNet](https://arxiv.org/abs/1512.03385)
+    * [ResNeXt](https://arxiv.org/abs/1611.05431)
+    * [ResNetD](https://arxiv.org/abs/1812.01187)
+    * [SKNet](https://arxiv.org/abs/1903.06586)
+    * [ResNeSt](https://arxiv.org/abs/2004.08955)
+* `Attention`
+    * [SENet](https://arxiv.org/abs/1709.01507)
+    * [Non-local](https://arxiv.org/abs/1711.07971)
+    * [GCNet](https://arxiv.org/abs/1904.11492)
+* `VGG`
+    * [ACNet](https://arxiv.org/abs/1908.03930)
+    * [RepVGG](https://arxiv.org/abs/2101.03697)
+* `ShuffleNet`
+    * [ShuffleNetV1](https://arxiv.org/abs/1707.01083)
+    * [ShuffleNetV2](https://arxiv.org/abs/1807.11164)
+* `MobileNet`
+    * [MobileNetV1](https://arxiv.org/abs/1704.04861)
+    * [MobileNetV2](https://arxiv.org/abs/1801.04381)
+    * [MNasNet](https://arxiv.org/abs/1807.11626)
+    * [MobileNetV3](https://arxiv.org/abs/1905.02244)
+
 ## 内容列表
 
 - [内容列表](#内容列表)
