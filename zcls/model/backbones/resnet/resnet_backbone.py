@@ -121,9 +121,9 @@ def make_res_layer(in_planes,
 class ResNetBackbone(nn.Module, ABC):
 
     def __init__(self,
-                 in_planes=3,
-                 base_planes=64,
-                 layer_planes=(64, 128, 256, 512),
+                 in_channels=3,
+                 base_channels=64,
+                 layer_channels=(64, 128, 256, 512),
                  layer_blocks=(2, 2, 2, 2),
                  down_samples=(0, 1, 1, 1),
                  groups=1,
@@ -140,9 +140,9 @@ class ResNetBackbone(nn.Module, ABC):
                  ):
         """
         参考Torchvision实现，适用于torchvision预训练模型加载
-        :param in_planes: 输入通道数
-        :param base_planes: 基础通道数
-        :param layer_planes: 每一层通道数
+        :param in_channels: 输入通道数
+        :param base_channels: 基础通道数
+        :param layer_channels: 每一层通道数
         :param layer_blocks: 每一层块个数
         :param down_samples: 是否执行空间下采样
         :param groups: cardinality
@@ -158,7 +158,7 @@ class ResNetBackbone(nn.Module, ABC):
         :param kwargs: 其他参数
         """
         super(ResNetBackbone, self).__init__()
-        assert len(layer_planes) == len(layer_blocks) == len(down_samples) == len(with_attentions)
+        assert len(layer_channels) == len(layer_blocks) == len(down_samples) == len(with_attentions)
 
         if block_layer is None:
             block_layer = BasicBlock
@@ -169,11 +169,11 @@ class ResNetBackbone(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.stem = make_stem(in_planes, base_planes, conv_layer, norm_layer, act_layer)
-        in_planes = base_planes
+        self.stem = make_stem(in_channels, base_channels, conv_layer, norm_layer, act_layer)
+        in_channels = base_channels
         for i in range(len(layer_blocks)):
-            res_layer = make_res_layer(in_planes,
-                                       layer_planes[i],
+            res_layer = make_res_layer(in_channels,
+                                       layer_channels[i],
                                        layer_blocks[i],
                                        down_samples[i],
                                        groups,
@@ -187,7 +187,7 @@ class ResNetBackbone(nn.Module, ABC):
                                        act_layer,
                                        **kwargs
                                        )
-            in_planes = layer_planes[i] * block_layer.expansion
+            in_channels = layer_channels[i] * block_layer.expansion
             layer_name = f'layer{i + 1}'
             self.add_module(layer_name, res_layer)
         self.layer_num = len(layer_blocks)
@@ -244,9 +244,9 @@ def build_resnet_backbone(cfg):
     block_layer, layer_blocks, groups, width_per_group = arch_settings[arch]
 
     return ResNetBackbone(
-        in_planes=in_planes,
-        base_planes=base_planes,
-        layer_planes=layer_planes,
+        in_channels=in_planes,
+        base_channels=base_planes,
+        layer_channels=layer_planes,
         layer_blocks=layer_blocks,
         down_samples=down_samples,
         groups=groups,

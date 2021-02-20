@@ -17,6 +17,7 @@ from .mobilenet.mnasnet_backbone import build_mnasnet
 from .mobilenet.mobilenetv3_backbone import build_mbv3_backbone
 from .vgg.repvgg_backbone import build_repvgg_backbone
 from .resnet.resnet_backbone import build_resnet_backbone
+from .resnet.resnet_d_backbone import build_resnet_d_backbone
 
 
 def build_backbone(cfg):

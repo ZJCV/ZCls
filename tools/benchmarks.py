@@ -155,11 +155,11 @@ def resnet():
     name = 'ResNetD50'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxd50_32x4d_avg_custom_cifar100_224_e100_rmsprop.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_avg_cifar100_224_e100_rmsprop.yaml'
     name = 'ResNeXtD50_32x4d_avg'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxd50_32x4d_fast_avg_custom_cifar100_224_e100_rmsprop.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_fast_avg_cifar100_224_e100_rmsprop.yaml'
     name = 'ResNeXtD50_32x4d_fast_avg'
     main(data_shape, cfg_file, name)
 
@@ -179,11 +179,11 @@ def resnet():
     name = 'Torchvision_ResNeXt50_32x4d'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_custom_cifar100_224_e100_rmsprop.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_cifar100_224_e100_rmsprop.yaml'
     name = 'ResNeXtD50_32x4d'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_custom_cifar100_224_e100_sgd.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_cifar100_224_e100_sgd.yaml'
     name = 'ResNeXtD50_32x4d'
     main(data_shape, cfg_file, name)
 
