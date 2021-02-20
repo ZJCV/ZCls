@@ -11,7 +11,7 @@ import torch
 import torch.nn as nn
 
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.repvgg_recognizer import RepVGGRecognizer
+from zcls.model.recognizers.vgg.repvgg import RepVGG
 from zcls.model.layers.repvgg_block import RepVGGBlock
 from zcls.model.conv_helper import insert_repvgg_block, fuse_repvgg_block
 
@@ -122,7 +122,7 @@ def test_conv_helper():
 
 
 def test_regvgg():
-    model = RepVGGRecognizer()
+    model = RepVGG()
     model.eval()
     print(model)
 

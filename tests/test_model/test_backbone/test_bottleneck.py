@@ -9,7 +9,7 @@
 
 import torch
 import torch.nn as nn
-from zcls.model.backbones.bottleneck import Bottleneck
+from zcls.model.backbones.resnet.bottleneck import Bottleneck
 
 
 def test_bottleneck():

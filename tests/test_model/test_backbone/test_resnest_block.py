@@ -10,7 +10,7 @@
 import torch
 import torch.nn as nn
 
-from zcls.model.backbones.resnest_block import ResNeStBlock
+from zcls.model.backbones.resnet.resnest_block import ResNeStBlock
 
 
 def test_bottleneck():

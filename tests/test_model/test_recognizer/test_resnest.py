@@ -9,9 +9,8 @@
 
 import torch
 
-from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.resnest_recognizer import ResNeStRecognizer
+from zcls.model.recognizers.resnet.resnest_recognizer import ResNeStRecognizer
 
 
 def test_data(model, input_shape, output_shape):

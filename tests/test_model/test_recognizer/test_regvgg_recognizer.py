@@ -12,8 +12,8 @@ import torch
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.recognizers.build import build_recognizer
-from zcls.model.recognizers.repvgg_recognizer import RepVGGRecognizer
-from zcls.model.recognizers.repvgg_recognizer import arch_settings
+from zcls.model.recognizers.vgg.repvgg import RepVGG
+from zcls.model.recognizers.vgg.repvgg import arch_settings
 from zcls.model.conv_helper import insert_repvgg_block, insert_acblock, fuse_repvgg_block, fuse_acblock
 
 
@@ -21,7 +21,7 @@ def test_regvgg_recognizer():
     data = torch.randn(1, 3, 224, 224)
     for key in arch_settings.keys():
         print('*' * 10, key)
-        model = RepVGGRecognizer(arch=key)
+        model = RepVGG(arch=key)
         # print(model)
         outputs = model(data)[KEY_OUTPUT]
         assert outputs.shape == (1, 1000)
@@ -91,7 +91,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('repvgg_b2g4_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_custom_cifar100_224_e100_sgd_calr.yaml"
+    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -107,7 +107,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('repvgg_b2g4_acb_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_acb_custom_cifar100_224_e100_sgd_calr.yaml"
+    config_file = "configs/benchmarks/repvgg/repvgg_b2g4_acb_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -126,7 +126,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('acb_repvgg_b2g4_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/acb_repvgg_b2g4_custom_cifar100_224_e100_sgd_calr.yaml"
+    config_file = "configs/benchmarks/repvgg/acb_repvgg_b2g4_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -145,7 +145,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('rxtd50_32x4d_acb_rvb_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_acb_rvb_custom_cifar100_224_e100_sgd_calr.yaml"
+    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_acb_rvb_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')
@@ -164,7 +164,7 @@ def test_config_file():
     assert outputs.shape == (3, 100)
 
     print('rxtd50_32x4d_rvb_acb_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_rvb_acb_custom_cifar100_224_e100_sgd_calr.yaml"
+    config_file = "configs/benchmarks/repvgg/rxtd50_32x4d_rvb_acb_cifar100_224_e100_sgd_calr.yaml"
     cfg.merge_from_file(config_file)
 
     device = torch.device('cpu')

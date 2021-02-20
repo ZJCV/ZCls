@@ -9,7 +9,7 @@
 
 import torch
 import torch.nn as nn
-from zcls.model.backbones.resnet3d_bottleneck import ResNet3DBottleneck
+from zcls.model.backbones.resnet.resnet3d_bottleneck import ResNet3DBottleneck
 
 
 def test_resnet3d_bottleneck():

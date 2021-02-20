@@ -14,14 +14,14 @@ from torchvision.models.resnet import model_urls
 from torchvision.models.utils import load_state_dict_from_url
 
 from zcls.config.key_word import KEY_OUTPUT
-from .. import registry
-from ..backbones.resnet3d_basicblock import ResNet3DBasicBlock
-from ..backbones.resnet3d_bottleneck import ResNet3DBottleneck
-from ..backbones.resnet3d_backbone import ResNet3DBackbone
-from ..heads.resnet3d_head import ResNet3DHead
-from ..norm_helper import get_norm, freezing_bn
-from ..conv_helper import get_conv
-from ..act_helper import get_act
+from zcls.model import registry
+from zcls.model.backbones.resnet.resnet3d_basicblock import ResNet3DBasicBlock
+from zcls.model.backbones.resnet.resnet3d_bottleneck import ResNet3DBottleneck
+from zcls.model.backbones.resnet.resnet3d_backbone import ResNet3DBackbone
+from zcls.model.heads.resnet3d_head import ResNet3DHead
+from zcls.model.norm_helper import get_norm, freezing_bn
+from zcls.model.conv_helper import get_conv
+from zcls.model.act_helper import get_act
 
 arch_settings = {
     'resnet18': (ResNet3DBasicBlock, (2, 2, 2, 2), 1, 64),

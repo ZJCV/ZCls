@@ -14,18 +14,18 @@ from torchvision.models.resnet import resnet18, resnet50, resnext50_32x4d
 from torchvision.models.utils import load_state_dict_from_url
 
 from zcls.config.key_word import KEY_OUTPUT
-from .. import registry
-from ..backbones.basicblock import BasicBlock
-from ..backbones.bottleneck import Bottleneck
-from ..backbones.sknet_block import SKNetBlock
-from ..backbones.resnest_block import ResNeStBlock
-from ..backbones.resnet_backbone import ResNetBackbone
-from ..backbones.resnet_d_backbone import ResNetDBackbone
-from ..heads.resnet_head import ResNetHead
-from ..heads.resnet_d_head import ResNetDHead
-from ..norm_helper import get_norm, freezing_bn
-from ..act_helper import get_act
-from ..conv_helper import get_conv
+from zcls.model import registry
+from zcls.model.backbones.resnet.basicblock import BasicBlock
+from zcls.model.backbones.resnet.bottleneck import Bottleneck
+from zcls.model.backbones.resnet.sknet_block import SKNetBlock
+from zcls.model.backbones.resnet.resnest_block import ResNeStBlock
+from zcls.model.backbones.resnet.resnet_backbone import ResNetBackbone
+from zcls.model.backbones.resnet.resnet_d_backbone import ResNetDBackbone
+from zcls.model.heads.resnet_head import ResNetHead
+from zcls.model.heads.resnet_d_head import ResNetDHead
+from zcls.model.norm_helper import get_norm, freezing_bn
+from zcls.model.act_helper import get_act
+from zcls.model.conv_helper import get_conv
 
 arch_settings = {
     # name: (Backbone, Head, Block, Layer_planes, groups, width_per_group)

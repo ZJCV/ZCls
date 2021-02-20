@@ -10,9 +10,9 @@ from abc import ABC
 
 import torch.nn as nn
 
-from ..layers.place_holder import PlaceHolder
-from ..backbones.resnet3d_basicblock import ResNet3DBasicBlock
-from ..backbones.resnet3d_bottleneck import ResNet3DBottleneck
+from zcls.model.layers.place_holder import PlaceHolder
+from zcls.model.backbones.resnet.resnet3d_basicblock import ResNet3DBasicBlock
+from zcls.model.backbones.resnet.resnet3d_bottleneck import ResNet3DBottleneck
 
 
 class ResNet3DBackbone(nn.Module, ABC):

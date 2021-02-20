@@ -10,7 +10,7 @@
 import torch
 import torch.nn as nn
 
-from zcls.model.backbones.basicblock import BasicBlock
+from zcls.model.backbones.resnet.basicblock import BasicBlock
 
 
 def test_basicblock():

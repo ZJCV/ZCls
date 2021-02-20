@@ -8,9 +8,9 @@
 """
 
 import torch
-from zcls.model.backbones.resnet3d_basicblock import ResNet3DBasicBlock
-from zcls.model.backbones.resnet3d_bottleneck import ResNet3DBottleneck
-from zcls.model.backbones.resnet3d_backbone import ResNet3DBackbone
+from zcls.model.backbones.resnet.resnet3d_basicblock import ResNet3DBasicBlock
+from zcls.model.backbones.resnet.resnet3d_bottleneck import ResNet3DBottleneck
+from zcls.model.backbones.resnet.resnet3d_backbone import ResNet3DBackbone
 
 
 def test_resnet3d_backbone():

@@ -10,8 +10,8 @@ from abc import ABC
 
 import torch.nn as nn
 
-from ..backbones.basicblock import BasicBlock
-from ..backbones.bottleneck import Bottleneck
+from zcls.model.backbones.resnet.basicblock import BasicBlock
+from zcls.model.backbones.resnet.bottleneck import Bottleneck
 
 
 class ResNetBackbone(nn.Module, ABC):

@@ -10,7 +10,7 @@
 import torch
 import torch.nn as nn
 
-from zcls.model.backbones.sknet_block import SKNetBlock
+from zcls.model.backbones.resnet.sknet_block import SKNetBlock
 
 
 def test_bottleneck():

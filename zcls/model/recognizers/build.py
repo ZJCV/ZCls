@@ -25,6 +25,7 @@ from .mobilenet.torchvision_mobilenetv2 import build_torchvision_mbv2
 from .mobilenet.mnasnet import build_mnasnet
 from .mobilenet.torchvision_mnasnet import build_torchvision_mnasnet
 from .mobilenet.mobilenetv3 import build_mobilenet_v3
+from .vgg.repvgg import build_repvgg
 
 logger = logging.get_logger(__name__)
 

@@ -14,8 +14,8 @@ from resnest.torch.resnest import resnest50
 from resnest.torch.resnet import ResNet, Bottleneck
 
 from zcls.config.key_word import KEY_OUTPUT
-from .. import registry
-from ..norm_helper import freezing_bn
+from zcls.model import registry
+from zcls.model.norm_helper import freezing_bn
 
 
 class ResNeStRecognizer(nn.Module, ABC):

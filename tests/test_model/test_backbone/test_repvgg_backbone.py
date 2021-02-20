@@ -8,7 +8,7 @@
 """
 
 import torch
-from zcls.model.backbones.repvgg_backbone import RepVGGBackbone
+from zcls.model.backbones.vgg.repvgg_backbone import RepVGGBackbone
 
 
 def test_repvgg_backbone():
