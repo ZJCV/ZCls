@@ -13,23 +13,23 @@ from ..act_helper import get_sigmoid
 
 
 class _SqueezeAndExcitationBlockND(nn.Module):
-    """
-    Squeeze-and-Excitation Block
-    参考：
-    [se_module.py](https://github.com/moskomule/senet.pytorch/blob/master/senet/se_module.py)
-    [如何评价Momenta ImageNet 2017夺冠架构SENet?](https://www.zhihu.com/question/63460684)
-    """
 
     def __init__(self,
-                 # 输入通道数
                  in_channels,
-                 # 中间层衰减率
                  reduction=16,
-                 # 数据维度
                  dimension=2,
-                 # sigmoid类型
                  sigmoid_type='Sigmoid'
                  ):
+        """
+        Squeeze-and-Excitation Block
+        refer to
+        [se_module.py](https://github.com/moskomule/senet.pytorch/blob/master/senet/se_module.py)
+        [如何评价Momenta ImageNet 2017夺冠架构SENet?](https://www.zhihu.com/question/63460684)
+        :param in_channels:
+        :param reduction:
+        :param dimension:
+        :param sigmoid_type:
+        """
         super(_SqueezeAndExcitationBlockND, self).__init__()
         assert dimension in [1, 2, 3]
         assert in_channels % reduction == 0, f'in_channels = {in_channels}, reduction = {reduction}'

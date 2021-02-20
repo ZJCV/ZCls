@@ -17,7 +17,7 @@ from ..init_helper import init_weights
 
 class SelectiveKernelConv2d(nn.Module, ABC):
     """
-    参考论文[Selective Kernel Networks](https://arxiv.org/abs/1903.06586)实现
+    refer to [Selective Kernel Networks](https://arxiv.org/abs/1903.06586)
     """
 
     def __init__(self,

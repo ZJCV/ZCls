@@ -147,11 +147,11 @@ def resnet():
     name = 'Torchvision_ResNet50'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rd50_custom_cifar100_224_e100_rmsprop.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rd50_cifar100_224_e100_rmsprop.yaml'
     name = 'ResNetD50'
     main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rd50_custom_cifar100_224_e100_sgd.yaml'
+    cfg_file = 'configs/benchmarks/resnet/rd50_cifar100_224_e100_sgd.yaml'
     name = 'ResNetD50'
     main(data_shape, cfg_file, name)
 

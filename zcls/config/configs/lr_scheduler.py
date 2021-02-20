@@ -19,13 +19,21 @@ def add_config(_C):
     _C.LR_SCHEDULER.IS_WARMUP = False
     _C.LR_SCHEDULER.GAMMA = 0.1
 
-    # for MultiStepLR
+    # ---------------------------------------------------------------------------- #
+    # MultiStepLR
+    # ---------------------------------------------------------------------------- #
     _C.LR_SCHEDULER.MULTISTEP_LR = CN()
     _C.LR_SCHEDULER.MULTISTEP_LR.MILESTONES = [100, 150, 175]
-    # for CosineAnnealingLR
+
+    # ---------------------------------------------------------------------------- #
+    # CosineAnnealingLR
+    # ---------------------------------------------------------------------------- #
     _C.LR_SCHEDULER.COSINE_ANNEALING_LR = CN()
     _C.LR_SCHEDULER.COSINE_ANNEALING_LR.MINIMAL_LR = 1e-5
-    # for Warmup
+
+    # ---------------------------------------------------------------------------- #
+    # Warmup
+    # ---------------------------------------------------------------------------- #
     _C.LR_SCHEDULER.WARMUP = CN()
     _C.LR_SCHEDULER.WARMUP.ITERATION = 5
     _C.LR_SCHEDULER.WARMUP.MULTIPLIER = 1.0

@@ -3,11 +3,11 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/rxtd50_32x4d_acb_custom_cifar100_224_e100_sgd_mslr'
+OUTPUT_DIR: 'outputs/benchmarks/r503d_cifar100_224_e50'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
-  MAX_EPOCH: 100
+  MAX_EPOCH: 50
   SAVE_EPOCH: 5
   EVAL_EPOCH: 5
   RESUME: False
@@ -34,10 +34,9 @@ DATALOADER:
   NUM_WORKERS: 8
 MODEL:
   CONV:
-    TYPE: 'Conv2d'
-    ADD_BLOCKS: ("ACBlock",)
+    TYPE: 'Conv3d'
   NORM:
-    TYPE: 'BatchNorm2d'
+    TYPE: 'BatchNorm3d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
@@ -45,18 +44,28 @@ MODEL:
     TYPE: 'ReLU'
   BACKBONE:
     IN_PLANES: 3
-    ARCH: 'resnext50_32x4d'
+    ARCH: 'resnet50'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
-    DOWN_SAMPLES: (0, 1, 1, 1)
+    DOWNSAMPLES: (0, 1, 1, 1)
+    CONV1_KERNEL: (1, 7, 7)
+    CONV1_STRIDE: (1, 2, 2)
+    CONV1_PADDING: (0, 3, 3)
+    POOL1_KERNEL: (1, 3, 3)
+    POOL1_STRIDE: (1, 2, 2)
+    POOL1_PADDING: (0, 1, 1)
+    WITH_POOL2: False
+    TEMPORAL_STRIDES: (1, 1, 1, 1)
+    INFLATE_LIST: (0, 0, 0, 0)
+    INFLATE_STYLE: '3x1x1'
   HEAD:
-    DROPOUT: 0.
+    DROPOUT_RATE: 0.
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'ResNet'
-    NAME: 'ZClsResNet'
+    TYPE: 'ResNet3D'
     PRELOADED: ""
     PRETRAINED: ""
+    TORCHVISION_PRETRAINED: False
     PRETRAINED_NUM_CLASSES: 1000
     ZERO_INIT_RESIDUAL: True
   CRITERION:
@@ -66,7 +75,7 @@ OPTIMIZER:
   LR: 0.0125
   MOMENTUM: 0.9
   WEIGHT_DECAY:
-    DECAY: 5e-4
+    DECAY: 1e-4
     NO_BIAS: True
     NO_NORM: True
 LR_SCHEDULER:
@@ -74,7 +83,7 @@ LR_SCHEDULER:
   IS_WARMUP: True
   GAMMA: 0.1
   MULTISTEP_LR:
-    MILESTONES: [ 40, 70 ]
+    MILESTONES: [ 30, 40 ]
   WARMUP:
     ITERATION: 5
     MULTIPLIER: 1.0

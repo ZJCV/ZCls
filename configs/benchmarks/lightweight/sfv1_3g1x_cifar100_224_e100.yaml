@@ -49,7 +49,7 @@ MODEL:
     ARCH: 'shufflenetv1_3g1x'
     IN_PLANES: 3
     BASE_PLANES: 32
-    DOWN_SAMPLES: (1, 1, 1)
+    DOWNSAMPLES: (1, 1, 1)
     WITH_GROUPS: (0, 1, 1)
   HEAD:
     NAME: 'GeneralHead2D'

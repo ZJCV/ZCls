@@ -4,7 +4,7 @@
 @date: 2020/12/28 上午9:50
 @file: place_holder.py
 @author: zj
-@description: 占位层，不执行任何操作，直接返回输入数据
+@description: The placeholder layer returns the input data directly without performing any operation
 """
 from abc import ABC
 
@@ -13,7 +13,7 @@ import torch.nn as nn
 
 class PlaceHolder(nn.Module, ABC):
     """
-    @deprecated. pytorch已实现，使用nn.Identity()
+    @deprecated. pytorch is implemented, using nn.Identity()
     """
 
     def __init__(self):

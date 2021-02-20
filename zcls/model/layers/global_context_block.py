@@ -13,17 +13,19 @@ import torch.nn as nn
 
 class _GlobalContextBlockND(nn.Module):
     """
-    参考：[context_block.py](https://github.com/xvjiarui/GCNet/blob/master/mmdet/ops/gcb/context_block.py)
+    refer to [context_block.py](https://github.com/xvjiarui/GCNet/blob/master/mmdet/ops/gcb/context_block.py)
     """
 
     def __init__(self,
-                 # 输入通道数
                  in_channels,
-                 # 转换层衰减率
                  reduction=16,
-                 # 数据维度
                  dimension=2
                  ):
+        """
+        :param in_channels:
+        :param reduction:
+        :param dimension:
+        """
         super(_GlobalContextBlockND, self).__init__()
         assert dimension in [1, 2, 3]
 

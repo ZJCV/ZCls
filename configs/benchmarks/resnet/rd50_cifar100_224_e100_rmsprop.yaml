@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/rd50_custom_cifar100_224_e100_sgd'
+OUTPUT_DIR: 'outputs/benchmarks/rd50_cifar100_224_e100_rtsprop'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -43,17 +43,19 @@ MODEL:
   ACT:
     TYPE: 'ReLU'
   BACKBONE:
+    NAME: 'ResNetD'
     IN_PLANES: 3
-    ARCH: 'resnetd50'
+    ARCH: 'resnet50'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
-    DOWN_SAMPLES: (0, 1, 1, 1)
+    DOWNSAMPLES: (0, 1, 1, 1)
   HEAD:
-    DROPOUT: 0.2
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 2048
+    DROPOUT_RATE: 0.
     NUM_CLASSES: 100
   RECOGNIZER:
-    TYPE: 'ResNet'
-    NAME: 'ZClsResNet'
+    NAME: 'ResNet'
     PRELOADED: ""
     PRETRAINED: ""
     PRETRAINED_NUM_CLASSES: 1000
@@ -61,8 +63,8 @@ MODEL:
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
-  NAME: 'SGD'
-  LR: 0.0125
+  NAME: 'RMSProp'
+  LR: 3e-4
   MOMENTUM: 0.9
   WEIGHT_DECAY:
     DECAY: 1e-4

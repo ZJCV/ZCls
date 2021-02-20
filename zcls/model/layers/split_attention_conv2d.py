@@ -17,29 +17,29 @@ from ..init_helper import init_weights
 
 
 class SplitAttentionConv2d(nn.Module, ABC):
-    """
-    ResNetSt的SplitAttention实现，参考：
-    1. https://github.com/open-mmlab/mmdetection/blob/master/mmdet/models/backbones/resnest.py
-    2. https://github.com/zhanghang1989/ResNeSt/blob/73b43ba63d1034dbf3e96b3010a8f2eb4cc3854f/resnest/torch/splat.py
-    部分参考./selective_kernel_conv2d.py实现
-    """
 
     def __init__(self,
-                 # 输入通道数
                  in_channels,
-                 # 输出通道数
                  out_channels,
-                 # 每个group中的分离数
                  radix=2,
-                 # cardinality
                  groups=1,
-                 # 中间层衰减率
                  reduction_rate=4,
-                 # 默认中间层最小通道数
                  default_channels: int = 32,
-                 # 维度
                  dimension: int = 2
                  ):
+        """
+        Implementation of SplitAttention in ResNetSt, refer to
+        1. https://github.com/open-mmlab/mmdetection/blob/master/mmdet/models/backbones/resnest.py
+        2. https://github.com/zhanghang1989/ResNeSt/blob/73b43ba63d1034dbf3e96b3010a8f2eb4cc3854f/resnest/torch/splat.py
+        Partial reference ./selective_kernel_conv2d.py implementation
+        :param in_channels:
+        :param out_channels:
+        :param radix:
+        :param groups:
+        :param reduction_rate:
+        :param default_channels:
+        :param dimension:
+        """
         super(SplitAttentionConv2d, self).__init__()
 
         # split

@@ -266,7 +266,7 @@ def build_resnet_d_backbone(cfg):
     in_planes = cfg.MODEL.BACKBONE.IN_PLANES
     base_planes = cfg.MODEL.BACKBONE.BASE_PLANES
     layer_planes = cfg.MODEL.BACKBONE.LAYER_PLANES
-    down_samples = cfg.MODEL.BACKBONE.DOWN_SAMPLES
+    down_samples = cfg.MODEL.BACKBONE.DOWNSAMPLES
     conv_layer = get_conv(cfg)
     norm_layer = get_norm(cfg)
     act_layer = get_act(cfg)

@@ -41,7 +41,7 @@ def add_config(_C):
     # (brightness, contrast, saturation, hue)
     _C.TRANSFORM.TRAIN.COLOR_JITTING = (0.1, 0.1, 0.1, 0.1)
 
-    # augo augment
+    # auto augment
     _C.TRANSFORM.TRAIN.AUTO_AUGMENT = False
     _C.TRANSFORM.TRAIN.AUGMENT_POLICY = AutoAugmentPolicy.IMAGENET.value
 

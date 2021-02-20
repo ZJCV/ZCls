@@ -13,7 +13,7 @@ import torch.nn as nn
 
 class _NonLocalNDEmbeddedGaussian(nn.Module):
     """
-    参考：
+    refer to
     1. https://github.com/AlexHex7/Non-local_pytorch/blob/master/lib/non_local_embedded_gaussian.py
     2. https://github.com/facebookresearch/SlowFast/blob/master/slowfast/models/nonlocal_helper.py
     """

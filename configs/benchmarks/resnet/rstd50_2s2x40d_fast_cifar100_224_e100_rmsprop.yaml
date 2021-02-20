@@ -51,7 +51,7 @@ MODEL:
     ARCH: 'resnest50_2s2x40d_fast'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
-    DOWN_SAMPLES: (0, 1, 1, 1)
+    DOWNSAMPLES: (0, 1, 1, 1)
   HEAD:
     NAME: 'GeneralHead2D'
     FEATURE_DIMS: 2048

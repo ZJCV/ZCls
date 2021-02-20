@@ -12,7 +12,7 @@ import torch.nn as nn
 
 class AsymmetricConvolutionBlock(nn.Module):
     """
-    参考[ACNet/acnet/acb.py](https://github.com/DingXiaoH/ACNet/blob/master/acnet/acb.py)实现
+    refer to [ACNet/acnet/acb.py](https://github.com/DingXiaoH/ACNet/blob/master/acnet/acb.py)
     """
 
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1,

@@ -195,12 +195,12 @@ def build_resnet3d(cfg):
     pool1_padding = cfg.MODEL.BACKBONE.POOL1_PADDING
     with_pool2 = cfg.MODEL.BACKBONE.WITH_POOL2
     layer_planes = cfg.MODEL.BACKBONE.LAYER_PLANES
-    down_samples = cfg.MODEL.BACKBONE.DOWN_SAMPLES
+    down_samples = cfg.MODEL.BACKBONE.DOWNSAMPLES
     temporal_strides = cfg.MODEL.BACKBONE.TEMPORAL_STRIDES
     inflate_list = cfg.MODEL.BACKBONE.INFLATE_LIST
     inflate_style = cfg.MODEL.BACKBONE.INFLATE_STYLE
     # for head
-    dropout_rate = cfg.MODEL.HEAD.DROPOUT
+    dropout_rate = cfg.MODEL.HEAD.DROPOUT_RATE
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
 
     return ResNet3DRecognizer(

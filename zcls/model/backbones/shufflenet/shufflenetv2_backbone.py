@@ -186,7 +186,7 @@ def build_sfv2_backbone(cfg):
         stage_channels[i] = make_divisible(stage_channels[i], round_nearest)
     out_channels = make_divisible(out_channels, round_nearest)
 
-    down_samples = cfg.MODEL.BACKBONE.DOWN_SAMPLES
+    down_samples = cfg.MODEL.BACKBONE.DOWNSAMPLES
     conv_layer = get_conv(cfg)
     norm_layer = get_norm(cfg)
     act_layer = get_act(cfg)

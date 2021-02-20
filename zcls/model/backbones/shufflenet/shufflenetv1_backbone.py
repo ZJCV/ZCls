@@ -177,7 +177,7 @@ def build_sfv1_backbone(cfg):
     round_nearest = cfg.MODEL.COMPRESSION.ROUND_NEAREST
     in_channels = cfg.MODEL.BACKBONE.IN_PLANES
     base_channels = cfg.MODEL.BACKBONE.BASE_PLANES
-    downsamples = cfg.MODEL.BACKBONE.DOWN_SAMPLES
+    downsamples = cfg.MODEL.BACKBONE.DOWNSAMPLES
     with_groups = cfg.MODEL.BACKBONE.WITH_GROUPS
     conv_layer = get_conv(cfg)
     norm_layer = get_norm(cfg)

@@ -44,7 +44,7 @@ MODEL:
     IN_PLANES: 3
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
-    DOWN_SAMPLES: (1, 1, 1, 1)
+    DOWNSAMPLES: (1, 1, 1, 1)
   HEAD:
     NAME: 'GeneralHead2D'
     FEATURE_DIMS: 2560

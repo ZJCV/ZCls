@@ -49,7 +49,7 @@ MODEL:
     ARCH: 'shufflenet_v2_x2_0'
     IN_PLANES: 3
     BASE_PLANES: 24
-    DOWN_SAMPLES: (1, 1, 1)
+    DOWNSAMPLES: (1, 1, 1)
   HEAD:
     NAME: 'GeneralHead2D'
     FEATURE_DIMS: 1024

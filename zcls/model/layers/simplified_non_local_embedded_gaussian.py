@@ -12,20 +12,20 @@ import torch.nn as nn
 
 
 class _SimplifiedNonLocalNDEmbeddedGaussian(nn.Module):
-    """
-    参考：[context_block.py](https://github.com/xvjiarui/GCNet/blob/master/mmdet/ops/gcb/context_block.py)
-    """
 
     def __init__(self,
-                 # 输入通道数
                  in_channels,
-                 # 数据维度
                  dimension=2,
-                 # 归一化层类型
                  norm_layer=None,
-                 # 零初始化最后的BN层，保证最开始模型的一致性连接
                  zero_init_final_norm=True
                  ):
+        """
+        refer to [context_block.py](https://github.com/xvjiarui/GCNet/blob/master/mmdet/ops/gcb/context_block.py)
+        :param in_channels: Input channels
+        :param dimension: Data dimension
+        :param norm_layer: Normalized layer type
+        :param zero_init_final_norm: Initialize the last BN layer at zero to ensure the consistent connection of the initial model
+        """
         super(_SimplifiedNonLocalNDEmbeddedGaussian, self).__init__()
         assert dimension in [1, 2, 3]
 

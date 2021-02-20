@@ -21,7 +21,7 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.CONV = CN()
     _C.MODEL.CONV.TYPE = 'Conv2d'
-    # 是否嵌入AsymmetricConvolutionBlock/RepVGGBlock
+    # used in AsymmetricConvolutionBlock/RepVGGBlock
     _C.MODEL.CONV.ADD_BLOCKS = None
 
     # ---------------------------------------------------------------------------- #
@@ -29,7 +29,7 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.NORM = CN()
     _C.MODEL.NORM.TYPE = 'BatchNorm2d'
-    # for BN
+    # batchnorm
     _C.MODEL.NORM.SYNC_BN = False
     _C.MODEL.NORM.FIX_BN = False
     _C.MODEL.NORM.PARTIAL_BN = False
@@ -37,7 +37,7 @@ def add_config(_C):
     _C.MODEL.NORM.PRECISE_BN = False
     # Number of samples use to compute precise bn.
     _C.MODEL.NORM.NUM_BATCHES_PRECISE = 200
-    # for GN
+    # groupnorm
     _C.MODEL.NORM.GROUPS = 32
 
     # ---------------------------------------------------------------------------- #
@@ -52,7 +52,7 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.COMPRESSION = CN()
     _C.MODEL.COMPRESSION.WIDTH_MULTIPLIER = 1.0
-    # 设置每一层通道数均为8的倍数
+    # Set the number of channels in each layer to be a multiple of 8
     _C.MODEL.COMPRESSION.ROUND_NEAREST = 8
 
     # ---------------------------------------------------------------------------- #
@@ -72,20 +72,15 @@ def add_config(_C):
     _C.MODEL.BACKBONE.IN_PLANES = 3
     _C.MODEL.BACKBONE.ARCH = 'resnet18'
     _C.MODEL.BACKBONE.BASE_PLANES = 64
-    # 每一层基础通道数
+    # base channels each layer
     _C.MODEL.BACKBONE.LAYER_PLANES = (64, 128, 256, 512)
-    # 是否执行空间下采样
-    _C.MODEL.BACKBONE.DOWN_SAMPLES = (0, 1, 1, 1)
-    # 是否使用AvgPool替代Conv2d在残差块中进行下采样
+    _C.MODEL.BACKBONE.DOWNSAMPLES = (0, 1, 1, 1)
+    # Is AvgPool used instead of Conv2d for downsampling in residual block
     _C.MODEL.BACKBONE.USE_AVG = False
-    # 在3x3之前执行下采样操作
+    # Perform downsampling before 3x3
     _C.MODEL.BACKBONE.FAST_AVG = False
     # for MobileNetV1
-    # 每层步长
     _C.MODEL.BACKBONE.STRIDES = (1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2)
-    # for MobileNetV2
-    # 输出特征维数
-    _C.MODEL.BACKBONE.FEATURE_DIMS = 1280
     # for ResNet3D
     _C.MODEL.BACKBONE.CONV1_KERNEL = (1, 7, 7)
     _C.MODEL.BACKBONE.CONV1_STRIDE = (1, 2, 2)
@@ -117,15 +112,15 @@ def add_config(_C):
     _C.MODEL.RECOGNIZER = CN()
     _C.MODEL.RECOGNIZER.NAME = 'ShuffleNetV1'
     _C.MODEL.RECOGNIZER.TYPE = 'ResNet'
-    # zcls框架训练的模型，用于测试阶段
+    # zcls training model, used in the test phase
     _C.MODEL.RECOGNIZER.PRELOADED = ""
-    # zcls框架训练的模型，用于训练阶段
+    # zcls training model, used in the training stage
     _C.MODEL.RECOGNIZER.PRETRAINED = ""
-    # torchvision训练的模型，用于训练阶段
+    # torchvision training model, used in the training phase
     _C.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED = False
-    # 预训练模型类别数
+    # Number of pre-training model categories
     _C.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES = 1000
-    # 零初始化残差连接
+    # Zero initialization residual connection
     _C.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL = False
 
     # ---------------------------------------------------------------------------- #
