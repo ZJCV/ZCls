@@ -1,7 +1,7 @@
 <div align="right">
   语言:
-    🇺🇸
-  <a title="英语" href="./README.md">🇨🇳</a>
+    🇨🇳
+  <a title="英语" href="./README.md">🇺🇸</a>
 </div>
 
  <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
