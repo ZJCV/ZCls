@@ -24,6 +24,7 @@ Note 2: Comparing ShuffleNet 2× with MobileNet whose complexity are comparable 
 """
 
 
+@registry.RECOGNIZER.register('ShuffleNetV1')
 class ShuffleNetV1(nn.Module, ABC):
 
     def __init__(self, cfg):
@@ -62,8 +63,3 @@ class ShuffleNetV1(nn.Module, ABC):
         x = self.head(x)
 
         return {KEY_OUTPUT: x}
-
-
-@registry.RECOGNIZER.register('ShuffleNetV1')
-def build_sfv1(cfg):
-    return ShuffleNetV1(cfg)

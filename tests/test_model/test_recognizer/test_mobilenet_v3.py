@@ -11,7 +11,7 @@ import torch
 
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.mobilenet.mobilenetv3 import build_mobilenet_v3
+from zcls.model.recognizers.mobilenet.mobilenetv3 import MobileNetV3
 
 
 def test_config():
@@ -19,7 +19,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mbv3_large_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mobilenet_v3(cfg)
+    model = MobileNetV3(cfg)
     print(model)
     outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
@@ -29,7 +29,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mbv3_large_se_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mobilenet_v3(cfg)
+    model = MobileNetV3(cfg)
     print(model)
     outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
@@ -39,7 +39,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mbv3_large_se_hsigmoid_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mobilenet_v3(cfg)
+    model = MobileNetV3(cfg)
     print(model)
     outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
@@ -49,7 +49,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mbv3_small_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mobilenet_v3(cfg)
+    model = MobileNetV3(cfg)
     print(model)
     outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
@@ -59,7 +59,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mbv3_small_se_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mobilenet_v3(cfg)
+    model = MobileNetV3(cfg)
     print(model)
     outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
@@ -69,7 +69,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mbv3_small_se_hsigmoid_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mobilenet_v3(cfg)
+    model = MobileNetV3(cfg)
     print(model)
     outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]

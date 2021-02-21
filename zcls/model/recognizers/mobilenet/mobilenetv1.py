@@ -18,6 +18,7 @@ from zcls.model.backbones.build import build_backbone
 from zcls.model.norm_helper import freezing_bn
 
 
+@registry.RECOGNIZER.register('MobileNetV1')
 class MobileNetV1(nn.Module, ABC):
 
     def __init__(self, cfg):
@@ -65,8 +66,3 @@ class MobileNetV1(nn.Module, ABC):
         x = self.head(x)
 
         return {KEY_OUTPUT: x}
-
-
-@registry.RECOGNIZER.register('MobileNetV1')
-def build_mobilenet_v1(cfg):
-    return MobileNetV1(cfg)

@@ -11,8 +11,8 @@ import torch
 
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.recognizers.mobilenet.mnasnet import MNASNet, build_mnasnet
-from zcls.model.recognizers.mobilenet.torchvision_mnasnet import TorchvisionMNASNet, build_torchvision_mnasnet
+from zcls.model.recognizers.mobilenet.mnasnet import MNASNet
+from zcls.model.recognizers.mobilenet.torchvision_mnasnet import build_torchvision_mnasnet
 
 
 def test_mnasnet():
@@ -46,7 +46,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mnasnet(cfg)
+    model = MNASNet(cfg)
     print(model)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
@@ -55,7 +55,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_se_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mnasnet(cfg)
+    model = MNASNet(cfg)
     print(model)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
@@ -64,7 +64,7 @@ def test_config():
 
     config_file = 'configs/benchmarks/lightweight/mnasnet_b1_1_3_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
-    model = build_mnasnet(cfg)
+    model = MNASNet(cfg)
     print(model)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)

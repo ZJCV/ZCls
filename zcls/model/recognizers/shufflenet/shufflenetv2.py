@@ -27,6 +27,7 @@ G4) Element-wise operations are non-negligible.
 """
 
 
+@registry.RECOGNIZER.register('ShuffleNetV2')
 class ShuffleNetV2(nn.Module, ABC):
 
     def __init__(self, cfg):
@@ -67,8 +68,3 @@ class ShuffleNetV2(nn.Module, ABC):
         x = self.head(x)
 
         return {KEY_OUTPUT: x}
-
-
-@registry.RECOGNIZER.register('ShuffleNetV2')
-def build_sfv2(cfg):
-    return ShuffleNetV2(cfg)

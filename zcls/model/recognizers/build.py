@@ -16,20 +16,20 @@ from zcls.util.checkpoint import CheckPointer
 from zcls.util import logging
 
 from .. import registry
-from .shufflenet.shufflenetv1 import build_sfv1
-from .shufflenet.shufflenetv2 import build_sfv2
+from .shufflenet.shufflenetv1 import ShuffleNetV1
+from .shufflenet.shufflenetv2 import ShuffleNetV2
 from .shufflenet.torchvision_sfv2 import build_torchvision_sfv2
-from .mobilenet.mobilenetv1 import build_mobilenet_v1
-from .mobilenet.mobilenetv2 import build_mobilenet_v2
+from .mobilenet.mobilenetv1 import MobileNetV1
+from .mobilenet.mobilenetv2 import MobileNetV2
 from .mobilenet.torchvision_mobilenetv2 import build_torchvision_mbv2
-from .mobilenet.mnasnet import build_mnasnet
+from .mobilenet.mnasnet import MNASNet
 from .mobilenet.torchvision_mnasnet import build_torchvision_mnasnet
-from .mobilenet.mobilenetv3 import build_mobilenet_v3
-from .vgg.repvgg import build_repvgg
-from .resnet.resnet import build_resnet
+from .mobilenet.mobilenetv3 import MobileNetV3
+from .vgg.repvgg import RepVGG
+from .resnet.resnet import ResNet
 from .resnet.torchvision_resnet import build_torchvision_resnet
 from .resnet.official_resnest import build_official_resnest
-from .resnet.resnet3d import build_resnet3d
+from .resnet.resnet3d import ResNet3D
 
 logger = logging.get_logger(__name__)
 

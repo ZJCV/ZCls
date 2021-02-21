@@ -16,6 +16,7 @@ from zcls.model.backbones.build import build_backbone
 from zcls.model.heads.build import build_head
 
 
+@registry.RECOGNIZER.register('RepVGG')
 class RepVGG(nn.Module):
 
     def __init__(self, cfg):
@@ -51,8 +52,3 @@ class RepVGG(nn.Module):
         x = self.head(x)
 
         return {KEY_OUTPUT: x}
-
-
-@registry.RECOGNIZER.register('RepVGG')
-def build_repvgg(cfg):
-    return RepVGG(cfg)

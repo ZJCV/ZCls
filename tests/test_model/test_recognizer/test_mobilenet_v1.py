@@ -12,7 +12,6 @@ import torch
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.backbones.misc import make_divisible
-from zcls.model.recognizers.mobilenet.mobilenetv1 import build_mobilenet_v1
 from zcls.model.recognizers.mobilenet.mobilenetv1 import MobileNetV1
 
 

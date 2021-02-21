@@ -19,6 +19,7 @@ from zcls.model.heads.build import build_head
 from zcls.model.norm_helper import freezing_bn
 
 
+@registry.RECOGNIZER.register('ResNet3D')
 class ResNet3D(nn.Module, ABC):
 
     def __init__(self, cfg):
@@ -68,8 +69,3 @@ class ResNet3D(nn.Module, ABC):
         x = self.head(x)
 
         return {KEY_OUTPUT: x}
-
-
-@registry.RECOGNIZER.register('ResNet3D')
-def build_resnet3d(cfg):
-    return ResNet3D(cfg)
