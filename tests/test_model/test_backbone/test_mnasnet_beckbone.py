@@ -22,7 +22,7 @@ def test_mnasnet_backbone():
         outputs = model(data)
         print(wm, outputs.shape)
 
-        assert outputs.shape == (1, int(1280 * wm), 7, 7)
+        assert outputs.shape == (1, 1280, 7, 7)
 
 
 def test():

@@ -158,7 +158,7 @@ def build_mbv2_backbone(cfg):
     for i in range(len(inverted_residual_setting)):
         channel = inverted_residual_setting[i][1]
         inverted_residual_setting[i][1] = make_divisible(channel * width_multiplier, round_nearest)
-    out_channels = make_divisible(out_channels * width_multiplier, round_nearest)
+    # out_channels = make_divisible(out_channels * width_multiplier, round_nearest)
 
     return MobileNetV2Backbone(
         in_channels=in_channels,

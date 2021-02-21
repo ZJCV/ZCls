@@ -8,15 +8,15 @@
 """
 
 import torch
-from zcls.model.heads.resnet_head import ResNetHead
+from zcls.model.heads.general_head_3d import GeneralHead3D
 
 
-def test_resnet_head():
-    data = torch.randn(1, 2048, 7, 7)
+def test_resnet3d_head():
+    data = torch.randn(1, 2048, 7, 7, 7)
 
     feature_dims = 2048
     num_classes = 1000
-    model = ResNetHead(feature_dims=feature_dims, num_classes=num_classes)
+    model = GeneralHead3D(feature_dims=feature_dims, num_classes=num_classes)
 
     outputs = model(data)
     print(outputs.shape)
@@ -25,4 +25,4 @@ def test_resnet_head():
 
 
 if __name__ == '__main__':
-    test_resnet_head()
+    test_resnet3d_head()

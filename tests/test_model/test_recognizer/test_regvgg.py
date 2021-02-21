@@ -2,7 +2,7 @@
 
 """
 @date: 2021/2/2 下午5:46
-@file: test_regvgg_recognizer.py
+@file: test_regvgg.py
 @author: zj
 @description: 
 """
@@ -13,18 +13,19 @@ from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.recognizers.build import build_recognizer
 from zcls.model.recognizers.vgg.repvgg import RepVGG
-from zcls.model.recognizers.vgg.repvgg import arch_settings
+from zcls.model.backbones.vgg.repvgg_backbone import arch_settings
 from zcls.model.conv_helper import insert_repvgg_block, insert_acblock, fuse_repvgg_block, fuse_acblock
 
 
-def test_regvgg_recognizer():
+def test_regvgg():
     data = torch.randn(1, 3, 224, 224)
     for key in arch_settings.keys():
         print('*' * 10, key)
-        model = RepVGG(arch=key)
+        cfg.merge_from_file('configs/benchmarks/repvgg/repvgg_b2g4_cifar100_224_e100_sgd_calr.yaml')
+        model = RepVGG(cfg)
         # print(model)
         outputs = model(data)[KEY_OUTPUT]
-        assert outputs.shape == (1, 1000)
+        assert outputs.shape == (1, 100)
 
         print('insert_regvgg_block -> fuse_regvgg_block')
         insert_repvgg_block(model)
@@ -75,20 +76,8 @@ def test_regvgg_recognizer():
         assert torch.allclose(outputs_insert, outputs_fuse, atol=1e-6)
 
 
-
 def test_config_file():
     data = torch.randn(3, 3, 224, 224)
-
-    print('repvgg_plain_custom_cifar100_224_e100_sgd')
-    config_file = "configs/benchmarks/repvgg/repvgg_plain_custom_cifar100_224_e100_sgd.yaml"
-    cfg.merge_from_file(config_file)
-
-    device = torch.device('cpu')
-    model = build_recognizer(cfg, device)
-    print(model)
-    outputs = model(data)[KEY_OUTPUT]
-
-    assert outputs.shape == (3, 100)
 
     print('repvgg_b2g4_custom_cifar100_224_e100_sgd')
     config_file = "configs/benchmarks/repvgg/repvgg_b2g4_cifar100_224_e100_sgd_calr.yaml"
@@ -184,5 +173,5 @@ def test_config_file():
 
 
 if __name__ == '__main__':
-    test_regvgg_recognizer()
+    test_regvgg()
     test_config_file()

@@ -12,7 +12,8 @@ import torch
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.norm_helper import get_norm
-from zcls.model.recognizers.resnet.resnet import TorchvisionResNet, ResNet, build_resnet
+from zcls.model.recognizers.resnet.resnet import ResNet, build_resnet
+from zcls.model.recognizers.resnet.torchvision_resnet import build_torchvision_resnet
 
 
 def test_data(model, input_shape, output_shape):

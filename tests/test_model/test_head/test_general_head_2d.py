@@ -2,13 +2,13 @@
 
 """
 @date: 2020/12/3 下午8:19
-@file: test_mobilenetv1_head.py
+@file: test_general_head_2d.py
 @author: zj
 @description: 
 """
 
 import torch
-from zcls.model.heads.mobilenetv1_head import MobileNetV1Head
+from zcls.model.heads.general_head_2d import GeneralHead2D
 
 
 def test_mobilenet_v1_head():
@@ -16,7 +16,7 @@ def test_mobilenet_v1_head():
 
     feature_dims = 1024
     num_classes = 1000
-    model = MobileNetV1Head(feature_dims=feature_dims, num_classes=num_classes)
+    model = GeneralHead2D(feature_dims=feature_dims, num_classes=num_classes)
 
     outputs = model(data)
     print(outputs.shape)

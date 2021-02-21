@@ -10,6 +10,7 @@
 import torch
 import torch.nn as nn
 
+from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.recognizers.vgg.repvgg import RepVGG
 from zcls.model.layers.repvgg_block import RepVGGBlock
@@ -122,7 +123,8 @@ def test_conv_helper():
 
 
 def test_regvgg():
-    model = RepVGG()
+    cfg.merge_from_file('configs/benchmarks/repvgg/repvgg_b2g4_cifar100_224_e100_sgd_calr.yaml')
+    model = RepVGG(cfg)
     model.eval()
     print(model)
 
