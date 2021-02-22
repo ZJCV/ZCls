@@ -11,8 +11,7 @@ import torch
 
 from zcls.config import cfg
 from zcls.config.key_word import KEY_OUTPUT
-from zcls.model.norm_helper import get_norm
-from zcls.model.recognizers.resnet.resnet import ResNet, build_resnet
+from zcls.model.recognizers.resnet.resnet import ResNet
 from zcls.model.recognizers.resnet.torchvision_resnet import build_torchvision_resnet
 
 
@@ -25,160 +24,107 @@ def test_data(model, input_shape, output_shape):
 
 
 def test_resnet():
-    # for torchvision
-    model = TorchvisionResNet(
-        arch='resnet50',
-        num_classes=1000
-    )
-    print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
-
-    # for custom
-    model = ResNet(
-        arch="resnet50",
-        num_classes=1000
-    )
-    print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
-
-    # resnetxt_32x4d
-    model = ResNet(
-        arch="resnext50_32x4d",
-        num_classes=1000
-    )
-    print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
-
-
-def test_resnet_gn():
-    cfg.MODEL.NORM.TYPE = 'GroupNorm'
-    norm_layer = get_norm(cfg)
-    print(norm_layer)
-
-    # for custom
-    model = ResNet(
-        arch="resnet50",
-        num_classes=1000,
-        norm_layer=norm_layer
-    )
-    print(model)
-    test_data(model, (1, 3, 224, 224), (1, 1000))
-
-    # resnetxt_32x4d
-    model = ResNet(
-        arch="resnext50_32x4d",
-        num_classes=1000,
-        norm_layer=norm_layer
-    )
-    print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
-
-
-def test_config():
-    config_file = 'configs/benchmarks/rxtd50_32x4d_avg_cifar100_224_e100_rmsprop.yaml'
+    config_file = 'configs/benchmarks/resnet/r50_cifar100_224_e100_rmsprop.yaml'
     cfg.merge_from_file(config_file)
 
-    model = build_resnet(cfg)
+    model = ResNet(cfg)
     print(model)
     test_data(model, (1, 3, 224, 224), (1, 100))
 
-    config_file = 'configs/benchmarks/rxtd50_32x4d_fast_avg_cifar100_224_e100_rmsprop.yaml'
+    config_file = 'configs/benchmarks/resnet/rxt50_32x4d_cifar100_224_e100_rmsprop.yaml'
     cfg.merge_from_file(config_file)
 
-    model = build_resnet(cfg)
+    model = ResNet(cfg)
+    print(model)
+    test_data(model, (1, 3, 224, 224), (1, 100))
+
+    config_file = 'configs/benchmarks/resnet/r50_torchvision_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = build_torchvision_resnet(cfg)
+    print(model)
+    test_data(model, (1, 3, 224, 224), (1, 100))
+
+    config_file = 'configs/benchmarks/resnet/rxt50_32x4d_torchvision_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = build_torchvision_resnet(cfg)
     print(model)
     test_data(model, (1, 3, 224, 224), (1, 100))
 
 
-def test_attention_resnet(
-        with_attentions=(1, 1, 1, 1),
-        reduction=16,
-        attention_type='SqueezeAndExcitationBlock2D'
-):
-    # for custom
-    model = ResNet(
-        arch="resnet50",
-        with_attentions=with_attentions,
-        reduction=reduction,
-        attention_type=attention_type,
-        num_classes=1000
-    )
-    print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
+def test_resnetd():
+    config_file = 'configs/benchmarks/resnet/rd50_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
 
-    # resnetxt_32x4d
-    model = ResNet(
-        arch="resnext50_32x4d",
-        with_attentions=with_attentions,
-        reduction=reduction,
-        attention_type=attention_type,
-        num_classes=1000
-    )
+    model = ResNet(cfg)
     print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
+    test_data(model, (1, 3, 224, 224), (1, 100))
 
+    config_file = 'configs/benchmarks/resnet/rxtd50_32x4d_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
 
-def test_attention_resnetd(
-        with_attentions=(1, 1, 1, 1),
-        reduction=16,
-        attention_type='SqueezeAndExcitationBlock2D'
-):
-    # for custom
-    model = ResNet(
-        arch="resnetd50",
-        with_attentions=with_attentions,
-        reduction=reduction,
-        attention_type=attention_type,
-        num_classes=1000
-    )
+    model = ResNet(cfg)
     print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
+    test_data(model, (1, 3, 224, 224), (1, 100))
 
-    # resnetxt_32x4d
-    model = ResNet(
-        arch="resnext50_32x4d",
-        with_attentions=with_attentions,
-        reduction=reduction,
-        attention_type=attention_type,
-        num_classes=1000
-    )
+    config_file = 'configs/benchmarks/resnet/rxtd50_32x4d_fast_avg_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = ResNet(cfg)
     print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
+    test_data(model, (1, 3, 224, 224), (1, 100))
+
+    config_file = 'configs/benchmarks/resnet/rxtd50_32x4d_avg_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = ResNet(cfg)
+    print(model)
+    test_data(model, (1, 3, 224, 224), (1, 100))
 
 
 def test_sknet():
-    # resnetd
-    model = ResNet(
-        arch="sknet50",
-        num_classes=1000
-    )
+    config_file = 'configs/benchmarks/resnet/sknet50_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = ResNet(cfg)
     print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
+    test_data(model, (3, 3, 224, 224), (3, 100))
 
 
 def test_resnest():
-    # resnetd
-    model = ResNet(
-        arch="resnest50_2s2x40d",
-        num_classes=1000
-    )
-    print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
+    config_file = 'configs/benchmarks/resnet/rstd50_2s2x40d_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
 
-    # resnetd
-    model = ResNet(
-        arch="resnest50_2s2x40d_fast",
-        num_classes=1000
-    )
+    model = ResNet(cfg)
     print(model)
-    test_data(model, (3, 3, 224, 224), (3, 1000))
+    test_data(model, (3, 3, 224, 224), (3, 100))
+
+    config_file = 'configs/benchmarks/resnet/rstd50_2s2x40d_fast_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = ResNet(cfg)
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 100))
+
+    config_file = 'configs/benchmarks/resnet/rstd50_2s2x40d_fast_official_cifar100_224_e100_rmsprop.yaml'
+    cfg.merge_from_file(config_file)
+
+    model = ResNet(cfg)
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 100))
 
 
 if __name__ == '__main__':
-    # print('*' * 10 + ' resnet')
-    # test_resnet()
-    # print('*' * 10 + ' resnet gn')
-    # test_resnet_gn()
+    print('*' * 10 + ' resnet')
+    test_resnet()
+    print('*' * 10 + ' resnetd')
+    test_resnetd()
+    print('*' * 10 + ' sknet')
+    test_sknet()
+    print('*' * 10 + ' resnest')
+    test_resnest()
+
     # print('*' * 10 + ' se resnet')
     # test_attention_resnet(with_attentions=(1, 1, 1, 1),
     #                       reduction=16,
@@ -212,11 +158,3 @@ if __name__ == '__main__':
     # test_attention_resnetd(with_attentions=(0, 1, 1, 1),
     #                        reduction=16,
     #                        attention_type='GlobalContextBlock2D')
-
-    print('*' * 10 + ' sknet')
-    test_sknet()
-
-    print('*' * 10 + ' resnetst')
-    test_resnest()
-
-    test_config()
