@@ -10,7 +10,7 @@
 from .base_evaluator import BaseEvaluator
 
 
-class FashionMNISTEvaluator(BaseEvaluator):
+class ImageNetEvaluator(BaseEvaluator):
 
     def __init__(self, classes, topk=(1,)):
         super().__init__(classes, topk)

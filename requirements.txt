@@ -83,8 +83,6 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/data/build.py: 12
 # ZCls/zcls/data/datasets/cifar.py: 10
 # ZCls/zcls/data/datasets/evaluator/base_evaluator.py: 11
-# ZCls/zcls/data/datasets/evaluator/cifar.py: 10
-# ZCls/zcls/data/datasets/evaluator/fashionmnist.py: 10
 # ZCls/zcls/data/datasets/fashionmnist.py: 10
 # ZCls/zcls/data/datasets/imagenet.py: 10
 # ZCls/zcls/engine/inference.py: 12

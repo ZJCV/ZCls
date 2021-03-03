@@ -46,6 +46,7 @@ def build_dataloader(cfg, is_train=True):
         else:
             sampler = SequentialSampler(dataset)
 
+    # [When to set pin_memory to true?](https://discuss.pytorch.org/t/when-to-set-pin-memory-to-true/19723)
     data_loader = DataLoader(dataset,
                              num_workers=cfg.DATALOADER.NUM_WORKERS,
                              sampler=sampler,
