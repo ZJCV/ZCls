@@ -1,6 +1,13 @@
 
 # CHANGE
 
+## v0.2.1
+
+* New features
+    1. Add FashionMNIST/ImageNet dataset
+* Bug fixes
+* Breaking changes.
+
 ## v0.2.0
 
 * New features
