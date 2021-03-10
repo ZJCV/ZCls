@@ -10,7 +10,7 @@
 from torch.utils.data import Dataset
 import torchvision.datasets as datasets
 
-from .evaluator.imagenet import ImageNetEvaluator
+from .evaluator.general_evaluator import GeneralEvaluator
 
 
 class ImageNet(Dataset):
@@ -34,4 +34,4 @@ class ImageNet(Dataset):
         return self.data_set.__len__()
 
     def _update_evaluator(self):
-        self.evaluator = ImageNetEvaluator(self.classes, topk=(1, 5))
+        self.evaluator = GeneralEvaluator(self.classes, topk=(1, 5))

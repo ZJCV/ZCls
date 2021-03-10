@@ -10,7 +10,7 @@
 from torch.utils.data import Dataset
 import torchvision.datasets as datasets
 
-from .evaluator.fashionmnist import FashionMNISTEvaluator
+from .evaluator.general_evaluator import GeneralEvaluator
 
 
 class FashionMNIST(Dataset):
@@ -29,4 +29,4 @@ class FashionMNIST(Dataset):
         return self.data_set.__len__()
 
     def _update_evaluator(self):
-        self.evaluator = FashionMNISTEvaluator(self.classes, topk=(1, 5))
+        self.evaluator = GeneralEvaluator(self.classes, topk=(1, 5))

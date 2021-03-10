@@ -10,7 +10,7 @@
 from torch.utils.data import Dataset
 from torchvision.datasets import CIFAR100
 
-from .evaluator.cifar import CIFAREvaluator
+from .evaluator.general_evaluator import GeneralEvaluator
 
 
 class CIFAR(Dataset):
@@ -29,4 +29,4 @@ class CIFAR(Dataset):
         return self.data_set.__len__()
 
     def _update_evaluator(self):
-        self.evaluator = CIFAREvaluator(self.classes, topk=(1, 5))
+        self.evaluator = GeneralEvaluator(self.classes, topk=(1, 5))

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-@date: 2021/2/23 下午8:23
-@file: fashionmnist.py
+@date: 2021/3/10 下午2:07
+@file: general_evaluator.py
 @author: zj
 @description: 
 """
@@ -10,7 +10,7 @@
 from .base_evaluator import BaseEvaluator
 
 
-class FashionMNISTEvaluator(BaseEvaluator):
+class GeneralEvaluator(BaseEvaluator):
 
     def __init__(self, classes, topk=(1,)):
         super().__init__(classes, topk)
