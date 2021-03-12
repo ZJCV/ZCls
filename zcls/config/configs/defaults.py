@@ -24,6 +24,9 @@ _C.RANK_ID = 0
 # Distributed backend.
 _C.DIST_BACKEND = "nccl"
 
+# Initialization method, includes TCP or shared file-system
+_C.INIT_METHOD = "tcp://localhost:39129"
+
 # ---------------------------------------------------------------------------- #
 # Train
 # ---------------------------------------------------------------------------- #

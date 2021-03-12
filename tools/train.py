@@ -7,6 +7,7 @@
 @description: 
 """
 
+import os
 import numpy as np
 import torch
 
@@ -21,7 +22,7 @@ from zcls.util.checkpoint import CheckPointer
 from zcls.util.collect_env import collect_env_info
 from zcls.util.distributed import init_distributed_training, get_device, get_local_rank, synchronize
 from zcls.util.misc import launch_job
-from zcls.util.parser import parse_train_args, load_train_config
+from zcls.util.parser import parse_args, load_config
 
 logger = logging.get_logger(__name__)
 
@@ -77,8 +78,11 @@ def train(cfg):
 
 
 def main():
-    args = parse_train_args()
-    cfg = load_train_config(args)
+    args = parse_args()
+    cfg = load_config(args)
+
+    if not os.path.exists(cfg.OUTPUT_DIR):
+        os.makedirs(cfg.OUTPUT_DIR)
 
     # Setup logging format.
     logging.setup_logging(cfg.OUTPUT_DIR)
@@ -92,7 +96,7 @@ def main():
             logger.info(config_str)
     logger.info("Running with config:\n{}".format(cfg))
 
-    launch_job(cfg=cfg, init_method=args.init_method, func=train)
+    launch_job(cfg=cfg, init_method=cfg.INIT_METHOD, func=train)
 
 
 if __name__ == '__main__':

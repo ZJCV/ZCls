@@ -7,6 +7,7 @@
 @description: 
 """
 
+import os
 import numpy as np
 import torch
 
@@ -15,7 +16,7 @@ from zcls.engine.inference import do_evaluation
 from zcls.util.collect_env import collect_env_info
 from zcls.util import logging
 from zcls.util.distributed import get_device, get_local_rank
-from zcls.util.parser import parse_test_args, load_test_config
+from zcls.util.parser import parse_args, load_config
 from zcls.util.misc import launch_job
 from zcls.util.distributed import synchronize, init_distributed_training
 
@@ -43,8 +44,11 @@ def test(cfg):
 
 
 def main():
-    args = parse_test_args()
-    cfg = load_test_config(args)
+    args = parse_args()
+    cfg = load_config(args)
+
+    if not os.path.exists(cfg.OUTPUT_DIR):
+        os.makedirs(cfg.OUTPUT_DIR)
 
     logging.setup_logging(cfg.OUTPUT_DIR)
     logger.info(args)
@@ -57,7 +61,7 @@ def main():
             logger.info(config_str)
     logger.info("Running with config:\n{}".format(cfg))
 
-    launch_job(cfg=cfg, init_method=args.init_method, func=test)
+    launch_job(cfg=cfg, init_method=cfg.INIT_METHOD, func=test)
 
 
 if __name__ == '__main__':

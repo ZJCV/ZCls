@@ -7,19 +7,29 @@
 @description: 
 """
 
-import os
 import argparse
 from zcls.config import cfg
 
 
-def parse_train_args():
-    parser = argparse.ArgumentParser(description='PyCls Training With PyTorch')
+def parse_args():
+    parser = argparse.ArgumentParser(description='PyCls Training/Test With PyTorch')
     parser.add_argument('-cfg',
                         "--config_file",
                         type=str,
                         default="",
                         metavar="FILE",
                         help="path to config file")
+    parser.add_argument('--pretrained',
+                        type=str,
+                        default="",
+                        metavar='PRETRAINED_FILE',
+                        help="path to pretrained model")
+    parser.add_argument('-out',
+                        '--output_dir',
+                        type=str,
+                        default="",
+                        metavar="OUTPUT_DIR",
+                        help="path to output")
 
     parser.add_argument('--log_step',
                         type=int,
@@ -38,7 +48,6 @@ def parse_train_args():
                         default=False,
                         action='store_true',
                         help='Resume training')
-
     parser.add_argument('--use_tensorboard',
                         default=True,
                         action='store_false')
@@ -61,7 +70,7 @@ def parse_train_args():
                         help='ranking within the nodes (default: 0)')
     parser.add_argument("--init_method",
                         help="Initialization method, includes TCP or shared file-system",
-                        default="tcp://localhost:39129",
+                        default="",
                         type=str)
 
     parser.add_argument("opts",
@@ -73,46 +82,14 @@ def parse_train_args():
     return args
 
 
-def parse_test_args():
-    parser = argparse.ArgumentParser(description='PyCls Test With PyTorch')
-    parser.add_argument("config_file",
-                        type=str,
-                        default="",
-                        metavar="FILE",
-                        help="path to config file")
-    parser.add_argument('pretrained', default="", metavar='PRETRAINED_FILE',
-                        help="path to pretrained model", type=str)
-    parser.add_argument('--output', default="./outputs/tests", type=str)
-
-    parser.add_argument('-g',
-                        '--gpus',
-                        type=int,
-                        default=-1,
-                        help='number of gpus per node (default: 1)')
-    parser.add_argument('-n',
-                        '--nodes',
-                        type=int,
-                        default=-1,
-                        metavar='N',
-                        help='number of machines (default: 1)')
-    parser.add_argument('-nr',
-                        '--nr',
-                        type=int,
-                        default=-1,
-                        help='ranking within the nodes (default: 0)')
-    parser.add_argument("--init_method",
-                        help="Initialization method, includes TCP or shared file-system",
-                        default="tcp://localhost:39129",
-                        type=str)
-
-    args = parser.parse_args()
-    return args
-
-
-def load_train_config(args):
+def load_config(args):
     if args.config_file:
         cfg.merge_from_file(args.config_file)
-    cfg.merge_from_list(args.opts)
+    if args.pretrained:
+        cfg.MODEL.RECOGNIZER.PRELOADED = args.pretrained
+    if args.output_dir:
+        cfg.OUTPUT_DIR = args.output_dir
+
     if args.log_step != -1:
         cfg.TRAIN.LOG_STEP = args.log_step
     if args.save_step != -1:
@@ -127,38 +104,13 @@ def load_train_config(args):
 
     if args.gpus != -1:
         cfg.NUM_GPUS = args.gpus
-        # 在多gpu训练/测试中，同步增加学习率和批量大小
-        cfg.OPTIMIZER.LR *= args.gpus
     if args.nodes != -1:
         cfg.NUM_NODES = args.nodes
     if args.nr != -1:
         cfg.RANK_ID = args.nr
+    if args.init_method:
+        cfg.INIT_METHOD = args.init_method
 
+    cfg.merge_from_list(args.opts)
     cfg.freeze()
-
-    if not os.path.exists(cfg.OUTPUT_DIR):
-        os.makedirs(cfg.OUTPUT_DIR)
-
-    return cfg
-
-
-def load_test_config(args):
-    if not os.path.isfile(args.config_file) or not os.path.isfile(args.pretrained):
-        raise ValueError('需要输入配置文件和预训练模型路径')
-
-    cfg.merge_from_file(args.config_file)
-    cfg.MODEL.RECOGNIZER.PRELOADED = args.pretrained
-    cfg.OUTPUT_DIR = args.output
-
-    if args.gpus != -1:
-        cfg.NUM_GPUS = args.gpus
-    if args.nodes != -1:
-        cfg.NODES = args.nodes
-    if args.nr != -1:
-        cfg.RANK = args.nr
-    cfg.freeze()
-
-    if not os.path.exists(cfg.OUTPUT_DIR):
-        os.makedirs(cfg.OUTPUT_DIR)
-
     return cfg
