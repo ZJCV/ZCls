@@ -16,22 +16,18 @@ DATASET:
   NAME: 'CIFAR100'
   DATA_DIR: './data/cifar'
 TRANSFORM:
+  TRAIN_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+  TEST_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+  TRAIN_RESIZE: (224, )
+  TEST_RESIZE: (224, )
+  TRAIN_CROP: (224, 224)
+  TEST_CROP: (224, 224)
   MEAN: (0.45, 0.45, 0.45)
   STD: (0.225, 0.225, 0.225)
-  TRAIN:
-    RESIZE: True
-    SHORTER_SIDE: 224
-    CENTER_CROP: True
-    TRAIN_CROP_SIZE: 224
-  TEST:
-    RESIZE: True
-    SHORTER_SIDE: 224
-    CENTER_CROP: True
-    TEST_CROP_SIZE: 224
 DATALOADER:
   TRAIN_BATCH_SIZE: 32
   TEST_BATCH_SIZE: 32
-  NUM_WORKERS: 8
+  NUM_WORKERS: 4
 MODEL:
   CONV:
     TYPE: 'Conv3d'
