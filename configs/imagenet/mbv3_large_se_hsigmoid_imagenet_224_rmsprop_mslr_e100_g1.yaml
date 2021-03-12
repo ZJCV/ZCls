@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/mbv3_large_se_hsigmoid_imagenet_224_rmsprop_mslr_e100_g1'
+OUTPUT_DIR: 'outputs/imagenet/mbv3_large_se_hsigmoid_imagenet_224_rmsprop_mslr_e100_g1'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
