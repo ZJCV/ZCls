@@ -1,6 +1,16 @@
 
 # CHANGE
 
+## v0.3.0
+
+* New features
+    1. Extract evaluator implementation, abstract out the general evaluator
+    2. Command line parameter parse of merge training phase / test phase
+    3. Refactoring the implementation of transforms module
+* Bug fixes
+    1. The Imagenet category entry is a tuple, not a string
+* Breaking changes.
+
 ## v0.2.1
 
 * New features
