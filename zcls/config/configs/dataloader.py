@@ -19,4 +19,4 @@ def add_config(_C):
     _C.DATALOADER.TEST_BATCH_SIZE = 16
 
     # refert to [torch Dataloader中的num_workers](https://zhuanlan.zhihu.com/p/69250939)
-    _C.DATALOADER.NUM_WORKERS = 2
+    _C.DATALOADER.NUM_WORKERS = 4
