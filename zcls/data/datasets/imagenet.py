@@ -24,7 +24,9 @@ class ImageNet(Dataset):
         split = 'train' if train else 'val'
 
         self.data_set = datasets.ImageNet(root, split=split, transform=transform, target_transform=target_transform)
-        self.classes = self.data_set.classes
+        self.classes = list()
+        for class_tuple in self.data_set.classes:
+            self.classes.append(','.join(class_tuple))
         self._update_evaluator()
 
     def __getitem__(self, index: int):
