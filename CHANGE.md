@@ -1,5 +1,11 @@
-
 # CHANGE
+
+## v0.3.2
+
+* New features
+* Bug fixes
+    1. When do_evaluation, need add test_data_loader
+* Breaking changes.
 
 ## v0.3.1
 
