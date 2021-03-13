@@ -11,6 +11,7 @@ import os
 import numpy as np
 import torch
 
+from zcls.data.build import build_dataloader
 from zcls.model.recognizers.build import build_recognizer
 from zcls.engine.inference import do_evaluation
 from zcls.util.collect_env import collect_env_info
@@ -39,8 +40,10 @@ def test(cfg):
     device = get_device(local_rank=local_rank_id)
     model = build_recognizer(cfg, device=device)
 
+    test_data_loader = build_dataloader(cfg, is_train=False)
+
     synchronize()
-    do_evaluation(cfg, model, device)
+    do_evaluation(cfg, model, test_data_loader, device)
 
 
 def main():

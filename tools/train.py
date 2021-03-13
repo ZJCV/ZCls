@@ -68,12 +68,14 @@ def train(cfg):
                 logger.info('warmup end')
         logger.info('resume end')
 
-    data_loader = build_dataloader(cfg, is_train=True)
+    train_data_loader = build_dataloader(cfg, is_train=True)
+    test_data_loader = build_dataloader(cfg, is_train=False)
 
     logger.info('init end')
     synchronize()
     do_train(cfg, arguments,
-             data_loader, model, criterion, optimizer, lr_scheduler,
+             train_data_loader, test_data_loader,
+             model, criterion, optimizer, lr_scheduler,
              checkpointer, device)
 
 

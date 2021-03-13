@@ -28,10 +28,11 @@ logger = logging.get_logger(__name__)
 
 
 def do_train(cfg, arguments,
-             data_loader, model, criterion, optimizer, lr_scheduler,
+             train_data_loader, test_data_loader,
+             model, criterion, optimizer, lr_scheduler,
              check_pointer, device):
     meters = MetricLogger()
-    evaluator = data_loader.dataset.evaluator
+    evaluator = train_data_loader.dataset.evaluator
     summary_writer = None
     use_tensorboard = cfg.TRAIN.USE_TENSORBOARD
     if is_master_proc() and use_tensorboard:
@@ -45,7 +46,7 @@ def do_train(cfg, arguments,
     gradient_accumulate_step = cfg.TRAIN.GRADIENT_ACCUMULATE_STEP
 
     start_epoch = arguments['cur_epoch']
-    epoch_iters = len(data_loader)
+    epoch_iters = len(train_data_loader)
     max_iter = (max_epoch - start_epoch) * epoch_iters
     current_iterations = 0
 
@@ -60,8 +61,8 @@ def do_train(cfg, arguments,
     start_training_time = time.time()
     end = time.time()
     for cur_epoch in range(start_epoch, max_epoch + 1):
-        shuffle_dataset(data_loader, cur_epoch)
-        for iteration, (images, targets) in enumerate(data_loader):
+        shuffle_dataset(train_data_loader, cur_epoch)
+        for iteration, (images, targets) in enumerate(train_data_loader):
             images = images.to(device=device, non_blocking=True)
             targets = targets.to(device=device, non_blocking=True)
 
@@ -112,13 +113,13 @@ def do_train(cfg, arguments,
         if eval_epoch > 0 and cur_epoch % eval_epoch == 0 and cur_epoch != max_epoch:
             if cfg.MODEL.NORM.PRECISE_BN:
                 calculate_and_update_precise_bn(
-                    data_loader,
+                    train_data_loader,
                     model,
-                    min(cfg.MODEL.NORM.NUM_BATCHES_PRECISE, len(data_loader)),
+                    min(cfg.MODEL.NORM.NUM_BATCHES_PRECISE, len(train_data_loader)),
                     cfg.NUM_GPUS > 0,
                 )
 
-            eval_results = do_evaluation(cfg, model, device, cur_epoch=cur_epoch)
+            eval_results = do_evaluation(cfg, model, test_data_loader, device, cur_epoch=cur_epoch)
             model.train()
             if is_master_proc() and summary_writer:
                 for key, value in eval_results.items():

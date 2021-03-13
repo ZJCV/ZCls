@@ -14,7 +14,6 @@ from tqdm import tqdm
 
 import zcls.util.logging as logging
 from zcls.util.distributed import all_gather, is_master_proc
-from zcls.data.build import build_dataloader
 
 logger = logging.get_logger(__name__)
 
@@ -40,23 +39,22 @@ def compute_on_dataset(images, targets, device, model, num_gpus, evaluator):
 
 
 @torch.no_grad()
-def inference(cfg, model, device, **kwargs):
+def inference(cfg, model, test_data_loader, device, **kwargs):
     cur_epoch = kwargs.get('cur_epoch', None)
     dataset_name = cfg.DATASET.NAME
     num_gpus = cfg.NUM_GPUS
 
-    data_loader = build_dataloader(cfg, is_train=False)
-    dataset = data_loader.dataset
-    evaluator = data_loader.dataset.evaluator
+    dataset = test_data_loader.dataset
+    evaluator = test_data_loader.dataset.evaluator
     evaluator.clean()
 
     logger.info("Evaluating {} dataset({} video clips):".format(dataset_name, len(dataset)))
 
     if is_master_proc():
-        for images, targets in tqdm(data_loader):
+        for images, targets in tqdm(test_data_loader):
             compute_on_dataset(images, targets, device, model, num_gpus, evaluator)
     else:
-        for images, targets in data_loader:
+        for images, targets in test_data_loader:
             compute_on_dataset(images, targets, device, model, num_gpus, evaluator)
 
     result_str, acc_dict = evaluator.get()
@@ -75,7 +73,7 @@ def inference(cfg, model, device, **kwargs):
 
 
 @torch.no_grad()
-def do_evaluation(cfg, model, device, **kwargs):
+def do_evaluation(cfg, model, test_data_loader, device, **kwargs):
     model.eval()
 
-    return inference(cfg, model, device, **kwargs)
+    return inference(cfg, model, test_data_loader, device, **kwargs)
