@@ -1,6 +1,13 @@
 
 # CHANGE
 
+## v0.3.1
+
+* New features
+    1. Change the loading method of test data set
+* Bug fixes
+* Breaking changes.
+
 ## v0.3.0
 
 * New features
