@@ -128,7 +128,7 @@ def do_train(cfg, arguments,
     if eval_epoch > 0:
         logger.info('Start final evaluating...')
         torch.cuda.empty_cache()  # speed up evaluating after training finished
-        eval_results = do_evaluation(cfg, model, device)
+        eval_results = do_evaluation(cfg, model, test_data_loader, device)
 
         if is_master_proc() and summary_writer:
             for key, value in eval_results.items():
