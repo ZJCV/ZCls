@@ -103,7 +103,7 @@ For more thanks, check [THANKS](./THANKS)
 
 ## Contributing
 
-Anyone's participation is welcome! Open an [issue](https://github.com/zjykzj/ZCls/issues) or submit PRs.
+Anyone's participation is welcome! Open an [issue](https://github.com/ZJCV/ZCls/issues) or submit PRs.
 
 Small note:
 

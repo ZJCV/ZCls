@@ -100,7 +100,7 @@
 
 ## 参与贡献方式
 
-欢迎任何人的参与！打开[issue](https://github.com/zjykzj/ZCls/issues)或提交合并请求。
+欢迎任何人的参与！打开[issue](https://github.com/ZJCV/ZCls/issues)或提交合并请求。
 
 注意:
 
