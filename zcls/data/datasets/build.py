@@ -17,7 +17,9 @@ def build_dataset(cfg, transform=None, is_train=True, download=True):
     data_dir = cfg.DATASET.DATA_DIR
 
     if dataset_name == 'CIFAR100':
-        dataset = CIFAR(data_dir, train=is_train, transform=transform, download=download)
+        dataset = CIFAR(data_dir, train=is_train, transform=transform, download=download, is_cifar100=True)
+    elif dataset_name == 'CIFAR10':
+        dataset = CIFAR(data_dir, train=is_train, transform=transform, download=download, is_cifar100=False)
     elif dataset_name == 'FashionMNIST':
         dataset = FashionMNIST(data_dir, train=is_train, transform=transform, download=download)
     elif dataset_name == 'ImageNet':

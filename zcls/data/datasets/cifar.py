@@ -8,7 +8,7 @@
 """
 
 from torch.utils.data import Dataset
-from torchvision.datasets import CIFAR100
+from torchvision.datasets import CIFAR10, CIFAR100
 
 from .evaluator.general_evaluator import GeneralEvaluator
 
@@ -16,9 +16,13 @@ from .evaluator.general_evaluator import GeneralEvaluator
 class CIFAR(Dataset):
 
     def __init__(self, root, train=True, transform=None, target_transform=None,
-                 download=False):
-        self.data_set = CIFAR100(root, train=train, transform=transform, target_transform=target_transform,
-                                 download=download)
+                 download=False, is_cifar100=True):
+        if is_cifar100:
+            self.data_set = CIFAR100(root, train=train, transform=transform, target_transform=target_transform,
+                                     download=download)
+        else:
+            self.data_set = CIFAR10(root, train=train, transform=transform, target_transform=target_transform,
+                                    download=download)
         self.classes = self.data_set.classes
         self._update_evaluator()
 
