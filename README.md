@@ -26,6 +26,9 @@ Supported Recognizers:
 
 - [Table of Contents](#table-of-contents)
 - [Background](#background)
+- [Usage](#usage)
+  - [Installation](#installation)
+  - [How to use](#how-to-use)
 - [Maintainers](#maintainers)
 - [Thanks](#thanks)
 - [Contributing](#contributing)
@@ -37,6 +40,18 @@ In order to further improve the algorithm performance, it is usually necessary t
 inevitably involves code refactoring. Creating this repo, on the one hand, serves as the CodeBase of the new
 model/optimization method, on the other hand, it also records the comparison between the custom model and the existing
 implementation (such as Torchvision Models)
+
+## Usage
+
+### Installation
+
+```
+$ pip install zcls
+```
+
+### How to use
+
+refer to [ZJCV/RotNet](https://github.com/ZJCV/RotNet)
 
 ## Maintainers
 
