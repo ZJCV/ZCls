@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.3.3
+
+* New features
+    1. Add CIFAR10 dataset
+* Bug fixes
+    1. Fix label_smoothing_loss usage
+* Breaking changes.
+
 ## v0.3.2
 
 * New features
