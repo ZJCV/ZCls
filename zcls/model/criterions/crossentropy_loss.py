@@ -6,8 +6,8 @@
 @author: zj
 @description: 
 """
-from abc import ABC
 
+from abc import ABC
 import torch.nn as nn
 
 from zcls.config.key_word import KEY_OUTPUT, KEY_LOSS

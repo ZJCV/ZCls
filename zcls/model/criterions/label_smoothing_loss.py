@@ -7,6 +7,7 @@
 @description: 
 """
 
+from abc import ABC
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -15,7 +16,7 @@ from zcls.config.key_word import KEY_OUTPUT, KEY_LOSS
 
 
 @registry.CRITERION.register('LabelSmoothingLoss')
-class LabelSmoothingLoss(nn.Module):
+class LabelSmoothingLoss(nn.Module, ABC):
     """
     Label smoothing cross entropy loss
     Refer to:
