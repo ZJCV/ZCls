@@ -90,7 +90,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/data/datasets/imagenet.py: 10
 # ZCls/zcls/data/transforms/build.py: 10
 # ZCls/zcls/engine/inference.py: 12
-# ZCls/zcls/engine/trainer.py: 13,14,16,17,38
+# ZCls/zcls/engine/trainer.py: 13,14,16,17,39
 # ZCls/zcls/model/act_helper.py: 10
 # ZCls/zcls/model/backbones/misc.py: 10
 # ZCls/zcls/model/backbones/mobilenet/mnasnet_backbone.py: 11
@@ -118,7 +118,7 @@ thop == 0.0.31.post2005241907
 # ZCls/zcls/model/backbones/vgg/repvgg_backbone.py: 10
 # ZCls/zcls/model/conv_helper.py: 11,12
 # ZCls/zcls/model/criterions/crossentropy_loss.py: 11
-# ZCls/zcls/model/criterions/label_smoothing_loss.py: 10,11
+# ZCls/zcls/model/criterions/label_smoothing_loss.py: 11,12
 # ZCls/zcls/model/heads/general_head_2d.py: 11,12
 # ZCls/zcls/model/heads/general_head_3d.py: 11,12
 # ZCls/zcls/model/heads/mobilenetv3_head.py: 11,12
