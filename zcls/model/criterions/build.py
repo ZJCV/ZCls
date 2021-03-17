@@ -9,6 +9,7 @@
 
 from .. import registry
 from .crossentropy_loss import CrossEntropyLoss
+from .label_smoothing_loss import LabelSmoothingLoss
 
 
 def build_criterion(cfg, device):
