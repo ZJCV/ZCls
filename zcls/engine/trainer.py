@@ -21,6 +21,7 @@ from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, 
 from zcls.util.precise_bn import calculate_and_update_precise_bn
 from zcls.util.distributed import is_master_proc, synchronize
 from zcls.util import logging
+from zcls.util.prefetcher import Prefetcher
 from zcls.engine.inference import do_evaluation
 from zcls.data.build import shuffle_dataset
 
@@ -50,6 +51,8 @@ def do_train(cfg, arguments,
     max_iter = (max_epoch - start_epoch) * epoch_iters
     current_iterations = 0
 
+    data_loader = Prefetcher(train_data_loader, device=device) if cfg.DATALOADER.PREFETCHER else train_data_loader
+
     # Creates a GradScaler once at the beginning of training.
     scaler = GradScaler()
 
@@ -62,7 +65,7 @@ def do_train(cfg, arguments,
     end = time.time()
     for cur_epoch in range(start_epoch, max_epoch + 1):
         shuffle_dataset(train_data_loader, cur_epoch)
-        for iteration, (images, targets) in enumerate(train_data_loader):
+        for iteration, (images, targets) in enumerate(iter(data_loader)):
             images = images.to(device=device, non_blocking=True)
             targets = targets.to(device=device, non_blocking=True)
 

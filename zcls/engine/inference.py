@@ -13,6 +13,7 @@ import torch
 from tqdm import tqdm
 
 import zcls.util.logging as logging
+from zcls.util.prefetcher import Prefetcher
 from zcls.util.distributed import all_gather, is_master_proc
 
 logger = logging.get_logger(__name__)
@@ -50,11 +51,12 @@ def inference(cfg, model, test_data_loader, device, **kwargs):
 
     logger.info("Evaluating {} dataset({} video clips):".format(dataset_name, len(dataset)))
 
+    data_loader = Prefetcher(test_data_loader, device=device) if cfg.DATALOADER.PREFETCHER else test_data_loader
     if is_master_proc():
-        for images, targets in tqdm(test_data_loader):
+        for images, targets in tqdm(iter(data_loader)):
             compute_on_dataset(images, targets, device, model, num_gpus, evaluator)
     else:
-        for images, targets in test_data_loader:
+        for images, targets in iter(data_loader):
             compute_on_dataset(images, targets, device, model, num_gpus, evaluator)
 
     result_str, acc_dict = evaluator.get()
