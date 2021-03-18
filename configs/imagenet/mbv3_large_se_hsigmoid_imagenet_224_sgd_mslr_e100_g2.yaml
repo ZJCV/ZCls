@@ -12,6 +12,7 @@ TRAIN:
   EVAL_EPOCH: 1
   RESUME: False
   USE_TENSORBOARD: True
+  HYBRID_PRECISION: True
 DATASET:
   NAME: 'ImageNet'
   DATA_DIR: './data/imagenet'
@@ -29,7 +30,7 @@ TRANSFORM:
 DATALOADER:
   TRAIN_BATCH_SIZE: 256
   TEST_BATCH_SIZE: 256
-  NUM_WORKERS: 8
+  NUM_WORKERS: 2
   PREFETCHER: True
 MODEL:
   CONV:
@@ -60,7 +61,7 @@ MODEL:
     NUM_CLASSES: 1000
   RECOGNIZER:
     NAME: 'MobileNetV3'
-    PRELOADED: ""#"outputs/benchmarks/mbv3_large_se_hsigmoid_imagenet_224_rmsprop_mslr_e100_g1/model_0017.pth"
+    PRELOADED: ""
     PRETRAINED: ""
     PRETRAINED_NUM_CLASSES: 1000
   CRITERION:

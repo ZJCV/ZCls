@@ -53,8 +53,9 @@ def do_train(cfg, arguments,
 
     data_loader = Prefetcher(train_data_loader, device=device) if cfg.DATALOADER.PREFETCHER else train_data_loader
 
-    # Creates a GradScaler once at the beginning of training.
-    scaler = GradScaler()
+    if cfg.TRAIN.HYBRID_PRECISION:
+        # Creates a GradScaler once at the beginning of training.
+        scaler = GradScaler()
 
     synchronize()
     model.train()
@@ -69,26 +70,45 @@ def do_train(cfg, arguments,
             images = images.to(device=device, non_blocking=True)
             targets = targets.to(device=device, non_blocking=True)
 
-            # Runs the forward pass with autocasting.
-            with autocast():
+            if cfg.TRAIN.HYBRID_PRECISION:
+                # Runs the forward pass with autocasting.
+                with autocast():
+                    output_dict = model(images)
+                    loss_dict = criterion(output_dict, targets)
+                    loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
+
+                current_iterations += 1
+                if current_iterations % gradient_accumulate_step != 0:
+                    if isinstance(model, DistributedDataParallel):
+                        # multi-gpu distributed training
+                        with model.no_sync():
+                            scaler.scale(loss).backward()
+                    else:
+                        scaler.scale(loss).backward()
+                else:
+                    scaler.scale(loss).backward()
+                    scaler.step(optimizer)
+                    scaler.update()
+                    current_iterations = 0
+                    optimizer.zero_grad()
+            else:
                 output_dict = model(images)
                 loss_dict = criterion(output_dict, targets)
                 loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
 
-            current_iterations += 1
-            if current_iterations % gradient_accumulate_step != 0:
-                if isinstance(model, DistributedDataParallel):
-                    # multi-gpu distributed training
-                    with model.no_sync():
-                        scaler.scale(loss).backward()
+                current_iterations += 1
+                if current_iterations % gradient_accumulate_step != 0:
+                    if isinstance(model, DistributedDataParallel):
+                        # multi-gpu distributed training
+                        with model.no_sync():
+                            loss.backward()
+                    else:
+                        loss.backward()
                 else:
-                    scaler.scale(loss).backward()
-            else:
-                scaler.scale(loss).backward()
-                scaler.step(optimizer)
-                scaler.update()
-                current_iterations = 0
-                optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
+                    current_iterations = 0
+                    optimizer.zero_grad()
 
             acc_list = evaluator.evaluate_train(output_dict, targets)
             update_stats(cfg.NUM_GPUS, meters, loss_dict, acc_list)

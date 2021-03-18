@@ -38,3 +38,6 @@ _C.TRAIN.EVAL_EPOCH = 5
 _C.TRAIN.MAX_EPOCH = 200
 _C.TRAIN.RESUME = False
 _C.TRAIN.USE_TENSORBOARD = True
+# Hybrid precision training
+# refer to [pytorch-distributed](https://github.com/zjykzj/pytorch-distributed)
+_C.TRAIN.HYBRID_PRECISION = False
