@@ -62,7 +62,7 @@ MODEL:
   RECOGNIZER:
     NAME: 'MobileNetV3'
     PRELOADED: ""
-    PRETRAINED: ""
+    PRETRAINED: "outputs/imagenet/mbv3_large_se_hsigmoid_imagenet_224_sgd_mslr_e100_g2/model_0007.pth"
     PRETRAINED_NUM_CLASSES: 1000
   CRITERION:
     NAME: 'CrossEntropyLoss'

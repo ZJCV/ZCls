@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.3.4
+
+* New features
+    1. Add PREFETCHER
+* Bug fixes
+    1. Distinguish local or remote pretrained links
+* Breaking changes.
+
 ## v0.3.3
 
 * New features
