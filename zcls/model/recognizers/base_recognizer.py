@@ -18,6 +18,9 @@ from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.backbones.build import build_backbone
 from zcls.model.heads.build import build_head
 from zcls.model.norm_helper import freezing_bn
+from zcls.util import logging
+
+logger = logging.get_logger(__name__)
 
 
 class BaseRecognizer(nn.Module, ABC):
@@ -41,8 +44,10 @@ class BaseRecognizer(nn.Module, ABC):
         if pretrained != "":
             # local or remote links
             if '://' in pretrained:
+                logger.info(f'load remote url: {pretrained}')
                 state_dict = load_state_dict_from_url(pretrained, progress=True)
             else:
+                logger.info(f'load local url: {pretrained}')
                 state_dict = torch.load(pretrained, map_location=torch.device('cpu'))['model']
             self.load_state_dict(state_dict=state_dict, strict=False)
         if num_classes != pretrained_num_classes:

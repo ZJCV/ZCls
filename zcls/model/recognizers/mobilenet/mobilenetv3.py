@@ -21,9 +21,8 @@ class MobileNetV3(BaseRecognizer):
         super().__init__(cfg)
 
     def init_weights(self, pretrained, pretrained_num_classes, num_classes):
-        if pretrained != "":
-            state_dict = load_state_dict_from_url(pretrained, progress=True)
-            self.load_state_dict(state_dict=state_dict, strict=False)
+        # Using super class method to load pretraining weights
+        super(MobileNetV3, self).init_weights(pretrained, pretrained_num_classes, pretrained_num_classes)
         if num_classes != pretrained_num_classes:
             in_channels = self.head.conv2.in_channels
             conv2 = nn.Conv2d(in_channels, num_classes, kernel_size=1, stride=1, padding=0, bias=True)
