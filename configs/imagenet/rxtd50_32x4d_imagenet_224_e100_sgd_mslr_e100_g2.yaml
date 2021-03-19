@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/imagenet/mbv3_large_se_hsigmoid_imagenet_224_sgd_mslr_e100_g2'
+OUTPUT_DIR: 'outputs/imagenet/rxtd50_32x4d_imagenet_224_e100_sgd_mslr_e100_g2'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -41,29 +41,25 @@ MODEL:
     FIX_BN: False
     PARTIAL_BN: False
   ACT:
-    TYPE: 'HSwish'
-    SIGMOID_TYPE: 'HSigmoid'
-  COMPRESSION:
-    WIDTH_MULTIPLIER: 1.0
-    ROUND_NEAREST: 8
-  ATTENTION:
-    WITH_ATTENTION: True
-    REDUCTION: 4
-    ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
+    TYPE: 'ReLU'
   BACKBONE:
-    NAME: 'MobileNetV3'
-    ARCH: 'mobilenetv3-large'
+    NAME: 'ResNetD'
     IN_PLANES: 3
+    ARCH: 'resnext50_32x4d'
+    BASE_PLANES: 64
+    LAYER_PLANES: (64, 128, 256, 512)
+    DOWNSAMPLES: (0, 1, 1, 1)
   HEAD:
-    NAME: 'MobileNetV3'
-    FEATURE_DIMS: 960
-    INNER_DIMS: 1280
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 2048
+    DROPOUT_RATE: 0.2
     NUM_CLASSES: 1000
   RECOGNIZER:
-    NAME: 'MobileNetV3'
+    NAME: 'ResNet'
     PRELOADED: ""
-    PRETRAINED: ""
+    PRETRAINED: "outputs/imagenet/rxtd50_32x4d_imagenet_224_e100_sgd_mslr_e100_g1/model_0017.pth"
     PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
@@ -71,7 +67,7 @@ OPTIMIZER:
   LR: 0.025
   MOMENTUM: 0.9
   WEIGHT_DECAY:
-    DECAY: 1e-5
+    DECAY: 1e-4
     NO_BIAS: True
     NO_NORM: True
 LR_SCHEDULER:
