@@ -9,6 +9,7 @@
 
 from abc import ABC
 
+import torch
 import torch.nn as nn
 from torch.nn.modules.module import T
 from torchvision.models.utils import load_state_dict_from_url
@@ -38,7 +39,11 @@ class BaseRecognizer(nn.Module, ABC):
 
     def init_weights(self, pretrained, pretrained_num_classes, num_classes):
         if pretrained != "":
-            state_dict = load_state_dict_from_url(pretrained, progress=True)
+            # local or remote links
+            if '://' in pretrained:
+                state_dict = load_state_dict_from_url(pretrained, progress=True)
+            else:
+                state_dict = torch.load(pretrained, map_location=torch.device('cpu'))['model']
             self.load_state_dict(state_dict=state_dict, strict=False)
         if num_classes != pretrained_num_classes:
             fc = self.head.fc
