@@ -51,7 +51,7 @@ def do_train(cfg, arguments,
     max_iter = (max_epoch - start_epoch) * epoch_iters
     current_iterations = 0
 
-    data_loader = Prefetcher(train_data_loader, device=device) if cfg.DATALOADER.PREFETCHER else train_data_loader
+    data_loader = Prefetcher(train_data_loader) if cfg.DATALOADER.PREFETCHER else train_data_loader
 
     if cfg.TRAIN.HYBRID_PRECISION:
         # Creates a GradScaler once at the beginning of training.
@@ -66,9 +66,10 @@ def do_train(cfg, arguments,
     end = time.time()
     for cur_epoch in range(start_epoch, max_epoch + 1):
         shuffle_dataset(train_data_loader, cur_epoch)
-        for iteration, (images, targets) in enumerate(iter(data_loader)):
-            images = images.to(device=device, non_blocking=True)
-            targets = targets.to(device=device, non_blocking=True)
+        for iteration, (images, targets) in enumerate(data_loader):
+            if not cfg.DATALOADER.PREFETCHER:
+                images = images.to(device=device, non_blocking=True)
+                targets = targets.to(device=device, non_blocking=True)
 
             if cfg.TRAIN.HYBRID_PRECISION:
                 # Runs the forward pass with autocasting.

@@ -8,6 +8,11 @@
 """
 
 import torch
+from torch.utils.data import DataLoader
+
+from . import logging
+
+logger = logging.get_logger(__name__)
 
 
 class Prefetcher():
@@ -16,40 +21,39 @@ class Prefetcher():
     refert to:
     1. [Dose data_prefetcher() really speed up training? #304](https://github.com/NVIDIA/apex/issues/304)
     2. [如何给你PyTorch里的Dataloader打鸡血](https://zhuanlan.zhihu.com/p/66145913)
+    Note:
+    For overlapped prefetching, supplying pin_memory=True to the dataloader is always required
     """
 
-    def __init__(self, loader, device):
+    def __init__(self, loader: DataLoader):
+        assert isinstance(loader, DataLoader)
+        self.length = len(loader)
         self.loader = iter(loader)
         self.stream = torch.cuda.Stream()
-        self.device = device
-        # self.mean = torch.tensor([0.485 * 255, 0.456 * 255, 0.406 * 255]).cuda().view(1, 3, 1, 1)
-        # self.std = torch.tensor([0.229 * 255, 0.224 * 255, 0.225 * 255]).cuda().view(1, 3, 1, 1)
-        # With Amp, it isn't necessary to manually convert data to half.
-        # if args.fp16:
-        #     self.mean = self.mean.half()
-        #     self.std = self.std.half()
         self.preload()
 
     def preload(self):
         try:
             self.next_input, self.next_target = next(self.loader)
-        except StopIteration:
+        except StopIteration as e:
             self.next_input = None
             self.next_target = None
             return
         with torch.cuda.stream(self.stream):
-            self.next_input = self.next_input.to(device=self.device, non_blocking=True)
-            self.next_target = self.next_target.to(device=self.device, non_blocking=True)
-            # With Amp, it isn't necessary to manually convert data to half.
-            # if args.fp16:
-            #     self.next_input = self.next_input.half()
-            # else:
-            # self.next_input = self.next_input.float()
-            # self.next_input = self.next_input.sub_(self.mean).div_(self.std)
+            self.next_input = self.next_input.cuda(non_blocking=True)
+            self.next_target = self.next_target.cuda(non_blocking=True)
 
-    def __getitem__(self, item):
+    def __next__(self):
         torch.cuda.current_stream().wait_stream(self.stream)
+        if self.next_input is None:
+            raise StopIteration
         input = self.next_input
         target = self.next_target
         self.preload()
         return input, target
+
+    def __iter__(self):
+        return self
+
+    def __len__(self):
+        return self.length

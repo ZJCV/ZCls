@@ -25,7 +25,6 @@ def build_dataloader(cfg, is_train=True):
     rank = du.get_rank()
     if is_train:
         batch_size = cfg.DATALOADER.TRAIN_BATCH_SIZE
-        drop_last = True
 
         if num_gpus > 1:
             sampler = DistributedSampler(dataset,
@@ -36,7 +35,6 @@ def build_dataloader(cfg, is_train=True):
             sampler = RandomSampler(dataset)
     else:
         batch_size = cfg.DATALOADER.TEST_BATCH_SIZE
-        drop_last = False
 
         if num_gpus > 1:
             sampler = DistributedSampler(dataset,
@@ -46,12 +44,12 @@ def build_dataloader(cfg, is_train=True):
         else:
             sampler = SequentialSampler(dataset)
 
-    # [When to set pin_memory to true?](https://discuss.pytorch.org/t/when-to-set-pin-memory-to-true/19723)
     data_loader = DataLoader(dataset,
                              num_workers=cfg.DATALOADER.NUM_WORKERS,
                              sampler=sampler,
                              batch_size=batch_size,
-                             drop_last=drop_last,
+                             drop_last=False,
+                             # [When to set pin_memory to true?](https://discuss.pytorch.org/t/when-to-set-pin-memory-to-true/19723)
                              pin_memory=True)
 
     return data_loader

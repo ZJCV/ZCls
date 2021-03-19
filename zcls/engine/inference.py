@@ -20,10 +20,7 @@ logger = logging.get_logger(__name__)
 
 
 @torch.no_grad()
-def compute_on_dataset(images, targets, device, model, num_gpus, evaluator):
-    images = images.to(device=device, non_blocking=True)
-    targets = targets.to(device=device, non_blocking=True)
-
+def compute_on_dataset(images, targets, model, num_gpus, evaluator):
     output_dict = model(images)
     # Gather all the predictions across all the devices to perform ensemble.
     if num_gpus > 1:
@@ -51,13 +48,19 @@ def inference(cfg, model, test_data_loader, device, **kwargs):
 
     logger.info("Evaluating {} dataset({} video clips):".format(dataset_name, len(dataset)))
 
-    data_loader = Prefetcher(test_data_loader, device=device) if cfg.DATALOADER.PREFETCHER else test_data_loader
+    data_loader = Prefetcher(test_data_loader) if cfg.DATALOADER.PREFETCHER else test_data_loader
     if is_master_proc():
-        for images, targets in tqdm(iter(data_loader)):
-            compute_on_dataset(images, targets, device, model, num_gpus, evaluator)
+        for images, targets in tqdm(data_loader):
+            if not cfg.DATALOADER.PREFETCHER:
+                images = images.to(device=device, non_blocking=True)
+                targets = targets.to(device=device, non_blocking=True)
+            compute_on_dataset(images, targets, model, num_gpus, evaluator)
     else:
-        for images, targets in iter(data_loader):
-            compute_on_dataset(images, targets, device, model, num_gpus, evaluator)
+        for images, targets in data_loader:
+            if not cfg.DATALOADER.PREFETCHER:
+                images = images.to(device=device, non_blocking=True)
+                targets = targets.to(device=device, non_blocking=True)
+            compute_on_dataset(images, targets, model, num_gpus, evaluator)
 
     result_str, acc_dict = evaluator.get()
     logger.info(result_str)
