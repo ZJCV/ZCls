@@ -1,5 +1,12 @@
 # CHANGE
 
+## v0.3.5
+
+* New features
+* Bug fixes
+    1. create prefetcher in every epoch
+* Breaking changes.
+
 ## v0.3.4
 
 * New features
