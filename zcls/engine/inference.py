@@ -48,7 +48,7 @@ def inference(cfg, model, test_data_loader, device, **kwargs):
 
     logger.info("Evaluating {} dataset({} video clips):".format(dataset_name, len(dataset)))
 
-    data_loader = Prefetcher(test_data_loader) if cfg.DATALOADER.PREFETCHER else test_data_loader
+    data_loader = Prefetcher(test_data_loader, device) if cfg.DATALOADER.PREFETCHER else test_data_loader
     if is_master_proc():
         for images, targets in tqdm(data_loader):
             if not cfg.DATALOADER.PREFETCHER:

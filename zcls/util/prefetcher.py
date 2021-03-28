@@ -25,10 +25,13 @@ class Prefetcher():
     For overlapped prefetching, supplying pin_memory=True to the dataloader is always required
     """
 
-    def __init__(self, loader: DataLoader):
+    def __init__(self, loader: DataLoader, device):
         assert isinstance(loader, DataLoader)
         self.length = len(loader)
+
         self.loader = iter(loader)
+        self.device = device
+
         self.stream = torch.cuda.Stream()
         self.preload()
 
@@ -40,8 +43,10 @@ class Prefetcher():
             self.next_target = None
             return
         with torch.cuda.stream(self.stream):
-            self.next_input = self.next_input.cuda(non_blocking=True)
-            self.next_target = self.next_target.cuda(non_blocking=True)
+            # self.next_input = self.next_input.cuda(non_blocking=True)
+            # self.next_target = self.next_target.cuda(non_blocking=True)
+            self.next_input = self.next_input.to(self.device, non_blocking=True)
+            self.next_target = self.next_target.to(self.device, non_blocking=True)
 
     def __next__(self):
         torch.cuda.current_stream().wait_stream(self.stream)
@@ -57,3 +62,9 @@ class Prefetcher():
 
     def __len__(self):
         return self.length
+
+    def release(self):
+        self.stream = None
+        self.loader = None
+        self.device = None
+        self.length = None

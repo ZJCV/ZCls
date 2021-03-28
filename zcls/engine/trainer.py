@@ -64,7 +64,7 @@ def do_train(cfg, arguments,
     end = time.time()
     for cur_epoch in range(start_epoch, max_epoch + 1):
         shuffle_dataset(train_data_loader, cur_epoch)
-        data_loader = Prefetcher(train_data_loader) if cfg.DATALOADER.PREFETCHER else train_data_loader
+        data_loader = Prefetcher(train_data_loader, device) if cfg.DATALOADER.PREFETCHER else train_data_loader
         for iteration, (images, targets) in enumerate(data_loader):
             if not cfg.DATALOADER.PREFETCHER:
                 images = images.to(device=device, non_blocking=True)
@@ -128,6 +128,8 @@ def do_train(cfg, arguments,
                                               global_step=global_step)
                 summary_writer.add_scalar('lr', optimizer.param_groups[0]['lr'], global_step=global_step)
 
+        if not cfg.DATALOADER.PREFETCHER:
+            data_loader.release()
         logger.info(log_epoch_stats(epoch_iters, cur_epoch, max_epoch, optimizer.param_groups[0]['lr'], meters))
         arguments["cur_epoch"] = cur_epoch
         lr_scheduler.step()
