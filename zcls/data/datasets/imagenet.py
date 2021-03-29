@@ -33,6 +33,8 @@ class ImageNet(Dataset):
     [What is the meta.bin file used by the ImageNet dataset? #1646](https://github.com/pytorch/vision/issues/1646)
     torchvision will parse the devkit archive of the ImageNet2012 classification dataset and save
     the meta information in a binary file.
+    about problem: TypeError: can't pickle Environment objects
+    refert to [TypeError: can't pickle Environment objects when num_workers > 0 for LSUN #689](https://github.com/pytorch/vision/issues/689)
     """
 
     def __init__(self, root, train=True, transform=None, target_transform=None):
@@ -42,22 +44,34 @@ class ImageNet(Dataset):
         self.classes = list()
         for class_tuple in data_set.classes:
             self.classes.append(','.join(class_tuple))
+        self.length = len(data_set)
 
         # get dataset
         self.dbpath = os.path.join(root, f'{split}.lmdb')
-        self.env = lmdb.open(self.dbpath, subdir=osp.isdir(self.dbpath),
-                             readonly=True, lock=False,
-                             readahead=False, meminit=False)
-        with self.env.begin(write=False) as txn:
-            self.length = loads_pyarrow(txn.get(b'__len__'))
-            self.keys = loads_pyarrow(txn.get(b'__keys__'))
+        # self.env = lmdb.open(self.dbpath, subdir=osp.isdir(self.dbpath),
+        #                      readonly=True, lock=False,
+        #                      readahead=False, meminit=False)
+        # with self.env.begin(write=False) as txn:
+        #     self.length = loads_pyarrow(txn.get(b'__len__'))
+        #     self.keys = loads_pyarrow(txn.get(b'__keys__'))
         # get transform and target_transform
         self.transform = transform
         self.target_transform = target_transform
         # create evaluator
         self._update_evaluator()
 
+    def open_lmdb(self):
+        self.env = lmdb.open(self.dbpath, subdir=osp.isdir(self.dbpath),
+                             readonly=True, lock=False,
+                             readahead=False, meminit=False)
+        # self.env = lmdb.open(self.dbpath, readonly=True, create=False)
+        self.txn = self.env.begin(buffers=True)
+        self.length = loads_pyarrow(self.txn.get(b'__len__'))
+        self.keys = loads_pyarrow(self.txn.get(b'__keys__'))
+
     def __getitem__(self, index: int):
+        if not hasattr(self, 'txn'):
+            self.open_lmdb()
         env = self.env
         with env.begin(write=False) as txn:
             byteflow = txn.get(self.keys[index])
