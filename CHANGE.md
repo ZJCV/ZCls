@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.3.6
+
+* New features
+    1. Add LMDB ImageNet
+* Bug fixes
+    1. one epoch end, use release() to del prefetcher
+* Breaking changes.
+
 ## v0.3.5
 
 * New features
