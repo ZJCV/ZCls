@@ -1,5 +1,12 @@
 # CHANGE
 
+## v0.3.7
+
+* New features
+* Bug fixes
+    1. update python requires in requirements.txt and setup.py
+* Breaking changes.
+
 ## v0.3.6
 
 * New features
