@@ -18,7 +18,9 @@
 
 当前已实现：
 
-![](./imgs/roadmap.png)
+<p align="center">
+<img align="center" src="./imgs/roadmap.svg">
+</p>
 
 *更多细节请参考[路线图](./docs/roadmap.md)*
 

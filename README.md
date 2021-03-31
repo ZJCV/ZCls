@@ -18,7 +18,9 @@
 
 Supported Recognizers:
 
-![](./imgs/roadmap.png)
+<p align="center">
+<img align="center" src="./imgs/roadmap.svg">
+</p>
 
 *Refer to [roadmap](./docs/roadmap.md) for details*
 
