@@ -62,6 +62,8 @@ def inference(cfg, model, test_data_loader, device, **kwargs):
                 targets = targets.to(device=device, non_blocking=True)
             compute_on_dataset(images, targets, model, num_gpus, evaluator)
 
+    if not cfg.DATALOADER.PREFETCHER:
+        data_loader.release()
     result_str, acc_dict = evaluator.get()
     logger.info(result_str)
 
