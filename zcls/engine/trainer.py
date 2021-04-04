@@ -128,7 +128,7 @@ def do_train(cfg, arguments,
                                               global_step=global_step)
                 summary_writer.add_scalar('lr', optimizer.param_groups[0]['lr'], global_step=global_step)
 
-        if not cfg.DATALOADER.PREFETCHER:
+        if cfg.DATALOADER.PREFETCHER:
             data_loader.release()
         logger.info(log_epoch_stats(epoch_iters, cur_epoch, max_epoch, optimizer.param_groups[0]['lr'], meters))
         arguments["cur_epoch"] = cur_epoch
