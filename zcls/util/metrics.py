@@ -21,7 +21,7 @@ def compute_num_flops(model, data):
     return GFlops, params_size
 
 
-def topk_accuracy(output, target, topk=(1,)):
+def topk_accuracy(output, target, top_k=(1,)):
     """
     计算前K个。N表示样本数，C表示类别数
     :param output: 大小为[N, C]，每行表示该样本计算得到的C个类别概率
@@ -30,7 +30,7 @@ def topk_accuracy(output, target, topk=(1,)):
     :return: list
     """
     assert len(output.shape) == 2 and output.shape[0] == target.shape[0]
-    maxk = max(topk)
+    maxk = max(top_k)
     batch_size = target.size(0)
 
     _, pred = output.topk(maxk, 1, largest=True, sorted=True)
@@ -38,7 +38,7 @@ def topk_accuracy(output, target, topk=(1,)):
     correct = pred.eq(target.view(1, -1).expand_as(pred))
 
     res = []
-    for k in topk:
+    for k in top_k:
         # correct_k = correct[:k].view(-1).float().sum(0)
         correct_k = correct[:k].reshape(-1).float().sum(0)
         res.append(correct_k.mul_(100.0 / batch_size))

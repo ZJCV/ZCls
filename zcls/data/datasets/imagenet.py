@@ -37,7 +37,7 @@ class ImageNet(Dataset):
     refert to [TypeError: can't pickle Environment objects when num_workers > 0 for LSUN #689](https://github.com/pytorch/vision/issues/689)
     """
 
-    def __init__(self, root, train=True, transform=None, target_transform=None):
+    def __init__(self, root, train=True, transform=None, target_transform=None, top_k=(1, 5)):
         split = 'train' if train else 'val'
         # using torchvision ImageNet to get classes
         data_set = datasets.ImageNet(root, split=split, transform=transform, target_transform=target_transform)
@@ -58,7 +58,7 @@ class ImageNet(Dataset):
         self.transform = transform
         self.target_transform = target_transform
         # create evaluator
-        self._update_evaluator()
+        self._update_evaluator(top_k)
 
     def open_lmdb(self):
         self.env = lmdb.open(self.dbpath, subdir=osp.isdir(self.dbpath),
@@ -99,8 +99,8 @@ class ImageNet(Dataset):
     def __len__(self) -> int:
         return self.length
 
-    def _update_evaluator(self):
-        self.evaluator = GeneralEvaluator(self.classes, topk=(1, 5))
+    def _update_evaluator(self, top_k):
+        self.evaluator = GeneralEvaluator(self.classes, top_k=top_k)
 
     def __repr__(self):
         return self.__class__.__name__ + ' (' + self.dbpath + ')'

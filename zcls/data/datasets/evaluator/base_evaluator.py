@@ -16,12 +16,12 @@ from zcls.util.metrics import topk_accuracy
 
 class BaseEvaluator(metaclass=ABCMeta):
 
-    def __init__(self, classes, topk=(1,)):
+    def __init__(self, classes, top_k=(1,)):
         super(BaseEvaluator, self).__init__()
         self.classes = classes
         self.device = torch.device('cpu')
 
-        self.topk = topk
+        self.top_k = top_k
         self._init()
 
     def _init(self):
@@ -33,11 +33,11 @@ class BaseEvaluator(metaclass=ABCMeta):
         assert isinstance(output_dict, dict) and KEY_OUTPUT in output_dict.keys()
 
         probs = output_dict[KEY_OUTPUT]
-        res = topk_accuracy(probs, targets, topk=self.topk)
+        res = topk_accuracy(probs, targets, top_k=self.top_k)
 
         acc_dict = dict()
-        for i in range(len(self.topk)):
-            acc_dict[f'tok{self.topk[i]}'] = res[i]
+        for i in range(len(self.top_k)):
+            acc_dict[f'tok{self.top_k[i]}'] = res[i]
         return acc_dict
 
     def evaluate_test(self, output_dict: dict, targets: torch.Tensor):
@@ -46,7 +46,7 @@ class BaseEvaluator(metaclass=ABCMeta):
         outputs = probs.to(device=self.device)
         targets = targets.to(device=self.device)
 
-        res = topk_accuracy(outputs, targets, topk=self.topk)
+        res = topk_accuracy(outputs, targets, top_k=self.top_k)
         self.topk_list.append(torch.stack(res))
         preds = torch.argmax(outputs, dim=1)
         for target, pred in zip(targets.numpy(), preds.numpy()):
@@ -74,9 +74,9 @@ class BaseEvaluator(metaclass=ABCMeta):
         result_str = '\ntotal -'
         acc_dict = dict()
         topk_list = torch.mean(torch.stack(self.topk_list), dim=0)
-        for i in range(len(self.topk)):
-            acc_dict[f"top{self.topk[i]}"] = topk_list[i]
-            result_str += ' {} acc: {:.3f}'.format(f"top{self.topk[i]}", topk_list[i])
+        for i in range(len(self.top_k)):
+            acc_dict[f"top{self.top_k[i]}"] = topk_list[i]
+            result_str += ' {} acc: {:.3f}'.format(f"top{self.top_k[i]}", topk_list[i])
         result_str += '\n'
 
         for idx in range(len(self.classes)):

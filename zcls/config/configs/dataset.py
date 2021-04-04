@@ -17,3 +17,5 @@ def add_config(_C):
     _C.DATASET = CN()
     _C.DATASET.NAME = 'CIFAR100'
     _C.DATASET.DATA_DIR = './data/cifar'
+    # used for evaluator
+    _C.DATASET.TOP_K = (1,)

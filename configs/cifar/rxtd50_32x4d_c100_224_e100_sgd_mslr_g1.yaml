@@ -15,6 +15,7 @@ TRAIN:
 DATASET:
   NAME: 'CIFAR100'
   DATA_DIR: './data/cifar'
+  TOP_K: (1, 5)
 TRANSFORM:
   TRAIN_METHODS: ('Resize', 'RandomCrop', 'RandomHorizontalFlip', 'ColorJitter', 'AUTO_AUGMENT', 'ToTensor', 'Normalize')
   TEST_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')

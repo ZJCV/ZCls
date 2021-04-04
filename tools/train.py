@@ -11,7 +11,7 @@ import os
 import numpy as np
 import torch
 
-from zcls.data.build import build_dataloader
+from zcls.data.build import build_data
 from zcls.engine.trainer import do_train
 from zcls.model.recognizers.build import build_recognizer
 from zcls.model.criterions.build import build_criterion
@@ -68,8 +68,8 @@ def train(cfg):
                 logger.info('warmup end')
         logger.info('resume end')
 
-    train_data_loader = build_dataloader(cfg, is_train=True)
-    test_data_loader = build_dataloader(cfg, is_train=False)
+    train_data_loader = build_data(cfg, is_train=True)
+    test_data_loader = build_data(cfg, is_train=False)
 
     logger.info('init end')
     synchronize()

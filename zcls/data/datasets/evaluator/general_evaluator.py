@@ -12,5 +12,5 @@ from .base_evaluator import BaseEvaluator
 
 class GeneralEvaluator(BaseEvaluator):
 
-    def __init__(self, classes, topk=(1,)):
-        super().__init__(classes, topk)
+    def __init__(self, classes, top_k=(1,)):
+        super().__init__(classes, top_k)

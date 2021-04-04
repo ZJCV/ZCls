@@ -84,5 +84,9 @@ def parse_transform(cfg, is_train=True):
     return transforms.Compose(aug_list)
 
 
+def parse_target_transform():
+    return None
+
+
 def build_transform(cfg, is_train=True):
-    return parse_transform(cfg, is_train)
+    return parse_transform(cfg, is_train), parse_target_transform()
