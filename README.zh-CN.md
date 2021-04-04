@@ -30,7 +30,8 @@
 - [背景](#背景)
 - [用法](#用法)
   - [安装](#安装)
-  - [如何使用](#如何使用)
+  - [如何操作](#如何操作)
+  - [如何添加数据集](#如何添加数据集)
 - [主要维护人员](#主要维护人员)
 - [致谢](#致谢)
 - [参与贡献方式](#参与贡献方式)
@@ -48,9 +49,63 @@
 $ pip install zcls
 ```
 
-### 如何使用
+### 如何操作
 
-参考[ZJCV/RotNet](https://github.com/ZJCV/RotNet)
+1. 添加数据集路径，比如`CIFAR100`
+
+```
+  NAME: 'CIFAR100'
+  TRAIN_DATA_DIR: './data/cifar'
+  TEST_DATA_DIR: './data/cifar'
+```
+
+2. 添加环境变量
+
+```
+$ export PYTHONPATH=/path/to/ZCls
+```
+
+3. 训练
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
+```
+
+完成训练后，可在`outputs/`路径下找到模型。将模型路径添加到配置文件中
+
+```
+    PRELOADED: ""
+```
+
+4. 测试
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/test.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
+```
+
+### 如何添加数据集
+
+假定数据集格式按以下方式排列：
+
+```
+root/dog/xxx.png
+root/dog/xxy.png
+root/dog/xxz.png
+
+root/cat/123.png
+root/cat/nsdf3.png
+root/cat/asd932_.png
+```
+
+修改配置文件如下：
+
+```
+DATASET:
+  NAME: 'GeneralDataset'
+  TRAIN_DATA_DIR: /path/to/train_root
+  TEST_DATA_DIR: /path/to/test/root
+  TOP_K: (1, 5)
+```
 
 ## 主要维护人员
 

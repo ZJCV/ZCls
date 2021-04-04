@@ -30,7 +30,8 @@ Supported Recognizers:
 - [Background](#background)
 - [Usage](#usage)
   - [Installation](#installation)
-  - [How to use](#how-to-use)
+  - [How to Use](#how-to-use)
+  - [How to add Dataset](#how-to-add-dataset)
 - [Maintainers](#maintainers)
 - [Thanks](#thanks)
 - [Contributing](#contributing)
@@ -51,9 +52,63 @@ implementation (such as Torchvision Models)
 $ pip install zcls
 ```
 
-### How to use
+### How to Use
 
-refer to [ZJCV/RotNet](https://github.com/ZJCV/RotNet)
+1. Add dataset path to config_file, like CIFAR100
+
+```
+  NAME: 'CIFAR100'
+  TRAIN_DATA_DIR: './data/cifar'
+  TEST_DATA_DIR: './data/cifar'
+```
+
+2. Add environment variable
+
+```
+$ export PYTHONPATH=/path/to/ZCls
+```
+
+3. train
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
+```
+
+After training, the corresponding model can be found in `outputs/`, add model path to xxx.yaml
+
+```
+    PRELOADED: ""
+```
+
+4. test
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/test.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
+```
+
+### How to add Dataset
+
+Suppose your dataset is in the following format
+
+```
+root/dog/xxx.png
+root/dog/xxy.png
+root/dog/xxz.png
+
+root/cat/123.png
+root/cat/nsdf3.png
+root/cat/asd932_.png
+```
+
+modify config_file like this
+
+```
+DATASET:
+  NAME: 'GeneralDataset'
+  TRAIN_DATA_DIR: /path/to/train_root
+  TEST_DATA_DIR: /path/to/test/root
+  TOP_K: (1, 5)
+```
 
 ## Maintainers
 
