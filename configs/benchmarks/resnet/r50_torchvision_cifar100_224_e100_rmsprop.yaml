@@ -14,7 +14,9 @@ TRAIN:
   USE_TENSORBOARD: True
 DATASET:
   NAME: 'CIFAR100'
-  DATA_DIR: './data/cifar'
+  TRAIN_DATA_DIR: './data/cifar'
+  TEST_DATA_DIR: './data/cifar'
+  TOP_K: (1, 5)
 TRANSFORM:
   TRAIN_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
   TEST_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')

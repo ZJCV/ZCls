@@ -8,13 +8,14 @@ TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
   MAX_EPOCH: 100
-  SAVE_EPOCH: 5
-  EVAL_EPOCH: 5
+  SAVE_EPOCH: 1
+  EVAL_EPOCH: 1
   RESUME: False
   USE_TENSORBOARD: True
 DATASET:
   NAME: 'CIFAR100'
-  DATA_DIR: './data/cifar'
+  TRAIN_DATA_DIR: './data/cifar'
+  TEST_DATA_DIR: './data/cifar'
   TOP_K: (1, 5)
 TRANSFORM:
   TRAIN_METHODS: ('Resize', 'RandomCrop', 'RandomHorizontalFlip', 'ColorJitter', 'AUTO_AUGMENT', 'ToTensor', 'Normalize')

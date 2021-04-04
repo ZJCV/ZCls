@@ -16,6 +16,9 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.DATASET = CN()
     _C.DATASET.NAME = 'CIFAR100'
-    _C.DATASET.DATA_DIR = './data/cifar'
+    # train data path
+    _C.DATASET.TRAIN_DATA_DIR = './data/cifar'
+    # test data path
+    _C.DATASET.TEST_DATA_DIR = './data/cifar'
     # used for evaluator
     _C.DATASET.TOP_K = (1,)
