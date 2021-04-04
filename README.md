@@ -68,7 +68,7 @@ $ pip install zcls
 $ export PYTHONPATH=/path/to/ZCls
 ```
 
-3. train
+3. Train
 
 ```
 $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
@@ -80,10 +80,22 @@ After training, the corresponding model can be found in `outputs/`, add model pa
     PRELOADED: ""
 ```
 
-4. test
+4. Test
 
 ```
 $ CUDA_VISIBLE_DEVICES=0 python tool/test.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
+```
+
+5. If finished the training halfway, resume it like this
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml --resume
+```
+
+6. Use multiple GPU to train
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
 ```
 
 ### How to add Dataset

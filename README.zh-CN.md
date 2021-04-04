@@ -83,6 +83,18 @@ $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar1
 $ CUDA_VISIBLE_DEVICES=0 python tool/test.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
 ```
 
+5. 如果中途结束训练，恢复训练如下
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml --resume
+```
+
+6. 多`GPU`训练
+
+```
+$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
+```
+
 ### 如何添加数据集
 
 假定数据集格式按以下方式排列：
