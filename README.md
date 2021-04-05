@@ -62,6 +62,8 @@ $ pip install zcls
   TEST_DATA_DIR: './data/cifar'
 ```
 
+*Note: current support `CIFAR10/CIFAR100/FashionMNIST/ImageNet`*
+
 2. Add environment variable
 
 ```
@@ -95,7 +97,7 @@ $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar1
 6. Use multiple GPU to train
 
 ```
-$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
+$ CUDA_VISIBLE_DEVICES=0<,1,2,3> python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
 ```
 
 ### How to add Dataset

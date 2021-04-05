@@ -59,6 +59,8 @@ $ pip install zcls
   TEST_DATA_DIR: './data/cifar'
 ```
 
+*注意：当前支持`CIFAR10/CIFAR100/FashionMNIST/ImageNet`*
+
 2. 添加环境变量
 
 ```
@@ -92,7 +94,7 @@ $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar1
 6. 多`GPU`训练
 
 ```
-$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
+$ CUDA_VISIBLE_DEVICES=0<,1,2,3> python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
 ```
 
 ### 如何添加数据集
