@@ -58,8 +58,8 @@ $ pip install zcls
 
 ```
   NAME: 'CIFAR100'
-  TRAIN_DATA_DIR: './data/cifar'
-  TEST_DATA_DIR: './data/cifar'
+  TRAIN_ROOT: './data/cifar'
+  TEST_ROOT: './data/cifar'
 ```
 
 *Note: current support `CIFAR10/CIFAR100/FashionMNIST/ImageNet`*
@@ -119,8 +119,8 @@ modify config_file like this
 ```
 DATASET:
   NAME: 'GeneralDataset'
-  TRAIN_DATA_DIR: /path/to/train_root
-  TEST_DATA_DIR: /path/to/test_root
+  TRAIN_ROOT: /path/to/train_root
+  TEST_ROOT: /path/to/test_root
   TOP_K: (1, 5)
 ```
 
