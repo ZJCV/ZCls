@@ -70,14 +70,13 @@ class LMDBDataset(Dataset):
         img = Image.open(buf).convert('RGB')
 
         # load label
-        target = unpacked[1]
+        target = unpacked[1][0]
 
         if self.transform is not None:
             img = self.transform(img)
         if self.target_transform is not None:
             target = self.target_transform(target)
 
-        # return img, target
         return img, target
 
     def __len__(self) -> int:
