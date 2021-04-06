@@ -13,6 +13,7 @@ import numpy as np
 from zcls.config import cfg
 from zcls.data.datasets.imagenet import ImageNet
 from zcls.data.build import build_dataloader
+from zcls.data.datasets.lmdb_imagenet import get_imagenet_classes
 
 
 def test_dataloader():
@@ -44,6 +45,12 @@ def test_imagenet():
     cv2.imwrite('test_imagenet.png', np_img)
 
 
+def test_imagenet_classes():
+    idx2label = get_imagenet_classes()
+    print(idx2label)
+
+
 if __name__ == '__main__':
     # test_imagenet()
-    test_dataloader()
+    # test_dataloader()
+    test_imagenet_classes()
