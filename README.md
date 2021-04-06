@@ -120,7 +120,7 @@ modify config_file like this
 DATASET:
   NAME: 'GeneralDataset'
   TRAIN_DATA_DIR: /path/to/train_root
-  TEST_DATA_DIR: /path/to/test/root
+  TEST_DATA_DIR: /path/to/test_root
   TOP_K: (1, 5)
 ```
 
