@@ -21,6 +21,7 @@ class CIFAR(Dataset):
         else:
             self.data_set = CIFAR10(root, train=train, transform=transform, target_transform=target_transform)
         self.classes = self.data_set.classes
+        self.root = root
         self._update_evaluator(top_k)
 
     def __getitem__(self, index: int):
@@ -31,3 +32,6 @@ class CIFAR(Dataset):
 
     def _update_evaluator(self, top_k):
         self.evaluator = GeneralEvaluator(self.classes, top_k=top_k)
+
+    def __repr__(self):
+        return self.__class__.__name__ + ' (' + self.root + ')'

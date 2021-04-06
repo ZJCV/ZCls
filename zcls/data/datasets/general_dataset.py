@@ -18,6 +18,7 @@ class GeneralDataset(Dataset):
     def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5)):
         self.data_set = datasets.ImageFolder(root, transform=transform, target_transform=target_transform)
         self.classes = self.data_set.classes
+        self.root = root
         self._update_evaluator(top_k)
 
     def __getitem__(self, index: int):
@@ -28,3 +29,6 @@ class GeneralDataset(Dataset):
 
     def _update_evaluator(self, top_k):
         self.evaluator = GeneralEvaluator(self.classes, top_k=top_k)
+
+    def __repr__(self):
+        return self.__class__.__name__ + ' (' + self.root + ')'
