@@ -26,6 +26,13 @@ def loads_data(buf):
 
 
 class LMDBDataset(Dataset):
+    """
+    [What is the meta.bin file used by the ImageNet dataset? #1646](https://github.com/pytorch/vision/issues/1646)
+    torchvision will parse the devkit archive of the ImageNet2012 classification dataset and save
+    the meta information in a binary file.
+    about problem: TypeError: can't pickle Environment objects
+    refert to [TypeError: can't pickle Environment objects when num_workers > 0 for LSUN #689](https://github.com/pytorch/vision/issues/689)
+    """
 
     def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5)):
         assert os.path.isfile(root)
@@ -74,9 +81,13 @@ class LMDBDataset(Dataset):
         return img, target
 
     def __len__(self) -> int:
+        if not hasattr(self, 'txn'):
+            self.open_lmdb()
         return self.length
 
     def _update_evaluator(self, top_k):
+        if not hasattr(self, 'txn'):
+            self.open_lmdb()
         self.evaluator = GeneralEvaluator(self.classes, top_k=top_k)
 
     def __repr__(self):
