@@ -38,3 +38,6 @@ extra_javascript:
 # 导航
 nav:
     - Home: index.md
+    - Roadmap: roadmap.md
+    - Installation: install.md
+    - Get Started with ZCls: get-started.md

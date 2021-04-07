@@ -1,17 +1,9 @@
-# Welcome to MkDocs
+# ZCls
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Welcome to zcls, a classification model benchmark code base.
 
-## Commands
+## Chapter
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+* [Roadmap](./roadmap.md)
+* [Installation](./install.md)
+* [Get Started with ZCls](./get-started.md)
