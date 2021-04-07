@@ -16,7 +16,8 @@ from .evaluator.general_evaluator import GeneralEvaluator
 class FashionMNIST(Dataset):
 
     def __init__(self, root, train=True, transform=None, target_transform=None, top_k=(1, 5)):
-        self.data_set = datasets.FashionMNIST(root, train=train, transform=transform, target_transform=target_transform)
+        self.data_set = datasets.FashionMNIST(root, train=train, transform=transform, target_transform=target_transform,
+                                              download=True)
         self.classes = self.data_set.classes
         self.root = root
         self._update_evaluator(top_k)

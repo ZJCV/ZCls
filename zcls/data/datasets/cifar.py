@@ -17,9 +17,11 @@ class CIFAR(Dataset):
 
     def __init__(self, root, train=True, transform=None, target_transform=None, top_k=(1, 5), is_cifar100=True):
         if is_cifar100:
-            self.data_set = CIFAR100(root, train=train, transform=transform, target_transform=target_transform)
+            self.data_set = CIFAR100(root, train=train, transform=transform, target_transform=target_transform,
+                                     download=True)
         else:
-            self.data_set = CIFAR10(root, train=train, transform=transform, target_transform=target_transform)
+            self.data_set = CIFAR10(root, train=train, transform=transform, target_transform=target_transform,
+                                    download=True)
         self.classes = self.data_set.classes
         self.root = root
         self._update_evaluator(top_k)
