@@ -31,8 +31,11 @@ def batch_process(model, src_dir, dst_dir):
         for file_name in file_list:
             src_file_path = os.path.join(src_cate_dir, file_name)
             dst_file_path = os.path.join(dst_cate_dir, file_name)
+            if os.path.isfile(dst_file_path):
+                continue
 
-            src_img = Image.open(src_file_path)
+            # fix OSError: cannot write mode RGBA as JPEG
+            src_img = Image.open(src_file_path).convert('RGB')
             dst_img = model(src_img)
 
             dst_img.save(dst_file_path)
