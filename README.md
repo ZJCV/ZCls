@@ -51,7 +51,11 @@ See [INSTALL](https://zcls.readthedocs.io/en/latest/install/)
 
 ## Usage
 
-See [Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started/)
+How to train, see [Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started/)
+
+Use builtin datasets, see [Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
+
+Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
 
 ## Maintainers
 
