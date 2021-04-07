@@ -1,5 +1,17 @@
 # CHANGE
 
+## v0.4.0
+
+* New features
+    1. add GeneralDataset class
+    2. add LMDBDataset class
+    3. add LMDBImageNet class 
+    4. add README usage
+* Bug fixes
+    1. when use prefetcher in inference, release it after one epoch
+    2. split train/test data path in config_file
+* Breaking changes.
+
 ## v0.3.7
 
 * New features

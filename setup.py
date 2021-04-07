@@ -17,7 +17,6 @@ INSTALL_REQUIRES = [
     "numpy >= 1.20.1",
     "opencv_contrib_python >= 4.5.1.48",
     "psutil >= 5.8.0",
-    "pyarrow >= 3.0.0",
     "resnest >= 0.0.6b20210114",
     "six >= 1.15.0",
     "tabulate >= 0.8.7",
