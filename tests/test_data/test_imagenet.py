@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 
 from zcls.data.datasets.imagenet import ImageNet
-from zcls.data.datasets.lmdb_imagenet import get_imagenet_classes, LMDBImageNet
+from zcls.data.datasets.lmdb_imagenet import LMDBImageNet
 
 
 def test_imagenet():
@@ -28,11 +28,6 @@ def test_imagenet():
     np_img = np.array(img)
     print(np_img.shape)
     cv2.imwrite('test_imagenet.png', np_img)
-
-
-def test_imagenet_classes():
-    idx2label = get_imagenet_classes()
-    print(idx2label)
 
 
 def test_lmdb_imagenet():
@@ -53,5 +48,4 @@ def test_lmdb_imagenet():
 
 if __name__ == '__main__':
     test_imagenet()
-    test_imagenet_classes()
     test_lmdb_imagenet()
