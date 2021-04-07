@@ -17,7 +17,7 @@ from torch.utils.data import Dataset
 from .evaluator.general_evaluator import GeneralEvaluator
 
 
-def loads_data(buf):
+def load_data(buf):
     """
     Args:
         buf: the output of `dumps`.
@@ -43,16 +43,6 @@ class LMDBDataset(Dataset):
         # create evaluator
         self._update_evaluator(top_k)
 
-    def open_lmdb(self):
-        self.env = lmdb.open(self.dbpath, subdir=False,
-                             readonly=True, lock=False,
-                             readahead=False, meminit=False)
-        # self.env = lmdb.open(self.dbpath, readonly=True, create=False)
-        self.txn = self.env.begin(buffers=True)
-        self.length = loads_data(self.txn.get(b'__len__'))
-        self.keys = loads_data(self.txn.get(b'__keys__'))
-        self.classes = loads_data(self.txn.get(b'classes'))
-
     def __getitem__(self, index: int):
         if not hasattr(self, 'txn'):
             self.open_lmdb()
@@ -60,10 +50,10 @@ class LMDBDataset(Dataset):
         with env.begin(write=False) as txn:
             byteflow = txn.get(self.keys[index])
 
-        unpacked = loads_data(byteflow)
+        unpacked = load_data(byteflow)
 
         # load img
-        imgbuf = unpacked[0]
+        imgbuf = unpacked[0][0]
         buf = six.BytesIO()
         buf.write(imgbuf)
         buf.seek(0)
@@ -91,3 +81,16 @@ class LMDBDataset(Dataset):
 
     def __repr__(self):
         return self.__class__.__name__ + ' (' + self.dbpath + ')'
+
+    def open_lmdb(self):
+        self.env = lmdb.open(self.dbpath, subdir=False,
+                             readonly=True, lock=False,
+                             readahead=False, meminit=False)
+        # self.env = lmdb.open(self.dbpath, readonly=True, create=False)
+        self.txn = self.env.begin(buffers=True)
+        self.length = load_data(self.txn.get(b'__len__'))
+        self.keys = load_data(self.txn.get(b'__keys__'))
+        self.classes = self.get_classes(self.txn)
+
+    def get_classes(self, txn):
+        return load_data(txn.get(b'classes'))
