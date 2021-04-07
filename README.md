@@ -14,6 +14,9 @@
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg"></a>
   <a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg"></a>
   <a href="https://pypi.org/project/zcls/"><img src="https://img.shields.io/badge/PYPI-zcls-brightgreen"></a>
+  <a href='https://zcls.readthedocs.io/en/latest/?badge=latest'>
+    <img src='https://readthedocs.org/projects/zcls/badge/?version=latest' alt='Documentation Status' />
+  </a>
 </p>
 
 Supported Recognizers:
