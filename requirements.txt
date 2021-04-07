@@ -212,7 +212,3 @@ tqdm == 4.56.0
 # ZCls/zcls/config/configs/optimizer.py: 10
 # ZCls/zcls/config/configs/transform.py: 10
 yacs == 0.1.8
-
-# ZCls/zcls/config/configs/transform.py: 11
-# ZCls/zcls/data/transforms/build.py: 12,13
-ztransforms == 0.2.0
