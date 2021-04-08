@@ -24,6 +24,7 @@ current supported transforms methods:
 7. 'RandomHorizontalFlip'
 8. 'RandomVerticalFlip'
 9. 'ColorJitter'
+10. 'Grayscale'
 """
 
 
@@ -66,6 +67,8 @@ def parse_transform(cfg, is_train=True):
             else:
                 raise ValueError(f'{cfg.TRANSFORM.AUGMENT_POLICY} does not exists')
             aug_list.append(transform(policy=policy))
+        elif method == 'Grayscale':
+            aug_list.append(transform())
         elif method == 'ToTensor':
             aug_list.append(transform())
         elif method == 'ConvertImageDtype':
