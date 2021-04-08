@@ -22,6 +22,8 @@ from multiprocessing import Pool
 num_worker = int(os.cpu_count() / 2)
 # Specifies the size of the shorter edge of the image
 short_side = 100
+# After processing, the image is saved in PNG format
+suffix = '.png'
 
 # Dataset source directory
 src_dir = 'data/imagenet/train'
@@ -45,8 +47,9 @@ def batch_process(cate_name):
     print(f'begin {src_cate_dir}')
     file_list = os.listdir(src_cate_dir)
     for file_name in file_list:
+        img_name, src_suffix = os.path.splitext(file_name)
         src_file_path = os.path.join(src_cate_dir, file_name)
-        dst_file_path = os.path.join(dst_cate_dir, file_name)
+        dst_file_path = os.path.join(dst_cate_dir, img_name + suffix)
         if os.path.isfile(dst_file_path):
             continue
 
