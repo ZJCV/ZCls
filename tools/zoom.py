@@ -25,8 +25,12 @@ short_side = 100
 
 # Dataset source directory
 src_dir = 'data/imagenet/train'
+# src_dir = 'data/imagenet/val'
 # Dataset results directory
 dst_dir = 'data/imagenet/train_zoom'
+
+
+# dst_dir = 'data/imagenet/val_zoom'
 
 
 def batch_process(cate_name):
@@ -38,6 +42,7 @@ def batch_process(cate_name):
     if not os.path.exists(dst_cate_dir):
         os.makedirs(dst_cate_dir)
 
+    print(f'begin {src_cate_dir}')
     file_list = os.listdir(src_cate_dir)
     for file_name in file_list:
         src_file_path = os.path.join(src_cate_dir, file_name)
@@ -50,7 +55,7 @@ def batch_process(cate_name):
         dst_img = model(src_img)
 
         dst_img.save(dst_file_path)
-    print(src_cate_dir)
+    print(f'end {src_cate_dir}')
 
 
 def get_model(short_side):
@@ -59,6 +64,10 @@ def get_model(short_side):
 
 
 if __name__ == '__main__':
+    if not os.path.exists(src_dir):
+        raise ValueError(f'{src_dir} does not exists')
+    if not os.path.exists(dst_dir):
+        os.makedirs(dst_dir)
     cate_list = os.listdir(src_dir)
 
     pool = Pool(num_worker)
