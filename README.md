@@ -118,7 +118,7 @@ Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/la
 }
 ```
 
-For more thanks, check [THANKS](./THANKS)
+*For more thanks, check [THANKS](./THANKS)*
 
 ## Contributing
 
