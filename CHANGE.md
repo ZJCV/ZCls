@@ -1,11 +1,21 @@
 # CHANGE
 
+## v0.4.1
+
+* New features
+    1. Add mkdocs project
+    2. Update README
+    3. add tool/zoom.py
+    4. add Grayscale transform
+* Bug fixes
+* Breaking changes.
+
 ## v0.4.0
 
 * New features
     1. add GeneralDataset class
     2. add LMDBDataset class
-    3. add LMDBImageNet class 
+    3. add LMDBImageNet class
     4. add README usage
 * Bug fixes
     1. when use prefetcher in inference, release it after one epoch
