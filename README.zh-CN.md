@@ -25,7 +25,7 @@
 <img align="center" src="./imgs/roadmap.svg">
 </p>
 
-*更多细节请参考[路线图](./docs/roadmap.md)*
+*更多细节请参考[路线图](https://zcls.readthedocs.io/en/latest/roadmap/)*
 
 ## 内容列表
 
@@ -34,7 +34,6 @@
 - [用法](#用法)
   - [安装](#安装)
   - [如何操作](#如何操作)
-  - [如何添加数据集](#如何添加数据集)
 - [主要维护人员](#主要维护人员)
 - [致谢](#致谢)
 - [参与贡献方式](#参与贡献方式)
@@ -48,81 +47,15 @@
 
 ### 安装
 
-```
-$ pip install zcls
-```
+查看[INSTALL](https://zcls.readthedocs.io/en/latest/install/)
 
 ### 如何操作
 
-1. 添加数据集路径，比如`CIFAR100`
+关于如何训练，查看[Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started/)
 
-```
-  NAME: 'CIFAR100'
-  TRAIN_ROOT: './data/cifar'
-  TEST_ROOT: './data/cifar'
-```
+关于如何使用内置数据集，查看[Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
 
-*注意：当前支持`CIFAR10/CIFAR100/FashionMNIST/ImageNet`*
-
-2. 添加环境变量
-
-```
-$ export PYTHONPATH=/path/to/ZCls
-```
-
-3. 训练
-
-```
-$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
-```
-
-完成训练后，可在`outputs/`路径下找到模型。将模型路径添加到配置文件中
-
-```
-    PRELOADED: ""
-```
-
-4. 测试
-
-```
-$ CUDA_VISIBLE_DEVICES=0 python tool/test.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
-```
-
-5. 如果中途结束训练，恢复训练如下
-
-```
-$ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml --resume
-```
-
-6. 多`GPU`训练
-
-```
-$ CUDA_VISIBLE_DEVICES=0<,1,2,3> python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
-```
-
-### 如何添加数据集
-
-假定数据集格式按以下方式排列：
-
-```
-root/dog/xxx.png
-root/dog/xxy.png
-root/dog/xxz.png
-
-root/cat/123.png
-root/cat/nsdf3.png
-root/cat/asd932_.png
-```
-
-修改配置文件如下：
-
-```
-DATASET:
-  NAME: 'GeneralDataset'
-  TRAIN_ROOT: /path/to/train_root
-  TEST_ROOT: /path/to/test_root
-  TOP_K: (1, 5)
-```
+关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
 
 ## 主要维护人员
 

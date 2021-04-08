@@ -25,7 +25,7 @@ Supported Recognizers:
 <img align="center" src="./imgs/roadmap.svg">
 </p>
 
-*Refer to [roadmap](./docs/roadmap.md) for details*
+*Refer to [roadmap](https://zcls.readthedocs.io/en/latest/roadmap/) for details*
 
 ## Table of Contents
 
