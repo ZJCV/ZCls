@@ -14,6 +14,17 @@ import pickle
 from PIL import Image
 from torch.utils.data import Dataset
 
+# [Python Pillow - ValueError: Decompressed Data Too Large](https://stackoverflow.com/questions/42671252/python-pillow-valueerror-decompressed-data-too-large)
+from PIL import PngImagePlugin
+
+LARGE_ENOUGH_NUMBER = 100
+PngImagePlugin.MAX_TEXT_CHUNK = LARGE_ENOUGH_NUMBER * (1024 ** 2)
+
+# [Logs polluted by PIL.PngImagePlugin DEBUG log-level #15](https://github.com/camptocamp/pytest-odoo/issues/15)
+import logging
+pil_logger = logging.getLogger('PIL')
+pil_logger.setLevel(logging.INFO)
+
 from .evaluator.general_evaluator import GeneralEvaluator
 
 
