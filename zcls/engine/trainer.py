@@ -63,7 +63,8 @@ def do_train(cfg, arguments,
     start_training_time = time.time()
     end = time.time()
     for cur_epoch in range(start_epoch, max_epoch + 1):
-        shuffle_dataset(train_data_loader, cur_epoch)
+        if cfg.DATALOADER.SHUFFLE:
+            shuffle_dataset(train_data_loader, cur_epoch)
         data_loader = Prefetcher(train_data_loader, device) if cfg.DATALOADER.PREFETCHER else train_data_loader
         for iteration, (images, targets) in enumerate(data_loader):
             if not cfg.DATALOADER.PREFETCHER:

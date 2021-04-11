@@ -24,3 +24,9 @@ def add_config(_C):
 
     # overlapped prefetching cpu->gpu memory copy
     _C.DATALOADER.PREFETCHER = False
+
+    # shuffle dataset per epoch
+    _C.DATALOADER.SHUFFLE = True
+
+    # random sample or sequential sample in train/test stage
+    _C.DATALOADER.RANDOM_SAMPLE = True
