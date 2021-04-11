@@ -1,5 +1,15 @@
 # CHANGE
 
+## v0.4.2
+
+* New features
+    1. add DATALOADER SHUFFLE/RANDOM_SAMPLE config
+    2. update lmdbdataset get image way
+    3. update tools/zoom.py process way
+* Bug fixes
+    1. LMDBDataset: valueError: Decompressed Data Too Large
+* Breaking changes.
+
 ## v0.4.1
 
 * New features
