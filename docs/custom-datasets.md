@@ -35,6 +35,8 @@ zcls supports [LMDB](https://lmdb.readthedocs.io/en/release/) to speed up data s
 
 See [pnno](https://github.com/zjykzj/pnno)
 
+*tip: before use `pnno` to create LMDB file, you can use `tools/zoom.py` to resize image*
+
 ### How to Use
 
 modify config_file like this
