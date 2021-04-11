@@ -7,8 +7,8 @@
 @description: 
 """
 
-import os
 import six
+import os
 import lmdb
 import pickle
 from PIL import Image
@@ -22,6 +22,7 @@ PngImagePlugin.MAX_TEXT_CHUNK = LARGE_ENOUGH_NUMBER * (1024 ** 2)
 
 # [Logs polluted by PIL.PngImagePlugin DEBUG log-level #15](https://github.com/camptocamp/pytest-odoo/issues/15)
 import logging
+
 pil_logger = logging.getLogger('PIL')
 pil_logger.setLevel(logging.INFO)
 
@@ -57,28 +58,18 @@ class LMDBDataset(Dataset):
     def __getitem__(self, index: int):
         if not hasattr(self, 'txn'):
             self.open_lmdb()
-        env = self.env
-        with env.begin(write=False) as txn:
-            byteflow = txn.get(self.keys[index])
+        # with env.begin(write=False) as txn:
+        byteflow = self.txn.get(self.keys[index])
 
-        unpacked = load_data(byteflow)
-
-        # load img
-        imgbuf = unpacked[0][0]
-        buf = six.BytesIO()
-        buf.write(imgbuf)
-        buf.seek(0)
-        img = Image.open(buf).convert('RGB')
-
-        # load label
-        target = unpacked[1][0]
+        imgbuf, target = load_data(byteflow)
+        image = self.get_image(imgbuf)
 
         if self.transform is not None:
-            img = self.transform(img)
+            image = self.transform(image)
         if self.target_transform is not None:
             target = self.target_transform(target)
 
-        return img, target
+        return image, target
 
     def __len__(self) -> int:
         if not hasattr(self, 'txn'):
@@ -97,11 +88,18 @@ class LMDBDataset(Dataset):
         self.env = lmdb.open(self.dbpath, subdir=False,
                              readonly=True, lock=False,
                              readahead=False, meminit=False)
-        # self.env = lmdb.open(self.dbpath, readonly=True, create=False)
-        self.txn = self.env.begin(buffers=True)
+        self.txn = self.env.begin(write=False, buffers=True)
         self.length = load_data(self.txn.get(b'__len__'))
         self.keys = load_data(self.txn.get(b'__keys__'))
         self.classes = self.get_classes(self.txn)
 
     def get_classes(self, txn):
         return load_data(txn.get(b'classes'))
+
+    def get_image(self, imgbuf):
+        buf = six.BytesIO()
+        buf.write(imgbuf)
+        buf.seek(0)
+
+        image = Image.open(buf).convert('RGB')
+        return image
