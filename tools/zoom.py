@@ -15,29 +15,31 @@ root/cat/asd932_.png
 """
 
 import os
+import imageio
+import numpy as np
 from ztransforms.cls import Resize
 from PIL import Image
 from multiprocessing import Pool
 
-num_worker = int(os.cpu_count() / 2)
+# number of process
+num_workers = int(os.cpu_count() / 2)
 # Specifies the size of the shorter edge of the image
-short_side = 100
+shorter_side = 224
 # After processing, the image is saved in PNG format
-suffix = '.png'
+suffix = '.jpg'
 
 # Dataset source directory
-src_dir = 'data/imagenet/train'
 # src_dir = 'data/imagenet/val'
+src_dir = 'data/imagenet/train'
+
 # Dataset results directory
-dst_dir = 'data/imagenet/train_zoom'
-
-
-# dst_dir = 'data/imagenet/val_zoom'
+# dst_dir = 'data/imagenet/zoom_val'
+dst_dir = 'data/imagenet/zoom_train'
 
 
 def batch_process(cate_name):
     # Resize
-    model = get_model(short_side)
+    model = get_model()
     # for i, cate_name in enumerate(cate_list):
     src_cate_dir = os.path.join(src_dir, cate_name)
     dst_cate_dir = os.path.join(dst_dir, cate_name)
@@ -55,14 +57,15 @@ def batch_process(cate_name):
 
         # fix OSError: cannot write mode RGBA as JPEG
         src_img = Image.open(src_file_path).convert('RGB')
-        dst_img = model(src_img)
+        tmp_img = model(src_img)
 
-        dst_img.save(dst_file_path)
+        dst_img = np.array(tmp_img)
+        imageio.imwrite(dst_file_path, dst_img)
     print(f'end {src_cate_dir}')
 
 
-def get_model(short_side):
-    model = Resize(short_side)
+def get_model():
+    model = Resize(shorter_side)
     return model
 
 
@@ -73,5 +76,5 @@ if __name__ == '__main__':
         os.makedirs(dst_dir)
     cate_list = os.listdir(src_dir)
 
-    pool = Pool(num_worker)
+    pool = Pool(num_workers)
     pool.map(batch_process, cate_list)
