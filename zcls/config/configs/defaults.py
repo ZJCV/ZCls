@@ -32,6 +32,9 @@ _C.INIT_METHOD = "tcp://localhost:39129"
 # ---------------------------------------------------------------------------- #
 _C.TRAIN = CN()
 _C.TRAIN.LOG_STEP = 10
+# refert to
+# [How to Break GPU Memory Boundaries Even with Large Batch Sizes](https://towardsdatascience.com/how-to-break-gpu-memory-boundaries-even-with-large-batch-sizes-7a9c27a400ce)
+# [How to implement accumulated gradient？](https://discuss.pytorch.org/t/how-to-implement-accumulated-gradient/3822)
 _C.TRAIN.GRADIENT_ACCUMULATE_STEP = 1
 _C.TRAIN.SAVE_EPOCH = 5
 _C.TRAIN.EVAL_EPOCH = 5
