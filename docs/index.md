@@ -10,3 +10,4 @@ Welcome to zcls, a classification model benchmark code base.
 * [Use Custom Datasets](./custom-datasets.md)
 * [Roadmap](./roadmap.md)
 * [Trick - Data](./trick-data.md)
+* [Trick - Train](./trick-train.md)
