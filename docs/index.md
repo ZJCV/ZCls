@@ -1,4 +1,4 @@
-# ZCls(v0.4.2)
+# ZCls(v0.5.0)
 
 Welcome to zcls, a classification model benchmark code base.
 

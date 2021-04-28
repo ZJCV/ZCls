@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.5.0
+
+* New features
+    1. Add docs for trick-data/trick-train
+    2. Add public function get_classes for dataset
+* Bug fixes
+* Breaking changes.
+
 ## v0.4.2
 
 * New features
