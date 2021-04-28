@@ -91,10 +91,12 @@ class LMDBDataset(Dataset):
         self.txn = self.env.begin(write=False, buffers=True)
         self.length = load_data(self.txn.get(b'__len__'))
         self.keys = load_data(self.txn.get(b'__keys__'))
-        self.classes = self.get_classes(self.txn)
+        self.classes = load_data(self.txn.get(b'classes'))
 
-    def get_classes(self, txn):
-        return load_data(txn.get(b'classes'))
+    def get_classes(self):
+        if not hasattr(self, 'txn'):
+            self.open_lmdb()
+        return self.classes
 
     def get_image(self, imgbuf):
         buf = six.BytesIO()

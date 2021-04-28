@@ -24,7 +24,7 @@ class LMDBImageNet(LMDBDataset):
     def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5)):
         super().__init__(root, transform, target_transform, top_k)
 
-    def get_classes(self, txn):
+    def get_classes(self):
         """
         refert to [Imagenet classes](https://discuss.pytorch.org/t/imagenet-classes/4923)
         :return:

@@ -30,5 +30,8 @@ class GeneralDataset(Dataset):
     def _update_evaluator(self, top_k):
         self.evaluator = GeneralEvaluator(self.classes, top_k=top_k)
 
+    def get_classes(self):
+        return self.classes
+
     def __repr__(self):
         return self.__class__.__name__ + ' (' + self.root + ')'
