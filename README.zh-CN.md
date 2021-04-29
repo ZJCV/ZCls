@@ -7,7 +7,7 @@
  <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
-  «ZCls»是一个分类模型基准代码库
+  «ZCls»是一个分类模型训练/部署框架
 <br>
 <br>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square"></a>

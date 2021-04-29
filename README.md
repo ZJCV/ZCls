@@ -7,7 +7,7 @@
  <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
-  «ZCls» is a classification model benchmark code base
+  «ZCls» is a classification model training/deployment framework 
 <br>
 <br>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square"></a>
