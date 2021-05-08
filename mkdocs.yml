@@ -48,3 +48,5 @@ nav:
     - Trick:
       - Data: trick-data.md
       - Train: trick-train.md
+    - Benchmark:
+      - ResNet: benchmark-resnet.md

@@ -14,3 +14,5 @@ Welcome to zcls, a classification model training/deployment framework.
 * Trick
     * [Data](./trick-data.md)
     * [Train](./trick-train.md)
+* Benchmark
+    * [ResNet](./benchmark-resnet.md)
