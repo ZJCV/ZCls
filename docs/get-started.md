@@ -15,20 +15,16 @@
 
 3. Train
 
-        $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
+        $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/cifar/r50_cifar100_224_e100_rmsprop.yaml
 
-      After training, the corresponding model can be found in `outputs/`, add model path to xxx.yaml
+      After training, the corresponding model can be found in `outputs/`
 
-        PRELOADED: ""
-
-4. Test
-
-        $ CUDA_VISIBLE_DEVICES=0 python tool/test.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml
+4. Using pretrained model, refer to [Pretrained Model](./pretrained-model.md)
 
 5. If finished the training halfway, resume it like this
 
-        $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml --resume
+        $ CUDA_VISIBLE_DEVICES=0 python tool/train.py -cfg=configs/cifar/r50_cifar100_224_e100_rmsprop.yaml --resume
 
 6. Use multiple GPU to train
 
-        $ CUDA_VISIBLE_DEVICES=0<,1,2,3> python tool/train.py -cfg=configs/benchmarks/r50_cifar100_224_e100_rmsprop.yaml -g=<N>
+        $ CUDA_VISIBLE_DEVICES=0<,1,2,3> python tool/train.py -cfg=configs/cifar/r50_cifar100_224_e100_rmsprop.yaml -g=<N>

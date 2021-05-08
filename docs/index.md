@@ -1,13 +1,16 @@
 # ZCls(v0.5.0)
 
-Welcome to zcls, a classification model benchmark code base.
+Welcome to zcls, a classification model training/deployment framework.
 
 ## Chapter
 
 * [Installation](./install.md)
-* [Get Started with ZCls](./get-started.md)
-* [Use Builtin Datasets](./builtin-datasets.md)
-* [Use Custom Datasets](./custom-datasets.md)
 * [Roadmap](./roadmap.md)
-* [Trick - Data](./trick-data.md)
-* [Trick - Train](./trick-train.md)
+* [Get Started with ZCls](./get-started.md)
+* [Using Pretrained Model](./pretrained-model.md)
+* Dataset
+    * [Use Builtin Datasets](./builtin-datasets.md)
+    * [Use Custom Datasets](./custom-datasets.md)
+* Trick
+    * [Data](./trick-data.md)
+    * [Train](./trick-train.md)

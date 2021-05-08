@@ -38,10 +38,13 @@ extra_javascript:
 # 导航
 nav:
     - Home: index.md
+    - Roadmap: roadmap.md
     - Installation: install.md
     - Get Started with ZCls: get-started.md
-    - Use Builtin Datasets: builtin-datasets.md
-    - Use Custom Datasets: custom-datasets.md
-    - Roadmap: roadmap.md
-    - Trick - Data: trick-data.md
-    - Trick - Train: trick-train.md
+    - Use Pretrained model: pretrained-model.md
+    - Dataset:
+      - Use Builtin Datasets: builtin-datasets.md
+      - Use Custom Datasets: custom-datasets.md
+    - Trick:
+      - Data: trick-data.md
+      - Train: trick-train.md
