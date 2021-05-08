@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.5.1
+
+* New features
+    1. transform torchvision resnet pretrained model to zcls format
+    2. update pretrained model usage
+* Bug fixes
+* Breaking changes.
+
 ## v0.5.0
 
 * New features
