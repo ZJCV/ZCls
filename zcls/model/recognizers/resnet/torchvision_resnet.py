@@ -11,7 +11,8 @@ from abc import ABC
 
 import torch.nn as nn
 from torch.nn.modules.module import T
-from torchvision.models.resnet import resnet18, resnet50, resnext50_32x4d
+from torchvision.models.resnet import resnet18, resnet34, resnet50, resnet101, resnet152, resnext50_32x4d, \
+    resnext101_32x8d
 
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model import registry
@@ -37,12 +38,24 @@ class TorchvisionResNet(nn.Module, ABC):
         if arch == 'resnet18':
             self.model = resnet18(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
                                   zero_init_residual=zero_init_residual)
+        elif arch == 'resnet34':
+            self.model = resnet34(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+                                  zero_init_residual=zero_init_residual)
         elif arch == 'resnet50':
             self.model = resnet50(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
                                   zero_init_residual=zero_init_residual)
+        elif arch == 'resnet101':
+            self.model = resnet101(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+                                   zero_init_residual=zero_init_residual)
+        elif arch == 'resnet152':
+            self.model = resnet152(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+                                   zero_init_residual=zero_init_residual)
         elif arch == 'resnext50_32x4d':
             self.model = resnext50_32x4d(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
                                          zero_init_residual=zero_init_residual)
+        elif arch == 'resnext101_32x8d':
+            self.model = resnext101_32x8d(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+                                          zero_init_residual=zero_init_residual)
         else:
             raise ValueError('no such value')
 
