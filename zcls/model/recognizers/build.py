@@ -44,7 +44,7 @@ def build_recognizer(cfg, device):
         convert_sync_bn(model, du.LOCAL_PROCESS_GROUP)
     preloaded = cfg.MODEL.RECOGNIZER.PRELOADED
     if preloaded != "":
-        logger.info(f'load pretrained: {preloaded}')
+        logger.info(f'load preloaded: {preloaded}')
         check_pointer = CheckPointer(model)
         check_pointer.load(preloaded, map_location=device)
         logger.info("finish loading model weights")
