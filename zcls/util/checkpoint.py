@@ -1,6 +1,7 @@
 import os
 import torch
 from torch.nn.parallel import DistributedDataParallel
+from torchvision.models.utils import load_state_dict_from_url
 
 from . import logging
 
@@ -94,7 +95,12 @@ class CheckPointer:
             f.write(last_filename)
 
     def _load_file(self, f, map_location=None):
-        if map_location:
-            return torch.load(f, map_location=map_location)
+        device = map_location if map_location else torch.device('cpu')
+        # local or remote links
+        if '://' in f:
+            # logger.info(f'load remote url: {f}')
+            state_dict = load_state_dict_from_url(f, progress=True, map_location=device)
         else:
-            return torch.load(f, map_location=torch.device("cpu"))
+            # logger.info(f'load local url: {f}')
+            state_dict = torch.load(f, map_location=device)
+        return state_dict
