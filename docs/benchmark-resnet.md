@@ -26,5 +26,5 @@ $ python tools/converters/torchvision_resnet_to_zcls_resnet.py
 |     resnet152    | torchvision | 78.139 | 93.946 |
 |  resnext50_32x4d |     zcls    | 77.353 | 93.610 |
 |  resnext50_32x4d | torchvision | 77.353 | 93.612 |
-|  resnet101_32x8d |     zcls    | 79.075 | 94.540 |
+|  resnext101_32x8d |     zcls    | 79.075 | 94.540 |
 | resnext101_32x8d | torchvision | 79.063 | 94.538 |
