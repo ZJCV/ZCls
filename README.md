@@ -40,10 +40,9 @@ Supported Recognizers:
 
 ## Background
 
-In order to further improve the algorithm performance, it is usually necessary to improve the existing model, which
-inevitably involves code refactoring. Creating this repo, on the one hand, serves as the CodeBase of the new
-model/optimization method, on the other hand, it also records the comparison between the custom model and the existing
-implementation (such as Torchvision Models)
+In the fields of object detection/object segmentation/action recognition, there have been many training frameworks with high integration and perfect process, such as [facebookresearch/detectron2](https://github.com/facebookresearch/detectron2), [open-mmlab/mmaction2](https://github.com/open-mmlab/mmaction2) ...
+
+Object classification is the most developed and theoretically basic field in deeplearning. Referring to the existing training framework, a training/deployment framework based on object classification model is implemented. I hope ZCls can bring you a better realization.
 
 ## Installation
 

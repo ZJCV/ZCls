@@ -40,7 +40,9 @@
 
 ## 背景
 
-为了进一步提高算法性能，通常需要对已有模型进行改进，不可避免的就涉及到代码重构。创建本仓库，一方面作为新的模型/优化方法的`CodeBase`，另一方面也记录下自定义模型与已有实现（比如`Torchvision Models`）之间的比较
+在目标检测/目标分割/动作识别领域，已经出现了许多集成度高、流程完善的训练框架，比如[facebookresearch/detectron2](https://github.com/facebookresearch/detectron2), [open-mmlab/mmaction2](https://github.com/open-mmlab/mmaction2)等等。
+
+目标分类是深度学习中最早发展的、理论最基础的领域。参考现有的训练框架，实现一个基于目标分类模型的训练/部署框架。希望`ZCls`能给你带来更好的实现。
 
 ## 安装
 
@@ -71,7 +73,7 @@
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
-
+`
 @misc{fan2020pyslowfast,
   author =       {Haoqi Fan and Yanghao Li and Bo Xiong and Wan-Yen Lo and
                   Christoph Feichtenhofer},
