@@ -7,7 +7,7 @@
  <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
-  «ZCls»是一个分类模型训练/部署框架
+  «ZCls»是一个分类模型训练/推理框架
 <br>
 <br>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square"></a>
@@ -42,7 +42,7 @@
 
 在目标检测/目标分割/动作识别领域，已经出现了许多集成度高、流程完善的训练框架，比如[facebookresearch/detectron2](https://github.com/facebookresearch/detectron2), [open-mmlab/mmaction2](https://github.com/open-mmlab/mmaction2)等等。
 
-目标分类是深度学习中最早发展的、理论最基础的领域。参考现有的训练框架，实现一个基于目标分类模型的训练/部署框架。希望`ZCls`能给你带来更好的实现。
+目标分类是深度学习中最早发展的、理论最基础的领域。参考现有的训练框架，实现一个基于目标分类模型的训练/推理框架。希望`ZCls`能给你带来更好的实现。
 
 ## 安装
 

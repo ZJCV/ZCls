@@ -7,7 +7,7 @@
  <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
-  «ZCls» is a classification model training/deployment framework 
+  «ZCls» is a classification model training/inferring framework 
 <br>
 <br>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square"></a>
@@ -42,7 +42,7 @@ Supported Recognizers:
 
 In the fields of object detection/object segmentation/action recognition, there have been many training frameworks with high integration and perfect process, such as [facebookresearch/detectron2](https://github.com/facebookresearch/detectron2), [open-mmlab/mmaction2](https://github.com/open-mmlab/mmaction2) ...
 
-Object classification is the most developed and theoretically basic field in deeplearning. Referring to the existing training framework, a training/deployment framework based on object classification model is implemented. I hope ZCls can bring you a better realization.
+Object classification is the most developed and theoretically basic field in deeplearning. Referring to the existing training framework, a training/inferring framework based on object classification model is implemented. I hope ZCls can bring you a better realization.
 
 ## Installation
 

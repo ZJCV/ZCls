@@ -1,6 +1,6 @@
 # ZCls(v0.5.1)
 
-Welcome to zcls, a classification model training/deployment framework.
+Welcome to zcls, a classification model training/inferring framework.
 
 ## Chapter
 
