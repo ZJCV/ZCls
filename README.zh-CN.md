@@ -56,7 +56,7 @@
 
 关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
 
-更多预训练模型，查看[Baidu Model Zoo](https://pan.baidu.com/s/1-lay0yane_hSqWRDYX5r9w)(*密码: `hlsr`*)
+使用预训练模型，查看 [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
 
 ## 主要维护人员
 

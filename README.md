@@ -56,7 +56,7 @@ Use builtin datasets, see [Use Builtin Datasets](https://zcls.readthedocs.io/en/
 
 Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
 
-More pretrained model, see [Baidu Model Zoo](https://pan.baidu.com/s/1-lay0yane_hSqWRDYX5r9w)(*passwd: `hlsr`*)
+Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
 
 ## Maintainers
 
