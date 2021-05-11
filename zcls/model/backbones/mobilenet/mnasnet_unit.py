@@ -56,7 +56,9 @@ class MNASNetUint(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
+        # if expansion_rate, use MBConv6(k3x3)/MBConv3(k5x5), else use SepConv(k3x3)
         self.with_expansion = expansion_rate > 1
+        # if with attention, use MBConv3(k5x5)
         self.with_attention = with_attention
 
         inner_planes = in_planes * expansion_rate
