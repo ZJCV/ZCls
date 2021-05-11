@@ -51,3 +51,4 @@ nav:
     - Benchmark:
       - ResNet: benchmark-resnet.md
       - MobileNet: benchmark-mobilenet.md
+      - ShuffleNet: benchmark-shufflenet.md
