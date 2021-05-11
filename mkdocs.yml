@@ -50,3 +50,4 @@ nav:
       - Train: trick-train.md
     - Benchmark:
       - ResNet: benchmark-resnet.md
+      - MobileNet: benchmark-mobilenet.md
