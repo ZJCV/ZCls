@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.5.2
+
+* New features
+    1. transform torchvision mobilenet/shufflenet pretrained model to zcls format
+* Bug fixes
+    1. use multiple mnanet/shufflenet model, deepcopy every stage_setting
+* Breaking changes.
+
 ## v0.5.1
 
 * New features
