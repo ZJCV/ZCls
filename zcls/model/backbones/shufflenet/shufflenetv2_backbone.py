@@ -8,6 +8,7 @@
 """
 
 from abc import ABC
+import copy
 import torch.nn as nn
 
 from zcls.model import registry
@@ -22,7 +23,7 @@ arch_settings = {
     'shufflenet_v2_x2_0': (ShuffleNetV2Unit, [244, 488, 976], (4, 8, 4), 1024),
     'shufflenet_v2_x1_5': (ShuffleNetV2Unit, [176, 352, 704], (4, 8, 4), 1024),
     'shufflenet_v2_x1_0': (ShuffleNetV2Unit, [116, 232, 464], (4, 8, 4), 1024),
-    'shufflenet_v2_x0_5': (ShuffleNetV2Unit, [48, 96, 192], (4, 8, 4), 2048),
+    'shufflenet_v2_x0_5': (ShuffleNetV2Unit, [48, 96, 192], (4, 8, 4), 1024),
 }
 
 
@@ -51,9 +52,10 @@ def make_stage(in_channels,
     stride = 2 if with_downsample else 1
     if with_downsample:
         down_sample = nn.Sequential(
-            conv_layer(in_channels, branch_planes, kernel_size=3, stride=stride, padding=1, bias=False),
-            norm_layer(branch_planes),
-            conv_layer(branch_planes, branch_planes, kernel_size=1, stride=1, padding=0, bias=False),
+            conv_layer(in_channels, in_channels, kernel_size=3, stride=stride, padding=1, bias=False,
+                       groups=in_channels),
+            norm_layer(in_channels),
+            conv_layer(in_channels, branch_planes, kernel_size=1, stride=1, padding=0, bias=False),
             norm_layer(branch_planes),
             act_layer(inplace=True)
         )
@@ -179,12 +181,12 @@ def build_sfv2_backbone(cfg):
     base_channels = cfg.MODEL.BACKBONE.BASE_PLANES
     round_nearest = cfg.MODEL.COMPRESSION.ROUND_NEAREST
 
-    block_layer, stage_channels, stage_blocks, out_channels = arch_settings[arch]
+    block_layer, stage_channels, stage_blocks, out_channels = copy.deepcopy(arch_settings[arch])
 
-    base_channels = make_divisible(base_channels, round_nearest)
-    for i in range(len(stage_channels)):
-        stage_channels[i] = make_divisible(stage_channels[i], round_nearest)
-    out_channels = make_divisible(out_channels, round_nearest)
+    # base_channels = make_divisible(base_channels, round_nearest)
+    # for i in range(len(stage_channels)):
+    #     stage_channels[i] = make_divisible(stage_channels[i], round_nearest)
+    # out_channels = make_divisible(out_channels, round_nearest)
 
     down_samples = cfg.MODEL.BACKBONE.DOWNSAMPLES
     conv_layer = get_conv(cfg)
