@@ -8,6 +8,7 @@
 """
 
 from abc import ABC
+import copy
 import torch.nn as nn
 
 from zcls.model import registry
@@ -29,7 +30,7 @@ arch_settings = {
         [3, 1, 6, 0, 1, 320],
     ],
     'mnasnet_b1': [
-        # 参考Torchvision实现
+        # refer to [vision/torchvision/models/mnasnet.py](https://github.com/pytorch/vision/blob/master/torchvision/models/mnasnet.py)
         # kernel_size, stride, expansion_rate, with_attention_2, repeated, out_planes
         [3, 1, 1, 0, 1, 16],
         [3, 2, 3, 0, 3, 24],
@@ -199,7 +200,7 @@ def build_mnasnet(cfg):
     act_layer = get_act(cfg)
 
     out_planes = 1280
-    stage_setting = arch_settings[arch]
+    stage_setting = copy.deepcopy(arch_settings[arch])
     return MNASNetBackbone(
         in_channels=in_planes,
         out_channels=out_planes,
