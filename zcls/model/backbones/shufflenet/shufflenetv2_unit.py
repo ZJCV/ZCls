@@ -66,7 +66,7 @@ class ShuffleNetV2Unit(nn.Module, ABC):
             x1 = x
             x2 = x
 
-        out = self.conv1(x1)
+        out = self.conv1(x2)
         out = self.norm1(out)
         out = self.act(out)
 
@@ -78,9 +78,9 @@ class ShuffleNetV2Unit(nn.Module, ABC):
         out = self.act(out)
 
         if self.down_sample is not None:
-            x2 = self.down_sample(x2)
+            x1 = self.down_sample(x1)
 
-        out = torch.cat((out, x2), dim=1)
+        out = torch.cat((x1, out), dim=1)
 
         out = channel_shuffle(out, 2)
         return out
