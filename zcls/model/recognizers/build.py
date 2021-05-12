@@ -42,12 +42,6 @@ def build_recognizer(cfg, device):
     if cfg.MODEL.NORM.SYNC_BN and world_size > 1:
         logger.info("start sync BN on the process group of {}".format(du.LOCAL_RANK_GROUP))
         convert_sync_bn(model, du.LOCAL_PROCESS_GROUP)
-    preloaded = cfg.MODEL.RECOGNIZER.PRELOADED
-    if preloaded != "":
-        logger.info(f'load preloaded: {preloaded}')
-        check_pointer = CheckPointer(model)
-        check_pointer.load(preloaded, map_location=device)
-        logger.info("finish loading model weights")
     if cfg.MODEL.CONV.ADD_BLOCKS is not None:
         assert isinstance(cfg.MODEL.CONV.ADD_BLOCKS, tuple)
         for add_block in cfg.MODEL.CONV.ADD_BLOCKS:
@@ -55,6 +49,12 @@ def build_recognizer(cfg, device):
                 insert_repvgg_block(model)
             if add_block == 'ACBlock':
                 insert_acblock(model)
+    preloaded = cfg.MODEL.RECOGNIZER.PRELOADED
+    if preloaded != "":
+        logger.info(f'load preloaded: {preloaded}')
+        check_pointer = CheckPointer(model)
+        check_pointer.load(preloaded, map_location=device)
+        logger.info("finish loading model weights")
 
     model = model.to(device=device)
     if du.get_world_size() > 1:
