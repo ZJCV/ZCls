@@ -92,7 +92,7 @@ class RepVGGBackbone(nn.Module):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.cur_layer_idx = 1
+        self.cur_layer_idx = 0
         self.override_groups_map = groups
         cur_groups = self.override_groups_map.get(self.cur_layer_idx, 1)
 
