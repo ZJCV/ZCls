@@ -18,3 +18,4 @@ Welcome to zcls, a classification model training/inferring framework.
     * [ResNet](./benchmark-resnet.md)
     * [MobileNet](./benchmark-mobilenet.md)
     * [ShuffleNet](./benchmark-shufflenet.md)
+    * [RepVGG](./benchmark-repvgg.md)
