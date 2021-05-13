@@ -18,7 +18,7 @@ from zcls.model.recognizers.mobilenet.mobilenetv1 import MobileNetV1
 def test_mobilenetv1():
     for s in [224, 192, 160, 128]:
         for wm in [1.0, 0.75, 0.5, 0.25]:
-            cfg.merge_from_file('configs/benchmarks/lightweight/mbv1_cifar100_224_e100.yaml')
+            cfg.merge_from_file('configs/cifar/mbv1_cifar100_224_e100.yaml')
             cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER = wm
             round_nearest = cfg.MODEL.COMPRESSION.ROUND_NEAREST
             feature_dims = make_divisible(cfg.MODEL.HEAD.FEATURE_DIMS * wm, round_nearest)

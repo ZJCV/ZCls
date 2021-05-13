@@ -17,7 +17,7 @@ from zcls.model.recognizers.mobilenet.mobilenetv3 import MobileNetV3
 def test_config():
     data = torch.randn(1, 3, 224, 224)
 
-    config_file = 'configs/benchmarks/lightweight/mbv3_large_cifar100_224_e100_sgd.yaml'
+    config_file = 'configs/cifar/mbv3_large_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
     print(model)
@@ -27,7 +27,7 @@ def test_config():
 
     assert outputs.shape == (1, 100)
 
-    config_file = 'configs/benchmarks/lightweight/mbv3_large_se_cifar100_224_e100_sgd.yaml'
+    config_file = 'configs/cifar/mbv3_large_se_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
     print(model)
@@ -37,7 +37,7 @@ def test_config():
 
     assert outputs.shape == (1, 100)
 
-    config_file = 'configs/benchmarks/lightweight/mbv3_large_se_hsigmoid_cifar100_224_e100.yaml'
+    config_file = 'configs/cifar/mbv3_large_se_hsigmoid_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
     print(model)
@@ -47,7 +47,7 @@ def test_config():
 
     assert outputs.shape == (1, 100)
 
-    config_file = 'configs/benchmarks/lightweight/mbv3_small_cifar100_224_e100_sgd.yaml'
+    config_file = 'configs/cifar/mbv3_small_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
     print(model)
@@ -57,7 +57,7 @@ def test_config():
 
     assert outputs.shape == (1, 100)
 
-    config_file = 'configs/benchmarks/lightweight/mbv3_small_se_cifar100_224_e100.yaml'
+    config_file = 'configs/cifar/mbv3_small_se_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
     print(model)
@@ -67,7 +67,7 @@ def test_config():
 
     assert outputs.shape == (1, 100)
 
-    config_file = 'configs/benchmarks/lightweight/mbv3_small_se_hsigmoid_cifar100_224_e100.yaml'
+    config_file = 'configs/cifar/mbv3_small_se_hsigmoid_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
     print(model)

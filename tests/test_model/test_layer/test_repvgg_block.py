@@ -123,7 +123,7 @@ def test_conv_helper():
 
 
 def test_regvgg():
-    cfg.merge_from_file('configs/benchmarks/repvgg/repvgg_b2g4_cifar100_224_e100_sgd_calr.yaml')
+    cfg.merge_from_file('configs/benchmarks/repvgg/repvgg_a0_infer_zcls_imagenet_224.yaml')
     model = RepVGG(cfg)
     model.eval()
     print(model)

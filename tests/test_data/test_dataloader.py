@@ -12,7 +12,7 @@ from zcls.data.build import build_data
 
 
 def test_dataloader():
-    config_file = 'configs/imagenet/rxtd50_32x4d_lmdbimagenet_224_e100_sgd_mslr_e100_g1.yaml'
+    config_file = 'configs/cifar/rd50_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
 
     dataloader = build_data(cfg, is_train=True)

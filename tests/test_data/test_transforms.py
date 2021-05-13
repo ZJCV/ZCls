@@ -18,33 +18,33 @@ from zcls.data.transforms.build import build_transform
 def test_transforms():
     print(cfg.TRANSFORM)
 
-    res = build_transform(cfg, is_train=True)
-    print(res)
+    tran, _ = build_transform(cfg, is_train=True)
+    print(tran)
     data = Image.fromarray(torch.randn(234, 134, 3).numpy().astype(np.uint8))
-    print(res(data).shape)
+    print(tran(data).shape)
 
-    res = build_transform(cfg, is_train=False)
-    print(res)
+    tran, _ = build_transform(cfg, is_train=False)
+    print(tran)
     data = Image.fromarray(torch.randn(231, 231, 3).numpy().astype(np.uint8))
-    print(res(data).shape)
+    print(tran(data).shape)
 
 
 def test_cfg():
-    cfg_file = 'configs/cifar/mbv3_large_se_hsigmoid_c100_224_e100_rmsprop_mslr_g1.yaml'
+    cfg_file = 'configs/cifar/rd50_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(cfg_file)
     print(cfg.TRANSFORM)
 
-    res = build_transform(cfg, is_train=True)
+    tran, _ = build_transform(cfg, is_train=True)
     data = Image.fromarray(torch.randn(234, 134, 3).numpy().astype(np.uint8))
-    print(res(data).shape)
+    print(tran(data).shape)
 
-    cfg_file = 'configs/cifar/rxtd50_32x4d_c100_224_e100_sgd_mslr_g1.yaml'
+    cfg_file = 'configs/cifar/rd50_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(cfg_file)
     print(cfg.TRANSFORM)
 
-    res = build_transform(cfg, is_train=True)
+    tran, _ = build_transform(cfg, is_train=True)
     data = Image.fromarray(torch.randn(234, 134, 3).numpy().astype(np.uint8))
-    print(res(data).shape)
+    print(tran(data).shape)
 
 
 if __name__ == '__main__':

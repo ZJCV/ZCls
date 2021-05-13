@@ -20,18 +20,18 @@ def test_data(model):
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
-    assert outputs.shape == (1, 100)
+    assert outputs.shape == (1, 1000)
 
 
 def test_shufflenet_v2():
-    cfg.merge_from_file('configs/benchmarks/lightweight/sfv2_x2_0_cifar100_224_e100.yaml')
+    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v2_x0_5_zcls_imagenet_224.yaml')
     print(cfg)
     model = ShuffleNetV2(cfg)
     print(model)
 
     test_data(model)
 
-    cfg.merge_from_file('configs/benchmarks/lightweight/sfv2_torchvision_cifar100_224_e100.yaml')
+    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v2_x0_5_torchvision_imagenet_224.yaml')
     model = build_torchvision_sfv2(cfg)
     print(model)
     test_data(model)
