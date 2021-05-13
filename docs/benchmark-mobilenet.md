@@ -111,4 +111,4 @@ $ python tools/converters/torchvision_mobilenet_to_zcls_mobilenet.py
 </tbody>
 </table>
 
-*CPU_INFO: Intel(R) Xeon(R) Silver 4114 CPU @ 2.20GHz*
+*CPU_INFO: Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz*

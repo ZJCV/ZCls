@@ -350,4 +350,4 @@ $ python tools/converters/official_repvgg_to_zcls_repvgg.py
 </tbody>
 </table>
 
-*CPU_INFO: Intel(R) Xeon(R) Silver 4114 CPU @ 2.20GHz*
+*CPU_INFO: Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz*
