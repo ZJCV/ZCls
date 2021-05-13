@@ -13,6 +13,7 @@ from zcls.model import registry
 from zcls.model.conv_helper import get_conv
 from zcls.model.act_helper import get_act
 from zcls.model.init_helper import init_weights
+from zcls.model.attention_helper import make_attention_block
 
 optional_groupwise_layers = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26]
 g2_map = {l: 2 for l in optional_groupwise_layers}
@@ -33,12 +34,17 @@ arch_settings = {
     'repvgg_b3': ((4, 6, 16, 1), (3, 5), {}),
     'repvgg_b3g2': ((4, 6, 16, 1), (3, 5), g2_map),
     'repvgg_b3g4': ((4, 6, 16, 1), (3, 5), g4_map),
+    'repvgg_d2se': ((8, 14, 24, 1), (2.5, 5), {})
 }
 
 
 def make_stem(in_channels,
               base_channels,
               groups,
+              with_attention,
+              reduction,
+              attention_type,
+              attention_bias,
               conv_layer,
               act_layer
               ):
@@ -54,6 +60,8 @@ def make_stem(in_channels,
     return nn.Sequential(
         conv_layer(in_channels=in_channels, out_channels=base_channels, kernel_size=3, stride=2, padding=1,
                    groups=groups, bias=True),
+        make_attention_block(base_channels, reduction,
+                             attention_type, bias=attention_bias) if with_attention else nn.Identity(),
         act_layer(inplace=True)
     )
 
@@ -68,6 +76,10 @@ class RepVGGBackbone(nn.Module):
                  width_multipliers=(1., 1.),
                  down_samples=(1, 1, 1, 1),
                  groups=dict(),
+                 with_attention=False,
+                 reduction=16,
+                 attention_type='SqueezeAndExcitationBlock2D',
+                 attention_bias=False,
                  conv_layer=None,
                  act_layer=None,
                  ):
@@ -92,13 +104,20 @@ class RepVGGBackbone(nn.Module):
         if act_layer is None:
             act_layer = nn.ReLU
 
+        self.with_attention = with_attention
+        self.reduction = reduction
+        self.attention_type = attention_type
+        self.attention_bias = attention_bias
+
         self.cur_layer_idx = 0
         self.override_groups_map = groups
         cur_groups = self.override_groups_map.get(self.cur_layer_idx, 1)
 
         width_multiplier_a, width_multiplier_b = width_multipliers
         base_channels = min(int(base_channels), int(base_channels * width_multiplier_a))
-        self.stage0 = make_stem(in_channels, base_channels, cur_groups, conv_layer, act_layer)
+        self.stage0 = make_stem(in_channels, base_channels, cur_groups,
+                                with_attention, reduction, attention_type, attention_bias,
+                                conv_layer, act_layer)
 
         in_channels = base_channels
         for i in range(len(layer_blocks)):
@@ -144,6 +163,9 @@ class RepVGGBackbone(nn.Module):
             nn.Sequential(
                 conv_layer(in_channels, out_channels, kernel_size=3,
                            stride=stride, padding=padding, groups=cur_groups, bias=True),
+                make_attention_block(out_channels, self.reduction,
+                                     self.attention_type, bias=self.attention_bias)
+                if self.with_attention else nn.Identity(),
                 act_layer(inplace=True)
             )
         )
@@ -159,6 +181,9 @@ class RepVGGBackbone(nn.Module):
                 nn.Sequential(
                     conv_layer(in_channels, out_channels, kernel_size=3,
                                stride=stride, padding=padding, groups=cur_groups, bias=True),
+                    make_attention_block(out_channels, self.reduction,
+                                         self.attention_type, bias=self.attention_bias)
+                    if self.with_attention else nn.Identity(),
                     act_layer(inplace=True)
                 )
             )
@@ -185,6 +210,10 @@ def build_repvgg_backbone(cfg):
     base_channels = cfg.MODEL.BACKBONE.BASE_PLANES
     layer_planes = cfg.MODEL.BACKBONE.LAYER_PLANES
     down_samples = cfg.MODEL.BACKBONE.DOWNSAMPLES
+    with_attention = cfg.MODEL.ATTENTION.WITH_ATTENTION
+    reduction = cfg.MODEL.ATTENTION.REDUCTION
+    attention_type = cfg.MODEL.ATTENTION.ATTENTION_TYPE
+    attention_bias = cfg.MODEL.ATTENTION.BIAS
     conv_layer = get_conv(cfg)
     act_layer = get_act(cfg)
 
@@ -197,6 +226,10 @@ def build_repvgg_backbone(cfg):
         down_samples=down_samples,
         width_multipliers=width_multipliers,
         groups=groups,
+        with_attention=with_attention,
+        reduction=reduction,
+        attention_type=attention_type,
+        attention_bias=attention_bias,
         conv_layer=conv_layer,
         act_layer=act_layer,
     )
