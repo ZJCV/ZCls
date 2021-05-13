@@ -38,9 +38,3 @@ Add the following fields `--resume` to the command line parameters：
 ```
 $ CUDA_VISIBLE_DEVICES=3 python tools/test.py -cfg=configs/benchmarks/resnet/r18_zcls_imagenet_224.yaml --resume
 ```
-
-## Model Zoo
-
-At present, zcls provides some pretraining parameters of some models
-
-* [Baidu Model Zoo](https://pan.baidu.com/s/1-lay0yane_hSqWRDYX5r9w)(*passwd: `hlsr`*)

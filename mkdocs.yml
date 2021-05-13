@@ -42,6 +42,7 @@ nav:
     - Installation: install.md
     - Get Started with ZCls: get-started.md
     - Use Pretrained model: pretrained-model.md
+    - Model Zoo: model-zoo.md
     - Dataset:
       - Use Builtin Datasets: builtin-datasets.md
       - Use Custom Datasets: custom-datasets.md
