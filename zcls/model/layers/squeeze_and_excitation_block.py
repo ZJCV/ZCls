@@ -18,7 +18,8 @@ class _SqueezeAndExcitationBlockND(nn.Module):
                  in_channels,
                  reduction=16,
                  dimension=2,
-                 sigmoid_type='Sigmoid'
+                 sigmoid_type='Sigmoid',
+                 bias=False,
                  ):
         """
         Squeeze-and-Excitation Block
@@ -44,9 +45,9 @@ class _SqueezeAndExcitationBlockND(nn.Module):
 
         sigmoid_layer = get_sigmoid(sigmoid_type)
         self.excitation = nn.Sequential(
-            nn.Linear(in_channels, inner_channel, bias=False),
+            nn.Linear(in_channels, inner_channel, bias=bias),
             nn.ReLU(inplace=True),
-            nn.Linear(inner_channel, in_channels, bias=False),
+            nn.Linear(inner_channel, in_channels, bias=bias),
             sigmoid_layer()
         )
 

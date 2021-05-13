@@ -63,6 +63,8 @@ def add_config(_C):
     _C.MODEL.ATTENTION.WITH_ATTENTIONS = (0, 0, 0, 0)
     _C.MODEL.ATTENTION.REDUCTION = 16
     _C.MODEL.ATTENTION.ATTENTION_TYPE = 'SqueezeAndExcitationBlock2D'
+    # used for se-block
+    _C.MODEL.ATTENTION.BIAS = False
 
     # ---------------------------------------------------------------------------- #
     # backbone
