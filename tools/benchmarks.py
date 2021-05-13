@@ -13,7 +13,7 @@ import torch
 
 from zcls.util.distributed import get_device, get_local_rank
 from zcls.util.metrics import compute_num_flops
-from zcls.config import cfg
+from zcls.config import get_cfg_defaults
 from zcls.model.recognizers.build import build_recognizer
 
 
@@ -33,14 +33,15 @@ def compute_model_time(data_shape, model, device):
 
 
 def main(data_shape, config_file, mobile_name):
+    cfg = get_cfg_defaults()
+    cfg.merge_from_file(config_file)
+
     np.random.seed(cfg.RNG_SEED)
     torch.manual_seed(cfg.RNG_SEED)
     torch.backends.cudnn.deterministic = False
     torch.backends.cudnn.benchmark = True
 
-    cfg.merge_from_file(config_file)
-
-    gpu_device = torch.device('cuda:0')
+    # gpu_device = torch.device('cuda:0')
     cpu_device = torch.device('cpu')
 
     model = build_recognizer(cfg, cpu_device)
@@ -57,8 +58,8 @@ def main(data_shape, config_file, mobile_name):
     model.eval()
     print(f'compute cpu infer time')
     compute_model_time(data_shape, model, cpu_device)
-    print(f'compute gpu infer time')
-    compute_model_time(data_shape, model, gpu_device)
+    # print(f'compute gpu infer time')
+    # compute_model_time(data_shape, model, gpu_device)
 
     del model
     torch.cuda.empty_cache()
@@ -67,151 +68,181 @@ def main(data_shape, config_file, mobile_name):
 def mobilenet():
     data_shape = (1, 3, 224, 224)
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv1_cifar100_224_e100.yaml'
-    name = 'MobileNetV1_1.0x'
-    main(data_shape, cfg_file, name)
+    cfg_file_list = [
+        'configs/benchmarks/mobilenet/mnasnet_b1_0_5_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/mobilenet/mnasnet_b1_0_5_zcls_imagenet_224.yaml',
+        'configs/benchmarks/mobilenet/mnasnet_b1_1_0_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/mobilenet/mnasnet_b1_1_0_zcls_imagenet_224.yaml',
+        'configs/benchmarks/mobilenet/mobilenet_v2_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/mobilenet/mobilenet_v2_zcls_imagenet_224.yaml',
+    ]
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv2_cifar100_224_e100.yaml'
-    name = 'MobileNetV2_1.0x'
-    main(data_shape, cfg_file, name)
+    name_list = [
+        'mnasnet_b1_0_5_torchvision',
+        'mnasnet_b1_0_5_zcls',
+        'mnasnet_b1_1_0_torchvision',
+        'mnasnet_b1_1_0_zcls',
+        'mobilenet_v2_torchvision',
+        'mobilenet_v2_zcls',
+    ]
 
-    cfg_file = 'configs/benchmarks/lightweight/mbv2_torchvision_cifar100_224_e100.yaml'
-    name = 'Torchvision_MobileNetV2_1.0x'
-    main(data_shape, cfg_file, name)
+    assert len(name_list) == len(cfg_file_list)
 
-    cfg_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_cifar100_224_e100.yaml'
-    name = 'MNasNet_a1_1.3x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mnasnet_a1_1_3_se_cifar100_224_e100.yaml'
-    name = 'MNasNet_SE_a1_1.3x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mnasnet_b1_1_3_cifar100_224_e100_sgd.yaml'
-    name = 'MNasNet_b1_1.3x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mnasnet_b1_1_3_torchvision_cifar100_224_e100_sgd.yaml'
-    name = 'Torchvision_MNasNet_b1_1.3x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_cifar100_224_e100_sgd.yaml'
-    name = 'MobileNetV3_Large_1.0x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_se_cifar100_224_e100_sgd.yaml'
-    name = 'MobileNetV3_SE_Large_1.0x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_large_se_hsigmoid_cifar100_224_e100.yaml'
-    name = 'MobileNetV3_SE_HSigmoid_Large_1.0x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_cifar100_224_e100_sgd.yaml'
-    name = 'MobileNetV3_Small_1.0x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_se_cifar100_224_e100.yaml'
-    name = 'MobileNetV3_SE_Small_1.0x'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/lightweight/mbv3_small_se_hsigmoid_cifar100_224_e100.yaml'
-    name = 'MobileNetV3_SE_HSigmoid_Small_1.0x'
-    main(data_shape, cfg_file, name)
+    for name, cfg_file in zip(name_list, cfg_file_list):
+        main(data_shape, cfg_file, name)
 
 
 def shufflenet():
     data_shape = (1, 3, 224, 224)
 
-    cfg_file = 'configs/benchmarks/lightweight/sfv1_3g1x_cifar100_224_e100.yaml'
-    name = 'ShuffleNetV1_1.0x'
-    main(data_shape, cfg_file, name)
+    cfg_file_list = [
+        'configs/benchmarks/shufflenet/shufflenet_v2_x0_5_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v2_x0_5_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_zcls_imagenet_224.yaml',
+    ]
 
-    cfg_file = 'configs/benchmarks/lightweight/sfv2_x2_0_cifar100_224_e100.yaml'
-    name = 'ShuffleNetV2_1.0x'
-    main(data_shape, cfg_file, name)
+    name_list = [
+        'shufflenet_v2_x0_5_torchvision',
+        'shufflenet_v2_x0_5_zcls',
+        'shufflenet_v2_x1_0_torchvision',
+        'shufflenet_v2_x1_0_zcls',
+    ]
 
-    cfg_file = 'configs/benchmarks/lightweight/sfv2_torchvision_cifar100_224_e100.yaml'
-    name = 'Torchvision_ShuffleNetV2_1.0x'
-    main(data_shape, cfg_file, name)
+    assert len(name_list) == len(cfg_file_list)
+
+    for name, cfg_file in zip(name_list, cfg_file_list):
+        main(data_shape, cfg_file, name)
 
 
 def resnet():
     data_shape = (1, 3, 224, 224)
 
-    cfg_file = 'configs/benchmarks/resnet/r50_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNet50'
-    main(data_shape, cfg_file, name)
+    cfg_file_list = [
+        'configs/benchmarks/resnet/r18_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r18_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r34_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r34_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r50_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r50_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r101_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r101_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r152_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet/r152_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/rxt50_32x4d_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet/rxt50_32x4d_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/rxt101_32x8d_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet/rxt101_32x8d_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/sknet50_zcls_imagenet_224.yaml'
+    ]
 
-    cfg_file = 'configs/benchmarks/resnet/r50_torchvision_cifar100_224_e100_rmsprop.yaml'
-    name = 'Torchvision_ResNet50'
-    main(data_shape, cfg_file, name)
+    name_list = [
+        'r18_torchvision',
+        'r18_zcls',
+        'r34_torchvision',
+        'r34_zcls',
+        'r50_torchvision',
+        'r50_zcls',
+        'r101_torchvision',
+        'r101_zcls',
+        'r152_torchvision',
+        'r152_zcls',
+        'rxt50_32x4d_torchvision',
+        'rxt50_32x4d_zcls',
+        'rxt101_32x8d_torchvision',
+        'rxt101_32x8d_zcls',
+        'sknet50_zcls_imagenet',
+    ]
 
-    cfg_file = 'configs/benchmarks/resnet/rd50_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNetD50'
-    main(data_shape, cfg_file, name)
+    assert len(name_list) == len(cfg_file_list)
 
-    cfg_file = 'configs/benchmarks/resnet/rd50_cifar100_224_e100_sgd.yaml'
-    name = 'ResNetD50'
-    main(data_shape, cfg_file, name)
+    for name, cfg_file in zip(name_list, cfg_file_list):
+        main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_avg_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNeXtD50_32x4d_avg'
-    main(data_shape, cfg_file, name)
 
-    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_fast_avg_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNeXtD50_32x4d_fast_avg'
-    main(data_shape, cfg_file, name)
+def repvgg():
+    cfg_file_list = [
+        'configs/benchmarks/repvgg/repvgg_a0_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_a0_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_a1_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_a1_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_a2_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_a2_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b0_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b0_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b1_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b1_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b1g2_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b1g2_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b1g4_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b1g4_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b2_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b2_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b2g4_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b2g4_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b3_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b3_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b3g4_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b3g4_infer_zcls_imagenet_320.yaml',
+        'configs/benchmarks/repvgg/repvgg_b3g4_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_b3g4_train_zcls_imagenet_320.yaml',
+        'configs/benchmarks/repvgg/repvgg_d2se_infer_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_d2se_infer_zcls_imagenet_320.yaml',
+        'configs/benchmarks/repvgg/repvgg_d2se_train_zcls_imagenet_224.yaml',
+        'configs/benchmarks/repvgg/repvgg_d2se_train_zcls_imagenet_320.yaml',
+    ]
 
-    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNeXt50_32x4d'
-    main(data_shape, cfg_file, name)
+    name_list = [
+        'repvgg_a0_infer_zcls',
+        'repvgg_a0_train_zcls',
+        'repvgg_a1_infer_zcls',
+        'repvgg_a1_train_zcls',
+        'repvgg_a2_infer_zcls',
+        'repvgg_a2_train_zcls',
+        'repvgg_b0_infer_zcls',
+        'repvgg_b0_train_zcls',
+        'repvgg_b1_infer_zcls',
+        'repvgg_b1_train_zcls',
+        'repvgg_b1g2_infer_zcls',
+        'repvgg_b1g2_train_zcls',
+        'repvgg_b1g4_infer_zcls',
+        'repvgg_b1g4_train_zcls',
+        'repvgg_b2_infer_zcls',
+        'repvgg_b2_train_zcls',
+        'repvgg_b2g4_infer_zcls',
+        'repvgg_b2g4_train_zcls',
+        'repvgg_b3_infer_zcls',
+        'repvgg_b3_train_zcls',
+        'repvgg_b3g4_infer_zcls_224',
+        'repvgg_b3g4_infer_zcls_320',
+        'repvgg_b3g4_train_zcls_224',
+        'repvgg_b3g4_train_zcls_320',
+        'repvgg_d2se_infer_zcls_224',
+        'repvgg_d2se_infer_zcls_320',
+        'repvgg_d2se_train_zcls_224',
+        'repvgg_d2se_train_zcls_320',
+    ]
 
-    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_cifar100_224_e100_sgd.yaml'
-    name = 'ResNeXt50_32x4d'
-    main(data_shape, cfg_file, name)
+    # print(len(name_list), len(cfg_file_list))
+    assert len(name_list) == len(cfg_file_list)
 
-    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_torchvision_cifar100_224_e100_rmsprop.yaml'
-    name = 'Torchvisoin_ResNeXt_32x4d'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/rxt50_32x4d_torchvision_cifar100_224_e100_sgd.yaml'
-    name = 'Torchvision_ResNeXt50_32x4d'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNeXtD50_32x4d'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/rxtd50_32x4d_cifar100_224_e100_sgd.yaml'
-    name = 'ResNeXtD50_32x4d'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/sknet50_cifar100_224_e100_rmsprop.yaml'
-    name = 'SKNet50'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/rstd50_2s2x40d_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNeSt50_2s2x40d'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/rstd50_2s2x40d_fast_cifar100_224_e100_rmsprop.yaml'
-    name = 'ResNeSt50_fast_2s2x40d'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/rstd50_2s2x40d_official_cifar100_224_e100_rmsprop.yaml'
-    name = 'Torchvision_ResNeSt50_2s2x40d'
-    main(data_shape, cfg_file, name)
-
-    cfg_file = 'configs/benchmarks/resnet/rstd50_2s2x40d_fast_official_cifar100_224_e100_rmsprop.yaml'
-    name = 'Torchvision_ResNeSt50_fast_2s2x40d'
-    main(data_shape, cfg_file, name)
+    for name, cfg_file in zip(name_list, cfg_file_list):
+        if '224' in cfg_file:
+            data_shape = (1, 3, 224, 224)
+            main(data_shape, cfg_file, name)
+        elif '320' in cfg_file:
+            data_shape = (1, 3, 320, 320)
+            main(data_shape, cfg_file, name)
+        else:
+            raise ValueError('ERROR')
 
 
 if __name__ == '__main__':
-    # print('#' * 30)
-    # mobilenet()
+    print('#' * 30)
+    mobilenet()
     # print('#' * 30)
     # shufflenet()
-    print('#' * 30)
-    resnet()
+    # print('#' * 30)
+    # resnet()
+    # print('#' * 30)
+    # repvgg()
