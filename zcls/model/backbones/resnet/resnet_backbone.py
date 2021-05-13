@@ -16,6 +16,7 @@ from zcls.model.norm_helper import get_norm
 from zcls.model.act_helper import get_act
 from .basicblock import BasicBlock
 from .bottleneck import Bottleneck
+from .sknet_block import SKNetBlock
 
 arch_settings = {
     # name: (Block, Layer_planes, groups, width_per_group)
@@ -26,6 +27,8 @@ arch_settings = {
     'resnet152': (Bottleneck, (3, 8, 36, 3), 1, 64),
     'resnext50_32x4d': (Bottleneck, (3, 4, 6, 3), 32, 4),
     'resnext101_32x8d': (Bottleneck, (3, 4, 23, 3), 32, 8),
+    # name: (Block, Layer_planes, groups, width_per_group)
+    'sknet50': (SKNetBlock, (3, 4, 6, 3), 32, 4),
 }
 
 

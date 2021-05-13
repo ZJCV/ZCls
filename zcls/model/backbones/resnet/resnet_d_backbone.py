@@ -29,7 +29,7 @@ arch_settings = {
     'resnext50_32x4d': (Bottleneck, (3, 4, 6, 3), 32, 4),
     'resnedxt101_32x8d': (Bottleneck, (3, 4, 23, 3), 32, 8),
     # name: (Block, Layer_planes, groups, width_per_group)
-    'sknet50': (SKNetBlock, (3, 4, 6, 3), 1, 64),
+    'sknet50': (SKNetBlock, (3, 4, 6, 3), 32, 4),
     # name: (Block, Layer_planes, radix, groups, width_per_group)
     'resnest50_1s1x64d': (ResNeStBlock, (3, 4, 6, 3), 1, 1, 64),
     'resnest50_2s1x64d': (ResNeStBlock, (3, 4, 6, 3), 2, 1, 64),
