@@ -61,8 +61,8 @@ class SelectiveKernelConv2d(nn.Module, ABC):
             nn.ReLU(inplace=True)
         )
         # select
-        self.select_a = nn.Linear(inner_channels, out_channels, bias=False)
-        self.select_b = nn.Linear(inner_channels, out_channels, bias=False)
+        self.select_a = nn.Linear(inner_channels, out_channels, bias=True)
+        self.select_b = nn.Linear(inner_channels, out_channels, bias=True)
         self.softmax = nn.Softmax(dim=0)
         self.dimension = dimension
         self.out_channels = out_channels
