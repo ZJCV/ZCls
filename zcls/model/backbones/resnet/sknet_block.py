@@ -75,7 +75,7 @@ class SKNetBlock(nn.Module, ABC):
 
         self.conv2 = SelectiveKernelConv2d(width, width, stride=stride, groups=groups,
                                            reduction_rate=reduction)
-        self.bn2 = norm_layer(width)
+        # self.bn2 = norm_layer(width)
 
         self.conv3 = conv_layer(width, out_channels * self.expansion, kernel_size=1, stride=1, bias=False)
         self.bn3 = norm_layer(out_channels * self.expansion)
@@ -99,7 +99,7 @@ class SKNetBlock(nn.Module, ABC):
         out = self.relu(out)
 
         out = self.conv2(out)
-        out = self.bn2(out)
+        # out = self.bn2(out)
         out = self.relu(out)
 
         out = self.conv3(out)
