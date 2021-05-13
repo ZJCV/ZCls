@@ -1,5 +1,16 @@
 # CHANGE
 
+## v0.6.0
+
+* New features
+    1. transform repvgg/sknet pretrained model to zcls format
+    2. update repvgg backbone and add attention module
+    3. add bias config item for se-block
+    4. open nn.Linear bias config for sk-block
+    5. cancel bn2 for sknet_block
+* Bug fixes
+* Breaking changes.
+
 ## v0.5.2
 
 * New features
