@@ -13,7 +13,8 @@ export PYTHONPATH=$PYTHONPATH:/path/to/RepVGG
 import os
 import torch
 from repvgg import create_RepVGG_A0, create_RepVGG_A1, create_RepVGG_A2, create_RepVGG_B0, create_RepVGG_B1, \
-    create_RepVGG_B1g2, create_RepVGG_B1g4, create_RepVGG_B2, create_RepVGG_B2g4, create_RepVGG_B3, create_RepVGG_B3g4
+    create_RepVGG_B1g2, create_RepVGG_B1g4, create_RepVGG_B2, create_RepVGG_B2g4, create_RepVGG_B3, create_RepVGG_B3g4, \
+    create_RepVGG_D2se
 
 from zcls.model.recognizers.build import build_recognizer
 from zcls.util.checkpoint import CheckPointer
@@ -26,6 +27,36 @@ def convert(official_model, zcls_model):
     zcls_dict = zcls_model.state_dict()
 
     for (o_k, o_v), (z_k, z_v) in zip(official_dict.items(), zcls_dict.items()):
+        # print(o_k, o_v.shape, z_k, z_v.shape)
+        zcls_dict[z_k] = o_v
+
+    return zcls_dict
+
+
+def convert_d2se(official_model, zcls_model):
+    official_dict = official_model.state_dict()
+    zcls_dict = zcls_model.state_dict()
+
+    k_list = [k for k, v in official_dict.items()]
+    v_list = [v for k, v in official_dict.items()]
+
+    idx = 0
+    while idx < (len(official_dict.items()) - 2):
+        v_list[idx] = v_list[idx].squeeze()
+        v_list[idx + 1] = v_list[idx + 1].squeeze()
+        v_list[idx + 2] = v_list[idx + 2].squeeze()
+        v_list[idx + 3] = v_list[idx + 3].squeeze()
+
+        if 'se' in k_list[idx + 16] or 'linear' in k_list[idx + 16]:
+            k_list = k_list[:idx] + k_list[(idx + 4):(idx + 16)] + k_list[idx:(idx + 4)] + k_list[(idx + 16):]
+            v_list = v_list[:idx] + v_list[(idx + 4):(idx + 16)] + v_list[idx:(idx + 4)] + v_list[(idx + 16):]
+            idx += 16
+        else:
+            k_list = k_list[:idx] + k_list[(idx + 4):(idx + 21)] + k_list[idx:(idx + 4)] + k_list[(idx + 21):]
+            v_list = v_list[:idx] + v_list[(idx + 4):(idx + 21)] + v_list[idx:(idx + 4)] + v_list[(idx + 21):]
+            idx += 21
+
+    for o_k, o_v, (z_k, z_v) in zip(k_list, v_list, zcls_dict.items()):
         # print(o_k, o_v.shape, z_k, z_v.shape)
         zcls_dict[z_k] = o_v
 
@@ -66,12 +97,19 @@ def process(item, cfg_file):
     elif item == 'repvgg_b3g4':
         official_model = create_RepVGG_B3g4()
         official_model.load_state_dict(torch.load('/home/zj/repos/RepVGG/RepVGG-B3g4-200epochs-train.pth'))
+    elif item == 'repvgg_d2se':
+        official_model = create_RepVGG_D2se()
+        official_model.load_state_dict(torch.load('/home/zj/repos/RepVGG/RepVGG-D2se-200epochs-train.pth'))
     else:
         raise ValueError(f"{item} doesn't exists")
 
     cfg.merge_from_file(cfg_file)
     zcls_model = build_recognizer(cfg, torch.device('cpu'))
-    zcls_model_dict = convert(official_model, zcls_model)
+
+    if item == 'repvgg_d2se':
+        zcls_model_dict = convert_d2se(official_model, zcls_model)
+    else:
+        zcls_model_dict = convert(official_model, zcls_model)
     zcls_model.load_state_dict(zcls_model_dict)
 
     res_dir = 'outputs/converters/'
