@@ -93,7 +93,7 @@ class ResNeStBlock(nn.Module, ABC):
         self.conv1 = conv_layer(in_channels, width, kernel_size=1, stride=1, bias=False)
         self.bn1 = norm_layer(width)
 
-        self.conv2 = SplitAttentionConv2d(width, width, groups, radix, reduction_rate=reduction)
+        self.conv2 = SplitAttentionConv2d(width, width, radix=radix, groups=groups, reduction_rate=reduction)
         if self.radix == 0:
             self.bn2 = norm_layer(width)
 

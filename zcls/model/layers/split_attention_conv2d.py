@@ -55,9 +55,10 @@ class SplitAttentionConv2d(nn.Module, ABC):
         # self.relu = nn.ReLU(inplace=True)
         # fuse
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
-        inner_channels = max(out_channels // reduction_rate, default_channels)
+        inner_channels = max(in_channels * radix // reduction_rate, 32)
+        # inner_channels = max(out_channels // reduction_rate, default_channels)
         self.compact = nn.Sequential(
-            nn.Conv2d(out_channels, inner_channels, kernel_size=1, stride=1, padding=0, bias=False,
+            nn.Conv2d(out_channels, inner_channels, kernel_size=1, stride=1, padding=0, bias=True,
                       groups=groups),
             nn.BatchNorm2d(inner_channels),
             nn.ReLU(inplace=True)
