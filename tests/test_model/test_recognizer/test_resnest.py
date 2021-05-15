@@ -10,7 +10,9 @@
 import torch
 
 from zcls.config.key_word import KEY_OUTPUT
+from zcls.config import cfg
 from zcls.model.recognizers.resnet.official_resnest import OfficialResNeSt
+from zcls.model.recognizers.build import build_recognizer
 
 
 def test_data(model, input_shape, output_shape):
@@ -21,7 +23,7 @@ def test_data(model, input_shape, output_shape):
     assert outputs.shape == output_shape
 
 
-def test_resnest():
+def test_official_resnest():
     # resnetd
     model = OfficialResNeSt(
         arch="resnest50_2s2x40d",
@@ -32,13 +34,21 @@ def test_resnest():
 
     # resnetd
     model = OfficialResNeSt(
-        arch="resnest50_2s2x40d_fast",
+        arch="resnest50_fast_2s2x40d",
         num_classes=1000
     )
     print(model)
     test_data(model, (3, 3, 224, 224), (3, 1000))
 
 
+def test_zcls_resnest():
+    cfg.merge_from_file('configs/benchmarks/resnet/resnest50_fast_2s1x64d_imagenet_224.yaml')
+    model = build_recognizer(cfg, torch.device('cpu'))
+    print(model)
+    test_data(model, (3, 3, 224, 224), (3, 1000))
+
+
 if __name__ == '__main__':
     print('*' * 10 + ' resnetst')
-    test_resnest()
+    # test_official_resnest()
+    test_zcls_resnest()
