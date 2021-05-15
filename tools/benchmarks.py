@@ -237,12 +237,31 @@ def repvgg():
             raise ValueError('ERROR')
 
 
+def resnest():
+    data_shape = (1, 3, 224, 224)
+
+    cfg_file_list = [
+        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_imagenet_224.yaml',
+    ]
+
+    name_list = [
+        'resnest50_fast_2s1x64d',
+    ]
+
+    assert len(name_list) == len(cfg_file_list)
+
+    for name, cfg_file in zip(name_list, cfg_file_list):
+        main(data_shape, cfg_file, name)
+
+
 if __name__ == '__main__':
-    print('#' * 30)
-    mobilenet()
+    # print('#' * 30)
+    # mobilenet()
     # print('#' * 30)
     # shufflenet()
     # print('#' * 30)
     # resnet()
     # print('#' * 30)
     # repvgg()
+    print('#' * 30)
+    resnest()
