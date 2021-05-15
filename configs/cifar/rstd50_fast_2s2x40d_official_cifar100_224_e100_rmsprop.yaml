@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/rstd50_2s2x40d_fast_cifar100_224_e100_rmsprop'
+OUTPUT_DIR: 'outputs/benchmarks/rstd50_fast_2s2x40d_official_cifar100_224_e100_rmsprop'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -31,36 +31,16 @@ DATALOADER:
   TEST_BATCH_SIZE: 32
   NUM_WORKERS: 4
 MODEL:
-  CONV:
-    TYPE: 'Conv2d'
-  NORM:
-    TYPE: 'BatchNorm2d'
-    SYNC_BN: False
-    FIX_BN: False
-    PARTIAL_BN: False
-  ACT:
-    TYPE: 'ReLU'
-  ATTENTION:
-    WITH_ATTENTIONS: (0, 0, 0, 0)
-    REDUCTION: 4
   BACKBONE:
-    NAME: 'ResNetD'
-    IN_PLANES: 3
-    ARCH: 'resnest50_2s2x40d_fast'
-    BASE_PLANES: 64
-    LAYER_PLANES: (64, 128, 256, 512)
-    DOWNSAMPLES: (0, 1, 1, 1)
+    ARCH: 'resnest50_fast_2s2x40d'
   HEAD:
-    NAME: 'GeneralHead2D'
-    FEATURE_DIMS: 2048
-    DROPOUT_RATE: 0.
+    DROPOUT_RATE: 0.2
     NUM_CLASSES: 100
   RECOGNIZER:
-    NAME: 'ResNet'
+    NAME: 'OfficialResNeSt'
     PRELOADED: ""
     PRETRAINED: ""
     PRETRAINED_NUM_CLASSES: 1000
-    ZERO_INIT_RESIDUAL: True
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:

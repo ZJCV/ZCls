@@ -39,6 +39,8 @@ MODEL:
   RECOGNIZER:
     NAME: 'OfficialResNeSt'
     PRELOADED: ""
+    PRETRAINED: ""
+    PRETRAINED_NUM_CLASSES: 1000
   CRITERION:
     NAME: 'CrossEntropyLoss'
 OPTIMIZER:
