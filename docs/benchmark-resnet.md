@@ -205,6 +205,28 @@ $ python tools/converters/torchvision_resnet_to_zcls_resnet.py
     <td class="tg-baqh">9.000</td>
     <td class="tg-baqh">0.143</td>
   </tr>
+  <tr>
+    <td class="tg-c3ow">resnest50_fast_2s1x64d</td>
+    <td class="tg-c3ow">zcls</td>
+    <td class="tg-c3ow">70.395</td>
+    <td class="tg-c3ow">89.393</td>
+    <td class="tg-c3ow">224x224</td>
+    <td class="tg-c3ow">imagenet</td>
+    <td class="tg-baqh">104.840</td>
+    <td class="tg-baqh">8.719</td>
+    <td class="tg-baqh">0.116</td>
+  </tr>
+  <tr>
+    <td class="tg-c3ow">resnest50_fast_2s1x64d</td>
+    <td class="tg-c3ow">official</td>
+    <td class="tg-c3ow">80.380</td>
+    <td class="tg-c3ow">95.252</td>
+    <td class="tg-c3ow">224x224</td>
+    <td class="tg-c3ow">imagenet</td>
+    <td class="tg-baqh">104.840</td>
+    <td class="tg-baqh">8.716</td>
+    <td class="tg-baqh">0.107</td>
+  </tr>
 </tbody>
 </table>
 
