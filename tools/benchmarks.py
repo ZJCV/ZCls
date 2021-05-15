@@ -241,11 +241,13 @@ def resnest():
     data_shape = (1, 3, 224, 224)
 
     cfg_file_list = [
-        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_official_imagenet_224.yaml'
     ]
 
     name_list = [
-        'resnest50_fast_2s1x64d',
+        'resnest50_fast_2s1x64d_zcls',
+        'resnest50_fast_2s1x64d_official',
     ]
 
     assert len(name_list) == len(cfg_file_list)
