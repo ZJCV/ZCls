@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/resnest50_fast_2s1x64d_official_imagenet_224'
+OUTPUT_DIR: 'outputs/benchmarks/resnest269_official_imagenet_224'
 DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
@@ -19,11 +19,11 @@ DATALOADER:
   NUM_WORKERS: 4
 MODEL:
   BACKBONE:
-    ARCH: 'resnest50_fast_2s1x64d'
+    ARCH: 'resnest269'
   HEAD:
     DROPOUT_RATE: 0.
     NUM_CLASSES: 1000
   RECOGNIZER:
     NAME: 'OfficialResNeSt'
-    PRETRAINED: "outputs/resnest50_fast_2s1x64d-44938639.pth"
+    PRETRAINED: "outputs/resnest269-0cc87c48.pth"
     PRETRAINED_NUM_CLASSES: 1000
