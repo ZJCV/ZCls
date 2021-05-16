@@ -11,7 +11,7 @@ from abc import ABC
 import torch
 import torch.nn as nn
 from torch.nn.modules.module import T
-from resnest.torch.resnest import resnest50
+from resnest.torch.resnest import resnest50, resnest101, resnest200, resnest269
 from resnest.torch.resnet import ResNet, Bottleneck
 
 from zcls.config.key_word import KEY_OUTPUT
@@ -94,6 +94,18 @@ class OfficialResNeSt(nn.Module, ABC):
                                 final_drop=dropout_rate,
                                 num_classes=pretrained_num_classes
                                 )
+        elif arch == 'resnest101':
+            self.model = resnest101(num_classes=pretrained_num_classes,
+                                    final_drop=dropout_rate
+                                    )
+        elif arch == 'resnest200':
+            self.model = resnest200(num_classes=pretrained_num_classes,
+                                    final_drop=dropout_rate
+                                    )
+        elif arch == 'resnest269':
+            self.model = resnest269(num_classes=pretrained_num_classes,
+                                    final_drop=dropout_rate
+                                    )
         else:
             raise ValueError('no such value')
 
