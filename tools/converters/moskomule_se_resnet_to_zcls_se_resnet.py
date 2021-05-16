@@ -56,7 +56,7 @@ def process(item, cfg_file):
     if not os.path.exists(res_dir):
         os.makedirs(res_dir)
     checkpoint = CheckPointer(model=zcls_model, save_dir=res_dir, save_to_disk=True)
-    checkpoint.save(f'{item}_imagenet')
+    checkpoint.save(f'se_{item}_imagenet')
 
 
 if __name__ == '__main__':
