@@ -214,7 +214,7 @@ $ python tools/converters/torchvision_resnet_to_zcls_resnet.py
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">104.840</td>
     <td class="tg-baqh">8.719</td>
-    <td class="tg-baqh">0.116</td>
+    <td class="tg-baqh">0.098</td>
   </tr>
   <tr>
     <td class="tg-c3ow">resnest50_fast_2s1x64d</td>
@@ -225,7 +225,7 @@ $ python tools/converters/torchvision_resnet_to_zcls_resnet.py
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">104.840</td>
     <td class="tg-baqh">8.716</td>
-    <td class="tg-baqh">0.107</td>
+    <td class="tg-baqh">0.100</td>
   </tr>
 </tbody>
 </table>
