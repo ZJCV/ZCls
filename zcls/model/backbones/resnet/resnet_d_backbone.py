@@ -35,7 +35,11 @@ arch_settings = {
     'resnest50_fast_2s1x64d': (ResNeStBlock, (3, 4, 6, 3), 2, 1, 64),
     'resnest50_4s1x64d': (ResNeStBlock, (3, 4, 6, 3), 4, 1, 64),
     'resnest50_2s2x40d': (ResNeStBlock, (3, 4, 6, 3), 2, 2, 40),
-    'resnest50_fast_2s2x40d': (ResNeStBlock, (3, 4, 6, 3), 2, 2, 40)
+    'resnest50_fast_2s2x40d': (ResNeStBlock, (3, 4, 6, 3), 2, 2, 40),
+    'resnest50': (ResNeStBlock, (3, 4, 6, 3), 2, 1, 64),
+    'resnest101': (ResNeStBlock, (3, 4, 23, 3), 2, 1, 64),
+    'resnest200': (ResNeStBlock, (3, 24, 36, 3), 2, 1, 64),
+    'resnest269': (ResNeStBlock, (3, 30, 48, 8), 2, 1, 64),
 }
 
 
@@ -58,8 +62,10 @@ def make_stem(in_channels,
     return nn.Sequential(
         conv_layer(in_channels, inner_planes, kernel_size=3, stride=2, padding=1, bias=False),
         norm_layer(inner_planes),
+        act_layer(inplace=True),
         conv_layer(inner_planes, inner_planes, kernel_size=3, stride=1, padding=1, bias=False),
         norm_layer(inner_planes),
+        act_layer(inplace=True),
         conv_layer(inner_planes, base_channels, kernel_size=3, stride=1, padding=1, bias=False),
         norm_layer(base_channels),
         act_layer(inplace=True),
