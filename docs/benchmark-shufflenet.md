@@ -129,11 +129,11 @@ $ python tools/converters/torchvision_shufflenet_to_zcls_shufflenet.py
   <tr>
     <td class="tg-9wq8">shufflenet_v2_x0_5</td>
     <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">59.735</td>
-    <td class="tg-9wq8">81.222</td>
+    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">/</td>
     <td class="tg-9wq8">224x224</td>
     <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">5.214</td>
+    <td class="tg-baqh">5.210</td>
     <td class="tg-baqh">0.085</td>
     <td class="tg-baqh">0.013</td>
   </tr>
@@ -151,12 +151,12 @@ $ python tools/converters/torchvision_shufflenet_to_zcls_shufflenet.py
   <tr>
     <td class="tg-9wq8">shufflenet_v2_x1_0</td>
     <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">68.944</td>
-    <td class="tg-9wq8">88.214</td>
+    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">/</td>
     <td class="tg-9wq8">224x224</td>
     <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">8.692</td>
-    <td class="tg-baqh">0.298</td>
+    <td class="tg-baqh">8.693</td>
+    <td class="tg-baqh">0.300</td>
     <td class="tg-baqh">0.018</td>
   </tr>
   <tr>
@@ -168,7 +168,29 @@ $ python tools/converters/torchvision_shufflenet_to_zcls_shufflenet.py
     <td class="tg-9wq8">imagenet</td>
     <td class="tg-baqh">8.692</td>
     <td class="tg-baqh">0.298</td>
-    <td class="tg-baqh">0.019</td>
+    <td class="tg-baqh">0.018</td>
+  </tr>
+  <tr>
+    <td class="tg-9wq8">shufflenet_v2_x1_5</td>
+    <td class="tg-9wq8">zcls</td>
+    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">224x224</td>
+    <td class="tg-9wq8">imagenet</td>
+    <td class="tg-baqh">13.377</td>
+    <td class="tg-baqh">0.609</td>
+    <td class="tg-baqh">0.021</td>
+  </tr>
+  <tr>
+    <td class="tg-9wq8">shufflenet_v2_x2_0</td>
+    <td class="tg-9wq8">zcls</td>
+    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">224x224</td>
+    <td class="tg-9wq8">imagenet</td>
+    <td class="tg-baqh">28.239</td>
+    <td class="tg-baqh">1.197</td>
+    <td class="tg-baqh">0.026</td>
   </tr>
 </tbody>
 </table>
