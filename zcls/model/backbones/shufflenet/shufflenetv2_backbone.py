@@ -16,11 +16,10 @@ from zcls.model.init_helper import init_weights
 from zcls.model.conv_helper import get_conv
 from zcls.model.norm_helper import get_norm
 from zcls.model.act_helper import get_act
-from ..misc import make_divisible
 from .shufflenetv2_unit import ShuffleNetV2Unit
 
 arch_settings = {
-    'shufflenet_v2_x2_0': (ShuffleNetV2Unit, [244, 488, 976], (4, 8, 4), 1024),
+    'shufflenet_v2_x2_0': (ShuffleNetV2Unit, [244, 488, 976], (4, 8, 4), 2048),
     'shufflenet_v2_x1_5': (ShuffleNetV2Unit, [176, 352, 704], (4, 8, 4), 1024),
     'shufflenet_v2_x1_0': (ShuffleNetV2Unit, [116, 232, 464], (4, 8, 4), 1024),
     'shufflenet_v2_x0_5': (ShuffleNetV2Unit, [48, 96, 192], (4, 8, 4), 1024),
@@ -47,16 +46,14 @@ def make_stage(in_channels,
     :param act_layer: 激活层类型
     :return:
     """
-    branch_planes = out_channels // 2
-
     stride = 2 if with_downsample else 1
     if with_downsample:
         down_sample = nn.Sequential(
             conv_layer(in_channels, in_channels, kernel_size=3, stride=stride, padding=1, bias=False,
                        groups=in_channels),
             norm_layer(in_channels),
-            conv_layer(in_channels, branch_planes, kernel_size=1, stride=1, padding=0, bias=False),
-            norm_layer(branch_planes),
+            conv_layer(in_channels, in_channels, kernel_size=1, stride=1, padding=0, bias=False),
+            norm_layer(in_channels),
             act_layer(inplace=True)
         )
     else:
@@ -64,14 +61,14 @@ def make_stage(in_channels,
 
     blocks = list()
     blocks.append(block_layer(
-        in_channels, branch_planes, stride, down_sample, conv_layer, norm_layer, act_layer))
-    in_channels = branch_planes
+        in_channels, out_channels, stride, down_sample, conv_layer, norm_layer, act_layer))
+    in_channels = out_channels
 
     stride = 1
     down_sample = None
     for i in range(1, block_num):
         blocks.append(block_layer(
-            in_channels, branch_planes, stride, down_sample, conv_layer, norm_layer, act_layer))
+            in_channels // 2, out_channels, stride, down_sample, conv_layer, norm_layer, act_layer))
     return nn.Sequential(*blocks)
 
 

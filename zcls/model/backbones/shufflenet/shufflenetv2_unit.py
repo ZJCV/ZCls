@@ -28,6 +28,7 @@ class ShuffleNetV2Unit(nn.Module, ABC):
         """
         when stride = 1, Unit = Channel Shuffle(Concat(Channel Split(Input), Conv(DWConv(Conv(Channel Split(Input))))));
         when stride = 2, Unit = Channel Shuffle(Concat(Conv(DWConv(Input)), Conv(DWConv(Conv(Input)))));
+        refer to [ShuffleNet-Series/ShuffleNetV2/blocks.py](https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV2/blocks.py)
         :param in_channels: 输入通道
         :param out_channels: 输出通道
         :param stride: 步长
@@ -45,15 +46,17 @@ class ShuffleNetV2Unit(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
-        self.conv1 = conv_layer(in_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm1 = norm_layer(out_channels)
+        mid_channels = out_channels // 2
+        self.conv1 = conv_layer(in_channels, mid_channels, kernel_size=1, stride=1, padding=0, bias=False)
+        self.norm1 = norm_layer(mid_channels)
 
-        self.conv2 = conv_layer(out_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False,
-                                groups=out_channels)
-        self.norm2 = norm_layer(out_channels)
+        self.conv2 = conv_layer(mid_channels, mid_channels, kernel_size=3, stride=stride, padding=1, bias=False,
+                                groups=mid_channels)
+        self.norm2 = norm_layer(mid_channels)
 
-        self.conv3 = conv_layer(out_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm3 = norm_layer(out_channels)
+        self.conv3 = conv_layer(mid_channels, out_channels - in_channels, kernel_size=1, stride=1, padding=0,
+                                bias=False)
+        self.norm3 = norm_layer(out_channels - in_channels)
 
         self.act = act_layer(inplace=True)
         self.stride = stride

@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/shufflenet_v2_x0_5_zcls_imagenet_224'
+OUTPUT_DIR: 'outputs/benchmarks/shufflenet_v2_x1_5_zcls_imagenet_224'
 DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
@@ -29,7 +29,7 @@ MODEL:
     TYPE: 'ReLU'
   BACKBONE:
     NAME: 'ShuffleNetV2'
-    ARCH: 'shufflenet_v2_x0_5'
+    ARCH: 'shufflenet_v2_x1_5'
     IN_PLANES: 3
     BASE_PLANES: 24
     DOWNSAMPLES: (1, 1, 1)
@@ -41,5 +41,5 @@ MODEL:
     BIAS: False
   RECOGNIZER:
     NAME: 'ShuffleNetV2'
-    PRELOADED: "outputs/converters/shufflenet_v2_x0_5_imagenet.pth"
+    PRELOADED: "outputs/converters/shufflenet_v2_x1_5_imagenet.pth"
     PRETRAINED_NUM_CLASSES: 1000
