@@ -8,6 +8,7 @@
 """
 
 from abc import ABC
+import copy
 import torch.nn as nn
 
 from zcls.model import registry
@@ -15,26 +16,18 @@ from zcls.model.init_helper import init_weights
 from zcls.model.conv_helper import get_conv
 from zcls.model.norm_helper import get_norm
 from zcls.model.act_helper import get_act
-from ..misc import make_divisible
 from .shufflenetv1_unit import ShuffleNetV1Unit
 
 arch_settings = {
-    'shufflenetv1_1g1x': (ShuffleNetV1Unit, 1, [144, 288, 576], (4, 8, 4), 1.0),
-    'shufflenetv1_1g0.5x': (ShuffleNetV1Unit, 1, [144, 288, 576], (4, 8, 4), 0.5),
-    'shufflenetv1_1g0.25x': (ShuffleNetV1Unit, 1, [144, 288, 576], (4, 8, 4), 0.25),
-    'shufflenetv1_2g1x': (ShuffleNetV1Unit, 2, [200, 400, 800], (4, 8, 4), 1.0),
-    'shufflenetv1_2g0.5x': (ShuffleNetV1Unit, 2, [200, 400, 800], (4, 8, 4), 0.5),
-    'shufflenetv1_2g0.25x': (ShuffleNetV1Unit, 2, [200, 400, 800], (4, 8, 4), 0.25),
-    'shufflenetv1_3g2x': (ShuffleNetV1Unit, 3, [240, 480, 960], (4, 8, 4), 2.0),
-    'shufflenetv1_3g1x': (ShuffleNetV1Unit, 3, [240, 480, 960], (4, 8, 4), 1.0),
-    'shufflenetv1_3g0.5x': (ShuffleNetV1Unit, 3, [240, 480, 960], (4, 8, 4), 0.5),
-    'shufflenetv1_3g0.25x': (ShuffleNetV1Unit, 3, [240, 480, 960], (4, 8, 4), 0.25),
-    'shufflenetv1_4g1x': (ShuffleNetV1Unit, 4, [272, 544, 1088], (4, 8, 4), 1.0),
-    'shufflenetv1_4g0.5x': (ShuffleNetV1Unit, 4, [272, 544, 1088], (4, 8, 4), 0.5),
-    'shufflenetv1_4g0.25x': (ShuffleNetV1Unit, 4, [272, 544, 1088], (4, 8, 4), 0.25),
-    'shufflenetv1_8g1x': (ShuffleNetV1Unit, 8, [384, 768, 1536], (4, 8, 4), 1.0),
-    'shufflenetv1_8g0.5x': (ShuffleNetV1Unit, 8, [384, 768, 1536], (4, 8, 4), 0.5),
-    'shufflenetv1_8g0.25x': (ShuffleNetV1Unit, 8, [384, 768, 1536], (4, 8, 4), 0.25),
+    # block_layer, groups, base_channel, stage_channels, layer_blocks, width_multiplier
+    'shufflenetv1_3g2x': (ShuffleNetV1Unit, 3, 48, [240, 480, 960], (4, 8, 4), 2.0),
+    'shufflenetv1_3g1_5x': (ShuffleNetV1Unit, 3, 24, [240, 480, 960], (4, 8, 4), 1.5),
+    'shufflenetv1_3g1x': (ShuffleNetV1Unit, 3, 24, [240, 480, 960], (4, 8, 4), 1.0),
+    'shufflenetv1_3g0_5x': (ShuffleNetV1Unit, 3, 12, [240, 480, 960], (4, 8, 4), 0.5),
+    'shufflenetv1_8g2x': (ShuffleNetV1Unit, 8, 48, [384, 768, 1536], (4, 8, 4), 2.0),
+    'shufflenetv1_8g1_5x': (ShuffleNetV1Unit, 8, 24, [384, 768, 1536], (4, 8, 4), 1.5),
+    'shufflenetv1_8g1x': (ShuffleNetV1Unit, 8, 24, [384, 768, 1536], (4, 8, 4), 1.0),
+    'shufflenetv1_8g0_5x': (ShuffleNetV1Unit, 8, 16, [384, 768, 1536], (4, 8, 4), 0.5),
 }
 
 
@@ -72,12 +65,11 @@ def make_stage(in_channels,
         in_channels, out_channels, groups, stride, down_sample, with_groups[0], conv_layer, norm_layer, act_layer))
     in_channels = out_channels
 
-    groups = 1
     stride = 1
     down_sample = None
     for i in range(1, block_num):
         blocks.append(block_layer(
-            in_channels, out_channels, groups, stride, down_sample, with_groups[i], conv_layer, norm_layer, act_layer))
+            in_channels, out_channels, groups, stride, down_sample, True, conv_layer, norm_layer, act_layer))
     return nn.Sequential(*blocks)
 
 
@@ -176,18 +168,18 @@ def build_sfv1_backbone(cfg):
     arch = cfg.MODEL.BACKBONE.ARCH
     round_nearest = cfg.MODEL.COMPRESSION.ROUND_NEAREST
     in_channels = cfg.MODEL.BACKBONE.IN_PLANES
-    base_channels = cfg.MODEL.BACKBONE.BASE_PLANES
     downsamples = cfg.MODEL.BACKBONE.DOWNSAMPLES
     with_groups = cfg.MODEL.BACKBONE.WITH_GROUPS
     conv_layer = get_conv(cfg)
     norm_layer = get_norm(cfg)
     act_layer = get_act(cfg)
 
-    block_layer, groups, stage_channels, layer_blocks, width_multiplier = arch_settings[arch]
+    block_layer, groups, base_channels, stage_channels, layer_blocks, width_multiplier = copy.deepcopy(
+        arch_settings[arch])
 
-    base_channels = make_divisible(base_channels * width_multiplier, round_nearest)
     for i in range(len(stage_channels)):
-        stage_channels[i] = make_divisible(stage_channels[i] * width_multiplier, round_nearest)
+        # stage_channels[i] = make_divisible(stage_channels[i] * width_multiplier, round_nearest)
+        stage_channels[i] = int(stage_channels[i] * width_multiplier)
 
     return ShuffleNetV1Backbone(
         in_channels=in_channels,

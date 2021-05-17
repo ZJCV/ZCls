@@ -30,6 +30,7 @@ class ShuffleNetV1Unit(nn.Module, ABC):
         """
         when stride=1, Unit = Add(Input, GConv(DWConv(Channel Shuffle(GConv(Input)))));
         when stride=2, Unit = Concat(AvgPool(Input), GConv(DWConv(Channel Shuffle(GConv(Input)))))
+        refer to [ShuffleNet-Series/ShuffleNetV1/blocks.py](https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV1/blocks.py)
         :param in_channels: 输入通道
         :param out_channels: 输出通道
         :param groups: 分组数
@@ -50,16 +51,17 @@ class ShuffleNetV1Unit(nn.Module, ABC):
         if act_layer is None:
             act_layer = nn.ReLU
 
+        mid_channels = out_channels // 4
         out_channels = out_channels if stride == 1 else out_channels - in_channels
-        groups = groups if with_group else 1
-        self.conv1 = conv_layer(in_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False, groups=groups)
-        self.norm1 = norm_layer(out_channels)
+        self.conv1 = conv_layer(in_channels, mid_channels, kernel_size=1, stride=1, padding=0, bias=False,
+                                groups=groups if with_group else 1)
+        self.norm1 = norm_layer(mid_channels)
 
-        self.conv2 = conv_layer(out_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False,
-                                groups=out_channels)
-        self.norm2 = norm_layer(out_channels)
+        self.conv2 = conv_layer(mid_channels, mid_channels, kernel_size=3, stride=stride, padding=1, bias=False,
+                                groups=mid_channels)
+        self.norm2 = norm_layer(mid_channels)
 
-        self.conv3 = conv_layer(out_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False,
+        self.conv3 = conv_layer(mid_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False,
                                 groups=groups)
         self.norm3 = norm_layer(out_channels)
 
