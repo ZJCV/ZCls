@@ -100,6 +100,14 @@ def shufflenet():
         'configs/benchmarks/shufflenet/shufflenet_v2_x0_5_zcls_imagenet_224.yaml',
         'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_torchvision_imagenet_224.yaml',
         'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_3g0_5x_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_3g1_5x_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_3g1x_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_3g2x_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_8g0_5x_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_8g1_5x_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_8g1x_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v1_8g2x_zcls_imagenet_224.yaml',
     ]
 
     name_list = [
@@ -107,6 +115,14 @@ def shufflenet():
         'shufflenet_v2_x0_5_zcls',
         'shufflenet_v2_x1_0_torchvision',
         'shufflenet_v2_x1_0_zcls',
+        'shufflenet_v1_3g0_5x_zcls',
+        'shufflenet_v1_3g1_5x_zcls',
+        'shufflenet_v1_3g1x_zcls',
+        'shufflenet_v1_3g2x_zcls',
+        'shufflenet_v1_8g0_5x_zcls',
+        'shufflenet_v1_8g1_5x_zcls',
+        'shufflenet_v1_8g1x_zcls',
+        'shufflenet_v1_8g2x_zcls',
     ]
 
     assert len(name_list) == len(cfg_file_list)
@@ -275,11 +291,11 @@ def resnest():
 if __name__ == '__main__':
     # print('#' * 30)
     # mobilenet()
-    # print('#' * 30)
-    # shufflenet()
+    print('#' * 30)
+    shufflenet()
     # print('#' * 30)
     # resnet()
     # print('#' * 30)
     # repvgg()
-    print('#' * 30)
-    resnest()
+    # print('#' * 30)
+    # resnest()
