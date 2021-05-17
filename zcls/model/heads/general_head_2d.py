@@ -19,7 +19,8 @@ class GeneralHead2D(nn.Module, ABC):
     def __init__(self,
                  feature_dims=1024,
                  dropout_rate=0.,
-                 num_classes=1000
+                 num_classes=1000,
+                 bias=True
                  ):
         """
         AvgPool + Dropout + FC
@@ -31,13 +32,14 @@ class GeneralHead2D(nn.Module, ABC):
 
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
         self.dropout = nn.Dropout(p=dropout_rate, inplace=True)
-        self.fc = nn.Linear(feature_dims, num_classes)
+        self.fc = nn.Linear(feature_dims, num_classes, bias=bias)
 
         self.init_weights()
 
     def init_weights(self):
         nn.init.normal_(self.fc.weight, 0, 0.01)
-        nn.init.zeros_(self.fc.bias)
+        if self.fc.bias is not None:
+            nn.init.zeros_(self.fc.bias)
 
     def forward(self, x):
         x = self.pool(x)
@@ -53,7 +55,9 @@ def build_general_head_2d(cfg):
     feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
     dropout_rate = cfg.MODEL.HEAD.DROPOUT_RATE
+    bias = cfg.MODEL.HEAD.BIAS
 
     return GeneralHead2D(feature_dims=feature_dims,
                          num_classes=num_classes,
-                         dropout_rate=dropout_rate)
+                         dropout_rate=dropout_rate,
+                         bias=bias)

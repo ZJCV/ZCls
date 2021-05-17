@@ -105,6 +105,7 @@ def add_config(_C):
     _C.MODEL.HEAD.FEATURE_DIMS = 1024
     _C.MODEL.HEAD.DROPOUT_RATE = 0.
     _C.MODEL.HEAD.NUM_CLASSES = 1000
+    _C.MODEL.HEAD.BIAS = True
     # for mobilenetv3
     _C.MODEL.HEAD.INNER_DIMS = 1280
 
