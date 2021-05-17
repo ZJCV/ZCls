@@ -11,7 +11,6 @@ import time
 import numpy as np
 import torch
 
-from zcls.util.distributed import get_device, get_local_rank
 from zcls.util.metrics import compute_num_flops
 from zcls.config import get_cfg_defaults
 from zcls.model.recognizers.build import build_recognizer
@@ -27,9 +26,10 @@ def compute_model_time(data_shape, model, device):
         data = torch.randn(data_shape)
         start = time.time()
         model(data.to(device=device, non_blocking=True))
-        t1 += time.time() - start
+        if i > num // 2:
+            t1 += time.time() - start
     t2 = time.time() - begin
-    print(f'one process need {t2 / num:.3f}s, model compute need: {t1 / num:.3f}s')
+    print(f'one process need {t2 / num:.3f}s, model compute need: {t1 / (num // 2):.3f}s')
 
 
 def main(data_shape, config_file, mobile_name):
@@ -242,12 +242,28 @@ def resnest():
 
     cfg_file_list = [
         'configs/benchmarks/resnet/resnest50_fast_2s1x64d_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_official_imagenet_224.yaml'
+        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest50_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest50_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest101_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest101_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest200_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest200_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest269_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/resnest269_official_imagenet_224.yaml',
     ]
 
     name_list = [
         'resnest50_fast_2s1x64d_zcls',
         'resnest50_fast_2s1x64d_official',
+        'resnest50_zcls',
+        'resnest50_official',
+        'resnest101_zcls',
+        'resnest101_official',
+        'resnest200_zcls',
+        'resnest200_official',
+        'resnest269_zcls',
+        'resnest269_official',
     ]
 
     assert len(name_list) == len(cfg_file_list)
