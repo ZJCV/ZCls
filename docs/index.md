@@ -16,7 +16,8 @@ Welcome to zcls, a classification model training/inferring framework.
     * [Data](./trick-data.md)
     * [Train](./trick-train.md)
 * Benchmark
-    * [ResNet](./benchmark-resnet.md)
+    * [ResNet/ResNeXt](./benchmark-resnet.md)
+    * [SENet/SKNet/ResNeSt](./benchmark-resnest.md)
     * [MobileNet](./benchmark-mobilenet.md)
     * [ShuffleNet](./benchmark-shufflenet.md)
     * [RepVGG](./benchmark-repvgg.md)
