@@ -3,11 +3,12 @@
 
 ## Convert
 
-The torchvision pretraining model can be transformed into zcls by script
+The official shufflenet_v1/v2 pretraining model can be transformed into zcls by script
 
 ```
 $ cd /path/to/ZCls
-$ python tools/converters/torchvision_shufflenet_to_zcls_shufflenet.py
+$ python tools/converters/official_shufflenet_v1_to_zcls_shufflenet_v1.py
+$ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
 ```
 
 ## Benchmark
