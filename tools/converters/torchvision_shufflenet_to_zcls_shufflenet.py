@@ -60,7 +60,7 @@ if __name__ == '__main__':
         'shufflenet_v2_x0_5_zcls_imagenet_224.yaml',
         'shufflenet_v2_x1_0_zcls_imagenet_224.yaml',
     ]
-    prefix_path = 'configs/benchmarks/lightweight'
+    prefix_path = 'configs/benchmarks/shufflenet'
     for item, cfg_file in zip(item_list, cfg_file_list):
         config_path = os.path.join(prefix_path, cfg_file)
         print(item, config_path)

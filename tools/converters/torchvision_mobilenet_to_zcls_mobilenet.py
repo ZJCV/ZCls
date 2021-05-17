@@ -74,7 +74,7 @@ if __name__ == '__main__':
         'mnasnet_b1_0_5_zcls_imagenet_224.yaml',
         'mnasnet_b1_1_0_zcls_imagenet_224.yaml',
     ]
-    prefix_path = 'configs/benchmarks/lightweight'
+    prefix_path = 'configs/benchmarks/mobilenet'
     for item, cfg_file in zip(item_list, cfg_file_list):
         config_path = os.path.join(prefix_path, cfg_file)
         print(item, config_path)
