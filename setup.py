@@ -103,4 +103,5 @@ setuptools.setup(
     cmdclass={
         'upload': UploadCommand,
     },
+    install_requires=INSTALL_REQUIRES,
 )
