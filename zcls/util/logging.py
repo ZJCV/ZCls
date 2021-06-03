@@ -73,22 +73,17 @@ def get_logger(name):
 
 class EmptyLogger(logging.Logger):
 
-    def debug(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
-              extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+    def debug(self, msg: Any, *args: Any, **kwargs: Any) -> None:
         pass
 
-    def info(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
-             extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+    def info(self, msg: Any, *args: Any, **kwargs: Any) -> None:
         pass
 
-    def warn(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
-             extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+    def warn(self, msg: Any, *args: Any, **kwargs: Any) -> None:
         pass
 
-    def warning(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
-                extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+    def warning(self, msg: Any, *args: Any, **kwargs: Any) -> None:
         pass
 
-    def error(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
-              extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+    def error(self, msg: Any, *args: Any, **kwargs: Any) -> None:
         pass
