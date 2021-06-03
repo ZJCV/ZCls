@@ -15,18 +15,20 @@ from zcls.model.recognizers.build import build_recognizer
 
 
 def test_data(model):
-    data = torch.randn(1, 3, 224, 224)
+    data = torch.ones(1, 3, 224, 224)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
+
+    # print(outputs)
 
     assert outputs.shape == (1, 1000)
 
 
 def test_shufflenet():
-    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v1_3g2x_zcls_imagenet_224.yaml')
-    print(cfg)
+    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v1_3g1x_zcls_imagenet_224.yaml')
+    # print(cfg)
     model = build_recognizer(cfg, torch.device('cpu'))
-    print(model)
+    # print(model)
 
     test_data(model)
 
