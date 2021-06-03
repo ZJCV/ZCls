@@ -40,13 +40,13 @@ def convert(official_dict, zcls_model):
 
 def process(item, cfg_file):
     if item == 'shufflenet_v2_x0_5':
-        official_dict = torch.load('outputs/ShufflenetV2/models/ShuffleNetV2.0.5x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV2/models/ShuffleNetV2.0.5x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenet_v2_x1_0':
-        official_dict = torch.load('outputs/ShufflenetV2/models/ShuffleNetV2.1.0x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV2/models/ShuffleNetV2.1.0x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenet_v2_x1_5':
-        official_dict = torch.load('outputs/ShufflenetV2/models/ShuffleNetV2.1.5x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV2/models/ShuffleNetV2.1.5x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenet_v2_x2_0':
-        official_dict = torch.load('outputs/ShufflenetV2/models/ShuffleNetV2.2.0x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV2/models/ShuffleNetV2.2.0x.pth.tar', torch.device('cpu'))['state_dict']
     else:
         raise ValueError(f"{item} doesn't exists")
 

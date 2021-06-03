@@ -37,25 +37,25 @@ def convert(official_dict, zcls_model):
 
 def process(item, cfg_file):
     if item == 'shufflenetv1_3g2x':
-        official_dict = torch.load('outputs/ShufflenetV1/Group3/models/2.0x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV1/Group3/models/2.0x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenetv1_3g1_5x':
-        official_dict = torch.load('outputs/ShufflenetV1/Group3/models/1.5x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV1/Group3/models/1.5x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenetv1_3g1x':
-        official_dict = torch.load('outputs/ShufflenetV1/Group3/models/1.0x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV1/Group3/models/1.0x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenetv1_3g0_5x':
-        official_dict = torch.load('outputs/ShufflenetV1/Group3/models/0.5x.pth.tar', torch.device('cpu'))['state_dict']
+        official_dict = torch.load('outputs/ShuffleNetV1/Group3/models/0.5x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenetv1_8g2x':
         official_dict = \
-        torch.load('outputs/ShufflenetV1/Group8/models/snetv1_group8_2.0x.pth.tar', torch.device('cpu'))['state_dict']
+        torch.load('outputs/ShuffleNetV1/Group8/models/snetv1_group8_2.0x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenetv1_8g1_5x':
         official_dict = \
-        torch.load('outputs/ShufflenetV1/Group8/models/snetv1_group8_1.5x.pth.tar', torch.device('cpu'))['state_dict']
+        torch.load('outputs/ShuffleNetV1/Group8/models/snetv1_group8_1.5x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenetv1_8g1x':
         official_dict = \
-        torch.load('outputs/ShufflenetV1/Group8/models/snetv1_group8_1.0x.pth.tar', torch.device('cpu'))['state_dict']
+        torch.load('outputs/ShuffleNetV1/Group8/models/snetv1_group8_1.0x.pth.tar', torch.device('cpu'))['state_dict']
     elif item == 'shufflenetv1_8g0_5x':
         official_dict = \
-        torch.load('outputs/ShufflenetV1/Group8/models/snetv1_group8_0.5x.pth.tar', torch.device('cpu'))['state_dict']
+        torch.load('outputs/ShuffleNetV1/Group8/models/snetv1_group8_0.5x.pth.tar', torch.device('cpu'))['state_dict']
     else:
         raise ValueError(f"{item} doesn't exists")
 
