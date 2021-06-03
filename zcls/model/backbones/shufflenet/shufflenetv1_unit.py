@@ -8,10 +8,9 @@
 """
 
 from abc import ABC
+
 import torch
 import torch.nn as nn
-
-from ..misc import channel_shuffle
 
 
 class ShuffleNetV1Unit(nn.Module, ABC):
@@ -28,9 +27,46 @@ class ShuffleNetV1Unit(nn.Module, ABC):
                  act_layer=None,
                  ):
         """
-        when stride=1, Unit = Add(Input, GConv(DWConv(Channel Shuffle(GConv(Input)))));
-        when stride=2, Unit = Concat(AvgPool(Input), GConv(DWConv(Channel Shuffle(GConv(Input)))))
-        refer to [ShuffleNet-Series/ShuffleNetV1/blocks.py](https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV1/blocks.py)
+        In paper https://arxiv.org/abs/1707.01083
+        when stride=1, Unit = ReLU(Add(
+                                Input,
+                                BN(1x1 GConv(
+                                    BN(3x3 DWConv(
+                                        Channel Shuffle(
+                                            ReLU(BN(1x1 GConv(Input)))
+                                        )
+                                    ))
+                                ))
+                              ));
+        when stride=2, Unit = ReLU(Concat(
+                                S=2 K=3x3 AvgPool(Input),
+                                BN(1x1 GConv(
+                                  BN(S=2 K=3x3 DWConv(
+                                    Channel Shuffle(
+                                        ReLU(BN(1x1 GConv(Input)))
+                                    )
+                                  ))
+                                ))
+                              ));
+        In official realization [ShuffleNet-Series/ShuffleNetV1/blocks.py](https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV1/blocks.py)
+        There are two differences with the paper description
+        1. use channel shuffle after 3x3 DWConv;
+        2. when stride=2, not use activation function for identity mapping
+                                Unit = Concat(
+                                    S=2 K=3x3 AvgPool(Input),
+                                    ReLU(BN(1x1 GConv(
+                                        Channel Shuffle(
+                                            BN(S=2 K=3x3 DWConv(
+                                                ReLU(BN(1x1 GConv(Input)))
+                                            ))
+                                        )
+                                    )))
+                                );
+        for first:
+        * [Why is ShuffleNetV1 different from description in paper ? #16](https://github.com/megvii-model/ShuffleNet-Series/issues/16)
+        * [shufflenetv1的一个问题 #40](https://github.com/megvii-model/ShuffleNet-Series/issues/40)
+        for second:
+        * [A mismatch in shufflenetv1 about ReLU #53](https://github.com/megvii-model/ShuffleNet-Series/issues/53)
         :param in_channels: 输入通道
         :param out_channels: 输出通道
         :param groups: 分组数
@@ -77,20 +113,28 @@ class ShuffleNetV1Unit(nn.Module, ABC):
         out = self.norm1(out)
         out = self.act(out)
 
-        out = channel_shuffle(out, groups=self.groups)
-
         out = self.conv2(out)
         out = self.norm2(out)
+
+        if self.groups > 1:
+            out = self.channel_shuffle(out)
 
         out = self.conv3(out)
         out = self.norm3(out)
 
-        if self.down_sample is not None:
-            identity = self.down_sample(x)
-
         if self.stride == 2:
-            out = torch.cat((out, identity), dim=1)
+            out = torch.cat((self.down_sample(identity), out), dim=1)
         else:
-            out = out + identity
-        out = self.act(out)
-        return out
+            out = self.act(out + identity)
+        return self.act(out)
+
+    def channel_shuffle(self, x):
+        batchsize, num_channels, height, width = x.data.size()
+        assert num_channels % self.groups == 0
+        group_channels = num_channels // self.groups
+
+        x = x.reshape(batchsize, group_channels, self.groups, height, width)
+        x = x.permute(0, 2, 1, 3, 4)
+        x = x.reshape(batchsize, num_channels, height, width)
+
+        return x

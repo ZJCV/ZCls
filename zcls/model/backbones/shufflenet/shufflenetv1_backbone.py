@@ -166,7 +166,6 @@ class ShuffleNetV1Backbone(nn.Module, ABC):
 @registry.Backbone.register('ShuffleNetV1')
 def build_sfv1_backbone(cfg):
     arch = cfg.MODEL.BACKBONE.ARCH
-    round_nearest = cfg.MODEL.COMPRESSION.ROUND_NEAREST
     in_channels = cfg.MODEL.BACKBONE.IN_PLANES
     downsamples = cfg.MODEL.BACKBONE.DOWNSAMPLES
     with_groups = cfg.MODEL.BACKBONE.WITH_GROUPS
@@ -178,7 +177,6 @@ def build_sfv1_backbone(cfg):
         arch_settings[arch])
 
     for i in range(len(stage_channels)):
-        # stage_channels[i] = make_divisible(stage_channels[i] * width_multiplier, round_nearest)
         stage_channels[i] = int(stage_channels[i] * width_multiplier)
 
     return ShuffleNetV1Backbone(
