@@ -18,6 +18,14 @@ from zcls.model.norm_helper import get_norm
 from zcls.model.act_helper import get_act
 from .shufflenetv2_unit import ShuffleNetV2Unit
 
+"""
+some interesting issues:
+* [通道设计不是2^n的原因 #47](https://github.com/megvii-model/ShuffleNet-Series/issues/47)
+* [Compare time cost between mobilenetV1 and shufflenetV1、V2 #25](https://github.com/megvii-model/ShuffleNet-Series/issues/25)
+* [Compare the speed of mobilenetv3-large, shufflenetv2 1.5x, shufflenetv2 + medium? #31](https://github.com/megvii-model/ShuffleNet-Series/issues/31)
+* [question on why 4 fragments in parallel runs slower than 4 fragments in series #46](https://github.com/megvii-model/ShuffleNet-Series/issues/46)
+"""
+
 arch_settings = {
     'shufflenet_v2_x2_0': (ShuffleNetV2Unit, [244, 488, 976], (4, 8, 4), 2048),
     'shufflenet_v2_x1_5': (ShuffleNetV2Unit, [176, 352, 704], (4, 8, 4), 1024),
