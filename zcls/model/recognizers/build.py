@@ -58,6 +58,6 @@ def build_recognizer(cfg, device):
 
     model = model.to(device=device)
     if du.get_world_size() > 1:
-        model = DDP(model, device_ids=[device], output_device=device, find_unused_parameters=True)
+        model = DDP(model, device_ids=[device], output_device=device, find_unused_parameters=False)
 
     return model
