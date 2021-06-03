@@ -126,7 +126,7 @@ class ShuffleNetV1Unit(nn.Module, ABC):
             out = torch.cat((self.down_sample(identity), out), dim=1)
         else:
             out = self.act(out + identity)
-        return self.act(out)
+        return out
 
     def channel_shuffle(self, x):
         batchsize, num_channels, height, width = x.data.size()
