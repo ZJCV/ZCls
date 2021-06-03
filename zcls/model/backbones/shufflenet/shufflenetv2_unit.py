@@ -26,9 +26,10 @@ class ShuffleNetV2Unit(nn.Module, ABC):
                  act_layer=None,
                  ):
         """
+        refer to Torchvision realization: https://github.com/pytorch/vision/blob/master/torchvision/models/shufflenetv2.py
         when stride = 1, Unit = Channel Shuffle(Concat(Channel Split(Input), Conv(DWConv(Conv(Channel Split(Input))))));
         when stride = 2, Unit = Channel Shuffle(Concat(Conv(DWConv(Input)), Conv(DWConv(Conv(Input)))));
-        refer to [ShuffleNet-Series/ShuffleNetV2/blocks.py](https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV2/blocks.py)
+        official realization (https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV2/blocks.py) is different with torchvision
         :param in_channels: 输入通道
         :param out_channels: 输出通道
         :param stride: 步长
@@ -54,9 +55,9 @@ class ShuffleNetV2Unit(nn.Module, ABC):
                                 groups=mid_channels)
         self.norm2 = norm_layer(mid_channels)
 
-        self.conv3 = conv_layer(mid_channels, out_channels - in_channels, kernel_size=1, stride=1, padding=0,
+        self.conv3 = conv_layer(mid_channels, mid_channels, kernel_size=1, stride=1, padding=0,
                                 bias=False)
-        self.norm3 = norm_layer(out_channels - in_channels)
+        self.norm3 = norm_layer(mid_channels)
 
         self.act = act_layer(inplace=True)
         self.stride = stride

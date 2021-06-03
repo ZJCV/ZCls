@@ -52,8 +52,8 @@ def make_stage(in_channels,
             conv_layer(in_channels, in_channels, kernel_size=3, stride=stride, padding=1, bias=False,
                        groups=in_channels),
             norm_layer(in_channels),
-            conv_layer(in_channels, in_channels, kernel_size=1, stride=1, padding=0, bias=False),
-            norm_layer(in_channels),
+            conv_layer(in_channels, out_channels // 2, kernel_size=1, stride=1, padding=0, bias=False),
+            norm_layer(out_channels // 2),
             act_layer(inplace=True)
         )
     else:
