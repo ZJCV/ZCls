@@ -7,6 +7,7 @@ import builtins
 import logging
 import os
 import sys
+from typing import Any, Optional, Dict
 
 import zcls.util.distributed as du
 
@@ -36,6 +37,7 @@ def setup_logging(output_dir=None):
     else:
         # Suppress logging for non-master processes.
         _suppress_print()
+        return EmptyLogger('ignore')
 
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -67,3 +69,26 @@ def get_logger(name):
         name (string): name of the logger.
     """
     return logging.getLogger(name)
+
+
+class EmptyLogger(logging.Logger):
+
+    def debug(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
+              extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+        pass
+
+    def info(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
+             extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+        pass
+
+    def warn(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
+             extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+        pass
+
+    def warning(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
+                extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+        pass
+
+    def error(self, msg: Any, *args: Any, exc_info: _ExcInfoType = ..., stack_info: bool = ..., stacklevel: int = ...,
+              extra: Optional[Dict[str, Any]] = ..., **kwargs: Any) -> None:
+        pass
