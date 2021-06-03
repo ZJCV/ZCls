@@ -24,14 +24,14 @@ def test_data(model):
 
 
 def test_shufflenet_v2():
-    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v2_x0_5_zcls_imagenet_224.yaml')
+    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v2_x1_0_zcls_imagenet_224.yaml')
     print(cfg)
     model = ShuffleNetV2(cfg)
     print(model)
 
     test_data(model)
 
-    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v2_x0_5_torchvision_imagenet_224.yaml')
+    cfg.merge_from_file('configs/benchmarks/shufflenet/shufflenet_v2_x1_0_torchvision_imagenet_224.yaml')
     model = build_torchvision_sfv2(cfg)
     print(model)
     test_data(model)
