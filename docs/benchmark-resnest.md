@@ -43,6 +43,17 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
 </thead>
 <tbody>
   <tr>
+    <td class="tg-c3ow">se_resnet50</td>
+    <td class="tg-c3ow">zcls</td>
+    <td class="tg-c3ow">75.500</td>
+    <td class="tg-c3ow">92.720</td>
+    <td class="tg-c3ow">224x224</td>
+    <td class="tg-c3ow">imagenet</td>
+    <td class="tg-baqh">107.086</td>
+    <td class="tg-baqh">8.239</td>
+    <td class="tg-baqh">0.073</td>
+  </tr>
+  <tr>
     <td class="tg-c3ow">sknet50</td>
     <td class="tg-c3ow">zcls</td>
     <td class="tg-c3ow">78.343</td>
