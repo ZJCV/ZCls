@@ -47,9 +47,9 @@ $ python tools/converters/official_ghostnet_to_zcls_ghostnet.py
     <td class="tg-c3ow">91.297</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
-    <td class="tg-baqh">/</td>
-    <td class="tg-baqh">/</td>
-    <td class="tg-baqh">/</td>
+    <td class="tg-baqh">19.770</td>
+    <td class="tg-baqh">0.298</td>
+    <td class="tg-baqh">0.025</td>
   </tr>
   </tbody>
 </table>
