@@ -168,7 +168,6 @@ def resnet():
         'configs/benchmarks/resnet/rxt50_32x4d_zcls_imagenet_224.yaml',
         'configs/benchmarks/resnet/rxt101_32x8d_torchvision_imagenet_224.yaml',
         'configs/benchmarks/resnet/rxt101_32x8d_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/sknet50_zcls_imagenet_224.yaml'
     ]
 
     name_list = [
@@ -186,7 +185,6 @@ def resnet():
         'rxt50_32x4d_zcls',
         'rxt101_32x8d_torchvision',
         'rxt101_32x8d_zcls',
-        'sknet50_zcls_imagenet',
     ]
 
     assert len(name_list) == len(cfg_file_list)
@@ -272,10 +270,12 @@ def repvgg():
             raise ValueError('ERROR')
 
 
-def resnest():
+def senet_sknet_resnest():
     data_shape = (1, 3, 224, 224)
 
     cfg_file_list = [
+        'configs/benchmarks/resnet/se_r50_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet/sknet50_zcls_imagenet_224.yaml',
         'configs/benchmarks/resnet/resnest50_fast_2s1x64d_zcls_imagenet_224.yaml',
         'configs/benchmarks/resnet/resnest50_fast_2s1x64d_official_imagenet_224.yaml',
         'configs/benchmarks/resnet/resnest50_zcls_imagenet_224.yaml',
@@ -289,6 +289,8 @@ def resnest():
     ]
 
     name_list = [
+        'se_r50_zcls_imagenet',
+        'sknet50_zcls_imagenet',
         'resnest50_fast_2s1x64d_zcls',
         'resnest50_fast_2s1x64d_official',
         'resnest50_zcls',
@@ -334,7 +336,7 @@ if __name__ == '__main__':
     # resnet()
     # print('#' * 30)
     # repvgg()
-    # print('#' * 30)
-    # resnest()
     print('#' * 30)
-    ghostnet()
+    senet_sknet_resnest()
+    # print('#' * 30)
+    # ghostnet()
