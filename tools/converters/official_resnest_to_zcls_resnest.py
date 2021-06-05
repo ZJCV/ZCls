@@ -5,6 +5,9 @@
 @file: torchvision_resnet_to_zcls_resnet.py
 @author: zj
 @description: Transform official pretrained model into zcls format
+Related issues:
+[Download URL, Model Weights #154](https://github.com/zhanghang1989/ResNeSt/issues/154)
+downloaded pretrained model and put it into ~/.cache/torch/hub/checkpoints
 """
 
 import os
