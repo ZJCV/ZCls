@@ -1,5 +1,20 @@
 # CHANGE
 
+## v0.7.0
+
+* New features
+    1. create EmptyLogger, used in subprocess
+    2. refer torchvision to realize shufflenet_v2
+    3. use nn.Hardswish replace custom HardswishWrapper
+    4. add dropout config in mobilenet_v3 head
+    5. add bias config in general_head_2d
+    6. realize ghostnet
+    7. upgrade development environment from torch 1.7.1 to 1.8.1
+* Bug fixes
+    1. fix the install requires bug
+    2. fix resnet_d_backbone's fast_avg usage
+* Breaking changes.
+
 ## v0.6.0
 
 * New features
