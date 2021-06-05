@@ -30,6 +30,7 @@ from .resnet.resnet import ResNet
 from .resnet.torchvision_resnet import build_torchvision_resnet
 from .resnet.official_resnest import build_official_resnest
 from .resnet.resnet3d import ResNet3D
+from .ghostnet.ghostnet import GhostNet
 
 logger = logging.get_logger(__name__)
 

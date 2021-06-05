@@ -19,6 +19,7 @@ from .vgg.repvgg_backbone import build_repvgg_backbone
 from .resnet.resnet_backbone import build_resnet_backbone
 from .resnet.resnet_d_backbone import build_resnet_d_backbone
 from .resnet.resnet3d_backbone import build_resnet3d_backbone
+from .ghostnet.ghost_backbone import build_ghostnet_backbone
 
 
 def build_backbone(cfg):
