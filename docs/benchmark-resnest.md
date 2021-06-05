@@ -56,8 +56,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest50_fast_2s1x64d</td>
     <td class="tg-c3ow">zcls</td>
-    <td class="tg-c3ow">70.395</td>
-    <td class="tg-c3ow">89.393</td>
+    <td class="tg-c3ow">80.394</td>
+    <td class="tg-c3ow">95.254</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">104.840</td>
@@ -78,8 +78,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest50</td>
     <td class="tg-c3ow">zcls</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">80.748</td>
+    <td class="tg-c3ow">95.399</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">104.840</td>
@@ -89,8 +89,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest50</td>
     <td class="tg-c3ow">official</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">80.742</td>
+    <td class="tg-c3ow">95.397</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">104.840</td>
@@ -100,8 +100,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest101</td>
     <td class="tg-c3ow">zcls</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">81.942</td>
+    <td class="tg-c3ow">95.931</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">184.155</td>
@@ -111,8 +111,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest101</td>
     <td class="tg-c3ow">official</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">81.938</td>
+    <td class="tg-c3ow">95.927</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">184.155</td>
@@ -122,8 +122,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest200</td>
     <td class="tg-c3ow">zcls</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">82.262</td>
+    <td class="tg-c3ow">96.101</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">267.798</td>
@@ -133,8 +133,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest200</td>
     <td class="tg-c3ow">official</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">82.262</td>
+    <td class="tg-c3ow">96.103</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">267.798</td>
@@ -144,8 +144,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest269</td>
     <td class="tg-c3ow">zcls</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">78.659</td>
+    <td class="tg-c3ow">94.176</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">423.162</td>
@@ -155,8 +155,8 @@ $ python tools/converters/official_resnest_to_zcls_resnest.py
   <tr>
     <td class="tg-c3ow">resnest269</td>
     <td class="tg-c3ow">official</td>
-    <td class="tg-c3ow">/</td>
-    <td class="tg-c3ow">/</td>
+    <td class="tg-c3ow">78.659</td>
+    <td class="tg-c3ow">94.176</td>
     <td class="tg-c3ow">224x224</td>
     <td class="tg-c3ow">imagenet</td>
     <td class="tg-baqh">423.162</td>
