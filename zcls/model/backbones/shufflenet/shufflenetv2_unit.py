@@ -29,7 +29,8 @@ class ShuffleNetV2Unit(nn.Module, ABC):
         refer to Torchvision realization: https://github.com/pytorch/vision/blob/master/torchvision/models/shufflenetv2.py
         when stride = 1, Unit = Channel Shuffle(Concat(Channel Split(Input), Conv(DWConv(Conv(Channel Split(Input))))));
         when stride = 2, Unit = Channel Shuffle(Concat(Conv(DWConv(Input)), Conv(DWConv(Conv(Input)))));
-        official realization (https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV2/blocks.py) is different with torchvision
+        official realization (https://github.com/megvii-model/ShuffleNet-Series/blob/master/ShuffleNetV2/blocks.py) has
+         a more ingenious implementation, see [A mismatch in shufflenetv1 about ReLU #53](https://github.com/megvii-model/ShuffleNet-Series/issues/53)
         :param in_channels: 输入通道
         :param out_channels: 输出通道
         :param stride: 步长
