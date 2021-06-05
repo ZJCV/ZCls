@@ -10,6 +10,7 @@
 import torch.nn as nn
 
 from ..act_helper import get_sigmoid
+from ..backbones.misc import round_to_multiple_of
 
 
 class _SqueezeAndExcitationBlockND(nn.Module):
@@ -20,6 +21,8 @@ class _SqueezeAndExcitationBlockND(nn.Module):
                  dimension=2,
                  sigmoid_type='Sigmoid',
                  bias=False,
+                 is_round=False,
+                 round_nearest=8,
                  ):
         """
         Squeeze-and-Excitation Block
@@ -36,6 +39,8 @@ class _SqueezeAndExcitationBlockND(nn.Module):
         assert in_channels % reduction == 0, f'in_channels = {in_channels}, reduction = {reduction}'
 
         inner_channel = in_channels // reduction
+        if is_round:
+            inner_channel = round_to_multiple_of(inner_channel, round_nearest)
         if dimension == 1:
             self.squeeze = nn.AdaptiveAvgPool1d((1))
         elif dimension == 2:
