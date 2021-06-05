@@ -20,8 +20,6 @@ def test_config():
     config_file = 'configs/cifar/mbv3_large_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
-    print(model)
-    outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
@@ -30,8 +28,6 @@ def test_config():
     config_file = 'configs/cifar/mbv3_large_se_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
-    print(model)
-    outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
@@ -40,8 +36,6 @@ def test_config():
     config_file = 'configs/cifar/mbv3_large_se_hsigmoid_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
-    print(model)
-    outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
@@ -50,8 +44,6 @@ def test_config():
     config_file = 'configs/cifar/mbv3_small_cifar100_224_e100_sgd.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
-    print(model)
-    outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
@@ -60,8 +52,6 @@ def test_config():
     config_file = 'configs/cifar/mbv3_small_se_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
-    print(model)
-    outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
@@ -70,8 +60,6 @@ def test_config():
     config_file = 'configs/cifar/mbv3_small_se_hsigmoid_cifar100_224_e100.yaml'
     cfg.merge_from_file(config_file)
     model = MobileNetV3(cfg)
-    print(model)
-    outputs = model(data)
     outputs = model(data)[KEY_OUTPUT]
     print(outputs.shape)
 
