@@ -9,8 +9,6 @@
 
 import torch.nn as nn
 
-from .layers.hard_swish_wrapper import HardswishWrapper
-
 
 def get_act(cfg):
     """
@@ -26,7 +24,7 @@ def get_act(cfg):
     elif act_type == "ReLU6":
         return nn.ReLU6
     elif act_type == 'HSwish':
-        return HardswishWrapper
+        return nn.Hardswish
     else:
         raise NotImplementedError(
             "Activation type {} is not supported".format(act_type)
