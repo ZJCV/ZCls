@@ -307,15 +307,34 @@ def resnest():
         main(data_shape, cfg_file, name)
 
 
+def ghostnet():
+    data_shape = (1, 3, 224, 224)
+
+    cfg_file_list = [
+        'configs/benchmarks/ghostnet/ghostnet_x1_0_zcls_imagenet_224.yaml',
+    ]
+
+    name_list = [
+        'ghostnet_x1_0_zcls',
+    ]
+
+    assert len(name_list) == len(cfg_file_list)
+
+    for name, cfg_file in zip(name_list, cfg_file_list):
+        main(data_shape, cfg_file, name)
+
+
 if __name__ == '__main__':
     # print('#' * 30)
     # mobilenet()
-    print('#' * 30)
+    # print('#' * 30)
     # shufflenet_v1()
-    shufflenet_v2()
+    # shufflenet_v2()
     # print('#' * 30)
     # resnet()
     # print('#' * 30)
     # repvgg()
     # print('#' * 30)
     # resnest()
+    print('#' * 30)
+    ghostnet()
