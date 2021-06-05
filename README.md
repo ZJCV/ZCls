@@ -91,6 +91,15 @@ Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/
       primaryClass={cs.CV}
 }
 
+@misc{han2020ghostnet,
+      title={GhostNet: More Features from Cheap Operations}, 
+      author={Kai Han and Yunhe Wang and Qi Tian and Jianyuan Guo and Chunjing Xu and Chang Xu},
+      year={2020},
+      eprint={1911.11907},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{ding2019acnet,
       title={ACNet: Strengthening the Kernel Skeletons for Powerful CNN via Asymmetric Convolution Blocks}, 
       author={Xiaohan Ding and Yuchen Guo and Guiguang Ding and Jungong Han},
@@ -105,15 +114,6 @@ Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/
       author={Andrew Howard and Mark Sandler and Grace Chu and Liang-Chieh Chen and Bo Chen and Mingxing Tan and Weijun Wang and Yukun Zhu and Ruoming Pang and Vijay Vasudevan and Quoc V. Le and Hartwig Adam},
       year={2019},
       eprint={1905.02244},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-
-@misc{cao2019gcnet,
-      title={GCNet: Non-local Networks Meet Squeeze-Excitation Networks and Beyond}, 
-      author={Yue Cao and Jiarui Xu and Stephen Lin and Fangyun Wei and Han Hu},
-      year={2019},
-      eprint={1904.11492},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }

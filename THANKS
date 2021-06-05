@@ -26,6 +26,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{han2020ghostnet,
+      title={GhostNet: More Features from Cheap Operations}, 
+      author={Kai Han and Yunhe Wang and Qi Tian and Jianyuan Guo and Chunjing Xu and Chang Xu},
+      year={2020},
+      eprint={1911.11907},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{ding2019acnet,
       title={ACNet: Strengthening the Kernel Skeletons for Powerful CNN via Asymmetric Convolution Blocks}, 
       author={Xiaohan Ding and Yuchen Guo and Guiguang Ding and Jungong Han},
