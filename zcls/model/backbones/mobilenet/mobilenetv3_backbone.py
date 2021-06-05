@@ -14,7 +14,6 @@ from zcls.model import registry
 from zcls.model.conv_helper import get_conv
 from zcls.model.norm_helper import get_norm
 from zcls.model.act_helper import get_act
-from zcls.model.layers.hard_swish_wrapper import HardswishWrapper
 from ..misc import round_to_multiple_of
 from .mobilenetv3_unit import MobileNetV3Uint, BN_MOMENTUM
 
@@ -60,7 +59,7 @@ def relu_or_hswish(name):
     if name == 'RE':
         return nn.ReLU
     elif name == 'HS':
-        return HardswishWrapper
+        return nn.Hardswish
     else:
         raise IOError(f'{name} does not exist')
 
@@ -124,7 +123,7 @@ class MobileNetV3Backbone(nn.Module, ABC):
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         if act_layer is None:
-            act_layer = HardswishWrapper
+            act_layer = nn.Hardswish
         if sigmoid_type is None:
             sigmoid_type = 'HSigmoid'
         block_layer = MobileNetV3Uint

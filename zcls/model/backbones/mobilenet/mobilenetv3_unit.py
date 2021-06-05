@@ -11,7 +11,6 @@ from abc import ABC
 import torch.nn as nn
 
 from zcls.model.attention_helper import make_attention_block
-from zcls.model.layers.hard_swish_wrapper import HardswishWrapper
 
 # Paper suggests 0.9997 momentum, for TensorFlow. Equivalent PyTorch momentum is
 # 1.0 - tensorflow.
@@ -56,7 +55,7 @@ class MobileNetV3Uint(nn.Module, ABC):
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         if act_layer is None:
-            act_layer = HardswishWrapper
+            act_layer = nn.Hardswish
         if sigmoid_type is None:
             sigmoid_type = 'HSigmoid'
 
