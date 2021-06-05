@@ -45,6 +45,9 @@ thop == 0.0.31.post2005241907
 # zcls/engine/inference.py: 12
 # zcls/engine/trainer.py: 13,14,16,17,40
 # zcls/model/act_helper.py: 10
+# zcls/model/backbones/ghostnet/ghost_backbone.py: 11
+# zcls/model/backbones/ghostnet/ghost_bottleneck.py: 10
+# zcls/model/backbones/ghostnet/ghost_module.py: 11,12
 # zcls/model/backbones/misc.py: 10
 # zcls/model/backbones/mobilenet/mnasnet_backbone.py: 12
 # zcls/model/backbones/mobilenet/mnasnet_unit.py: 11
@@ -96,6 +99,7 @@ thop == 0.0.31.post2005241907
 # zcls/model/norm_helper.py: 10
 # zcls/model/recognizers/base_recognizer.py: 12,13,14
 # zcls/model/recognizers/build.py: 10
+# zcls/model/recognizers/ghostnet/ghostnet.py: 10
 # zcls/model/recognizers/mobilenet/mobilenetv3.py: 10
 # zcls/model/recognizers/mobilenet/torchvision_mnasnet.py: 12
 # zcls/model/recognizers/mobilenet/torchvision_mobilenetv2.py: 11
