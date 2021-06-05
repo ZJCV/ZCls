@@ -3,12 +3,12 @@
 
 ## Convert
 
-The official shufflenet_v1/v2 pretraining model can be transformed into zcls by script
+The official shufflenet_v1/torchvision shufflenet_v2 pretraining model can be transformed into zcls by script
 
 ```
 $ cd /path/to/ZCls
 $ python tools/converters/official_shufflenet_v1_to_zcls_shufflenet_v1.py
-$ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
+$ python tools/converters/torchvision_shufflenet_to_zcls_shufflenet.py
 ```
 
 ## Benchmark
@@ -40,17 +40,6 @@ $ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
 </thead>
 <tbody>
   <tr>
-    <td class="tg-9wq8">shufflenet_v1_3g0_5x</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">2.736</td>
-    <td class="tg-baqh">0.081</td>
-    <td class="tg-baqh">0.013</td>
-  </tr>
-  <tr>
     <td class="tg-9wq8">shufflenet_v1_3g1x</td>
     <td class="tg-9wq8">zcls</td>
     <td class="tg-9wq8">/</td>
@@ -60,39 +49,6 @@ $ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
     <td class="tg-baqh">7.113</td>
     <td class="tg-baqh">0.287</td>
     <td class="tg-baqh">0.019</td>
-  </tr>
-  <tr>
-    <td class="tg-9wq8">shufflenet_v1_3g1_5x</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">13.127</td>
-    <td class="tg-baqh">0.603</td>
-    <td class="tg-baqh">0.023</td>
-  </tr>
-  <tr>
-    <td class="tg-9wq8">shufflenet_v1_3g2x</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">20.789</td>
-    <td class="tg-baqh">1.073</td>
-    <td class="tg-baqh">0.035</td>
-  </tr>
-  <tr>
-    <td class="tg-9wq8">shufflenet_v1_8g0_5x</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">3.855</td>
-    <td class="tg-baqh">0.091</td>
-    <td class="tg-baqh">0.014</td>
   </tr>
   <tr>
     <td class="tg-9wq8">shufflenet_v1_8g1x</td>
@@ -106,32 +62,10 @@ $ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
     <td class="tg-baqh">0.022</td>
   </tr>
   <tr>
-    <td class="tg-9wq8">shufflenet_v1_8g1_5x</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">16.285</td>
-    <td class="tg-baqh">0.608</td>
-    <td class="tg-baqh">0.031</td>
-  </tr>
-  <tr>
-    <td class="tg-9wq8">shufflenet_v1_8g2x</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">24.877</td>
-    <td class="tg-baqh">1.082</td>
-    <td class="tg-baqh">0.042</td>
-  </tr>
-  <tr>
     <td class="tg-9wq8">shufflenet_v2_x0_5</td>
     <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">59.729</td>
+    <td class="tg-9wq8">81.226</td>
     <td class="tg-9wq8">224x224</td>
     <td class="tg-9wq8">imagenet</td>
     <td class="tg-baqh">5.210</td>
@@ -141,8 +75,8 @@ $ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
   <tr>
     <td class="tg-9wq8">shufflenet_v2_x0_5</td>
     <td class="tg-9wq8">torchvision</td>
-    <td class="tg-9wq8">59.735</td>
-    <td class="tg-9wq8">81.226</td>
+    <td class="tg-9wq8">59.729</td>
+    <td class="tg-9wq8">81.230</td>
     <td class="tg-9wq8">224x224</td>
     <td class="tg-9wq8">imagenet</td>
     <td class="tg-baqh">5.214</td>
@@ -152,8 +86,8 @@ $ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
   <tr>
     <td class="tg-9wq8">shufflenet_v2_x1_0</td>
     <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
+    <td class="tg-9wq8">68.942</td>
+    <td class="tg-9wq8">88.218</td>
     <td class="tg-9wq8">224x224</td>
     <td class="tg-9wq8">imagenet</td>
     <td class="tg-baqh">8.693</td>
@@ -163,35 +97,13 @@ $ python tools/converters/official_shufflenet_v2_to_zcls_shufflenet_v2.py
   <tr>
     <td class="tg-9wq8">shufflenet_v2_x1_0</td>
     <td class="tg-9wq8">torchvision</td>
-    <td class="tg-9wq8">68.942</td>
-    <td class="tg-9wq8">88.214</td>
+    <td class="tg-9wq8">68.940</td>
+    <td class="tg-9wq8">88.218</td>
     <td class="tg-9wq8">224x224</td>
     <td class="tg-9wq8">imagenet</td>
     <td class="tg-baqh">8.692</td>
     <td class="tg-baqh">0.298</td>
     <td class="tg-baqh">0.018</td>
-  </tr>
-  <tr>
-    <td class="tg-9wq8">shufflenet_v2_x1_5</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">13.377</td>
-    <td class="tg-baqh">0.609</td>
-    <td class="tg-baqh">0.021</td>
-  </tr>
-  <tr>
-    <td class="tg-9wq8">shufflenet_v2_x2_0</td>
-    <td class="tg-9wq8">zcls</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">/</td>
-    <td class="tg-9wq8">224x224</td>
-    <td class="tg-9wq8">imagenet</td>
-    <td class="tg-baqh">28.239</td>
-    <td class="tg-baqh">1.197</td>
-    <td class="tg-baqh">0.026</td>
   </tr>
 </tbody>
 </table>
