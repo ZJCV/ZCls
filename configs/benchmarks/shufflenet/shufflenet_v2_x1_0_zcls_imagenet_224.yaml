@@ -38,7 +38,7 @@ MODEL:
     FEATURE_DIMS: 1024
     DROPOUT_RATE: 0.
     NUM_CLASSES: 1000
-    BIAS: False
+    BIAS: True
   RECOGNIZER:
     NAME: 'ShuffleNetV2'
     PRELOADED: "outputs/converters/shufflenet_v2_x1_0_imagenet.pth"
