@@ -278,7 +278,7 @@ def build_resnet_d_backbone(cfg):
     act_layer = get_act(cfg)
     zero_init_residual = cfg.MODEL.RECOGNIZER.ZERO_INIT_RESIDUAL
     use_avg = cfg.MODEL.BACKBONE.USE_AVG
-    fast_avg = cfg.MODEL.BACKBONE.FAST_AVG
+    # fast_avg = cfg.MODEL.BACKBONE.FAST_AVG
 
     # for attention
     with_attentions = cfg.MODEL.ATTENTION.WITH_ATTENTIONS
@@ -286,10 +286,9 @@ def build_resnet_d_backbone(cfg):
     attention_type = cfg.MODEL.ATTENTION.ATTENTION_TYPE
 
     radix = 1
+    fast_avg = True if 'fast' in arch else False
     if 'resnest' in arch:
         block_layer, layer_blocks, radix, groups, width_per_group = arch_settings[arch]
-        if 'fast' in arch:
-            fast_avg = True
     else:
         block_layer, layer_blocks, groups, width_per_group = arch_settings[arch]
 
