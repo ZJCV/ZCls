@@ -7,6 +7,7 @@
 
 * [[2021]RepVGG](https://arxiv.org/abs/2101.03697)
 * [[2020]ResNeSt](https://arxiv.org/abs/2004.08955)
+* [[2019]GhostNet](https://arxiv.org/abs/1911.11907)
 * [[2019]ACNet](https://arxiv.org/abs/1908.03930)
 * [[2019]MobileNetV3](https://arxiv.org/abs/1905.02244)
 * [[2019]GCNet](https://arxiv.org/abs/1904.11492)
