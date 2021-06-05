@@ -25,5 +25,5 @@ MODEL:
     NUM_CLASSES: 1000
   RECOGNIZER:
     NAME: 'OfficialResNeSt'
-    PRETRAINED: "outputs/resnest200-75117900.pth"
+    PRETRAINED: "outputs/resnest/resnest200-75117900.pth"
     PRETRAINED_NUM_CLASSES: 1000
