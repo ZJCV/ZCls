@@ -69,6 +69,8 @@ def mobilenet():
     data_shape = (1, 3, 224, 224)
 
     cfg_file_list = [
+        'configs/benchmarks/mobilenet/mobilenet_v3_large_x1_0_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/mobilenet/mobilenet_v3_small_x1_0_torchvision_imagenet_224.yaml',
         'configs/benchmarks/mobilenet/mnasnet_b1_0_5_torchvision_imagenet_224.yaml',
         'configs/benchmarks/mobilenet/mnasnet_b1_0_5_zcls_imagenet_224.yaml',
         'configs/benchmarks/mobilenet/mnasnet_b1_1_0_torchvision_imagenet_224.yaml',
@@ -78,6 +80,8 @@ def mobilenet():
     ]
 
     name_list = [
+        'mobilenet_v3_large_x1_0',
+        'mobilenet_v3_small_x1_0',
         'mnasnet_b1_0_5_torchvision',
         'mnasnet_b1_0_5_zcls',
         'mnasnet_b1_1_0_torchvision',
@@ -327,8 +331,8 @@ def ghostnet():
 
 
 if __name__ == '__main__':
-    # print('#' * 30)
-    # mobilenet()
+    print('#' * 30)
+    mobilenet()
     # print('#' * 30)
     # shufflenet_v1()
     # shufflenet_v2()
@@ -336,7 +340,7 @@ if __name__ == '__main__':
     # resnet()
     # print('#' * 30)
     # repvgg()
-    print('#' * 30)
-    senet_sknet_resnest()
+    # print('#' * 30)
+    # senet_sknet_resnest()
     # print('#' * 30)
     # ghostnet()
