@@ -25,6 +25,7 @@ from .mobilenet.torchvision_mobilenetv2 import build_torchvision_mbv2
 from .mobilenet.mnasnet import MNASNet
 from .mobilenet.torchvision_mnasnet import build_torchvision_mnasnet
 from .mobilenet.mobilenetv3 import MobileNetV3
+from .mobilenet.torchvision_mobilenetv3 import build_torchvision_mbv3
 from .vgg.repvgg import RepVGG
 from .resnet.resnet import ResNet
 from .resnet.torchvision_resnet import build_torchvision_resnet
