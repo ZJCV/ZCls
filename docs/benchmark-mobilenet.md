@@ -105,8 +105,30 @@ $ python tools/converters/torchvision_mobilenet_to_zcls_mobilenet.py
     <td class="tg-baqh">224x224</td>
     <td class="tg-baqh">imagenet</td>
     <td class="tg-baqh">16.721</td>
-    <td class="tg-baqh">0.651G</td>
+    <td class="tg-baqh">0.651</td>
     <td class="tg-baqh">0.023</td>
+  </tr>
+  <tr>
+    <td class="tg-gg09"><span style="font-weight:400">mobilenet_v3_large</span></td>
+    <td class="tg-gg09"><span style="font-weight:400">torchvision</span></td>
+    <td class="tg-gg09"><span style="font-weight:400">65.157</span></td>
+    <td class="tg-gg09"><span style="font-weight:400">86.014</span></td>
+    <td class="tg-baqh">224x224</td>
+    <td class="tg-baqh">imagenet</td>
+    <td class="tg-baqh">20.916</td>
+    <td class="tg-baqh">0.451</td>
+    <td class="tg-baqh">0.131</td>
+  </tr>
+  <tr>
+    <td class="tg-gg09"><span style="font-weight:400">mobilenet_v3_small</span></td>
+    <td class="tg-gg09"><span style="font-weight:400">torchvision</span></td>
+    <td class="tg-gg09"><span style="font-weight:400">70.909</span></td>
+    <td class="tg-gg09"><span style="font-weight:400">89.765</span></td>
+    <td class="tg-baqh">224x224</td>
+    <td class="tg-baqh">imagenet</td>
+    <td class="tg-baqh">9.700</td>
+    <td class="tg-baqh">0.119</td>
+    <td class="tg-baqh">0.097</td>
   </tr>
 </tbody>
 </table>
