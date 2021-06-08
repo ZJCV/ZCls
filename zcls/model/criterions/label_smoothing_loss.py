@@ -23,12 +23,13 @@ class LabelSmoothingLoss(nn.Module, ABC):
     1. [解决过拟合：如何在PyTorch中使用标签平滑正则化](https://zhuanlan.zhihu.com/p/123077402)
     2. [Rethinking the Inception Architecture for Computer Vision](https://arxiv.org/abs/1512.00567)
     3. [[译]Rethinking the Inception Architecture for Computer Vision](https://blog.zhujian.life/posts/a0a2be91.html)
+    4. [Label Smoothing in PyTorch](https://stackoverflow.com/questions/55681502/label-smoothing-in-pytorch)
     """
 
     def __init__(self, cfg):
         super(LabelSmoothingLoss, self).__init__()
-        self.epsilon = 0.1
-        self.reduction = 'mean'
+        self.epsilon = cfg.MODEL.CRITERION.SMOOTHING
+        self.reduction = cfg.MODEL.CRITERION.REDUCTION
 
     def __call__(self, output_dict, targets):
         assert isinstance(output_dict, dict) and KEY_OUTPUT in output_dict.keys()
