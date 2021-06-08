@@ -11,6 +11,7 @@ import os
 import numpy as np
 import torch
 
+from zcls.config import cfg
 from zcls.data.build import build_data
 from zcls.engine.trainer import do_train
 from zcls.model.recognizers.build import build_recognizer
@@ -81,7 +82,7 @@ def train(cfg):
 
 def main():
     args = parse_args()
-    cfg = load_config(args)
+    load_config(args, cfg)
 
     if not os.path.exists(cfg.OUTPUT_DIR):
         os.makedirs(cfg.OUTPUT_DIR)

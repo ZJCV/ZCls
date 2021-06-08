@@ -8,7 +8,7 @@
 """
 
 import argparse
-from zcls.config import cfg
+from yacs.config import CfgNode as CN
 
 
 def parse_args():
@@ -82,7 +82,9 @@ def parse_args():
     return args
 
 
-def load_config(args):
+def load_config(args, cfg):
+    assert isinstance(args, argparse.Namespace)
+    assert isinstance(cfg, CN)
     if args.config_file:
         cfg.merge_from_file(args.config_file)
     if args.pretrained:
