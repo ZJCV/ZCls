@@ -12,12 +12,8 @@ import torch.nn as nn
 
 from zcls.model.attention_helper import make_attention_block
 
-# Paper suggests 0.9997 momentum, for TensorFlow. Equivalent PyTorch momentum is
-# 1.0 - tensorflow.
-BN_MOMENTUM = 1 - 0.9997
 
-
-class MobileNetV3Uint(nn.Module, ABC):
+class MobileNetV3Unit(nn.Module, ABC):
 
     def __init__(self,
                  in_channels,
@@ -25,6 +21,7 @@ class MobileNetV3Uint(nn.Module, ABC):
                  out_channels,
                  stride=1,
                  kernel_size=3,
+                 round_nearest=8,
                  with_attention=True,
                  reduction=4,
                  attention_type='SqueezeAndExcitationBlock2D',
@@ -40,6 +37,7 @@ class MobileNetV3Uint(nn.Module, ABC):
         :param out_channels: 输出通道数
         :param stride: 步长
         :param kernel_size: 卷积核大小
+        :param round_nearest: 设置每一层通道数均为8的倍数
         :param with_attention: 是否使用注意力模块
         :param reduction: 衰减率
         :param attention_type: 注意力模块类型
@@ -48,7 +46,7 @@ class MobileNetV3Uint(nn.Module, ABC):
         :param act_layer: 激活层类型
         :param sigmoid_type: sigmoid类型
         """
-        super(MobileNetV3Uint, self).__init__()
+        super(MobileNetV3Unit, self).__init__()
 
         if conv_layer is None:
             conv_layer = nn.Conv2d
@@ -62,10 +60,10 @@ class MobileNetV3Uint(nn.Module, ABC):
         self.with_attention = with_attention
 
         self.expansion = nn.Sequential(
-            conv_layer(in_channels, inner_channels, kernel_size=1, stride=1, padding=0, bias=False),
-            norm_layer(inner_channels, momentum=BN_MOMENTUM),
+            conv_layer(in_channels, inner_channels, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0), bias=False),
+            norm_layer(inner_channels),
             act_layer(inplace=True)
-        )
+        ) if in_channels != inner_channels else nn.Identity()
 
         if kernel_size == 3:
             padding = 1
@@ -73,16 +71,24 @@ class MobileNetV3Uint(nn.Module, ABC):
             padding = 2
         else:
             padding = 0
-        self.conv1 = conv_layer(inner_channels, inner_channels, kernel_size=kernel_size, stride=stride, padding=padding,
-                                bias=False, groups=inner_channels)
-        self.norm1 = norm_layer(inner_channels, momentum=BN_MOMENTUM)
+        self.conv1 = conv_layer(inner_channels, inner_channels, kernel_size=(kernel_size, kernel_size),
+                                stride=(stride, stride), padding=(padding, padding), bias=False, groups=inner_channels)
+        self.norm1 = norm_layer(inner_channels)
         self.act = act_layer(inplace=True)
 
-        self.conv2 = conv_layer(inner_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
-        self.norm2 = norm_layer(out_channels, momentum=BN_MOMENTUM)
-
         if self.with_attention:
-            self.attention = make_attention_block(inner_channels, reduction, attention_type, sigmoid_type=sigmoid_type)
+            self.attention = make_attention_block(inner_channels,
+                                                  reduction,
+                                                  attention_type,
+                                                  sigmoid_type=sigmoid_type,
+                                                  is_round=True,
+                                                  round_nearest=round_nearest,
+                                                  bias=True,
+                                                  )
+
+        self.conv2 = conv_layer(inner_channels, out_channels, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0),
+                                bias=False)
+        self.norm2 = norm_layer(out_channels)
 
         self.apply_residual = (in_channels == out_channels and stride == 1)
 

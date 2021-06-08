@@ -42,8 +42,8 @@ class MobileNetV3Head(nn.Module, ABC):
             act_layer = nn.Hardswish
 
         self.pool = nn.AdaptiveAvgPool2d((1, 1))
-        self.conv1 = conv_layer(feature_dims, inner_dims, kernel_size=1, stride=1, padding=0, bias=True)
-        self.conv2 = conv_layer(inner_dims, num_classes, kernel_size=1, stride=1, padding=0, bias=True)
+        self.conv1 = conv_layer(feature_dims, inner_dims, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0), bias=True)
+        self.conv2 = conv_layer(inner_dims, num_classes, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0), bias=True)
         self.act = act_layer(inplace=True)
         self.dropout = nn.Dropout(p=dropout_rate, inplace=True)
 

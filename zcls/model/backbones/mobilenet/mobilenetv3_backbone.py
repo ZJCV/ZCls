@@ -8,6 +8,7 @@
 """
 from abc import ABC
 
+import copy
 import torch.nn as nn
 
 from zcls.model import registry
@@ -15,7 +16,7 @@ from zcls.model.conv_helper import get_conv
 from zcls.model.norm_helper import get_norm
 from zcls.model.act_helper import get_act
 from ..misc import round_to_multiple_of
-from .mobilenetv3_unit import MobileNetV3Uint, BN_MOMENTUM
+from .mobilenetv3_unit import MobileNetV3Unit
 
 arch_settings = {
     'mobilenetv3-large': [16, 960, 1280,
@@ -73,13 +74,13 @@ def make_stem(in_planes,
               act_layer):
     first_stem = nn.Sequential(
         conv_layer(in_planes, base_planes, kernel_size=3, stride=2, padding=1, bias=False),
-        norm_layer(base_planes, momentum=BN_MOMENTUM),
+        norm_layer(base_planes),
         act_layer(inplace=True)
     )
 
     last_stem = nn.Sequential(
         conv_layer(inner_planes, out_planes, kernel_size=1, stride=1, padding=0, bias=False),
-        norm_layer(out_planes, momentum=BN_MOMENTUM),
+        norm_layer(out_planes),
         act_layer(inplace=True)
     )
 
@@ -92,6 +93,7 @@ class MobileNetV3Backbone(nn.Module, ABC):
                  in_channels=3,
                  base_channels=16,
                  out_channels=960,
+                 layer_setting=None,
                  width_multiplier=1.,
                  round_nearest=8,
                  with_attention=True,
@@ -126,33 +128,34 @@ class MobileNetV3Backbone(nn.Module, ABC):
             act_layer = nn.Hardswish
         if sigmoid_type is None:
             sigmoid_type = 'HSigmoid'
-        block_layer = MobileNetV3Uint
+        block_layer = MobileNetV3Unit
 
-        layer_setting = [
-            # kernel_size, stride, inner_planes, with_attention_2, non-linearity, out_planes
-            [3, 1, 16, 0, 'RE', 16],
-            [3, 2, 64, 0, 'RE', 24],
-            [3, 1, 72, 0, 'RE', 24],
-            [5, 2, 72, 1, 'RE', 40],
-            [5, 1, 120, 1, 'RE', 40],
-            [5, 1, 120, 1, 'RE', 40],
-            [3, 2, 240, 0, 'HS', 80],
-            [3, 1, 200, 0, 'HS', 80],
-            [3, 1, 184, 0, 'HS', 80],
-            [3, 1, 184, 0, 'HS', 80],
-            [3, 1, 480, 1, 'HS', 112],
-            [3, 1, 672, 1, 'HS', 112],
-            [5, 2, 672, 1, 'HS', 160],
-            [5, 1, 960, 1, 'HS', 160],
-            [5, 1, 960, 1, 'HS', 160],
-        ]
+        if layer_setting is None:
+            layer_setting = [
+                # kernel_size, stride, inner_planes, with_attention_2, non-linearity, out_planes
+                [3, 1, 16, 0, 'RE', 16],
+                [3, 2, 64, 0, 'RE', 24],
+                [3, 1, 72, 0, 'RE', 24],
+                [5, 2, 72, 1, 'RE', 40],
+                [5, 1, 120, 1, 'RE', 40],
+                [5, 1, 120, 1, 'RE', 40],
+                [3, 2, 240, 0, 'HS', 80],
+                [3, 1, 200, 0, 'HS', 80],
+                [3, 1, 184, 0, 'HS', 80],
+                [3, 1, 184, 0, 'HS', 80],
+                [3, 1, 480, 1, 'HS', 112],
+                [3, 1, 672, 1, 'HS', 112],
+                [5, 2, 672, 1, 'HS', 160],
+                [5, 1, 960, 1, 'HS', 160],
+                [5, 1, 960, 1, 'HS', 160],
+            ]
 
         base_channels = round_to_multiple_of(base_channels * width_multiplier, round_nearest)
-        # 参考Torchvision MnasNet实现，不对输出特征维度进行缩放
-        # out_planes = _round_to_multiple_of(out_planes * width_multiplier, round_nearest)
+        out_channels = round_to_multiple_of(out_channels * width_multiplier, round_nearest)
+
         for i in range(len(layer_setting)):
             # 缩放膨胀通道数
-            layer_setting[i][2] = round_to_multiple_of(layer_setting[i][2] * width_multiplier, round_nearest)
+            layer_setting[i][2] = round_to_multiple_of(layer_setting[i][2], round_nearest)
             # 缩放输出通道数
             layer_setting[i][-1] = round_to_multiple_of(layer_setting[i][-1] * width_multiplier, round_nearest)
 
@@ -226,12 +229,13 @@ def build_mbv3_backbone(cfg):
     act_layer = get_act(cfg)
     sigmoid_type = cfg.MODEL.ACT.SIGMOID_TYPE
 
-    base_channels, feature_dims, inner_dims, layer_setting = arch_settings[arch]
+    base_channels, feature_dims, inner_dims, layer_setting = copy.deepcopy(arch_settings[arch])
 
     return MobileNetV3Backbone(
         in_channels=in_channels,
         base_channels=base_channels,
         out_channels=feature_dims,
+        layer_setting=layer_setting,
         width_multiplier=width_multiplier,
         round_nearest=round_nearest,
         with_attention=with_attention,

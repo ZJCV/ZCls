@@ -10,13 +10,13 @@
 import torch
 import torch.nn as nn
 
-from zcls.model.backbones.mobilenet.mobilenetv3_unit import MobileNetV3Uint
+from zcls.model.backbones.mobilenet.mobilenetv3_unit import MobileNetV3Unit
 
 
 def test_mobilenet_v3_unit():
     # 3x3, 不进行下采样
     data = torch.randn(1, 16, 112, 112)
-    model = MobileNetV3Uint(in_channels=16,
+    model = MobileNetV3Unit(in_channels=16,
                             inner_channels=16,
                             out_channels=16,
                             stride=1,
@@ -32,7 +32,7 @@ def test_mobilenet_v3_unit():
 
     # 5x5, 进行下采样
     data = torch.randn(1, 24, 56, 56)
-    model = MobileNetV3Uint(in_channels=24,
+    model = MobileNetV3Unit(in_channels=24,
                             inner_channels=72,
                             out_channels=40,
                             stride=2,
