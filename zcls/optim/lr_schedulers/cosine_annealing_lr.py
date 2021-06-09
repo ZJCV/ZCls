@@ -2,7 +2,7 @@
 
 """
 @date: 2020/9/9 下午9:49
-@file: cosine_annearling_lr.py
+@file: cosine_annealing_lr.py
 @author: zj
 @description: 
 """
@@ -13,8 +13,8 @@ from torch.optim.optimizer import Optimizer
 from .. import registry
 
 
-@registry.LR_SCHEDULERS.register('CosineAnnearlingLR')
-def build_cosine_annearling_lr(cfg, optimizer):
+@registry.LR_SCHEDULERS.register('CosineAnnealingLR')
+def build_cosine_annealing_lr(cfg, optimizer):
     assert isinstance(optimizer, Optimizer)
 
     max_epoch = cfg.TRAIN.MAX_EPOCH

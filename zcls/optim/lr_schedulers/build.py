@@ -12,7 +12,7 @@ from torch.optim.optimizer import Optimizer
 from .. import registry
 from .gradual_warmup import GradualWarmupScheduler
 from .multistep_lr import build_multistep_lr
-from .cosine_annearling_lr import build_cosine_annearling_lr
+from .cosine_annealing_lr import build_cosine_annealing_lr
 
 
 def build_lr_scheduler(cfg, optimizer):
