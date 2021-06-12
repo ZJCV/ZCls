@@ -51,12 +51,12 @@ def do_train(cfg, arguments,
     max_iter = (max_epoch - start_epoch) * epoch_iters
     current_iterations = 0
 
-    if cfg.TRAIN.HYBRID_PRECISION:
-        # Creates a GradScaler once at the beginning of training.
-        scaler = GradScaler()
+    # Creates a GradScaler once at the beginning of training.
+    scalar = GradScaler()
+    model.train()
+    optimizer.zero_grad()
 
     synchronize()
-    model.train()
     logger.info("Start training ...")
     # Perform the training loop.
     logger.info("Start epoch: {}".format(start_epoch))
@@ -79,17 +79,16 @@ def do_train(cfg, arguments,
                     loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
 
                 current_iterations += 1
-                if current_iterations % gradient_accumulate_step != 0:
-                    if isinstance(model, DistributedDataParallel):
-                        # multi-gpu distributed training
-                        with model.no_sync():
-                            scaler.scale(loss).backward()
-                    else:
-                        scaler.scale(loss).backward()
+
+                if isinstance(model, DistributedDataParallel):
+                    # multi-gpu distributed training
+                    with model.no_sync():
+                        scalar.scale(loss).backward()
                 else:
-                    scaler.scale(loss).backward()
-                    scaler.step(optimizer)
-                    scaler.update()
+                    scalar.scale(loss).backward()
+                if current_iterations % gradient_accumulate_step == 0:
+                    scalar.step(optimizer)
+                    scalar.update()
                     current_iterations = 0
                     optimizer.zero_grad()
             else:
@@ -98,15 +97,13 @@ def do_train(cfg, arguments,
                 loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
 
                 current_iterations += 1
-                if current_iterations % gradient_accumulate_step != 0:
-                    if isinstance(model, DistributedDataParallel):
-                        # multi-gpu distributed training
-                        with model.no_sync():
-                            loss.backward()
-                    else:
+                if isinstance(model, DistributedDataParallel):
+                    # multi-gpu distributed training
+                    with model.no_sync():
                         loss.backward()
                 else:
                     loss.backward()
+                if current_iterations % gradient_accumulate_step != 0:
                     optimizer.step()
                     current_iterations = 0
                     optimizer.zero_grad()
@@ -131,6 +128,8 @@ def do_train(cfg, arguments,
 
         if cfg.DATALOADER.PREFETCHER:
             data_loader.release()
+            del data_loader
+        torch.cuda.empty_cache()
         logger.info(log_epoch_stats(epoch_iters, cur_epoch, max_epoch, optimizer.param_groups[0]['lr'], meters))
         arguments["cur_epoch"] = cur_epoch
         lr_scheduler.step()
