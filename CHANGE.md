@@ -1,5 +1,14 @@
 # CHANGE
 
+## v0.7.1
+
+* New features
+    1. add torchvision mobilenet_v3
+    2. update parser.py usage
+    3. update label_smoothing_loss usage
+* Bug fixes
+* Breaking changes.
+
 ## v0.7.0
 
 * New features
