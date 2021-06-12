@@ -12,7 +12,7 @@ from yacs.config import CfgNode as CN
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='PyCls Training/Test With PyTorch')
+    parser = argparse.ArgumentParser(description='ZCls Training/Test With PyTorch')
     parser.add_argument('-cfg',
                         "--config_file",
                         type=str,
