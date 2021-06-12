@@ -83,4 +83,6 @@ def inference(cfg, model, test_data_loader, device, **kwargs):
 def do_evaluation(cfg, model, test_data_loader, device, **kwargs):
     model.eval()
 
-    return inference(cfg, model, test_data_loader, device, **kwargs)
+    eval_results = inference(cfg, model, test_data_loader, device, **kwargs)
+    torch.cuda.empty_cache()
+    return eval_results
