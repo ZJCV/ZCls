@@ -42,7 +42,7 @@ def train(cfg):
     # Setup logging format.
     logging.setup_logging(cfg.OUTPUT_DIR)
     logger.info('init start')
-    # 迭代轮数从１开始计数
+    # The number of iteration rounds is counted from 1
     arguments = {"cur_epoch": 1}
 
     device = get_device(local_rank_id)
