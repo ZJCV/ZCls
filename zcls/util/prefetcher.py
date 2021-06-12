@@ -27,12 +27,11 @@ class Prefetcher():
 
     def __init__(self, loader: DataLoader, device):
         assert isinstance(loader, DataLoader)
-        self.length = len(loader)
-
-        self.loader = iter(loader)
         self.device = device
-
+        self.length = len(loader)
+        self.loader = iter(loader)
         self.stream = torch.cuda.Stream()
+
         self.preload()
 
     def preload(self):
@@ -64,7 +63,7 @@ class Prefetcher():
         return self.length
 
     def release(self):
-        self.stream = None
-        self.loader = None
+        del self.stream
+        del self.loader
         self.device = None
         self.length = None
