@@ -72,7 +72,7 @@ def build_mbv3_head(cfg):
     feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
     inner_dims = cfg.MODEL.HEAD.INNER_DIMS
     dropout_rate = cfg.MODEL.HEAD.DROPOUT_RATE
-    num_classes = cfg.MODEL.HEAD.NUM_CLASSES
+    num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     conv_layer = get_conv(cfg)
     act_layer = get_act(cfg)
 
