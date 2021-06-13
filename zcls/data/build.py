@@ -22,13 +22,16 @@ def build_data(cfg, is_train=True):
     return build_dataloader(cfg, dataset, is_train=is_train)
 
 
-def shuffle_dataset(loader, cur_epoch):
+def shuffle_dataset(loader, cur_epoch, is_shuffle=False):
     """"
     Shuffles the data.
     Args:
         loader (loader): data loader to perform shuffle.
         cur_epoch (int): number of the current epoch.
+        is_shuffle (bool): need to shuffle the data
     """
+    if not is_shuffle:
+        return
     sampler = loader.sampler
     assert isinstance(
         sampler, (RandomSampler, DistributedSampler)

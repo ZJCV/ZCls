@@ -22,11 +22,8 @@ def add_config(_C):
     # refert to [torch Dataloader中的num_workers](https://zhuanlan.zhihu.com/p/69250939)
     _C.DATALOADER.NUM_WORKERS = 2
 
-    # overlapped prefetching cpu->gpu memory copy, default False
-    _C.DATALOADER.PREFETCHER = False
-
-    # shuffle dataset per epoch, default False
-    _C.DATALOADER.SHUFFLE = False
-
     # random sample or sequential sample in train/test stage, default False
     _C.DATALOADER.RANDOM_SAMPLE = False
+
+    # overlapped prefetching cpu->gpu memory copy, default False
+    _C.DATALOADER.PREFETCHER = False
