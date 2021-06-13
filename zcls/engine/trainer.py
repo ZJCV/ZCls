@@ -77,36 +77,33 @@ def do_train(cfg, arguments,
                     output_dict = model(images)
                     loss_dict = criterion(output_dict, targets)
                     loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
-
-                current_iterations += 1
-
                 if isinstance(model, DistributedDataParallel):
                     # multi-gpu distributed training
                     with model.no_sync():
                         scalar.scale(loss).backward()
                 else:
                     scalar.scale(loss).backward()
-                if current_iterations % gradient_accumulate_step == 0:
-                    scalar.step(optimizer)
-                    scalar.update()
-                    current_iterations = 0
-                    optimizer.zero_grad()
             else:
                 output_dict = model(images)
                 loss_dict = criterion(output_dict, targets)
                 loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
 
-                current_iterations += 1
                 if isinstance(model, DistributedDataParallel):
                     # multi-gpu distributed training
                     with model.no_sync():
                         loss.backward()
                 else:
                     loss.backward()
-                if current_iterations % gradient_accumulate_step != 0:
+
+            current_iterations += 1
+            if current_iterations % gradient_accumulate_step == 0:
+                current_iterations = 0
+                if cfg.TRAIN.HYBRID_PRECISION:
+                    scalar.step(optimizer)
+                    scalar.update()
+                else:
                     optimizer.step()
-                    current_iterations = 0
-                    optimizer.zero_grad()
+                optimizer.zero_grad()
 
             acc_list = evaluator.evaluate_train(output_dict, targets)
             update_stats(cfg.NUM_GPUS, meters, loss_dict, acc_list)
