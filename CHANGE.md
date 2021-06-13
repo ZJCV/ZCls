@@ -1,5 +1,15 @@
 # CHANGE
 
+## v0.8.0
+
+* New features
+    1. update hybrid_precision/distributed_data_parallel/gradient_acculmulate usage
+    2. remove cfg.DATALOADER.SHUFFLE; use cfg.DATALOADER.RANDOM_SAMPLE
+* Bug fixes
+    1. add torch.cuda.empty_cache() to fix momory leak
+    2. use cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES in head definition
+* Breaking changes.
+
 ## v0.7.1
 
 * New features
