@@ -51,8 +51,9 @@ def do_train(cfg, arguments,
     max_iter = (max_epoch - start_epoch) * epoch_iters
     current_iterations = 0
 
-    # Creates a GradScaler once at the beginning of training.
-    scalar = GradScaler()
+    if cfg.TRAIN.HYBRID_PRECISION:
+        # Creates a GradScaler once at the beginning of training.
+        scalar = GradScaler()
     model.train()
     optimizer.zero_grad()
 
