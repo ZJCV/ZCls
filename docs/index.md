@@ -1,4 +1,4 @@
-# ZCls(v0.8.0)
+# ZCls(v0.9.0)
 
 Welcome to zcls, a classification model training/inferring framework.
 

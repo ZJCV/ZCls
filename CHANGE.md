@@ -1,5 +1,12 @@
 # CHANGE
 
+## v0.9.0
+
+* New features
+* Bug fixes
+    1. fix Dropout inplace operation make gradient computation failed
+* Breaking changes.
+
 ## v0.8.0
 
 * New features
