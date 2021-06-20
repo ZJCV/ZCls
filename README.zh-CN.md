@@ -4,7 +4,7 @@
   <a title="英语" href="./README.md">🇺🇸</a>
 </div>
 
- <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
+ <div align="center"><a title="" href="https://github.com/ZJCV/ZCls"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
   «ZCls»是一个分类模型训练/推理框架
@@ -25,7 +25,7 @@
 <img align="center" src="./imgs/roadmap.svg">
 </p>
 
-*更多细节请参考[路线图](https://zcls.readthedocs.io/en/latest/roadmap/)*
+*更多细节请参考[路线图](https://zcls.readthedocs.io/en/latest/roadmap.html)*
 
 ## 内容列表
 
@@ -46,17 +46,17 @@
 
 ## 安装
 
-查看[INSTALL](https://zcls.readthedocs.io/en/latest/install/)
+查看[INSTALL](https://zcls.readthedocs.io/en/latest/install.html)
 
 ## 用法
 
-关于如何训练，查看[Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started/)
+关于如何训练，查看[Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started.html)
 
-关于如何使用内置数据集，查看[Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
+关于如何使用内置数据集，查看[Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets.html)
 
-关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
+关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets.html)
 
-使用预训练模型，查看 [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
+使用预训练模型，查看 [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model.html)
 
 ## 主要维护人员
 

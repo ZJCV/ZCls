@@ -4,7 +4,7 @@
   <a title="Chinese" href="./README.zh-CN.md">🇨🇳</a>
 </div>
 
- <div align="center"><a title="" href="git@github.com:ZJCV/ZCls.git"><img align="center" src="./imgs/ZCls.png"></a></div>
+ <div align="center"><a title="" href="https://github.com/ZJCV/ZCls"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
   «ZCls» is a classification model training/inferring framework 
@@ -25,7 +25,7 @@ Supported Recognizers:
 <img align="center" src="./imgs/roadmap.svg">
 </p>
 
-*Refer to [roadmap](https://zcls.readthedocs.io/en/latest/roadmap/) for details*
+*Refer to [roadmap](https://zcls.readthedocs.io/en/latest/roadmap.html) for details*
 
 ## Table of Contents
 
@@ -46,17 +46,17 @@ Object classification is the most developed and theoretically basic field in dee
 
 ## Installation
 
-See [INSTALL](https://zcls.readthedocs.io/en/latest/install/)
+See [INSTALL](https://zcls.readthedocs.io/en/latest/install.html)
 
 ## Usage
 
-How to train, see [Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started/)
+How to train, see [Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started.html)
 
-Use builtin datasets, see [Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
+Use builtin datasets, see [Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets.html)
 
-Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
+Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets.html)
 
-Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
+Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model.html)
 
 ## Maintainers
 
