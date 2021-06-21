@@ -64,6 +64,8 @@ class BaseEvaluator(metaclass=ABCMeta):
             return None, None
 
         cate_topk_dict = dict()
+        for class_name in self.classes:
+            cate_topk_dict[class_name] = 0.0
         for key in self.cate_num_dict.keys():
             total_num = self.cate_num_dict[key]
             acc_num = self.cate_acc_dict[key]
