@@ -78,6 +78,10 @@ class BaseEvaluator(metaclass=ABCMeta):
         #     })
 
     def get(self):
+        assert len(self.total_targets_list) == len(self.total_outputs_list)
+        if len(self.total_targets_list) == 0:
+            return None, None
+
         result_str = '\ntotal -'
         topk_list = topk_accuracy(torch.stack(self.total_outputs_list), torch.stack(self.total_targets_list),
                              top_k=self.top_k)
