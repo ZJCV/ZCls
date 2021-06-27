@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.9.1
+
+* New features
+    1. update the accuracy calculation and calculate the TOPK accuracy of each category
+    2. when compute dataset's accuracy, make assert for security
+* Bug fixes
+* Breaking changes.
+
 ## v0.9.0
 
 * New features
