@@ -84,25 +84,31 @@ class BaseEvaluator(metaclass=ABCMeta):
 
         result_str = '\ntotal -'
         topk_list = topk_accuracy(torch.stack(self.total_outputs_list), torch.stack(self.total_targets_list),
-                             top_k=self.top_k)
+                                  top_k=self.top_k)
         acc_dict = dict()
         for i in range(len(self.top_k)):
             acc_dict[f"top{self.top_k[i]}"] = topk_list[i]
             result_str += '  {} acc: {:.3f}'.format(f"top{self.top_k[i]}", topk_list[i])
 
         for idx in range(len(self.classes)):
-            class_name = self.classes[idx]
+            class_name = self.classes[idx].strip()
 
             key = str(idx)
-            cate_outputs = torch.stack(self.cate_outputs_dict[key])
-            cate_targets = torch.stack(self.cate_targets_dict[key])
-
-            topk_list = topk_accuracy(cate_outputs, cate_targets, top_k=self.top_k)
-
+            cate_outputs = self.cate_outputs_dict[key]
             result_str += '\n{:<3} - {:<20}'.format(idx, class_name)
-            for i in range(len(self.top_k)):
-                acc_dict[f"top{self.top_k[i]}"] = topk_list[i]
-                result_str += '  {:<3}: {:<5}'.format(f"top{self.top_k[i]}", "{:.2f}".format(topk_list[i]))
+            if len(cate_outputs) == 0:
+                for i in range(len(self.top_k)):
+                    acc_dict[f"top{self.top_k[i]}"] = 0.
+                    result_str += '  {:<3}: {:<5}'.format(f"top{self.top_k[i]}", "{:.2f}".format(0.))
+            else:
+                cate_outputs = torch.stack(self.cate_outputs_dict[key])
+                cate_targets = torch.stack(self.cate_targets_dict[key])
+
+                topk_list = topk_accuracy(cate_outputs, cate_targets, top_k=self.top_k)
+
+                for i in range(len(self.top_k)):
+                    acc_dict[f"top{self.top_k[i]}"] = topk_list[i]
+                    result_str += '  {:<3}: {:<5}'.format(f"top{self.top_k[i]}", "{:.2f}".format(topk_list[i]))
         result_str += '\n'
 
         # if len(self.topk_list) == 0:
