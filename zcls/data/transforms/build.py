@@ -9,8 +9,10 @@
 
 import torch
 
-import ztransforms.cls.transforms as transforms
-import ztransforms.cls.autoaugment as autoaugment
+import torchvision.transforms.transforms as transforms
+import torchvision.transforms.autoaugment as autoaugment
+
+from .square_pad import SquarePad
 
 """
 current supported transforms methods:
@@ -25,6 +27,10 @@ current supported transforms methods:
 8. 'RandomVerticalFlip'
 9. 'ColorJitter'
 10. 'Grayscale'
+
+custom methods:
+
+1. 'SquarePad'
 """
 
 
@@ -36,14 +42,18 @@ def parse_transform(cfg, is_train=True):
     transforms_dict = transforms.__dict__
     aug_list = list()
     for method in methods:
-        if method in keys:
+        if method == 'SquarePad':
+            transform = SquarePad
+        elif method in keys:
             transform = transforms_dict[method]
         elif method == 'AUTO_AUGMENT':
             transform = autoaugment.AutoAugment
         else:
             raise ValueError(f'f{method} does not exists')
 
-        if method == 'Resize':
+        if method == 'SquarePad':
+            aug_list.append(transform())
+        elif method == 'Resize':
             size = cfg.TRANSFORM.TRAIN_RESIZE if is_train else cfg.TRANSFORM.TEST_RESIZE
             aug_list.append(transform(size))
         elif method == 'CenterCrop':
