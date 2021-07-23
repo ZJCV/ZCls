@@ -1,5 +1,14 @@
 # CHANGE
 
+## v0.9.2
+
+* New features
+    1. add custom transform: SquarePad
+    2. use torchvision.autoaugment replace ztransforms
+* Bug fixes
+    1. When some category data of the test set is empty, RuntimeError: stack expects a non-empty TensorList
+* Breaking changes.
+
 ## v0.9.1
 
 * New features
