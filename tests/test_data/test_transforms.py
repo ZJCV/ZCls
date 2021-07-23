@@ -47,6 +47,20 @@ def test_cfg():
     print(tran(data).shape)
 
 
+def test_square_pad():
+    config_file = 'tests/configs/square_pad.yaml'
+    cfg.merge_from_file(config_file)
+    print(cfg.TRANSFORM)
+
+    tran, _ = build_transform(cfg, is_train=True)
+
+    data = Image.fromarray(torch.randn(234, 134, 3).numpy().astype(np.uint8))
+    res = tran(data)
+    print(type(res))
+    print(res.size)
+
+
 if __name__ == '__main__':
-    test_transforms()
-    test_cfg()
+    # test_transforms()
+    # test_cfg()
+    test_square_pad()

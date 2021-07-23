@@ -1,0 +1,2 @@
+TRANSFORM:
+  TRAIN_METHODS: ('SquarePad',)
