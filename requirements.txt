@@ -21,7 +21,7 @@ opencv_python == 4.5.3.56
 psutil == 5.8.0
 
 # zcls/model/recognizers/resnet/official_resnest.py: 15
-resnest == 0.0.6b20210712
+resnest == 0.0.6b20210114
 
 # zcls/data/datasets/lmdb_dataset.py: 10
 six == 1.16.0

@@ -17,7 +17,7 @@ INSTALL_REQUIRES = [
     "numpy >= 1.21.0",
     "opencv_contrib_python >= 4.5.3.56",
     "psutil >= 5.8.0",
-    "resnest >= 0.0.6b20210114",
+    "resnest == 0.0.6b20210114",
     "six >= 1.16.0",
     "tabulate >= 0.8.7",
     "thop >= 0.0.31.post2005241907",
