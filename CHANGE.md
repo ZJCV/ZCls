@@ -1,5 +1,12 @@
 # CHANGE
 
+## v0.9.3
+
+* New features
+* Bug fixes
+    1. moduleNotFoundError: No module named 'resnest.torch.resnest'
+* Breaking changes.
+
 ## v0.9.2
 
 * New features
