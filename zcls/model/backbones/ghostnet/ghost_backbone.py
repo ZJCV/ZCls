@@ -101,6 +101,7 @@ class GhostBackbone(nn.Module):
                  width_multiplier=1.0,
                  round_nearest=4,
                  attention_type='SqueezeAndExcitationBlock2D',
+                 sigmoid_type='HSigmoid',
                  arch_configs=None,
                  block_layer=None,
                  conv_layer=None,
@@ -114,6 +115,7 @@ class GhostBackbone(nn.Module):
         :param width_multiplier: 宽度乘法器
         :param round_nearest: 设置每一层通道数均为4的倍数
         :param attention_type: 注意力模块类型
+        :param sigmoid_type: 作用于注意力模块
         :param block_layer: 块类型
         :param conv_layer: 卷积层类型
         :param norm_layer: 归一化层类型
@@ -138,12 +140,12 @@ class GhostBackbone(nn.Module):
         last_in_channels = round_to_multiple_of(arch_configs[-1][-1][2] * width_multiplier, round_nearest)
         last_out_channels = round_to_multiple_of(arch_configs[-1][-1][1] * width_multiplier, round_nearest)
         self.first_stem, self.last_stem = make_stem(in_channels,
-                                              base_channels,
-                                              last_in_channels,
-                                              last_out_channels,
-                                              conv_layer,
-                                              norm_layer,
-                                              act_layer)
+                                                    base_channels,
+                                                    last_in_channels,
+                                                    last_out_channels,
+                                                    conv_layer,
+                                                    norm_layer,
+                                                    act_layer)
 
         input_channels = base_channels
         # building inverted residual blocks
@@ -161,6 +163,7 @@ class GhostBackbone(nn.Module):
                                           with_attention=attention_reduction_rate > 1,
                                           reduction=attention_reduction_rate,
                                           attention_type=attention_type,
+                                          sigmoid_type=sigmoid_type,
                                           )
                               )
                 input_channels = output_channels
@@ -191,6 +194,7 @@ def build_ghostnet_backbone(cfg):
     norm_layer = get_norm(cfg)
     # act
     act_layer = get_act(cfg)
+    sigmoid_type = cfg.MODEL.ACT.SIGMOID_TYPE
 
     return GhostBackbone(
         in_channels=in_channels,
@@ -198,6 +202,7 @@ def build_ghostnet_backbone(cfg):
         width_multiplier=width_multiplier,
         round_nearest=round_nearest,
         attention_type=attention_type,
+        sigmoid_type=sigmoid_type,
         conv_layer=conv_layer,
         norm_layer=norm_layer,
         act_layer=act_layer,

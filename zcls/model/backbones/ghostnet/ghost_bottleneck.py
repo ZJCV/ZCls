@@ -23,7 +23,8 @@ class GhostBottleneck(nn.Module):
                  kernel_size=3,
                  with_attention=False,
                  reduction=4,
-                 attention_type='SqueezeAndExcitationBlock2D'
+                 attention_type='SqueezeAndExcitationBlock2D',
+                 sigmoid_type='HSigmoid',
                  ):
         """
         when stride=1, bottleneck=Add(
@@ -72,7 +73,7 @@ class GhostBottleneck(nn.Module):
             self.se = make_attention_block(mid_channels,
                                            reduction,
                                            attention_type,
-                                           sigmoid_type='HSigmoid',
+                                           sigmoid_type=sigmoid_type,
                                            is_round=True,
                                            round_nearest=4,
                                            bias=True,
