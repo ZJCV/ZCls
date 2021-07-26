@@ -11,6 +11,8 @@ import os
 import datetime
 import time
 import torch
+
+import numpy as np
 from torch.nn.parallel import DistributedDataParallel
 
 from torch.cuda.amp import GradScaler
@@ -23,6 +25,8 @@ from zcls.util.distributed import is_master_proc, synchronize
 from zcls.util import logging
 from zcls.util.prefetcher import Prefetcher
 from zcls.util.mixup import mixup_data, mixup_criterion, mixup_evaluate
+from zcls.util.cutmix import cutmix_data, cutmix_criterion, cutmix_evaluate
+
 from zcls.engine.inference import do_evaluation
 from zcls.data.build import shuffle_dataset
 
@@ -71,15 +75,20 @@ def do_train(cfg, arguments,
             if not cfg.DATALOADER.PREFETCHER:
                 images = images.to(device=device, non_blocking=True)
                 targets = targets.to(device=device, non_blocking=True)
-            if cfg.TRAIN.MIXUP:
+            mix_prob = np.random.rand(1)
+            if cfg.TRAIN.MIXUP and mix_prob < 0.5:
                 images, targets_a, targets_b, mix_lam = mixup_data(images, targets, alpha=1.0, device=device)
+            if cfg.TRAIN.CUTMIX and mix_prob < 0.5:
+                images, targets_a, targets_b, mix_lam = cutmix_data(images, targets, alpha=1.0, device=device)
 
             if cfg.TRAIN.HYBRID_PRECISION:
                 # Runs the forward pass with autocasting.
                 with autocast():
                     output_dict = model(images)
-                    if cfg.TRAIN.MIXUP:
+                    if cfg.TRAIN.MIXUP and mix_prob < 0.5:
                         loss_dict = mixup_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
+                    elif cfg.TRAIN.CUTMIX and mix_prob < 0.5:
+                        loss_dict = cutmix_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
                     else:
                         loss_dict = criterion(output_dict, targets)
                     loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
@@ -91,8 +100,10 @@ def do_train(cfg, arguments,
                     scalar.scale(loss).backward()
             else:
                 output_dict = model(images)
-                if cfg.TRAIN.MIXUP:
+                if cfg.TRAIN.MIXUP and mix_prob < 0.5:
                     loss_dict = mixup_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
+                elif cfg.TRAIN.CUTMIX and mix_prob < 0.5:
+                    loss_dict = cutmix_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
                 else:
                     loss_dict = criterion(output_dict, targets)
                 loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
@@ -114,8 +125,10 @@ def do_train(cfg, arguments,
                     optimizer.step()
                 optimizer.zero_grad()
 
-            if cfg.TRAIN.MIXUP:
+            if cfg.TRAIN.MIXUP and mix_prob < 0.5:
                 acc_dict = mixup_evaluate(evaluator, output_dict, targets_a, targets_b, mix_lam)
+            elif cfg.TRAIN.CUTMIX and mix_prob < 0.5:
+                acc_dict = cutmix_evaluate(evaluator, output_dict, targets_a, targets_b, mix_lam)
             else:
                 acc_dict = evaluator.evaluate_train(output_dict, targets)
             update_stats(cfg.NUM_GPUS, meters, loss_dict, acc_dict)

@@ -50,3 +50,6 @@ _C.TRAIN.HYBRID_PRECISION = False
 
 # the data enhancement operation mixup
 _C.TRAIN.MIXUP = False
+
+# the data enhancement operation cutmix
+_C.TRAIN.CUTMIX = False
