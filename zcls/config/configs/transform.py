@@ -19,11 +19,20 @@ def add_config(_C):
     _C.TRANSFORM.TRAIN_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
     _C.TRANSFORM.TEST_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
 
+    # Range of degrees to select from.
+    # If degrees is a number instead of sequence like (min, max), the range of degrees
+    # will be (-degrees, +degrees).
+    _C.TRANSFORM.ROTATE_DEGREE = (30,)
+    # If true, expands the output to make it large enough to hold the entire rotated image.
+    # If false or omitted, make the output image the same size as the input image.
+    # Note that the expand flag assumes rotation around the center and no translation.
+    _C.TRANSFORM.ROTATE_EXPAND = False
+
     # If size is a sequence like (h, w), output size will be matched to this.
     # If size is an int, smaller edge of the image will be matched to this number.
     # i.e, if height > width, then image will be rescaled to (size * height / width, size).
-    _C.TRANSFORM.TRAIN_RESIZE = (224, )
-    _C.TRANSFORM.TEST_RESIZE = (224, )
+    _C.TRANSFORM.TRAIN_RESIZE = (224,)
+    _C.TRANSFORM.TEST_RESIZE = (224,)
 
     # Desired output size of the crop.
     # If size is an int instead of sequence like (h, w), a square crop (size, size) is made.
@@ -59,3 +68,10 @@ def add_config(_C):
 
     # Sequence of standard deviations for each channel.
     _C.TRANSFORM.STD = (0.225, 0.225, 0.225)
+
+    # probability that the random erasing operation will be performed.
+    _C.TRANSFORM.ERASE_P = 0.5
+    # range of proportion of erased area against input image.
+    _C.TRANSFORM.ERASE_SCALE = (0.02, 0.33)
+    # range of aspect ratio of erased area.
+    _C.TRANSFORM.ERASE_RATIO = (0.3, 3.3)

@@ -27,6 +27,8 @@ current supported transforms methods:
 8. 'RandomVerticalFlip'
 9. 'ColorJitter'
 10. 'Grayscale'
+11. 'RandomRotation'
+12. 'RandomErasing'
 
 custom methods:
 
@@ -53,6 +55,11 @@ def parse_transform(cfg, is_train=True):
 
         if method == 'SquarePad':
             aug_list.append(transform())
+        elif method == 'RandomRotation':
+            degree = cfg.TRANSFORM.ROTATE_DEGREE
+            degree = degree[0] if len(degree) == 1 else degree
+            expand = cfg.TRANSFORM.ROTATE_EXPAND
+            aug_list.append(transform(degree, expand=expand))
         elif method == 'Resize':
             size = cfg.TRANSFORM.TRAIN_RESIZE if is_train else cfg.TRANSFORM.TEST_RESIZE
             aug_list.append(transform(size))
@@ -89,6 +96,11 @@ def parse_transform(cfg, is_train=True):
             else:
                 raise ValueError(f'{cfg.TRANSFORM.IMAGE_DTYPE} does not exists')
             aug_list.append(transform(dtype))
+        elif method == 'RandomErasing':
+            p = cfg.TRANSFORM.ERASE_P
+            scale = cfg.TRANSFORM.ERASE_SCALE
+            ratio = cfg.TRANSFORM.ERASE_RATIO
+            aug_list.append(transform(p=p, scale=scale, ratio=ratio))
         elif method == 'Normalize':
             aug_list.append(transform(cfg.TRANSFORM.MEAN, cfg.TRANSFORM.STD))
         else:
