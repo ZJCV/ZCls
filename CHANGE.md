@@ -1,5 +1,14 @@
 # CHANGE
 
+## v0.10.0
+
+* New features
+    1. add RandomRotation/RandomErasing support
+    2. add mixup/cutmix support
+    3. add ghostnet attention module' sigmoid type setting
+* Bug fixes
+* Breaking changes.
+
 ## v0.9.3
 
 * New features
