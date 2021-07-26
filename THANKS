@@ -44,6 +44,15 @@
       primaryClass={cs.CV}
 }
 
+@misc{yun2019cutmix,
+      title={CutMix: Regularization Strategy to Train Strong Classifiers with Localizable Features},
+      author={Sangdoo Yun and Dongyoon Han and Seong Joon Oh and Sanghyuk Chun and Junsuk Choe and Youngjoon Yoo},
+      year={2019},
+      eprint={1905.04899},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{howard2019searching,
       title={Searching for MobileNetV3}, 
       author={Andrew Howard and Mark Sandler and Grace Chu and Liang-Chieh Chen and Bo Chen and Mingxing Tan and Weijun Wang and Yukun Zhu and Ruoming Pang and Vijay Vasudevan and Quoc V. Le and Hartwig Adam},
