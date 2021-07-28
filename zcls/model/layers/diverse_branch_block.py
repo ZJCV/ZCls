@@ -4,7 +4,8 @@
 @date: 2021/7/28 下午5:51
 @file: diver_branch_block.py
 @author: zj
-@description: 
+@description:
+refer to [DingXiaoH/DiverseBranchBlock](https://github.com/DingXiaoH/DiverseBranchBlock)
 """
 
 import torch
