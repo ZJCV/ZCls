@@ -1,0 +1,81 @@
+NUM_GPUS: 1
+NUM_NODES: 1
+RANK_ID: 0
+DIST_BACKEND: "nccl"
+RNG_SEED: 1
+OUTPUT_DIR: 'outputs/cifar/rxtd50_32x4d_avg_cifar100_224_e100_rmsprop'
+TRAIN:
+  LOG_STEP: 10
+  GRADIENT_ACCUMULATE_STEP: 1
+  MAX_EPOCH: 100
+  SAVE_EPOCH: 5
+  EVAL_EPOCH: 5
+  RESUME: False
+  USE_TENSORBOARD: True
+DATASET:
+  NAME: 'CIFAR100'
+  TRAIN_ROOT: './data/cifar'
+  TEST_ROOT: './data/cifar'
+  TOP_K: (1, 5)
+TRANSFORM:
+  TRAIN_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+  TEST_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+  TRAIN_RESIZE: (224, )
+  TEST_RESIZE: (224, )
+  TRAIN_CROP: (224, 224)
+  TEST_CROP: (224, 224)
+  MEAN: (0.45, 0.45, 0.45)
+  STD: (0.225, 0.225, 0.225)
+DATALOADER:
+  TRAIN_BATCH_SIZE: 32
+  TEST_BATCH_SIZE: 32
+  NUM_WORKERS: 4
+MODEL:
+  CONV:
+    TYPE: 'Conv2d'
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU'
+  BACKBONE:
+    NAME: 'ResNetD'
+    IN_PLANES: 3
+    ARCH: 'resnext50_32x4d'
+    BASE_PLANES: 64
+    LAYER_PLANES: (64, 128, 256, 512)
+    DOWNSAMPLES: (0, 1, 1, 1)
+    USE_AVG: True
+    FAST_AVG: False
+  HEAD:
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 2048
+    DROPOUT_RATE: 0.2
+    NUM_CLASSES: 100
+  RECOGNIZER:
+    NAME: 'ResNet'
+    PRELOADED: ""
+    PRETRAINED: ""
+    PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True
+  CRITERION:
+    NAME: 'CrossEntropyLoss'
+OPTIMIZER:
+  NAME: 'RMSProp'
+  LR: 3e-4
+  MOMENTUM: 0.9
+  WEIGHT_DECAY:
+    DECAY: 1e-4
+    NO_BIAS: True
+    NO_NORM: True
+LR_SCHEDULER:
+  NAME: 'MultiStepLR'
+  IS_WARMUP: True
+  GAMMA: 0.1
+  MULTISTEP_LR:
+    MILESTONES: [ 40, 70 ]
+  WARMUP:
+    ITERATION: 5
+    MULTIPLIER: 1.0

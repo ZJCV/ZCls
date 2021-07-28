@@ -1,0 +1,90 @@
+NUM_GPUS: 1
+NUM_NODES: 1
+RANK_ID: 0
+DIST_BACKEND: "nccl"
+RNG_SEED: 1
+OUTPUT_DIR: 'outputs/cifar/r503d_cifar100_224_e50'
+TRAIN:
+  LOG_STEP: 10
+  GRADIENT_ACCUMULATE_STEP: 1
+  MAX_EPOCH: 50
+  SAVE_EPOCH: 5
+  EVAL_EPOCH: 5
+  RESUME: False
+  USE_TENSORBOARD: True
+DATASET:
+  NAME: 'CIFAR100'
+  TRAIN_ROOT: './data/cifar'
+  TEST_ROOT: './data/cifar'
+  TOP_K: (1, 5)
+TRANSFORM:
+  TRAIN_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+  TEST_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+  TRAIN_RESIZE: (224, )
+  TEST_RESIZE: (224, )
+  TRAIN_CROP: (224, 224)
+  TEST_CROP: (224, 224)
+  MEAN: (0.45, 0.45, 0.45)
+  STD: (0.225, 0.225, 0.225)
+DATALOADER:
+  TRAIN_BATCH_SIZE: 32
+  TEST_BATCH_SIZE: 32
+  NUM_WORKERS: 4
+MODEL:
+  CONV:
+    TYPE: 'Conv3d'
+  NORM:
+    TYPE: 'BatchNorm3d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU'
+  BACKBONE:
+    NAME: 'ResNet3D'
+    IN_PLANES: 3
+    ARCH: 'resnet50'
+    BASE_PLANES: 64
+    LAYER_PLANES: (64, 128, 256, 512)
+    DOWNSAMPLES: (0, 1, 1, 1)
+    CONV1_KERNEL: (1, 7, 7)
+    CONV1_STRIDE: (1, 2, 2)
+    CONV1_PADDING: (0, 3, 3)
+    POOL1_KERNEL: (1, 3, 3)
+    POOL1_STRIDE: (1, 2, 2)
+    POOL1_PADDING: (0, 1, 1)
+    WITH_POOL2: False
+    TEMPORAL_STRIDES: (1, 1, 1, 1)
+    INFLATE_LIST: (0, 0, 0, 0)
+    INFLATE_STYLE: '3x1x1'
+  HEAD:
+    NAME: 'GeneralHead3D'
+    FEATURE_DIMS: 2048
+    DROPOUT_RATE: 0.
+    NUM_CLASSES: 100
+  RECOGNIZER:
+    NAME: 'ResNet3D'
+    PRELOADED: ""
+    PRETRAINED: ""
+    TORCHVISION_PRETRAINED: False
+    PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True
+  CRITERION:
+    NAME: 'CrossEntropyLoss'
+OPTIMIZER:
+  NAME: 'SGD'
+  LR: 0.0125
+  MOMENTUM: 0.9
+  WEIGHT_DECAY:
+    DECAY: 1e-4
+    NO_BIAS: True
+    NO_NORM: True
+LR_SCHEDULER:
+  NAME: 'MultiStepLR'
+  IS_WARMUP: True
+  GAMMA: 0.1
+  MULTISTEP_LR:
+    MILESTONES: [ 30, 40 ]
+  WARMUP:
+    ITERATION: 5
+    MULTIPLIER: 1.0
