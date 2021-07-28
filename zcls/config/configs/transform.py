@@ -8,7 +8,6 @@
 """
 
 from yacs.config import CfgNode as CN
-from ztransforms.cls.autoaugment import AutoAugmentPolicy
 
 
 def add_config(_C):
