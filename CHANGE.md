@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.10.1
+
+* New features
+    1. add new module: DiverseBranchBlock
+    2. add tool: fuse block for ACBlock/RepVGGBLock/DBBlock
+* Bug fixes
+* Breaking changes.
+
 ## v0.10.0
 
 * New features
