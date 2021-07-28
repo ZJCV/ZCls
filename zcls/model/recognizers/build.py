@@ -9,7 +9,7 @@
 
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-from zcls.model.conv_helper import insert_acblock, insert_repvgg_block
+from zcls.model.conv_helper import insert_acblock, insert_repvgg_block, insert_dbblock
 from zcls.model.norm_helper import convert_sync_bn
 import zcls.util.distributed as du
 from zcls.util.checkpoint import CheckPointer
@@ -51,6 +51,8 @@ def build_recognizer(cfg, device):
                 insert_repvgg_block(model)
             if add_block == 'ACBlock':
                 insert_acblock(model)
+            if add_block == 'DiverseBranchBlock':
+                insert_dbblock(model)
     preloaded = cfg.MODEL.RECOGNIZER.PRELOADED
     if preloaded != "":
         logger.info(f'load preloaded: {preloaded}')

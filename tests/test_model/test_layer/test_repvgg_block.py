@@ -124,6 +124,7 @@ def test_conv_helper():
 
 def test_regvgg():
     cfg.merge_from_file('configs/benchmarks/repvgg/repvgg_a0_infer_zcls_imagenet_224.yaml')
+    cfg.MODEL.RECOGNIZER.PRELOADED = ""
     model = RepVGG(cfg)
     model.eval()
     print(model)
@@ -140,14 +141,14 @@ def test_regvgg():
     print(model)
 
     print(torch.sqrt(torch.sum((train_outputs - eval_outputs) ** 2)))
-    print(torch.allclose(train_outputs, eval_outputs, atol=1e-8))
-    assert torch.allclose(train_outputs, eval_outputs, atol=1e-8)
+    print(torch.allclose(train_outputs, eval_outputs, atol=1e-7))
+    assert torch.allclose(train_outputs, eval_outputs, atol=1e-7)
 
 
 if __name__ == '__main__':
-    print('*' * 10)
+    print('#' * 10)
     test_repvgg_block()
-    print('*' * 10)
+    print('@' * 10)
     test_conv_helper()
     print('*' * 10)
     test_regvgg()

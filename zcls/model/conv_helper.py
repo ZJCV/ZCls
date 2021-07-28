@@ -13,7 +13,9 @@ import torch.nn as nn
 from .layers.asymmetric_convolution_block import AsymmetricConvolutionBlock
 from .layers.acb_util import _fuse_kernel, _add_to_square_kernel
 from .layers.repvgg_block import RepVGGBlock
-from .layers.repvgg_util import get_equivalent_kernel_bias
+from .layers import repvgg_util
+from .layers.diverse_branch_block import DiverseBranchBlock
+from .layers import dbb_util
 
 
 def get_conv(cfg):
@@ -41,7 +43,7 @@ def insert_acblock(model: nn.Module):
     while idx < len(items):
         name, module = items[idx]
         if isinstance(module, nn.Conv2d) and module.kernel_size[0] > 1:
-            # 将标准卷积替换为ACBlock
+            # Replace standard convolution with acblock
             in_channels = module.in_channels
             out_channels = module.out_channels
             kernel_size = module.kernel_size
@@ -60,8 +62,8 @@ def insert_acblock(model: nn.Module):
                                                  dilation=dilation,
                                                  groups=groups)
             model.add_module(name, acblock)
-            # 如果conv层之后跟随着BN层，那么删除该BN层
-            # 参考[About BN layer #35](https://github.com/DingXiaoH/ACNet/issues/35)
+            # If conv layer is followed by BN layer, delete the BN layer
+            # refer to [About BN layer #35](https://github.com/DingXiaoH/ACNet/issues/35)
             if (idx + 1) < len(items) and isinstance(items[idx + 1][1], nn.BatchNorm2d):
                 new_layer = nn.Identity()
                 model.add_module(items[idx + 1][0], new_layer)
@@ -73,29 +75,27 @@ def insert_acblock(model: nn.Module):
 def fuse_acblock(model: nn.Module, eps=1e-5):
     for name, module in model.named_children():
         if isinstance(module, AsymmetricConvolutionBlock):
-            # 将ACBlock替换为标准卷积
-            # 获取Nx1卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
+            # Replace acblock with standard convolution
+            # Obtain the weight of NX1 convolution and the weight, offset, runtime mean and runtime variance of corresponding BN
             vertical_conv_weight = module.ver_conv.weight
             vertical_bn_weight = module.ver_bn.weight
             vertical_bn_bias = module.ver_bn.bias
             vertical_bn_running_mean = module.ver_bn.running_mean
             vertical_bn_running_std = torch.sqrt(module.ver_bn.running_var + eps)
-            # 获取1xN卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
+            # Obtain the weight of 1xN convolution and the weight, offset, runtime mean and runtime variance of the corresponding BN
             horizontal_conv_weight = module.hor_conv.weight
             horizontal_bn_weight = module.hor_bn.weight
             horizontal_bn_bias = module.hor_bn.bias
             horizontal_bn_running_mean = module.hor_bn.running_mean
             horizontal_bn_running_std = torch.sqrt(module.hor_bn.running_var + eps)
             if isinstance(module.square_bn, nn.Identity):
-                # 获取NxN卷积的权重以及对应BN的权重、偏置、运行时均值、运行时方差
-                # 在insert_repvgg_block过程中将Conv后面的BN设置nn.Identity
                 square_weight = module.square_conv.weight
                 square_bias = module.square_conv.bias
-                # 计算偏差
+                # Calculation bias
                 fused_bias = square_bias + vertical_bn_bias + horizontal_bn_bias \
                              - vertical_bn_running_mean * vertical_bn_weight / vertical_bn_running_std \
                              - horizontal_bn_running_mean * horizontal_bn_weight / horizontal_bn_running_std
-                # 计算权重
+                # Calculate weight
                 fused_kernel = square_weight
             else:
                 square_conv_weight = module.square_conv.weight
@@ -103,19 +103,19 @@ def fuse_acblock(model: nn.Module, eps=1e-5):
                 square_bn_bias = module.square_bn.bias
                 square_bn_running_mean = module.square_bn.running_mean
                 square_bn_running_std = torch.sqrt(module.square_bn.running_var + eps)
-                # 计算偏差
+                # Calculate bias
                 fused_bias = square_bn_bias + vertical_bn_bias + horizontal_bn_bias \
                              - square_bn_running_mean * square_bn_weight / square_bn_running_std \
                              - vertical_bn_running_mean * vertical_bn_weight / vertical_bn_running_std \
                              - horizontal_bn_running_mean * horizontal_bn_weight / horizontal_bn_running_std
-                # 计算权重
+                # Calculate weight
                 fused_kernel = _fuse_kernel(square_conv_weight, square_bn_weight, square_bn_running_std)
-            # 计算权重
+            # Calculate weight
             _add_to_square_kernel(fused_kernel,
                                   _fuse_kernel(vertical_conv_weight, vertical_bn_weight, vertical_bn_running_std))
             _add_to_square_kernel(fused_kernel,
                                   _fuse_kernel(horizontal_conv_weight, horizontal_bn_weight, horizontal_bn_running_std))
-            # 新建标准卷积，赋值权重和偏差后重新插入模型
+            # Create a new standard convolution, assign weight and bias, and reinsert the model
             fused_conv = nn.Conv2d(module.in_channels,
                                    module.out_channels,
                                    module.kernel_size,
@@ -138,7 +138,7 @@ def insert_repvgg_block(model: nn.Module):
     while idx < len(items):
         name, module = items[idx]
         if isinstance(module, nn.Conv2d) and module.kernel_size[0] > 1:
-            # 将标准卷积替换为RepVGGBlock
+            # Replace the standard convolution with repvgg_block
             in_channels = module.in_channels
             out_channels = module.out_channels
             kernel_size = module.kernel_size
@@ -157,8 +157,8 @@ def insert_repvgg_block(model: nn.Module):
                                   dilation=dilation,
                                   groups=groups)
             model.add_module(name, acblock)
-            # 如果conv层之后跟随着BN层，那么删除该BN层
-            # 参考[About BN layer #35](https://github.com/DingXiaoH/ACNet/issues/35)
+            # If conv layer is followed by BN layer, delete the BN layer
+            # refer to [About BN layer #35](https://github.com/DingXiaoH/ACNet/issues/35)
             if (idx + 1) < len(items) and isinstance(items[idx + 1][1], nn.BatchNorm2d):
                 new_layer = nn.Identity()
                 model.add_module(items[idx + 1][0], new_layer)
@@ -170,14 +170,14 @@ def insert_repvgg_block(model: nn.Module):
 def fuse_repvgg_block(model: nn.Module):
     for name, module in model.named_children():
         if isinstance(module, RepVGGBlock):
-            # 将RepVGGBlock替换为标准卷积
-            kernel, bias = get_equivalent_kernel_bias(module.rbr_dense,
-                                                      module.rbr_1x1,
-                                                      module.rbr_identity,
-                                                      module.in_channels,
-                                                      module.groups,
-                                                      module.padding)
-            # 新建标准卷积，赋值权重和偏差后重新插入模型
+            # Replace repvgg_block with standard convolution
+            kernel, bias = repvgg_util.get_equivalent_kernel_bias(module.rbr_dense,
+                                                                  module.rbr_1x1,
+                                                                  module.rbr_identity,
+                                                                  module.in_channels,
+                                                                  module.groups,
+                                                                  module.padding)
+            # Create a new standard convolution, assign weight and bias, and reinsert the model
             fused_conv = nn.Conv2d(module.in_channels,
                                    module.out_channels,
                                    module.kernel_size,
@@ -193,3 +193,59 @@ def fuse_repvgg_block(model: nn.Module):
             model.add_module(name, fused_conv)
         else:
             fuse_repvgg_block(module)
+
+
+def insert_dbblock(model: nn.Module):
+    items = list(model.named_children())
+    idx = 0
+    while idx < len(items):
+        name, module = items[idx]
+        if isinstance(module, nn.Conv2d) and module.kernel_size[0] > 1:
+            # Replace the standard convolution with dbblock
+            in_channels = module.in_channels
+            out_channels = module.out_channels
+            kernel_size = module.kernel_size
+            stride = module.stride
+            padding = module.padding
+            dilation = module.dilation
+            groups = module.groups
+
+            acblock = DiverseBranchBlock(in_channels,
+                                         out_channels,
+                                         kernel_size[0],
+                                         stride[0],
+                                         padding=padding[0],
+                                         dilation=dilation[0],
+                                         groups=groups)
+            model.add_module(name, acblock)
+            # If conv layer is followed by BN layer, delete the BN layer
+            # refer to [About BN layer #35](https://github.com/DingXiaoH/ACNet/issues/35)
+            if (idx + 1) < len(items) and isinstance(items[idx + 1][1], nn.BatchNorm2d):
+                new_layer = nn.Identity()
+                model.add_module(items[idx + 1][0], new_layer)
+        else:
+            insert_dbblock(module)
+        idx += 1
+
+
+def fuse_dbblock(model: nn.Module):
+    for name, module in model.named_children():
+        if isinstance(module, DiverseBranchBlock):
+            # Replace dbblock with standard convolution
+            kernel, bias = dbb_util.get_equivalent_kernel_bias(module)
+
+            # Create a new standard convolution, assign weight and bias, and reinsert the model
+            fused_conv = nn.Conv2d(module.in_channels,
+                                   module.out_channels,
+                                   module.kernel_size,
+                                   stride=module.stride,
+                                   padding=module.padding,
+                                   dilation=module.dilation,
+                                   groups=module.groups,
+                                   bias=True
+                                   )
+            fused_conv.weight = nn.Parameter(kernel.detach().cpu())
+            fused_conv.bias = nn.Parameter(bias.detach().cpu())
+            model.add_module(name, fused_conv)
+        else:
+            fuse_dbblock(module)

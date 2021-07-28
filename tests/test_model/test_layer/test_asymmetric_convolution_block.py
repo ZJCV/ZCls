@@ -142,9 +142,9 @@ def test_resnet50_acb():
 
 
 if __name__ == '__main__':
-    print('*' * 10)
+    print('#' * 10)
     test_asymmetric_convolution_block()
-    print('*' * 10)
+    print('-' * 10)
     test_acb_helper()
     print('*' * 10)
     test_resnet50_acb()

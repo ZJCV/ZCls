@@ -21,7 +21,7 @@ def add_config(_C):
     # ---------------------------------------------------------------------------- #
     _C.MODEL.CONV = CN()
     _C.MODEL.CONV.TYPE = 'Conv2d'
-    # used in AsymmetricConvolutionBlock/RepVGGBlock
+    # used in AsymmetricConvolutionBlock/RepVGGBlock/DiverseBranchBlock
     _C.MODEL.CONV.ADD_BLOCKS = None
 
     # ---------------------------------------------------------------------------- #
