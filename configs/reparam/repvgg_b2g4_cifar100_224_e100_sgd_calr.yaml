@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/repvgg_b2g4_cifar100_224_e100_sgd_calr'
+OUTPUT_DIR: 'outputs/reparam/repvgg_b2g4_cifar100_224_e100_sgd_calr'
 TRAIN:
   LOG_STEP: 10
   GRADIENT_ACCUMULATE_STEP: 1
@@ -12,24 +12,28 @@ TRAIN:
   EVAL_EPOCH: 5
   RESUME: False
   USE_TENSORBOARD: True
+  HYBRID_PRECISION: True
 DATASET:
   NAME: 'CIFAR100'
   TRAIN_ROOT: './data/cifar'
   TEST_ROOT: './data/cifar'
   TOP_K: (1, 5)
 TRANSFORM:
-  TRAIN_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+  TRAIN_METHODS: ('Resize', 'RandomCrop', 'RandomHorizontalFlip', 'AUTO_AUGMENT', 'ToTensor', 'Normalize')
   TEST_METHODS: ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
-  TRAIN_RESIZE: (224, )
+  TRAIN_RESIZE: (256, )
   TEST_RESIZE: (224, )
   TRAIN_CROP: (224, 224)
   TEST_CROP: (224, 224)
+  AUGMENT_POLICY: "imagenet"
   MEAN: (0.45, 0.45, 0.45)
   STD: (0.225, 0.225, 0.225)
 DATALOADER:
   TRAIN_BATCH_SIZE: 32
   TEST_BATCH_SIZE: 32
   NUM_WORKERS: 4
+  RANDOM_SAMPLE: True
+  PREFETCHER: True
 MODEL:
   CONV:
     TYPE: 'Conv2d'
