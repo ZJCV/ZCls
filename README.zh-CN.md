@@ -25,7 +25,7 @@
 <img align="center" src="./imgs/roadmap.svg">
 </p>
 
-*更多细节请参考[路线图](https://zcls.readthedocs.io/en/latest/roadmap.html)*
+*更多细节请参考[路线图](https://zcls.readthedocs.io/en/latest/roadmap/)*
 
 ## 内容列表
 
@@ -46,17 +46,17 @@
 
 ## 安装
 
-查看[INSTALL](https://zcls.readthedocs.io/en/latest/install.html)
+查看[INSTALL](https://zcls.readthedocs.io/en/latest/install/)
 
 ## 用法
 
-关于如何训练，查看[Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started.html)
+关于如何训练，查看[Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started/)
 
-关于如何使用内置数据集，查看[Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets.html)
+关于如何使用内置数据集，查看[Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
 
-关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets.html)
+关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
 
-使用预训练模型，查看 [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model.html)
+使用预训练模型，查看 [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
 
 ## 主要维护人员
 

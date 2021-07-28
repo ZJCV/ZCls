@@ -25,7 +25,7 @@ Supported Recognizers:
 <img align="center" src="./imgs/roadmap.svg">
 </p>
 
-*Refer to [roadmap](https://zcls.readthedocs.io/en/latest/roadmap.html) for details*
+*Refer to [roadmap](https://zcls.readthedocs.io/en/latest/roadmap/) for details*
 
 ## Table of Contents
 
@@ -46,17 +46,17 @@ Object classification is the most developed and theoretically basic field in dee
 
 ## Installation
 
-See [INSTALL](https://zcls.readthedocs.io/en/latest/install.html)
+See [INSTALL](https://zcls.readthedocs.io/en/latest/install/)
 
 ## Usage
 
-How to train, see [Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started.html)
+How to train, see [Get Started with ZCls](https://zcls.readthedocs.io/en/latest/get-started/)
 
-Use builtin datasets, see [Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets.html)
+Use builtin datasets, see [Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
 
-Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets.html)
+Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
 
-Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model.html)
+Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
 
 ## Maintainers
 
