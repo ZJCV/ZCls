@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument("config_file",
                         type=str,
                         default="",
-                        metavar="FILE",
+                        metavar="CONFIG_FILE",
                         help="path to config file")
     parser.add_argument('output_dir',
                         type=str,
