@@ -1,5 +1,14 @@
 
 ```
+@misc{ding2021diverse,
+      title={Diverse Branch Block: Building a Convolution as an Inception-like Unit}, 
+      author={Xiaohan Ding and Xiangyu Zhang and Jungong Han and Guiguang Ding},
+      year={2021},
+      eprint={2103.13425},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{ding2021repvgg,
       title={RepVGG: Making VGG-style ConvNets Great Again}, 
       author={Xiaohan Ding and Xiangyu Zhang and Ningning Ma and Jungong Han and Guiguang Ding and Jian Sun},

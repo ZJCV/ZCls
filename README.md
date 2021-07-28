@@ -65,6 +65,15 @@ Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/
 ## Thanks
 
 ```
+@misc{ding2021diverse,
+      title={Diverse Branch Block: Building a Convolution as an Inception-like Unit}, 
+      author={Xiaohan Ding and Xiangyu Zhang and Jungong Han and Guiguang Ding},
+      year={2021},
+      eprint={2103.13425},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
 @misc{ding2021repvgg,
       title={RepVGG: Making VGG-style ConvNets Great Again}, 
       author={Xiaohan Ding and Xiangyu Zhang and Ningning Ma and Jungong Han and Guiguang Ding and Jian Sun},
@@ -96,24 +105,6 @@ Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/
       author={Kai Han and Yunhe Wang and Qi Tian and Jianyuan Guo and Chunjing Xu and Chang Xu},
       year={2020},
       eprint={1911.11907},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-
-@misc{ding2019acnet,
-      title={ACNet: Strengthening the Kernel Skeletons for Powerful CNN via Asymmetric Convolution Blocks}, 
-      author={Xiaohan Ding and Yuchen Guo and Guiguang Ding and Jungong Han},
-      year={2019},
-      eprint={1908.03930},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
-}
-
-@misc{howard2019searching,
-      title={Searching for MobileNetV3}, 
-      author={Andrew Howard and Mark Sandler and Grace Chu and Liang-Chieh Chen and Bo Chen and Mingxing Tan and Weijun Wang and Yukun Zhu and Ruoming Pang and Vijay Vasudevan and Quoc V. Le and Hartwig Adam},
-      year={2019},
-      eprint={1905.02244},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
