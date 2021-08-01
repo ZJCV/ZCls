@@ -46,6 +46,7 @@ def build_recognizer(cfg, device):
         convert_sync_bn(model, du.LOCAL_PROCESS_GROUP)
     if cfg.MODEL.CONV.ADD_BLOCKS is not None:
         assert isinstance(cfg.MODEL.CONV.ADD_BLOCKS, tuple)
+        logger.info(f'add blocks: {cfg.MODEL.CONV.ADD_BLOCKS}')
         for add_block in cfg.MODEL.CONV.ADD_BLOCKS:
             if add_block == 'RepVGGBlock':
                 insert_repvgg_block(model)
@@ -59,6 +60,10 @@ def build_recognizer(cfg, device):
         check_pointer = CheckPointer(model)
         check_pointer.load(preloaded, map_location=device)
         logger.info("finish loading model weights")
+
+    if du.is_master_proc():
+        logger.info(f'full model info:')
+        logger.info(model)
 
     model = model.to(device=device)
     if du.get_world_size() > 1:
