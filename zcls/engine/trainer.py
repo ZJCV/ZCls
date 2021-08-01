@@ -116,7 +116,7 @@ def do_train(cfg, arguments,
                     loss.backward()
 
             if cfg.TRAIN.CLIP_GRADIENT:
-                torch.nn.utils.clip_grad_norm_(model, cfg.TRAIN.MAX_NORM)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), cfg.TRAIN.MAX_NORM)
 
             current_iterations += 1
             if current_iterations % gradient_accumulate_step == 0:
