@@ -14,6 +14,8 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
+from .. import init_helper
+
 
 def conv_bn(in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1,
             padding_mode='zeros'):
@@ -163,6 +165,7 @@ class DiverseBranchBlock(nn.Module):
                                               groups=groups, bias=False))
         self.dbb_1x1_kxk.add_module('bn2', nn.BatchNorm2d(out_channels))
 
+        self.init_weights()
         #   The experiments reported in the paper used the default initialization of bn.weight (all as 1). But changing the initialization may be useful in some cases.
         if single_init:
             #   Initialize the bn.weight of dbb_origin as 1 and others as 0. This is not the default setting.
@@ -175,6 +178,16 @@ class DiverseBranchBlock(nn.Module):
         out += self.dbb_avg(inputs)
         out += self.dbb_1x1_kxk(inputs)
         return out
+
+    def init_weights(self):
+        if hasattr(self, "dbb_origin"):
+            init_helper.init_weights(self.dbb_origin)
+        if hasattr(self, "dbb_1x1"):
+            init_helper.init_weights(self.dbb_1x1)
+        if hasattr(self, "dbb_avg"):
+            init_helper.init_weights(self.dbb_avg)
+        if hasattr(self, "dbb_1x1_kxk"):
+            init_helper.init_weights(self.dbb_1x1_kxk)
 
     def init_gamma(self, gamma_value):
         if hasattr(self, "dbb_origin"):
