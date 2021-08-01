@@ -1,5 +1,14 @@
 # CHANGE
 
+## v0.10.2
+
+* New features
+    1. add gradient_clip feature
+    2. add init weights for DDB
+* Bug fixes
+    1. input model.parameters() to clip_grad_norm_ rather than model
+* Breaking changes.
+
 ## v0.10.1
 
 * New features
