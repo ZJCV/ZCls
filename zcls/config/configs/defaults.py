@@ -64,3 +64,10 @@ _C.TRAIN.MIXUP = False
 
 # the data enhancement operation cutmix
 _C.TRAIN.CUTMIX = False
+
+# note: when using clip_gradient, set too small MAX_NORM value will make training slower
+# 1. [Proper way to do gradient clipping?](https://discuss.pytorch.org/t/proper-way-to-do-gradient-clipping/191)
+# 2. [pytorch/torch/nn/utils/clip_grad.py](https://github.com/pytorch/pytorch/blob/master/torch/nn/utils/clip_grad.py)
+# 3. [How to do gradient clipping in pytorch?](https://stackoverflow.com/questions/54716377/how-to-do-gradient-clipping-in-pytorch)
+_C.TRAIN.CLIP_GRADIENT = False
+_C.TRAIN.MAX_NORM = 20.0
