@@ -31,6 +31,8 @@ _C.INIT_METHOD = "tcp://localhost:39129"
 # Train
 # ---------------------------------------------------------------------------- #
 _C.TRAIN = CN()
+
+# How many iterations to print the log on the command line
 _C.TRAIN.LOG_STEP = 10
 
 # refert to
@@ -38,10 +40,19 @@ _C.TRAIN.LOG_STEP = 10
 # [How to implement accumulated gradient？](https://discuss.pytorch.org/t/how-to-implement-accumulated-gradient/3822)
 _C.TRAIN.GRADIENT_ACCUMULATE_STEP = 1
 
+# how many rounds to save training params, includes model weights, train epoch, criterion, optimizer and lr_scheduler
 _C.TRAIN.SAVE_EPOCH = 5
+
+# how many rounds to use model infer test dataset
 _C.TRAIN.EVAL_EPOCH = 5
+
+# how many rounds to train
 _C.TRAIN.MAX_EPOCH = 200
+
+# resume model weights, train epoch, criterion, optimizer and lr_scheduler
 _C.TRAIN.RESUME = False
+
+# Graphical recording of training log
 _C.TRAIN.USE_TENSORBOARD = True
 
 # Hybrid precision training
