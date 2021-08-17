@@ -29,6 +29,10 @@ current supported transforms methods:
 10. 'Grayscale'
 11. 'RandomRotation'
 12. 'RandomErasing'
+13. 'RandomAutocontrast'
+14. 'RandomAdjustSharpness'
+15. 'RandomPosterize'
+16. 'ToPILImage'
 
 custom methods:
 
@@ -55,6 +59,14 @@ def parse_transform(cfg, is_train=True):
 
         if method == 'SquarePad':
             aug_list.append(transform())
+        elif method == 'RandomAutocontrast':
+            aug_list.append(transform())
+        elif method == 'RandomAdjustSharpness':
+            sharpness_factor = cfg.TRANSFORM.SHARPNESS_FACTOR
+            aug_list.append(transform(sharpness_factor))
+        elif method == 'RandomPosterize':
+            bits = cfg.TRANSFORM.BITS
+            aug_list.append(transform(bits))
         elif method == 'RandomRotation':
             degree = cfg.TRANSFORM.ROTATE_DEGREE
             degree = degree[0] if len(degree) == 1 else degree
@@ -85,6 +97,8 @@ def parse_transform(cfg, is_train=True):
                 raise ValueError(f'{cfg.TRANSFORM.AUGMENT_POLICY} does not exists')
             aug_list.append(transform(policy=policy))
         elif method == 'Grayscale':
+            aug_list.append(transform())
+        elif method == 'ToPILImage':
             aug_list.append(transform())
         elif method == 'ToTensor':
             aug_list.append(transform())

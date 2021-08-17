@@ -74,3 +74,11 @@ def add_config(_C):
     _C.TRANSFORM.ERASE_SCALE = (0.02, 0.33)
     # range of aspect ratio of erased area.
     _C.TRANSFORM.ERASE_RATIO = (0.3, 3.3)
+
+    # sharpness_factor (float):  How much to adjust the sharpness. Can be
+    # any non negative number. 0 gives a blurred image, 1 gives the
+    # original image while 2 increases the sharpness by a factor of 2.
+    _C.TRANSFORM.SHARPNESS_FACTOR = 1.0
+
+    # bits (int): number of bits to keep for each channel (0-8)
+    _C.TRANSFORM.KEEP_BITS = 8
