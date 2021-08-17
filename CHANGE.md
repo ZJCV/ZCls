@@ -1,5 +1,12 @@
 # CHANGE
 
+## v0.10.3
+
+* New features
+    1. new image processing strategy: RandomAutocontrast/RandomAdjustSharpness/RandomPosterize/ToPILImage
+* Bug fixes
+* Breaking changes.
+
 ## v0.10.2
 
 * New features
