@@ -57,7 +57,7 @@ def train(cfg):
         logger.info('resume start')
         extra_checkpoint_data = checkpointer.load(map_location=device)
         if isinstance(extra_checkpoint_data, dict):
-            arguments['cur_epoch'] = extra_checkpoint_data['cur_epoch']
+            arguments['cur_epoch'] = extra_checkpoint_data['cur_epoch'] + 1
             if cfg.LR_SCHEDULER.IS_WARMUP:
                 logger.info('warmup start')
                 if lr_scheduler.finished:
