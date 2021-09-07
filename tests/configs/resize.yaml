@@ -1,0 +1,4 @@
+TRANSFORM:
+  TRAIN_METHODS: ('Resize',)
+#  TRAIN_RESIZE: (112, )
+  TRAIN_RESIZE: (33, 33)

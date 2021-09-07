@@ -13,6 +13,7 @@ import torchvision.transforms.transforms as transforms
 import torchvision.transforms.autoaugment as autoaugment
 
 from .square_pad import SquarePad
+from .resize import Resize
 
 """
 current supported transforms methods:
@@ -20,7 +21,7 @@ current supported transforms methods:
 1. 'ToTensor'
 2. 'ConvertImageDtype',
 3. 'Normalize',
-4. 'Resize'
+# 4. 'Resize'
 5. 'CenterCrop'
 6. 'RandomCrop'
 7. 'RandomHorizontalFlip'
@@ -37,6 +38,7 @@ current supported transforms methods:
 custom methods:
 
 1. 'SquarePad'
+2. 'Resize'
 """
 
 
@@ -50,6 +52,8 @@ def parse_transform(cfg, is_train=True):
     for method in methods:
         if method == 'SquarePad':
             transform = SquarePad
+        elif method == 'Resize':
+            transform = Resize
         elif method in keys:
             transform = transforms_dict[method]
         elif method == 'AUTO_AUGMENT':
