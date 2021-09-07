@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.11.0
+
+* New features
+    1. feat(transform): custom resize using opencv replacing pil
+* Bug fixes
+    1. fix(checkpoint): when resume, make cur_epoch + 1 
+* Breaking changes.
+
 ## v0.10.3
 
 * New features
