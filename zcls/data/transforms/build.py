@@ -69,7 +69,7 @@ def parse_transform(cfg, is_train=True):
             sharpness_factor = cfg.TRANSFORM.SHARPNESS_FACTOR
             aug_list.append(transform(sharpness_factor))
         elif method == 'RandomPosterize':
-            bits = cfg.TRANSFORM.BITS
+            bits = cfg.TRANSFORM.KEEP_BITS
             aug_list.append(transform(bits))
         elif method == 'RandomRotation':
             degree = cfg.TRANSFORM.ROTATE_DEGREE
