@@ -26,9 +26,11 @@ def compute_on_dataset(images, targets, model, num_gpus, evaluator):
     if num_gpus > 1:
         keys = list()
         values = list()
-        for key in sorted(output_dict):
-            keys.append(key)
-            values.append(output_dict[key])
+        # for key in sorted(output_dict):
+        #     keys.append(key)
+        #     values.append(output_dict[key])
+        keys.append(KEY_OUTPUT)
+        values.append(output_dict[KEY_OUTPUT])
         values = all_gather(values)
         output_dict = {k: v for k, v in zip(keys, values)}
         targets = all_gather([targets])[0]
