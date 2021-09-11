@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.11.1
+
+* New features
+* Bug fixes
+    1. fix(inference): only use output_dict[KEY_OUTPUT] when infering
+    2. fix(transform): use cfg.TRANSFORM.KEEP_BITS instead of cfg.TRANSFORM.BITS
+* Breaking changes.
+
 ## v0.11.0
 
 * New features
