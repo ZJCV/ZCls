@@ -11,6 +11,7 @@ from .cifar import CIFAR
 from .fashionmnist import FashionMNIST
 from .imagenet import ImageNet
 from .general_dataset import GeneralDataset
+from .general_dataset_v2 import GeneralDatasetV2
 from .lmdb_dataset import LMDBDataset
 from .lmdb_imagenet import LMDBImageNet
 
@@ -34,6 +35,8 @@ def build_dataset(cfg, transform=None, target_transform=None, is_train=True):
                            top_k=top_k)
     elif dataset_name == 'GeneralDataset':
         dataset = GeneralDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
+    elif dataset_name == 'GeneralDatasetV2':
+        dataset = GeneralDatasetV2(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
     elif dataset_name == 'LMDBDataset':
         dataset = LMDBDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
     elif dataset_name == 'LMDBImageNet':
