@@ -1,0 +1,11 @@
+NUM_GPUS: 1
+NUM_NODES: 1
+RANK_ID: 0
+DATASET:
+  NAME: 'CIFAR100'
+  TRAIN_ROOT: './data/cifar'
+  TEST_ROOT: './data/cifar'
+  TOP_K: (1, 5)
+DATALOADER:
+  TEST_BATCH_SIZE: 32
+  NUM_WORKERS: 4
