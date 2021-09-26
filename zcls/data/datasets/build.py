@@ -14,9 +14,10 @@ from .general_dataset import GeneralDataset
 from .general_dataset_v2 import GeneralDatasetV2
 from .lmdb_dataset import LMDBDataset
 from .lmdb_imagenet import LMDBImageNet
+from .rank_dataset import RankDataset
 
 
-def build_dataset(cfg, transform=None, target_transform=None, is_train=True):
+def build_dataset(cfg, transform=None, target_transform=None, is_train=True, **kwargs):
     dataset_name = cfg.DATASET.NAME
     data_root = cfg.DATASET.TRAIN_ROOT if is_train else cfg.DATASET.TEST_ROOT
     top_k = cfg.DATASET.TOP_K
@@ -41,6 +42,14 @@ def build_dataset(cfg, transform=None, target_transform=None, is_train=True):
         dataset = LMDBDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
     elif dataset_name == 'LMDBImageNet':
         dataset = LMDBImageNet(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
+    elif dataset_name == 'RankDataset':
+        world_size = kwargs['world_size'] if 'world_size' in kwargs.keys() else 1
+        rank_id = kwargs['rank_id'] if 'rank_id' in kwargs.keys() else 0
+        seed = kwargs['seed'] if 'seed' in kwargs.keys() else 0
+        epoch = kwargs['epoch'] if 'epoch' in kwargs.keys() else 0
+
+        dataset = RankDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
+                              world_size=world_size, rank_id=rank_id, seed=seed, epoch=epoch)
     else:
         raise ValueError(f"the dataset {dataset_name} does not exist")
 

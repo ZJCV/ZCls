@@ -13,21 +13,25 @@ from torch.utils.data import RandomSampler, SequentialSampler
 
 import zcls.util.distributed as du
 
+from ..datasets.rank_dataset import RankDataset
+
 
 def build_sampler(cfg, dataset):
     world_size = du.get_world_size()
     num_gpus = cfg.NUM_GPUS
     rank = du.get_rank()
-    if num_gpus > 1:
+
+    if num_gpus <= 1 or isinstance(dataset, RankDataset):
+        if cfg.DATALOADER.RANDOM_SAMPLE:
+            sampler = RandomSampler(dataset)
+        else:
+            sampler = SequentialSampler(dataset)
+    else:
         shuffle = cfg.DATALOADER.RANDOM_SAMPLE
         sampler = DistributedSampler(dataset,
                                      num_replicas=world_size,
                                      rank=rank,
                                      shuffle=shuffle)
-    elif cfg.DATALOADER.RANDOM_SAMPLE:
-        sampler = RandomSampler(dataset)
-    else:
-        sampler = SequentialSampler(dataset)
 
     return sampler
 

@@ -8,20 +8,21 @@
 """
 
 import os
+
 import numpy as np
 import torch
 
 from zcls.config import cfg
 from zcls.data.build import build_data
 from zcls.engine.trainer import do_train
-from zcls.model.recognizers.build import build_recognizer
 from zcls.model.criterions.build import build_criterion
-from zcls.optim.optimizers.build import build_optimizer
+from zcls.model.recognizers.build import build_recognizer
 from zcls.optim.lr_schedulers.build import build_lr_scheduler
+from zcls.optim.optimizers.build import build_optimizer
 from zcls.util import logging
 from zcls.util.checkpoint import CheckPointer
 from zcls.util.collect_env import collect_env_info
-from zcls.util.distributed import init_distributed_training, get_device, get_local_rank, synchronize
+from zcls.util.distributed import init_distributed_training, get_device, get_local_rank, synchronize, get_world_size
 from zcls.util.misc import launch_job
 from zcls.util.parser import parse_args, load_config
 
@@ -69,8 +70,10 @@ def train(cfg):
                 logger.info('warmup end')
         logger.info('resume end')
 
-    train_data_loader = build_data(cfg, is_train=True)
-    test_data_loader = build_data(cfg, is_train=False)
+    train_data_loader = build_data(cfg, is_train=True, world_size=get_world_size(), rank_id=local_rank_id,
+                                   epoch=arguments['cur_epoch'])
+    test_data_loader = build_data(cfg, is_train=False, world_size=get_world_size(), rank_id=local_rank_id,
+                                  epoch=arguments['cur_epoch'])
 
     logger.info('init end')
     synchronize()
