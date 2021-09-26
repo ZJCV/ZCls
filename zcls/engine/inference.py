@@ -12,6 +12,7 @@ import datetime
 import torch
 from tqdm import tqdm
 
+from zcls.config.key_word import KEY_OUTPUT
 import zcls.util.logging as logging
 from zcls.util.prefetcher import Prefetcher
 from zcls.util.distributed import all_gather, is_master_proc
@@ -26,9 +27,6 @@ def compute_on_dataset(images, targets, model, num_gpus, evaluator):
     if num_gpus > 1:
         keys = list()
         values = list()
-        # for key in sorted(output_dict):
-        #     keys.append(key)
-        #     values.append(output_dict[key])
         keys.append(KEY_OUTPUT)
         values.append(output_dict[KEY_OUTPUT])
         values = all_gather(values)
