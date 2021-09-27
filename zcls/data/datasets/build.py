@@ -14,7 +14,7 @@ from .general_dataset import GeneralDataset
 from .general_dataset_v2 import GeneralDatasetV2
 from .lmdb_dataset import LMDBDataset
 from .lmdb_imagenet import LMDBImageNet
-from .rank_dataset import RankDataset
+from .mp_dataset import MPDataset
 
 
 def build_dataset(cfg, transform=None, target_transform=None, is_train=True, **kwargs):
@@ -42,14 +42,14 @@ def build_dataset(cfg, transform=None, target_transform=None, is_train=True, **k
         dataset = LMDBDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
     elif dataset_name == 'LMDBImageNet':
         dataset = LMDBImageNet(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
-    elif dataset_name == 'RankDataset':
-        world_size = kwargs['world_size'] if 'world_size' in kwargs.keys() else 1
+    elif dataset_name == 'MPDataset':
+        shuffle = cfg.DATALOADER.RANDOM_SAMPLE
+        num_gpus = cfg.NUM_GPUS
         rank_id = kwargs['rank_id'] if 'rank_id' in kwargs.keys() else 0
-        seed = kwargs['seed'] if 'seed' in kwargs.keys() else 0
         epoch = kwargs['epoch'] if 'epoch' in kwargs.keys() else 0
 
-        dataset = RankDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
-                              world_size=world_size, rank_id=rank_id, seed=seed, epoch=epoch)
+        dataset = MPDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
+                            shuffle=shuffle, num_gpus=num_gpus, rank_id=rank_id, epoch=epoch)
     else:
         raise ValueError(f"the dataset {dataset_name} does not exist")
 

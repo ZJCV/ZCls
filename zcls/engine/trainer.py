@@ -28,7 +28,7 @@ from zcls.util.mixup import mixup_data, mixup_criterion, mixup_evaluate
 from zcls.util.cutmix import cutmix_data, cutmix_criterion, cutmix_evaluate
 
 from zcls.engine.inference import do_evaluation
-from zcls.data.build import shuffle_dataset, set_rank_dataset
+from zcls.data.build import shuffle_dataset
 
 logger = logging.get_logger(__name__)
 
@@ -70,7 +70,6 @@ def do_train(cfg, arguments,
     end = time.time()
     for cur_epoch in range(start_epoch, max_epoch + 1):
         shuffle_dataset(train_data_loader, cur_epoch, is_shuffle=cfg.DATALOADER.RANDOM_SAMPLE)
-        set_rank_dataset(train_data_loader, cur_epoch)
         data_loader = Prefetcher(train_data_loader, device) if cfg.DATALOADER.PREFETCHER else train_data_loader
         for iteration, (images, targets) in enumerate(data_loader):
             if not cfg.DATALOADER.PREFETCHER:

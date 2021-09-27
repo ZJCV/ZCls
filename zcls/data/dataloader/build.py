@@ -13,7 +13,7 @@ from torch.utils.data import RandomSampler, SequentialSampler
 
 import zcls.util.distributed as du
 
-from ..datasets.rank_dataset import RankDataset
+from ..datasets.mp_dataset import MPDataset
 
 
 def build_sampler(cfg, dataset):
@@ -21,7 +21,7 @@ def build_sampler(cfg, dataset):
     num_gpus = cfg.NUM_GPUS
     rank = du.get_rank()
 
-    if num_gpus <= 1 or isinstance(dataset, RankDataset):
+    if num_gpus <= 1:
         if cfg.DATALOADER.RANDOM_SAMPLE:
             sampler = RandomSampler(dataset)
         else:
@@ -36,16 +36,16 @@ def build_sampler(cfg, dataset):
     return sampler
 
 
-def build_dataloader(cfg, dataset, is_train=True):
+def build_dataloader(cfg, dataset, is_train=True, drop_last=False, pin_memory=True):
     batch_size = cfg.DATALOADER.TRAIN_BATCH_SIZE if is_train else cfg.DATALOADER.TEST_BATCH_SIZE
 
-    sampler = build_sampler(cfg, dataset)
+    sampler = None if isinstance(dataset, MPDataset) else build_sampler(cfg, dataset)
     data_loader = DataLoader(dataset,
                              num_workers=cfg.DATALOADER.NUM_WORKERS,
                              sampler=sampler,
                              batch_size=batch_size,
-                             drop_last=False,
+                             drop_last=drop_last,
                              # [When to set pin_memory to true?](https://discuss.pytorch.org/t/when-to-set-pin-memory-to-true/19723)
-                             pin_memory=True)
+                             pin_memory=pin_memory)
 
     return data_loader

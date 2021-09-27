@@ -11,9 +11,10 @@ from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import RandomSampler
 
 from .datasets.build import build_dataset
-from .datasets.rank_dataset import RankDataset
 from .transforms.build import build_transform
 from .dataloader.build import build_dataloader
+
+from .datasets.mp_dataset import MPDataset
 
 
 def build_data(cfg, is_train=True, **kwargs):
@@ -33,22 +34,16 @@ def shuffle_dataset(loader, cur_epoch, is_shuffle=False):
     """
     if not is_shuffle:
         return
-    sampler = loader.sampler
-    assert isinstance(
-        sampler, (RandomSampler, DistributedSampler)
-    ), "Sampler type '{}' not supported".format(type(sampler))
-    # RandomSampler handles shuffling automatically
-    if isinstance(sampler, DistributedSampler):
-        # DistributedSampler shuffles data based on epoch
-        sampler.set_epoch(cur_epoch)
 
-
-def set_rank_dataset(loader, epoch):
-    """
-    set data set for each card
-    """
     dataset = loader.dataset
-    if not isinstance(dataset, RankDataset):
-        return
-
-    dataset.set_epoch(epoch)
+    if isinstance(dataset, MPDataset):
+        dataset.set_epoch(cur_epoch)
+    else:
+        sampler = loader.sampler
+        assert isinstance(
+            sampler, (RandomSampler, DistributedSampler)
+        ), "Sampler type '{}' not supported".format(type(sampler))
+        # RandomSampler handles shuffling automatically
+        if isinstance(sampler, DistributedSampler):
+            # DistributedSampler shuffles data based on epoch
+            sampler.set_epoch(cur_epoch)
