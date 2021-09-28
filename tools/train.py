@@ -22,7 +22,7 @@ from zcls.optim.optimizers.build import build_optimizer
 from zcls.util import logging
 from zcls.util.checkpoint import CheckPointer
 from zcls.util.collect_env import collect_env_info
-from zcls.util.distributed import init_distributed_training, get_device, get_local_rank, synchronize, get_world_size
+from zcls.util.distributed import init_distributed_training, get_device, get_local_rank, synchronize
 from zcls.util.misc import launch_job
 from zcls.util.parser import parse_args, load_config
 
