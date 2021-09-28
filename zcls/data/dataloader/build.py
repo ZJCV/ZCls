@@ -36,7 +36,7 @@ def build_sampler(cfg, dataset):
     return sampler
 
 
-def build_dataloader(cfg, dataset, is_train=True, drop_last=False, pin_memory=True):
+def build_dataloader(cfg, dataset, is_train=True):
     batch_size = cfg.DATALOADER.TRAIN_BATCH_SIZE if is_train else cfg.DATALOADER.TEST_BATCH_SIZE
 
     sampler = None if isinstance(dataset, MPDataset) else build_sampler(cfg, dataset)
@@ -44,8 +44,8 @@ def build_dataloader(cfg, dataset, is_train=True, drop_last=False, pin_memory=Tr
                              num_workers=cfg.DATALOADER.NUM_WORKERS,
                              sampler=sampler,
                              batch_size=batch_size,
-                             drop_last=drop_last,
+                             drop_last=is_train,
                              # [When to set pin_memory to true?](https://discuss.pytorch.org/t/when-to-set-pin-memory-to-true/19723)
-                             pin_memory=pin_memory)
+                             pin_memory=True)
 
     return data_loader
