@@ -10,15 +10,14 @@
 import os
 import json
 
+import numpy as np
 from PIL import Image
 
 import torch
 from torch.utils.data import IterableDataset
-from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import RandomSampler, SequentialSampler
 
-import zcls.util.distributed as du
-
+from ..samplers.distributed_sampler import DistributedSampler
 from .evaluator.general_evaluator import GeneralEvaluator
 
 
@@ -40,10 +39,7 @@ def get_base_info(json_path):
     return classes, length
 
 
-def build_sampler(dataset, num_gpus=1, random_sample=False):
-    world_size = du.get_world_size()
-    rank = du.get_rank()
-
+def build_sampler(dataset, num_gpus=1, random_sample=False, rank_id=0):
     if num_gpus <= 1:
         if random_sample:
             sampler = RandomSampler(dataset)
@@ -51,9 +47,10 @@ def build_sampler(dataset, num_gpus=1, random_sample=False):
             sampler = SequentialSampler(dataset)
     else:
         shuffle = random_sample
-        sampler = DistributedSampler(dataset,
-                                     num_replicas=world_size,
-                                     rank=rank,
+        # using dataset.length replace dataset
+        sampler = DistributedSampler(dataset.length,
+                                     num_replicas=num_gpus,
+                                     rank=rank_id,
                                      shuffle=shuffle)
 
     return sampler
@@ -81,7 +78,7 @@ def get_total_data(json_path, classes):
     return total_img_list, total_label_list
 
 
-def get_subdata(json_path, classes, indices):
+def get_subset_data(json_path, classes, indices):
     total_img_list, total_label_list = get_total_data(json_path, classes)
 
     sub_img_list = list()
@@ -120,12 +117,13 @@ class MPDataset(IterableDataset):
         self.root = root
         self.transform = transform
         self.target_transform = target_transform
+        self.shuffle = shuffle
 
         self.rank = rank_id
         self.num_replicas = num_gpus
 
         self.classes, self.length = get_base_info(root)
-        self.sampler = build_sampler(self, self.num_replicas, shuffle)
+        self.sampler = build_sampler(self, num_gpus=self.num_replicas, random_sample=self.shuffle, rank_id=self.rank)
         self.set_epoch(epoch)
 
         self._update_evaluator(top_k)
@@ -141,28 +139,36 @@ class MPDataset(IterableDataset):
             yield image, target
 
     def get_indices(self):
-        indices = list(self.sampler)
-        length = len(indices)
-
         worker_info = torch.utils.data.get_worker_info()
         if worker_info is not None:
             # in a worker process
             worker_id = worker_info.id
             # split workload
-            indices = indices[worker_id:length:worker_info.num_workers]
-        # single-process data loading, return the full iterator
+            indices = self.indices[worker_id:self.indices_length:worker_info.num_workers]
+        else:
+            # single-process data loading, return the full iterator
+            indices = self.indices
 
         return indices
 
     def __iter__(self):
         indices = self.get_indices()
-        img_list, label_list = get_subdata(self.root, self.classes, indices)
+        img_list, label_list = get_subset_data(self.root, self.classes, indices)
         assert len(img_list) == len(label_list)
+
+        if self.shuffle:
+            # shuffle subset data
+            g = torch.Generator()
+            g.manual_seed(101 + self.epoch)
+            indices = torch.randperm(len(img_list), generator=g).tolist()  # type: ignore[arg-type]
+
+            img_list = np.array(img_list)[indices].tolist()
+            label_list = np.array(label_list)[indices].tolist()
 
         return iter(self.parse_file(img_list, label_list))
 
     def __len__(self):
-        return self.length
+        return self.indices_length if self.num_replicas > 1 else self.length
 
     def _update_evaluator(self, top_k):
         self.evaluator = GeneralEvaluator(self.classes, top_k=top_k)
@@ -176,3 +182,5 @@ class MPDataset(IterableDataset):
         """
         self.epoch = epoch
         shuffle_dataset(self.sampler, self.epoch, self.shuffle)
+        self.indices = list(self.sampler)
+        self.indices_length = len(self.indices)
