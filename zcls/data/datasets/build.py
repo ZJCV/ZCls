@@ -7,6 +7,8 @@
 @description: 
 """
 
+import torch
+
 from .cifar import CIFAR
 from .fashionmnist import FashionMNIST
 from .imagenet import ImageNet
@@ -45,11 +47,11 @@ def build_dataset(cfg, transform=None, target_transform=None, is_train=True, **k
     elif dataset_name == 'MPDataset':
         shuffle = cfg.DATALOADER.RANDOM_SAMPLE
         num_gpus = cfg.NUM_GPUS
-        rank_id = kwargs['rank_id'] if 'rank_id' in kwargs.keys() else 0
-        epoch = kwargs['epoch'] if 'epoch' in kwargs.keys() else 0
+        rank_id = kwargs.get('rank_id', 0)
+        epoch = kwargs.get('epoch', 0)
 
         dataset = MPDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
-                            shuffle=shuffle, num_gpus=num_gpus, rank_id=rank_id, epoch=epoch)
+                            shuffle=shuffle, num_gpus=num_gpus, rank_id=rank_id, epoch=epoch, drop_last=is_train)
     else:
         raise ValueError(f"the dataset {dataset_name} does not exist")
 
