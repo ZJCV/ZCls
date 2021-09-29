@@ -10,12 +10,10 @@
 import os
 import json
 
-import numpy as np
-from PIL import Image
-
 import torch
 from torch.utils.data import IterableDataset
 from torch.utils.data import RandomSampler, SequentialSampler
+from torchvision.datasets.folder import default_loader
 
 from ..samplers.distributed_sampler import DistributedSampler
 from .evaluator.general_evaluator import GeneralEvaluator
@@ -26,23 +24,19 @@ def get_base_info(json_path):
     with open(json_path, 'r') as f:
         data_dict = json.load(f)
 
-    length = 0
-    classes = list(data_dict.keys())
-    for key in classes:
-        img_list = data_dict[key]
-
-        for img_path in img_list:
-            assert os.path.isfile(img_path), img_path
-        length += len(img_list)
-    data_dict.clear()
+    classes = data_dict['classes']
+    length = len(data_dict['targets'])
 
     return classes, length
 
 
-def build_sampler(dataset, num_gpus=1, random_sample=False, rank_id=0):
+def build_sampler(dataset, num_gpus=1, random_sample=False, rank_id=0, drop_last=False):
     if num_gpus <= 1:
         if random_sample:
-            sampler = RandomSampler(dataset)
+            # different work use same generator
+            generator = torch.Generator()
+            generator.manual_seed(int(torch.empty((), dtype=torch.int64).random_().item()))
+            sampler = RandomSampler(dataset, generator=generator)
         else:
             sampler = SequentialSampler(dataset)
     else:
@@ -51,7 +45,8 @@ def build_sampler(dataset, num_gpus=1, random_sample=False, rank_id=0):
         sampler = DistributedSampler(dataset.length,
                                      num_replicas=num_gpus,
                                      rank=rank_id,
-                                     shuffle=shuffle)
+                                     shuffle=shuffle,
+                                     drop_last=drop_last)
 
     return sampler
 
@@ -60,20 +55,11 @@ def get_total_data(json_path, classes):
     assert os.path.isfile(json_path)
     assert isinstance(classes, list)
 
-    total_img_list = list()
-    total_label_list = list()
-
     with open(json_path, 'r') as f:
         data_dict = json.load(f)
 
-    for key in classes:
-        img_list = data_dict[key]
-
-        label = classes.index(key)
-        for img_path in img_list:
-            assert os.path.isfile(img_path), img_path
-            total_img_list.append(img_path)
-            total_label_list.append(label)
+    total_img_list = data_dict['imgs']
+    total_label_list = data_dict['targets']
 
     return total_img_list, total_label_list
 
@@ -81,11 +67,8 @@ def get_total_data(json_path, classes):
 def get_subset_data(json_path, classes, indices):
     total_img_list, total_label_list = get_total_data(json_path, classes)
 
-    sub_img_list = list()
-    sub_label_list = list()
-    for idx in indices:
-        sub_img_list.append(total_img_list[idx])
-        sub_label_list.append(total_label_list[idx])
+    sub_img_list = [total_img_list[idx] for idx in indices]
+    sub_label_list = [total_label_list[idx] for idx in indices]
 
     return sub_img_list, sub_label_list
 
@@ -94,7 +77,7 @@ def shuffle_dataset(sampler, cur_epoch, is_shuffle=False):
     """"
     Shuffles the data.
     Args:
-        loader (loader): data loader to perform shuffle.
+        sampler (sampler): sampler to perform shuffle.
         cur_epoch (int): number of the current epoch.
         is_shuffle (bool): need to shuffle the data
     """
@@ -103,6 +86,7 @@ def shuffle_dataset(sampler, cur_epoch, is_shuffle=False):
     assert isinstance(
         sampler, (RandomSampler, DistributedSampler)
     ), "Sampler type '{}' not supported".format(type(sampler))
+
     # RandomSampler handles shuffling automatically
     if isinstance(sampler, DistributedSampler):
         # DistributedSampler shuffles data based on epoch
@@ -112,7 +96,7 @@ def shuffle_dataset(sampler, cur_epoch, is_shuffle=False):
 class MPDataset(IterableDataset):
 
     def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5), shuffle: bool = False,
-                 num_gpus: int = 1, rank_id: int = 0, epoch: int = 0):
+                 num_gpus: int = 1, rank_id: int = 0, epoch: int = 0, drop_last: bool = False):
         super(MPDataset).__init__()
         self.root = root
         self.transform = transform
@@ -123,14 +107,15 @@ class MPDataset(IterableDataset):
         self.num_replicas = num_gpus
 
         self.classes, self.length = get_base_info(root)
-        self.sampler = build_sampler(self, num_gpus=self.num_replicas, random_sample=self.shuffle, rank_id=self.rank)
+        self.sampler = build_sampler(self, num_gpus=self.num_replicas, random_sample=self.shuffle,
+                                     rank_id=self.rank, drop_last=drop_last)
         self.set_epoch(epoch)
 
         self._update_evaluator(top_k)
 
     def parse_file(self, img_list, label_list):
         for img_path, target in zip(img_list, label_list):
-            image = Image.open(img_path)
+            image = default_loader(img_path)
             if self.transform is not None:
                 image = self.transform(image)
             if self.target_transform is not None:
@@ -140,6 +125,7 @@ class MPDataset(IterableDataset):
 
     def get_indices(self):
         worker_info = torch.utils.data.get_worker_info()
+
         if worker_info is not None:
             # in a worker process
             worker_id = worker_info.id
@@ -156,15 +142,6 @@ class MPDataset(IterableDataset):
         img_list, label_list = get_subset_data(self.root, self.classes, indices)
         assert len(img_list) == len(label_list)
 
-        if self.shuffle:
-            # shuffle subset data
-            g = torch.Generator()
-            g.manual_seed(101 + self.epoch)
-            indices = torch.randperm(len(img_list), generator=g).tolist()  # type: ignore[arg-type]
-
-            img_list = np.array(img_list)[indices].tolist()
-            label_list = np.array(label_list)[indices].tolist()
-
         return iter(self.parse_file(img_list, label_list))
 
     def __len__(self):
@@ -180,7 +157,6 @@ class MPDataset(IterableDataset):
         Args:
             epoch (int): Epoch number.
         """
-        self.epoch = epoch
-        shuffle_dataset(self.sampler, self.epoch, self.shuffle)
+        shuffle_dataset(self.sampler, epoch, self.shuffle)
         self.indices = list(self.sampler)
         self.indices_length = len(self.indices)
