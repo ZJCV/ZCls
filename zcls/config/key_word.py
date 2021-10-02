@@ -9,3 +9,7 @@
 
 KEY_OUTPUT = 'output'
 KEY_LOSS = 'loss'
+
+KEY_IMGS = 'imgs'
+KEY_TARGETS = 'targets'
+KEY_CLASSES = 'classes'

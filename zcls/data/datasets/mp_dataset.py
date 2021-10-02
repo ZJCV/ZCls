@@ -15,6 +15,7 @@ from torch.utils.data import IterableDataset
 from torch.utils.data import RandomSampler, SequentialSampler
 from torchvision.datasets.folder import default_loader
 
+from zcls.config.key_word import KEY_IMGS, KEY_TARGETS, KEY_CLASSES
 from ..samplers.distributed_sampler import DistributedSampler
 from .evaluator.general_evaluator import GeneralEvaluator
 
@@ -24,8 +25,8 @@ def get_base_info(json_path):
     with open(json_path, 'r') as f:
         data_dict = json.load(f)
 
-    classes = data_dict['classes']
-    length = len(data_dict['targets'])
+    classes = data_dict[KEY_CLASSES]
+    length = len(data_dict[KEY_TARGETS])
 
     return classes, length
 
@@ -58,8 +59,8 @@ def get_total_data(json_path, classes):
     with open(json_path, 'r') as f:
         data_dict = json.load(f)
 
-    total_img_list = data_dict['imgs']
-    total_label_list = data_dict['targets']
+    total_img_list = data_dict[KEY_IMGS]
+    total_label_list = data_dict[KEY_TARGETS]
 
     return total_img_list, total_label_list
 
