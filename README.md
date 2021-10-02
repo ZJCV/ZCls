@@ -54,7 +54,7 @@ How to train, see [Get Started with ZCls](https://zcls.readthedocs.io/en/latest/
 
 Use builtin datasets, see [Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
 
-Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
+Use custom datasets, see [Use Custom Datasets](https://zcls.readthedocs.io/en/latest/)
 
 Use pretrained model, see [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
 

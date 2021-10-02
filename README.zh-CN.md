@@ -54,7 +54,7 @@
 
 关于如何使用内置数据集，查看[Use Builtin Datasets](https://zcls.readthedocs.io/en/latest/builtin-datasets/)
 
-关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/custom-datasets/)
+关于如何使用自定义数据集，查看[Use Custom Datasets](https://zcls.readthedocs.io/en/latest/)
 
 使用预训练模型，查看 [Use Pretrained Model](https://zcls.readthedocs.io/en/latest/pretrained-model/)
 
