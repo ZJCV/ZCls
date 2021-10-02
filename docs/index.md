@@ -11,7 +11,10 @@ Welcome to zcls, a classification model training/inferring framework.
 * [Model Zoo](./model-zoo.md)
 * Dataset
     * [Use Builtin Datasets](./builtin-datasets.md)
-    * [Use Custom Datasets](./custom-datasets.md)
+    * Use Custom Datasets
+        * [GeneralDataset](./general_dataset.md)
+        * [LMDBDataset](./lmdb_dataset.md)
+        * [MPDataset](./mp_dataset.md)
 * Trick
     * [Data](./trick-data.md)
     * [Train](./trick-train.md)
