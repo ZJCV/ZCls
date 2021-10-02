@@ -13,6 +13,8 @@ import json
 from PIL import Image
 
 from torch.utils.data import Dataset
+from torchvision.datasets.folder import default_loader
+
 from .evaluator.general_evaluator import GeneralEvaluator
 
 
@@ -45,7 +47,7 @@ class GeneralDatasetV2(Dataset):
         img_path = self.total_img_list[index]
         target = self.total_label_list[index]
 
-        image = Image.open(img_path)
+        image = default_loader(img_path)
         if self.transform is not None:
             image = self.transform(image)
         if self.target_transform is not None:
