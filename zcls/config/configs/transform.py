@@ -18,67 +18,66 @@ def add_config(_C):
     _C.TRANSFORM.TRAIN_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
     _C.TRANSFORM.TEST_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
 
-    # Range of degrees to select from.
-    # If degrees is a number instead of sequence like (min, max), the range of degrees
-    # will be (-degrees, +degrees).
-    _C.TRANSFORM.ROTATE_DEGREE = (30,)
-    # If true, expands the output to make it large enough to hold the entire rotated image.
-    # If false or omitted, make the output image the same size as the input image.
-    # Note that the expand flag assumes rotation around the center and no translation.
-    _C.TRANSFORM.ROTATE_EXPAND = False
+    # default: max_holes=8, max_height=8, max_width=8, min_holes=None, min_height=None, min_width=None, fill_value=0, p=0.5
+    _C.TRANSFORM.COARSE_DROPOUT = (8, 8, 8, None, None, None, 0, 0.5)
 
-    # If size is a sequence like (h, w), output size will be matched to this.
-    # If size is an int, smaller edge of the image will be matched to this number.
-    # i.e, if height > width, then image will be rescaled to (size * height / width, size).
-    _C.TRANSFORM.TRAIN_RESIZE = (224,)
-    _C.TRANSFORM.TEST_RESIZE = (224,)
+    # default: size, p=1.0
+    _C.TRANSFORM.TRAIN_CENTER_CROP = ((224, 224), 1.0)
+    _C.TRANSFORM.TEST_CENTER_CROP = ((224, 224), 1.0)
 
-    # Desired output size of the crop.
-    # If size is an int instead of sequence like (h, w), a square crop (size, size) is made.
-    # If provided a sequence of length 1, it will be interpreted as (size[0], size[0]).
-    _C.TRANSFORM.TRAIN_CROP = (224, 224)
-    _C.TRANSFORM.TEST_CROP = (224, 224)
+    # default: size, p=1.0
+    _C.TRANSFORM.RANDOM_CROP = ((224, 224), 1.0)
 
-    # brightness (float or tuple of float (min, max)): How much to jitter brightness.
-    #     brightness_factor is chosen uniformly from [max(0, 1 - brightness), 1 + brightness]
-    #     or the given [min, max]. Should be non negative numbers.
-    # contrast (float or tuple of float (min, max)): How much to jitter contrast.
-    #     contrast_factor is chosen uniformly from [max(0, 1 - contrast), 1 + contrast]
-    #     or the given [min, max]. Should be non negative numbers.
-    # saturation (float or tuple of float (min, max)): How much to jitter saturation.
-    #     saturation_factor is chosen uniformly from [max(0, 1 - saturation), 1 + saturation]
-    #     or the given [min, max]. Should be non negative numbers.
-    # hue (float or tuple of float (min, max)): How much to jitter hue.
-    #     hue_factor is chosen uniformly from [-hue, hue] or the given [min, max].
-    #     Should have 0<= hue <= 0.5 or -0.5 <= min <= max <= 0.5.
-    # (brightness, contrast, saturation, hue)
-    _C.TRANSFORM.ColorJitter = (0.1, 0.1, 0.1, 0.1)
+    # default: p=0.5
+    _C.TRANSFORM.HORIZONTAL_FLIP = 0.5
 
-    # AutoAugment policies learned on different datasets.
-    _C.TRANSFORM.AUGMENT_POLICY = "imagenet"
+    # default: p=0.5
+    _C.TRANSFORM.VERTICAL_FLIP = 0.5
 
-    # for AutoAugment, only torch.uint8 image tensors are supported
-    # for Normalize, may be happens
-    # ValueError: std evaluated to zero after conversion to torch.uint8, leading to division by zero.
-    _C.TRANSFORM.IMAGE_DTYPE = 'float32'
+    # default: size, interpolation=cv2.INTER_LINEAR, p=1.0
+    # for interpolation, should be
+    #     INTER_AREA = 3
+    #     INTER_CUBIC = 2
+    #     INTER_LANCZOS4 = 4
+    #     INTER_LINEAR = 1
+    #     INTER_NEAREST = 0
+    _C.TRANSFORM.TRAIN_RESIZE = ((224, 224), 1, 1.0)
+    _C.TRANSFORM.TEST_RESIZE = ((224, 224), 1, 1.0)
 
-    # Sequence of means for each channel.
-    _C.TRANSFORM.MEAN = (0.45, 0.45, 0.45)
+    # default: limit, interpolation=cv2.INTER_LINEAR, border_mode=cv2.BORDER_REFLECT_101, value=None, p=0.5
+    # for interpolation, should be
+    #     INTER_AREA = 3
+    #     INTER_CUBIC = 2
+    #     INTER_LANCZOS4 = 4
+    #     INTER_LINEAR = 1
+    #     INTER_NEAREST = 0
+    # for padding_mode, should be
+    #     BORDER_CONSTANT = 0
+    #     BORDER_DEFAULT = 4
+    #     BORDER_ISOLATED = 16
+    #     BORDER_REFLECT = 2
+    #     BORDER_REFLECT101 = 4
+    _C.TRANSFORM.ROTATE = ((224, 224), 1, 4, None, 0.5)
 
-    # Sequence of standard deviations for each channel.
-    _C.TRANSFORM.STD = (0.225, 0.225, 0.225)
+    # default: padding_position=A.PadIfNeeded.PositionType.CENTER, padding_mode=cv2.BORDER_CONSTANT, fill=0, p=1.0
+    # for padding_position, should be
+    #     CENTER = "center"
+    #     TOP_LEFT = "top_left"
+    #     TOP_RIGHT = "top_right"
+    #     BOTTOM_LEFT = "bottom_left"
+    #     BOTTOM_RIGHT = "bottom_right"
+    # for padding_mode, should be
+    #     BORDER_CONSTANT = 0
+    #     BORDER_DEFAULT = 4
+    #     BORDER_ISOLATED = 16
+    #     BORDER_REFLECT = 2
+    #     BORDER_REFLECT101 = 4
+    _C.TRANSFORM.SQUARE_PAD = ("center", 0, 0, 1.0)
 
-    # probability that the random erasing operation will be performed.
-    _C.TRANSFORM.ERASE_P = 0.5
-    # range of proportion of erased area against input image.
-    _C.TRANSFORM.ERASE_SCALE = (0.02, 0.33)
-    # range of aspect ratio of erased area.
-    _C.TRANSFORM.ERASE_RATIO = (0.3, 3.3)
+    # default: mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, p=1.0
+    # Normalization is applied by the formula: `img = (img - mean * max_pixel_value) / (std * max_pixel_value)`
+    _C.TRANSFORM.NORMALIZE = ((0.445, 0.445, 0.445), (0.225, 0.225, 0.225), 255.0, 1.0)
 
-    # sharpness_factor (float):  How much to adjust the sharpness. Can be
-    # any non negative number. 0 gives a blurred image, 1 gives the
-    # original image while 2 increases the sharpness by a factor of 2.
-    _C.TRANSFORM.SHARPNESS_FACTOR = 1.0
-
-    # bits (int): number of bits to keep for each channel (0-8)
-    _C.TRANSFORM.KEEP_BITS = 8
+    # default: p=1.0
+    # Convert image to `torch.Tensor`. The numpy `HWC` image is converted to pytorch `CHW` tensor.
+    _C.TRANSFORM.TO_TENSOR = 1.0

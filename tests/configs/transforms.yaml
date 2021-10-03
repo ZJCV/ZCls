@@ -1,0 +1,15 @@
+TRANSFORM:
+  TRAIN_METHODS: ('SquarePad', 'Resize', 'RandomCrop', 'CenterCrop', 'HorizontalFlip', 'VerticalFlip', 'Rotate', 'CoarseDropout')
+  TEST_METHODS: ('SquarePad', 'Resize', 'RandomCrop', 'CenterCrop', 'HorizontalFlip', 'VerticalFlip', 'Rotate', 'CoarseDropout')
+  SQUARE_PAD: ("center", 0, 0, 1.0)
+  TRAIN_RESIZE: ((299, 299), 1, 1.0)
+  TEST_RESIZE: ((299, 299), 1, 1.0)
+  RANDOM_CROP: ((256, 256), 1.0)
+  TRAIN_CENTER_CROP: ((224, 224), 1.0)
+  TEST_CENTER_CROP: ((224, 224), 1.0)
+  HORIZONTAL_FLIP: 0.5
+  VERTICAL_FLIP: 0.5
+  ROTATE: ((224, 224), 1, 4, None, 0.5)
+  COARSE_DROPOUT: (8, 8, 8, None, None, None, 0, 0.5)
+  TO_TENSOR: 1.0
+  NORMALIZE: ((0.445, 0.445, 0.445), (0.225, 0.225, 0.225), 255.0, 1.0)

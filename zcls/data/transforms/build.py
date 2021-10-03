@@ -7,120 +7,64 @@
 @description: 
 """
 
-import torch
-
 import torchvision.transforms.transforms as transforms
-import torchvision.transforms.autoaugment as autoaugment
 
-from .square_pad import SquarePad
-from .resize import Resize
-
-"""
-current supported transforms methods:
-
-1. 'ToTensor'
-2. 'ConvertImageDtype',
-3. 'Normalize',
-# 4. 'Resize'
-5. 'CenterCrop'
-6. 'RandomCrop'
-7. 'RandomHorizontalFlip'
-8. 'RandomVerticalFlip'
-9. 'ColorJitter'
-10. 'Grayscale'
-11. 'RandomRotation'
-12. 'RandomErasing'
-13. 'RandomAutocontrast'
-14. 'RandomAdjustSharpness'
-15. 'RandomPosterize'
-16. 'ToPILImage'
-
-custom methods:
-
-1. 'SquarePad'
-2. 'Resize'
-"""
+from . import realization
 
 
 def parse_transform(cfg, is_train=True):
     methods = cfg.TRANSFORM.TRAIN_METHODS if is_train else cfg.TRANSFORM.TEST_METHODS
     assert isinstance(methods, tuple)
 
-    keys = transforms.__all__
-    transforms_dict = transforms.__dict__
+    keys = realization.__all__
+    transforms_dict = realization.__dict__
     aug_list = list()
     for method in methods:
-        if method == 'SquarePad':
-            transform = SquarePad
-        elif method == 'Resize':
-            transform = Resize
-        elif method in keys:
+        if method in keys:
             transform = transforms_dict[method]
-        elif method == 'AUTO_AUGMENT':
-            transform = autoaugment.AutoAugment
         else:
             raise ValueError(f'f{method} does not exists')
 
-        if method == 'SquarePad':
-            aug_list.append(transform())
-        elif method == 'RandomAutocontrast':
-            aug_list.append(transform())
-        elif method == 'RandomAdjustSharpness':
-            sharpness_factor = cfg.TRANSFORM.SHARPNESS_FACTOR
-            aug_list.append(transform(sharpness_factor))
-        elif method == 'RandomPosterize':
-            bits = cfg.TRANSFORM.KEEP_BITS
-            aug_list.append(transform(bits))
-        elif method == 'RandomRotation':
-            degree = cfg.TRANSFORM.ROTATE_DEGREE
-            degree = degree[0] if len(degree) == 1 else degree
-            expand = cfg.TRANSFORM.ROTATE_EXPAND
-            aug_list.append(transform(degree, expand=expand))
-        elif method == 'Resize':
-            size = cfg.TRANSFORM.TRAIN_RESIZE if is_train else cfg.TRANSFORM.TEST_RESIZE
-            aug_list.append(transform(size))
+        if method == 'CoarseDropout':
+            max_holes, max_height, max_width, min_holes, min_height, min_width, fill_value, p \
+                = cfg.TRANSFORM.COARSE_DROPOUT
+            aug_list.append(transform(max_holes=max_holes, max_height=max_height, max_width=max_width,
+                                      min_holes=min_holes, min_height=min_height, min_width=min_width,
+                                      fill_value=fill_value, p=p))
         elif method == 'CenterCrop':
-            size = cfg.TRANSFORM.TRAIN_CROP if is_train else cfg.TRANSFORM.TEST_CROP
-            aug_list.append(transform(size))
+            if is_train:
+                size, p = cfg.TRANSFORM.TRAIN_CENTER_CROP
+            else:
+                size, p = cfg.TRANSFORM.TEST_CENTER_CROP
+            aug_list.append(transform(size, p=p))
         elif method == 'RandomCrop':
-            size = cfg.TRANSFORM.TRAIN_CROP if is_train else cfg.TRANSFORM.TEST_CROP
-            aug_list.append(transform(size))
-        elif method == 'RandomHorizontalFlip':
-            aug_list.append(transform())
-        elif method == 'RandomVerticalFlip':
-            aug_list.append(transform())
-        elif method == 'ColorJitter':
-            brightness, contrast, saturation, hue = cfg.TRANSFORM.ColorJitter
-            aug_list.append(transform(brightness=brightness, contrast=contrast, saturation=saturation, hue=hue))
-        elif method == 'AUTO_AUGMENT':
-            if cfg.TRANSFORM.AUGMENT_POLICY == 'imagenet':
-                policy = autoaugment.AutoAugmentPolicy.IMAGENET
-            elif cfg.TRANSFORM.AUGMENT_POLICY == 'cifar10':
-                policy = autoaugment.AutoAugmentPolicy.CIFAR10
+            size, p = cfg.TRANSFORM.RANDOM_CROP
+            aug_list.append(transform(size, p=p))
+        elif method == 'HorizontalFlip':
+            p = cfg.TRANSFORM.HORIZONTAL_FLIP
+            aug_list.append(transform(p=p))
+        elif method == 'VerticalFlip':
+            p = cfg.TRANSFORM.VERTICAL_FLIP
+            aug_list.append(transform(p=p))
+        elif method == 'Resize':
+            if is_train:
+                size, interpolation, p = cfg.TRANSFORM.TRAIN_RESIZE
             else:
-                raise ValueError(f'{cfg.TRANSFORM.AUGMENT_POLICY} does not exists')
-            aug_list.append(transform(policy=policy))
-        elif method == 'Grayscale':
-            aug_list.append(transform())
-        elif method == 'ToPILImage':
-            aug_list.append(transform())
-        elif method == 'ToTensor':
-            aug_list.append(transform())
-        elif method == 'ConvertImageDtype':
-            if cfg.TRANSFORM.IMAGE_DTYPE == 'uint8':
-                dtype = torch.uint8
-            elif cfg.TRANSFORM.IMAGE_DTYPE == 'float32':
-                dtype = torch.float32
-            else:
-                raise ValueError(f'{cfg.TRANSFORM.IMAGE_DTYPE} does not exists')
-            aug_list.append(transform(dtype))
-        elif method == 'RandomErasing':
-            p = cfg.TRANSFORM.ERASE_P
-            scale = cfg.TRANSFORM.ERASE_SCALE
-            ratio = cfg.TRANSFORM.ERASE_RATIO
-            aug_list.append(transform(p=p, scale=scale, ratio=ratio))
+                size, interpolation, p = cfg.TRANSFORM.TEST_RESIZE
+            aug_list.append(transform(size, interpolation=interpolation, p=p))
+        elif method == 'Rotate':
+            limit, interpolation, border_mode, value, p = cfg.TRANSFORM.ROTATE
+            aug_list.append(transform(limit, interpolation=interpolation,
+                                      border_mode=border_mode, value=value, p=p))
+        elif method == 'SquarePad':
+            padding_position, padding_mode, fill, p = cfg.TRANSFORM.SQUARE_PAD
+            aug_list.append(transform(padding_position=padding_position, padding_mode=padding_mode, fill=fill, p=p))
         elif method == 'Normalize':
-            aug_list.append(transform(cfg.TRANSFORM.MEAN, cfg.TRANSFORM.STD))
+            mean, std, max_pixel_value, p = cfg.TRANSFORM.NORMALIZE
+            aug_list.append(transform(mean=mean, std=std, max_pixel_value=max_pixel_value, p=p))
+        elif method == 'ToTensor':
+            p = cfg.TRANSFORM.TO_TENSOR
+            aug_list.append(transform(p=p))
         else:
             raise ValueError(f'{method} does not exists')
 
