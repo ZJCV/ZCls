@@ -1,0 +1,30 @@
+MODEL:
+  CONV:
+    TYPE: 'Conv2d'
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU'
+    SIGMOID_TYPE: 'HSigmoid'
+  COMPRESSION:
+    WIDTH_MULTIPLIER: 1.0
+    ROUND_NEAREST: 4
+  ATTENTION:
+    ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
+  BACKBONE:
+    NAME: 'GhostNet'
+    IN_PLANES: 3
+    BASE_PLANES: 16
+  HEAD:
+    NAME: 'MobileNetV3'
+    FEATURE_DIMS: 960
+    INNER_DIMS: 1280
+    NUM_CLASSES: 1000
+    DROPOUT_RATE: 0.2
+  RECOGNIZER:
+    NAME: "GhostNet"
+#    PRELOADED: "outputs/converters/ghostnet_x1_0_imagenet.pth"
+    PRETRAINED_NUM_CLASSES: 1000

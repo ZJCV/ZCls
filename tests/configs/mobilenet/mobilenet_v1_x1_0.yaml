@@ -1,0 +1,30 @@
+MODEL:
+  CONV:
+    TYPE: 'Conv2d'
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU'
+  COMPRESSION:
+    WIDTH_MULTIPLIER: 1.0
+    ROUND_NEAREST: 8
+  BACKBONE:
+    NAME: 'MobileNetV1'
+    IN_PLANES: 3
+    BASE_PLANES: 32
+    LAYER_PLANES: (64, 128, 128, 256, 256, 512, 512, 512, 512, 512, 512, 1024, 1024)
+    STRIDES: (1, 2, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 2)
+  HEAD:
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 1024
+    DROPOUT_RATE: 0.2
+    NUM_CLASSES: 100
+  RECOGNIZER:
+    NAME: 'MobileNetV1'
+    PRELOADED: ""
+    PRETRAINED: ""
+    PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True

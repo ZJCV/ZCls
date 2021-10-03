@@ -1,0 +1,26 @@
+MODEL:
+  CONV:
+    TYPE: 'Conv2d'
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU6'
+  COMPRESSION:
+    WIDTH_MULTIPLIER: 1.0
+    ROUND_NEAREST: 8
+  BACKBONE:
+    NAME: 'MobileNetV2'
+    IN_PLANES: 3
+    BASE_PLANES: 32
+  HEAD:
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 1280
+    DROPOUT_RATE: 0.2
+    NUM_CLASSES: 1000
+  RECOGNIZER:
+    NAME: 'MobileNetV2'
+#    PRELOADED: "outputs/converters/mobilenet_v2_imagenet.pth"
+    PRETRAINED_NUM_CLASSES: 1000

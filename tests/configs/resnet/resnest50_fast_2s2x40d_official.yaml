@@ -1,0 +1,11 @@
+MODEL:
+  BACKBONE:
+    ARCH: 'resnest50_fast_2s2x40d'
+  HEAD:
+    DROPOUT_RATE: 0.2
+    NUM_CLASSES: 100
+  RECOGNIZER:
+    NAME: 'OfficialResNeSt'
+    PRELOADED: ""
+    PRETRAINED: ""
+    PRETRAINED_NUM_CLASSES: 1000

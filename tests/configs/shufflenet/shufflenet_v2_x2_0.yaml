@@ -1,0 +1,28 @@
+MODEL:
+  CONV:
+    TYPE: 'Conv2d'
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU'
+  COMPRESSION:
+    ROUND_NEAREST: 8
+  BACKBONE:
+    NAME: 'ShuffleNetV2'
+    ARCH: 'shufflenet_v2_x2_0'
+    IN_PLANES: 3
+    BASE_PLANES: 24
+    DOWNSAMPLES: (1, 1, 1)
+  HEAD:
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 1024
+    DROPOUT_RATE: 0.2
+    NUM_CLASSES: 100
+  RECOGNIZER:
+    NAME: 'ShuffleNetV2'
+    PRELOADED: ""
+    PRETRAINED: ""
+    PRETRAINED_NUM_CLASSES: 1000

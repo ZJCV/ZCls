@@ -1,0 +1,29 @@
+MODEL:
+  CONV:
+    TYPE: 'Conv2d'
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU'
+  COMPRESSION:
+    WIDTH_MULTIPLIER: 1.3
+    ROUND_NEAREST: 8
+  ATTENTION:
+    WITH_ATTENTION: False
+  BACKBONE:
+    NAME: 'MNASNet'
+    ARCH: 'mnasnet_a1'
+    IN_PLANES: 3
+  HEAD:
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 1280
+    DROPOUT_RATE: 0.2
+    NUM_CLASSES: 100
+  RECOGNIZER:
+    NAME: 'MNASNet'
+    PRELOADED: ""
+    PRETRAINED: ""
+    PRETRAINED_NUM_CLASSES: 1000
