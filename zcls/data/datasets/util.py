@@ -14,5 +14,5 @@ from typing import Any
 def default_loader(path: str, rgb=True) -> Any:
     image = cv2.imread(path)
     if rgb:
-        cv2.cvtColor(image, image, cv2.COLOR_BGR2RGB)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return image
