@@ -67,7 +67,7 @@ def add_config(_C):
     #     BORDER_ISOLATED = 16
     #     BORDER_REFLECT = 2
     #     BORDER_REFLECT101 = 4
-    _C.TRANSFORM.ROTATE = ((224, 224), 1, 4, None, 0.5)
+    _C.TRANSFORM.ROTATE = ((-30, 30), 1, 4, None, 0.5)
 
     # default: padding_position=A.PadIfNeeded.PositionType.CENTER, padding_mode=cv2.BORDER_CONSTANT, fill=0, p=1.0
     # for padding_position, should be

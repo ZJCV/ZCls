@@ -11,7 +11,7 @@ TRANSFORM:
   AUTOAUGMENT: ("imagenet", 0.5)
   HORIZONTAL_FLIP: 0.5
   VERTICAL_FLIP: 0.5
-  ROTATE: ((224, 224), 1, 4, None, 0.5)
+  ROTATE: ((-30, 30), 1, 4, None, 0.5)
   COARSE_DROPOUT: (8, 8, 8, None, None, None, 0, 0.5)
   TO_TENSOR: 1.0
   NORMALIZE: ((0.445, 0.445, 0.445), (0.225, 0.225, 0.225), 255.0, 1.0)
