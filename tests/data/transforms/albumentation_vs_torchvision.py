@@ -17,6 +17,9 @@ from albumentations.pytorch.transforms import ToTensorV2
 import torchvision.transforms as transforms
 from tqdm import tqdm
 
+from zcls.config import cfg
+from zcls.data.transforms.build import build_transform
+
 
 def get_torchvision_transform():
     return transforms.Compose([
@@ -45,7 +48,7 @@ def get_albumentation_transform():
     ])
 
 
-def compute_time(transform, is_pil=False):
+def compute_time(transform, is_pil=False, is_a=False):
     t = 0.
     for i in tqdm(range(1000)):
         data = np.random.randn(224, 224, 3).astype(np.uint8)
@@ -56,7 +59,10 @@ def compute_time(transform, is_pil=False):
         if is_pil:
             transform(data)
         else:
-            transform(image=data)
+            if is_a:
+                transform(image=data)
+            else:
+                transform(data)
         t += time.time() - t1
 
     print('average time is:', (t / 1000))
@@ -64,7 +70,16 @@ def compute_time(transform, is_pil=False):
 
 if __name__ == '__main__':
     t = get_torchvision_transform()
+    print('torchvision:', t)
     compute_time(t, is_pil=True)
 
     t = get_albumentation_transform()
-    compute_time(t, is_pil=False)
+    print('albumentation:', t)
+    compute_time(t, is_pil=False, is_a=True)
+
+    cfg_file = 'tests/configs/transforms_total.yaml'
+    cfg.merge_from_file(cfg_file)
+
+    t_train, _ = build_transform(cfg, is_train=True)
+    print('zcls:', t_train)
+    compute_time(t_train, is_pil=False, is_a=False)

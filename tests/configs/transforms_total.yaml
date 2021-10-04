@@ -1,12 +1,13 @@
 TRANSFORM:
-  TRAIN_METHODS: ('SquarePad', 'Resize', 'RandomCrop', 'CenterCrop', 'AutoAugment', 'HorizontalFlip', 'VerticalFlip', 'Rotate', 'CoarseDropout')
-  TEST_METHODS: ('SquarePad', 'Resize', 'RandomCrop', 'CenterCrop', 'AutoAugment', 'HorizontalFlip', 'VerticalFlip', 'Rotate', 'CoarseDropout')
+  TRAIN_METHODS: ('SquarePad', 'Resize', 'RandomCrop', 'CenterCrop', 'ColorJitter', 'AutoAugment', 'HorizontalFlip', 'VerticalFlip', 'Rotate', 'CoarseDropout')
+  TEST_METHODS: ('SquarePad', 'Resize', 'RandomCrop', 'CenterCrop', 'ColorJitter', 'AutoAugment', 'HorizontalFlip', 'VerticalFlip', 'Rotate', 'CoarseDropout')
   SQUARE_PAD: ("center", 0, 0, 1.0)
   TRAIN_RESIZE: ((299, 299), 1, 1.0)
   TEST_RESIZE: ((299, 299), 1, 1.0)
   RANDOM_CROP: ((256, 256), 1.0)
   TRAIN_CENTER_CROP: ((224, 224), 1.0)
   TEST_CENTER_CROP: ((224, 224), 1.0)
+  COLOR_JITTER: (0.2, 0.2, 0.2, 0.2, 1.0)
   AUTOAUGMENT: ("imagenet", 0.5)
   HORIZONTAL_FLIP: 0.5
   VERTICAL_FLIP: 0.5

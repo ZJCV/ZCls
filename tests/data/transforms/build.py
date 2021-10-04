@@ -16,7 +16,7 @@ def transform():
     image = cv2.imread('tests/assets/lena_224.jpg')
     print('image.shape:', image.shape)
 
-    cfg_file = 'tests/configs/transforms.yaml'
+    cfg_file = 'tests/configs/transforms_total.yaml'
     cfg.merge_from_file(cfg_file)
 
     t_train, _ = build_transform(cfg, is_train=True)

@@ -1,0 +1,10 @@
+TRANSFORM:
+  TRAIN_METHODS: ('Rotate', 'Resize', 'RandomCrop', 'HorizontalFlip', 'ColorJitter', 'CoarseDropout', 'Normalize', 'ToTensor')
+  ROTATE: ((224, 224), 1, 4, None, 1.0)
+  TRAIN_RESIZE: ((299, 299), 1, 1.0)
+  RANDOM_CROP: ((256, 256), 1.0)
+  HORIZONTAL_FLIP: 1.0
+  COLOR_JITTER: (0.2, 0., 0., 0., 1.0)
+  COARSE_DROPOUT: (8, 8, 8, None, None, None, 0, 1.0)
+  NORMALIZE: ((0.445, 0.445, 0.445), (0.225, 0.225, 0.225), 255.0, 1.0)
+  TO_TENSOR: 1.0

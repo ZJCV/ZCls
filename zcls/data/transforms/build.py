@@ -49,6 +49,9 @@ def parse_transform(cfg, is_train=True):
             else:
                 size, p = cfg.TRANSFORM.TEST_CENTER_CROP
             aug_list.append(transform(size, p=p))
+        elif method == 'ColorJitter':
+            brightness, contrast, saturation, hue, p = cfg.TRANSFORM.COLOR_JITTER
+            aug_list.append(transform(brightness=brightness, contrast=contrast, saturation=saturation, hue=hue, p=p))
         elif method == 'RandomCrop':
             size, p = cfg.TRANSFORM.RANDOM_CROP
             aug_list.append(transform(size, p=p))

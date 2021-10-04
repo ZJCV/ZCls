@@ -28,6 +28,9 @@ def add_config(_C):
     # default: max_holes=8, max_height=8, max_width=8, min_holes=None, min_height=None, min_width=None, fill_value=0, p=0.5
     _C.TRANSFORM.COARSE_DROPOUT = (8, 8, 8, None, None, None, 0, 0.5)
 
+    # default: brightness=0.2, contrast=0.2, saturation=0.2, hue=0.2, p=0.5
+    _C.TRANSFORM.COLOR_JITTER = (0.2, 0.2, 0.2, 0.2, 0.5)
+
     # default: size, p=1.0
     _C.TRANSFORM.TRAIN_CENTER_CROP = ((224, 224), 1.0)
     _C.TRANSFORM.TEST_CENTER_CROP = ((224, 224), 1.0)
