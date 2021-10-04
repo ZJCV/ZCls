@@ -13,7 +13,7 @@ site_dir: 'site'
 # 额外信息
 extra:
     # 版本号
-    version: 0.13.0
+    version: 0.13.1
 # 主题
 theme: 
     # name: 'readthedocs'

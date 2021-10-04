@@ -1,21 +1,28 @@
 # CHANGE
 
+## v0.13.1
+
+* New features
+* Bug fixes
+  1. fix(datasets): use np.ndarray instead of PIL.Image to preprocess image
+* Breaking changes.
+
 ## v0.13.0
 
 * New features
-  1. feat(transforms): use albumentation replace torchvision as backbend
+    1. feat(transforms): use albumentation replace torchvision as backbend
 * Bug fixes
 * Breaking changes.
-  1. use albumentation replace torchvision as backbend
+    1. use albumentation replace torchvision as backbend
 
 ## v0.12.0
 
 * New features
-  1. feat(dataset): add GeneralDatasetV2
-  2. feat(dataset): add MPDataset for large-scale data loading
-  3. perf(dataloader): in train phase, keep drop_last=True
-  4. feat(sampler): custom DistributedSampler used for IterableDataset
-  5. Update issue templates
+    1. feat(dataset): add GeneralDatasetV2
+    2. feat(dataset): add MPDataset for large-scale data loading
+    3. perf(dataloader): in train phase, keep drop_last=True
+    4. feat(sampler): custom DistributedSampler used for IterableDataset
+    5. Update issue templates
 * Bug fixes
     1. fix(inference.py): add KEY_OUTPUT import
 * Breaking changes.
@@ -33,7 +40,7 @@
 * New features
     1. feat(transform): custom resize using opencv replacing pil
 * Bug fixes
-    1. fix(checkpoint): when resume, make cur_epoch + 1 
+    1. fix(checkpoint): when resume, make cur_epoch + 1
 * Breaking changes.
 
 ## v0.10.3
