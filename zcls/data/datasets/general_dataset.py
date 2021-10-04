@@ -7,6 +7,9 @@
 @description: 
 """
 
+import numpy as np
+from PIL import Image
+
 from torch.utils.data import Dataset
 import torchvision.datasets as datasets
 
@@ -16,13 +19,24 @@ from .evaluator.general_evaluator import GeneralEvaluator
 class GeneralDataset(Dataset):
 
     def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5)):
-        self.data_set = datasets.ImageFolder(root, transform=transform, target_transform=target_transform)
+        self.data_set = datasets.ImageFolder(root)
         self.classes = self.data_set.classes
         self.root = root
+        self.transform = transform
+        self.target_transform = target_transform
         self._update_evaluator(top_k)
 
     def __getitem__(self, index: int):
-        return self.data_set.__getitem__(index)
+        image, target = self.data_set.__getitem__(index)
+        if isinstance(image, Image.Image):
+            image = np.array(image)
+
+        if self.transform is not None:
+            image = self.transform(image)
+        if self.target_transform is not None:
+            target = self.target_transform(target)
+
+        return image, target
 
     def __len__(self) -> int:
         return self.data_set.__len__()

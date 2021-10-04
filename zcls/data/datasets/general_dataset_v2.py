@@ -10,12 +10,10 @@
 import os
 import json
 
-from PIL import Image
-
 from torch.utils.data import Dataset
-from torchvision.datasets.folder import default_loader
 
 from .evaluator.general_evaluator import GeneralEvaluator
+from .util import default_loader
 
 
 class GeneralDatasetV2(Dataset):

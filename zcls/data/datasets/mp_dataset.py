@@ -13,11 +13,11 @@ import json
 import torch
 from torch.utils.data import IterableDataset
 from torch.utils.data import RandomSampler, SequentialSampler
-from torchvision.datasets.folder import default_loader
 
 from zcls.config.key_word import KEY_IMGS, KEY_TARGETS, KEY_CLASSES
 from ..samplers.distributed_sampler import DistributedSampler
 from .evaluator.general_evaluator import GeneralEvaluator
+from .util import default_loader
 
 
 def get_base_info(json_path):

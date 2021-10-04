@@ -11,6 +11,8 @@ import six
 import os
 import lmdb
 import pickle
+
+import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
 
@@ -63,6 +65,8 @@ class LMDBDataset(Dataset):
 
         imgbuf, target = load_data(byteflow)
         image = self.get_image(imgbuf)
+        if isinstance(image, Image.Image):
+            image = np.array(image)
 
         if self.transform is not None:
             image = self.transform(image)
