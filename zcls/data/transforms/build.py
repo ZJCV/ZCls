@@ -8,6 +8,7 @@
 """
 
 import torchvision.transforms.transforms as transforms
+from torchvision.transforms.autoaugment import AutoAugmentPolicy
 
 from . import realization
 
@@ -25,7 +26,18 @@ def parse_transform(cfg, is_train=True):
         else:
             raise ValueError(f'f{method} does not exists')
 
-        if method == 'CoarseDropout':
+        if method == 'AutoAugment':
+            policy, p = cfg.TRANSFORM.AUTOAUGMENT
+            if policy == 'imagenet':
+                policy = AutoAugmentPolicy.IMAGENET
+            elif policy == 'cifar10':
+                policy = AutoAugmentPolicy.CIFAR10
+            elif policy == 'svhn':
+                policy = AutoAugmentPolicy.SVHN
+            else:
+                raise ValueError(f'{policy} does not supports')
+            aug_list.append(transform(policy=policy, p=p))
+        elif method == 'CoarseDropout':
             max_holes, max_height, max_width, min_holes, min_height, min_width, fill_value, p \
                 = cfg.TRANSFORM.COARSE_DROPOUT
             aug_list.append(transform(max_holes=max_holes, max_height=max_height, max_width=max_width,

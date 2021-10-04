@@ -7,8 +7,10 @@
 @description: 
 """
 
-__all__ = ['CoarseDropout', 'ColorJitter', 'HorizontalFlip', 'VerticalFlip', 'RandomCrop', 'CenterCrop',
+__all__ = ['AutoAugment', 'CoarseDropout', 'ColorJitter', 'HorizontalFlip', 'VerticalFlip', 'RandomCrop', 'CenterCrop',
            'Resize', 'Rotate', 'SquarePad', 'Normalize', 'ToTensor']
+
+from .autoaugment import AutoAugment
 
 from .coarse_dropout import CoarseDropout
 from .color_jitter import ColorJitter

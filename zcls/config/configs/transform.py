@@ -18,6 +18,13 @@ def add_config(_C):
     _C.TRANSFORM.TRAIN_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
     _C.TRANSFORM.TEST_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
 
+    # default: policy: AutoAugmentPolicy = AutoAugmentPolicy.IMAGENET, p=0.5
+    # for policy, should be
+    #     IMAGENET = "imagenet"
+    #     CIFAR10 = "cifar10"
+    #     SVHN = "svhn"
+    _C.TRANSFORM.AUTOAUGMENT = ("imagenet", 0.5)
+
     # default: max_holes=8, max_height=8, max_width=8, min_holes=None, min_height=None, min_width=None, fill_value=0, p=0.5
     _C.TRANSFORM.COARSE_DROPOUT = (8, 8, 8, None, None, None, 0, 0.5)
 
