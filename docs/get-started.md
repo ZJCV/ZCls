@@ -7,7 +7,9 @@
         TRAIN_ROOT: './data/cifar'
         TEST_ROOT: './data/cifar'
 
-      *Note: current support `CIFAR10/CIFAR100/FashionMNIST/ImageNet`*
+      *Note 1: current support `CIFAR10/CIFAR100/FashionMNIST/ImageNet`*
+
+      *Note 2: use `BGR` image format*
 
 2. Add environment variable
 
