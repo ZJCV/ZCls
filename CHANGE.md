@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.13.2
+
+* New features
+* Bug fixes
+  1. fix(cv2.cvtColor): Argument 'code' is required to be an integer 
+  2. fix(datasets): when convert PIL.Image to np.ndarray, synchronization settings RGB2BGR
+* Breaking changes.
+
 ## v0.13.1
 
 * New features
