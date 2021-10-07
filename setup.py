@@ -12,10 +12,11 @@ DESCRIPTION = "Object Classification Training/Inferring Framework "
 URL = "https://github.com/ZJCV/ZCls"
 PYTHON_REQUIRES = ">=3.8"
 INSTALL_REQUIRES = [
-    "Pillow >= 8.3.1",
+    "albumentations >= 1.0.3",
+    "Pillow_SIMD >= 7.0.0.post3",
     "lmdb >= 1.2.1",
     "numpy >= 1.21.0",
-    "opencv_contrib_python >= 4.5.3.56",
+    "opencv_python_headless >= 4.5.3.56",
     "psutil >= 5.8.0",
     "resnest == 0.0.6b20210114",
     "six >= 1.16.0",
