@@ -45,7 +45,7 @@ class GeneralDatasetV2(Dataset):
         img_path = self.total_img_list[index]
         target = self.total_label_list[index]
 
-        image = default_loader(img_path)
+        image = default_loader(img_path, rgb=False)
         if self.transform is not None:
             image = self.transform(image)
         if self.target_transform is not None:

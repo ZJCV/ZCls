@@ -116,7 +116,7 @@ class MPDataset(IterableDataset):
 
     def parse_file(self, img_list, label_list):
         for img_path, target in zip(img_list, label_list):
-            image = default_loader(img_path)
+            image = default_loader(img_path, rgb=False)
             if self.transform is not None:
                 image = self.transform(image)
             if self.target_transform is not None:

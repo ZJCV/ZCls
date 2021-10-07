@@ -12,7 +12,6 @@ import os
 import lmdb
 import pickle
 
-import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
 
@@ -28,6 +27,7 @@ import logging
 pil_logger = logging.getLogger('PIL')
 pil_logger.setLevel(logging.INFO)
 
+from .util import default_converter
 from .evaluator.general_evaluator import GeneralEvaluator
 
 
@@ -65,8 +65,7 @@ class LMDBDataset(Dataset):
 
         imgbuf, target = load_data(byteflow)
         image = self.get_image(imgbuf)
-        if isinstance(image, Image.Image):
-            image = np.array(image)
+        default_converter(image, rgb=False)
 
         if self.transform is not None:
             image = self.transform(image)

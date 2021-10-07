@@ -7,12 +7,10 @@
 @description: 
 """
 
-import numpy as np
-from PIL import Image
-
 from torch.utils.data import Dataset
 from torchvision.datasets import CIFAR10, CIFAR100
 
+from .util import default_converter
 from .evaluator.general_evaluator import GeneralEvaluator
 
 
@@ -31,8 +29,7 @@ class CIFAR(Dataset):
 
     def __getitem__(self, index: int):
         image, target = self.data_set.__getitem__(index)
-        if isinstance(image, Image.Image):
-            image = np.array(image)
+        default_converter(image, rgb=False)
 
         if self.transform is not None:
             image = self.transform(image)
