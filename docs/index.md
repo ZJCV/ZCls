@@ -25,3 +25,7 @@ Welcome to zcls, a classification model training/inferring framework.
     * [ShuffleNet](./benchmark-shufflenet.md)
     * [RepVGG](./benchmark-repvgg.md)
     * [GhostNet](./benchmark-ghostnet.md)
+
+## Breaking Changes
+
+1. From `v0.13.0`, add [albumentation](https://github.com/albumentations-team/albumentations) to replace [torchvision](https://github.com/pytorch/vision) as the main transform backbend. Now the image format is `BGR` not `RGB`
