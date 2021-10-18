@@ -10,6 +10,6 @@
 KEY_OUTPUT = 'output'
 KEY_LOSS = 'loss'
 
-KEY_IMGS = 'imgs'
-KEY_TARGETS = 'targets'
-KEY_CLASSES = 'classes'
+KEY_SEP = ',,'
+KEY_DATASET = 'data.csv'
+KEY_CLASSES = 'cls.csv'

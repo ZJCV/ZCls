@@ -8,26 +8,29 @@
 """
 
 import os
-import json
 
 import torch
 from torch.utils.data import IterableDataset
 from torch.utils.data import RandomSampler, SequentialSampler
 
-from zcls.config.key_word import KEY_IMGS, KEY_TARGETS, KEY_CLASSES
+from zcls.config.key_word import KEY_DATASET, KEY_CLASSES, KEY_SEP
 from ..samplers.distributed_sampler import DistributedSampler
 from .evaluator.general_evaluator import GeneralEvaluator
 from .util import default_loader
 
 
-def get_base_info(json_path):
-    assert os.path.isfile(json_path), json_path
-    with open(json_path, 'r') as f:
-        data_dict = json.load(f)
+def get_base_info(cls_path, data_path):
+    assert os.path.isfile(cls_path), cls_path
+    classes = list()
+    with open(cls_path, 'r') as f:
+        for idx, line in enumerate(f):
+            classes.append(line.strip())
 
-    classes = data_dict[KEY_CLASSES]
-    length = len(data_dict[KEY_TARGETS])
-
+    assert os.path.isfile(data_path), data_path
+    length = 0
+    with open(data_path, 'r') as f:
+        for _ in f:
+            length += 1
     return classes, length
 
 
@@ -52,24 +55,17 @@ def build_sampler(dataset, num_gpus=1, random_sample=False, rank_id=0, drop_last
     return sampler
 
 
-def get_total_data(json_path, classes):
-    assert os.path.isfile(json_path)
-    assert isinstance(classes, list)
+def get_subset_data(data_path, indices):
+    sub_img_list = list()
+    sub_label_list = list()
 
-    with open(json_path, 'r') as f:
-        data_dict = json.load(f)
+    with open(data_path, 'r') as f:
+        for idx, line in enumerate(f):
+            if idx in indices:
+                img_path, target = line.split(KEY_SEP)
 
-    total_img_list = data_dict[KEY_IMGS]
-    total_label_list = data_dict[KEY_TARGETS]
-
-    return total_img_list, total_label_list
-
-
-def get_subset_data(json_path, classes, indices):
-    total_img_list, total_label_list = get_total_data(json_path, classes)
-
-    sub_img_list = [total_img_list[idx] for idx in indices]
-    sub_label_list = [total_label_list[idx] for idx in indices]
+                sub_img_list.append(img_path)
+                sub_label_list.append(int(target))
 
     return sub_img_list, sub_label_list
 
@@ -107,7 +103,9 @@ class MPDataset(IterableDataset):
         self.rank = rank_id
         self.num_replicas = num_gpus
 
-        self.classes, self.length = get_base_info(root)
+        self.data_path = os.path.join(self.root, KEY_DATASET)
+        self.cls_path = os.path.join(self.root, KEY_CLASSES)
+        self.classes, self.length = get_base_info(self.cls_path, self.data_path)
         self.sampler = build_sampler(self, num_gpus=self.num_replicas, random_sample=self.shuffle,
                                      rank_id=self.rank, drop_last=drop_last)
         self.set_epoch(epoch)
@@ -139,8 +137,8 @@ class MPDataset(IterableDataset):
         return indices
 
     def __iter__(self):
-        indices = self.get_indices()
-        img_list, label_list = get_subset_data(self.root, self.classes, indices)
+        indices = set(self.get_indices())
+        img_list, label_list = get_subset_data(self.data_path, indices)
         assert len(img_list) == len(label_list)
 
         return iter(self.parse_file(img_list, label_list))
