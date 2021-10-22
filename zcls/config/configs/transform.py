@@ -15,8 +15,8 @@ def add_config(_C):
     # Transform
     # ---------------------------------------------------------------------------- #
     _C.TRANSFORM = CN()
-    _C.TRANSFORM.TRAIN_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
-    _C.TRANSFORM.TEST_METHODS = ('Resize', 'CenterCrop', 'ToTensor', 'Normalize')
+    _C.TRANSFORM.TRAIN_METHODS = ('Resize', 'CenterCrop', 'Normalize', 'ToTensor')
+    _C.TRANSFORM.TEST_METHODS = ('Resize', 'CenterCrop', 'Normalize', 'ToTensor')
 
     # default: policy: AutoAugmentPolicy = AutoAugmentPolicy.IMAGENET, p=0.5
     # for policy, should be
