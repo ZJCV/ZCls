@@ -29,7 +29,7 @@ class CIFAR(Dataset):
 
     def __getitem__(self, index: int):
         image, target = self.data_set.__getitem__(index)
-        default_converter(image, rgb=False)
+        image = default_converter(image, rgb=False)
 
         if self.transform is not None:
             image = self.transform(image)

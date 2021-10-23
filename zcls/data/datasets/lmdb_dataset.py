@@ -65,7 +65,7 @@ class LMDBDataset(Dataset):
 
         imgbuf, target = load_data(byteflow)
         image = self.get_image(imgbuf)
-        default_converter(image, rgb=False)
+        image = default_converter(image, rgb=False)
 
         if self.transform is not None:
             image = self.transform(image)
