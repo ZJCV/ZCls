@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.13.4
+
+* New features
+  * perf(evaluator): update topk output format
+* Bug fixes
+  * fix(dataset): fix default_converter usage
+* Breaking changes.
+
 ## v0.13.3
 
 * New features
