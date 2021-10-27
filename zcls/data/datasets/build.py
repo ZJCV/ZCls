@@ -45,7 +45,7 @@ def build_dataset(cfg, transform=None, target_transform=None, is_train=True, **k
     elif dataset_name == 'LMDBImageNet':
         dataset = LMDBImageNet(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
     elif dataset_name == 'MPDataset':
-        shuffle = cfg.DATALOADER.RANDOM_SAMPLE
+        shuffle = cfg.DATALOADER.RANDOM_SAMPLE if is_train else False
         num_gpus = cfg.NUM_GPUS
         rank_id = kwargs.get('rank_id', 0)
         epoch = kwargs.get('epoch', 0)
