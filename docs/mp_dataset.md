@@ -5,17 +5,40 @@ ZCls provides a new iterable-style dataset class for large-scale data loading.
 
 ## File structure
 
-Suppose your dataset save in json file with following format
+It is assumed that the folder structure is as follows
+
+```angular2html
+data/
+└── dataset_name
+    ├── test
+    │   ├── cls.csv
+    │   ├── data.csv
+    └── train
+        ├── cls.csv
+        └── data.csv
+```
+
+* `data.csv` means stores the image path
 
 ```
-{
-    'imgs': [img_path1, img_path2, ...],
-    'targets': [label1, label2, ...],
-    'classes': [class1, class2, ...]
-}
+/path/to/img1.jpg,,target1
+/path/to/img2.jpg,,target2
+/path/to/img3.jpg,,target3
+...
+...
 ```
 
-About how to create json file, you can see [get_cifar_data.py](https://github.com/zjykzj/MPDataset/blob/master/tools/data/get_cifar_data.py)
+* `cls.csv` stores the classes
+
+```angular2html
+cls_name1
+cls_name2
+cls_name3
+...
+...
+```
+
+*Note: `,,` means separator*
 
 ## Usage
 
@@ -24,8 +47,8 @@ modify config_file like this
 ```
 DATASET:
   NAME: 'MPDataset'
-  TRAIN_ROOT: './data/cifar/cifar100_train.json'
-  TEST_ROOT: './data/cifar/cifar100_test.json'
+  TRAIN_ROOT: './data/dataset_name/train/'
+  TEST_ROOT: './data/dataset_name/test/'
   TOP_K: (1, 5)
 ```
 
