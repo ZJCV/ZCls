@@ -1,5 +1,15 @@
 # CHANGE
 
+## v0.13.5
+
+* New features
+  * perf(base_evaluator.py): update result_str format
+  * perf(color_jitter.py): add hue config
+* Bug fixes
+  * fix(mpdataset): fix data read index order
+  * fix(configs): fix TRANSFORMS order: ('ToTensor', 'Normalize') to ('Normalize', 'ToTensor')
+* Breaking changes.
+
 ## v0.13.4
 
 * New features
