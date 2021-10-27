@@ -56,16 +56,22 @@ def build_sampler(dataset, num_gpus=1, random_sample=False, rank_id=0, drop_last
 
 
 def get_subset_data(data_path, indices):
-    sub_img_list = list()
-    sub_label_list = list()
+    sub_img_list = [0 for _ in indices]
+    sub_label_list = [0 for _ in indices]
 
+    idx_dict = dict()
+    for i, idx in enumerate(indices):
+        idx_dict[idx] = i
+
+    indices_set = set(indices)
     with open(data_path, 'r') as f:
         for idx, line in enumerate(f):
-            if idx in indices:
-                img_path, target = line.split(KEY_SEP)
+            if idx in indices_set:
+                img_path, target = line.strip().split(KEY_SEP)[:2]
 
-                sub_img_list.append(img_path)
-                sub_label_list.append(int(target))
+                list_idx = idx_dict[idx]
+                sub_img_list[list_idx] = img_path
+                sub_label_list[list_idx] = int(target)
 
     return sub_img_list, sub_label_list
 
@@ -137,7 +143,8 @@ class MPDataset(IterableDataset):
         return indices
 
     def __iter__(self):
-        indices = set(self.get_indices())
+        indices = self.get_indices()
+
         img_list, label_list = get_subset_data(self.data_path, indices)
         assert len(img_list) == len(label_list)
 
