@@ -11,6 +11,7 @@ import torchvision.transforms.transforms as transforms
 from torchvision.transforms.autoaugment import AutoAugmentPolicy
 
 from . import realization
+from .realization import Resize
 
 
 def parse_transform(cfg, is_train=True):
@@ -23,6 +24,8 @@ def parse_transform(cfg, is_train=True):
     for method in methods:
         if method in keys:
             transform = transforms_dict[method]
+        elif method == 'Resize_First':
+            transform = Resize
         else:
             raise ValueError(f'f{method} does not exists')
 
@@ -66,6 +69,12 @@ def parse_transform(cfg, is_train=True):
                 size, interpolation, p = cfg.TRANSFORM.TRAIN_RESIZE
             else:
                 size, interpolation, p = cfg.TRANSFORM.TEST_RESIZE
+            aug_list.append(transform(size, interpolation=interpolation, p=p))
+        elif method == 'Resize_First':
+            if is_train:
+                size, interpolation, p = cfg.TRANSFORM.TRAIN_RESIZE_FIRST
+            else:
+                size, interpolation, p = cfg.TRANSFORM.TEST_RESIZE_FIRST
             aug_list.append(transform(size, interpolation=interpolation, p=p))
         elif method == 'Rotate':
             limit, interpolation, border_mode, value, p = cfg.TRANSFORM.ROTATE
