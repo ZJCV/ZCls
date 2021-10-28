@@ -21,14 +21,26 @@ def resize():
     print(m)
     res = m(image)
     print('enlarged image.shape:', res.shape)
-    # cv2.imwrite('tests/assets/lena_256.jpg', res)
+    cv2.imwrite('tests/assets/lena_256.jpg', res)
+
+    m = Resize(size=(320,), interpolation=cv2.INTER_LINEAR, p=1.0)
+    print(m)
+    res = m(image)
+    print('enlarged image.shape:', res.shape)
+    cv2.imwrite('tests/assets/lena_320.jpg', res)
 
     # reduce
     m = Resize(size=(112, 112), interpolation=cv2.INTER_AREA, p=1.0)
     print(m)
     res = m(image)
     print('reduced image.shape:', res.shape)
-    # cv2.imwrite('tests/assets/lena_112.jpg', res)
+    cv2.imwrite('tests/assets/lena_112.jpg', res)
+
+    m = Resize(size=(196,), interpolation=cv2.INTER_AREA, p=1.0)
+    print(m)
+    res = m(image)
+    print('reduced image.shape:', res.shape)
+    cv2.imwrite('tests/assets/lena_196.jpg', res)
 
 
 if __name__ == '__main__':
