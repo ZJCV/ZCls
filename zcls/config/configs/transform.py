@@ -51,10 +51,10 @@ def add_config(_C):
     #     INTER_LANCZOS4 = 4
     #     INTER_LINEAR = 1
     #     INTER_NEAREST = 0
-    _C.TRANSFORM.TRAIN_RESIZE_FIRST = ((224, ), 1, 1.0)
     _C.TRANSFORM.TRAIN_RESIZE = ((224, 224), 1, 1.0)
-    _C.TRANSFORM.TEST_RESIZE_FIRST = ((224, ), 1, 1.0)
+    _C.TRANSFORM.TRAIN_RESIZE2 = ((224, ), 1, 1.0)
     _C.TRANSFORM.TEST_RESIZE = ((224, 224), 1, 1.0)
+    _C.TRANSFORM.TEST_RESIZE2 = ((224, ), 1, 1.0)
 
     # default: limit, interpolation=cv2.INTER_LINEAR, border_mode=cv2.BORDER_REFLECT_101, value=None, p=0.5
     # for interpolation, should be

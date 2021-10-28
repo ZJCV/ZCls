@@ -8,7 +8,7 @@
 """
 
 __all__ = ['AutoAugment', 'CoarseDropout', 'ColorJitter', 'HorizontalFlip', 'VerticalFlip', 'RandomCrop', 'CenterCrop',
-           'Resize', 'Rotate', 'SquarePad', 'Normalize', 'ToTensor']
+           'Resize', 'Resize2', 'Rotate', 'SquarePad', 'Normalize', 'ToTensor']
 
 from .autoaugment import AutoAugment
 
@@ -27,3 +27,5 @@ from .square_pad import SquarePad
 
 from .normalize import Normalize
 from .to_tensor import ToTensor
+
+Resize2 = Resize
