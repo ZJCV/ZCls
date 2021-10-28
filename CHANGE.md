@@ -1,5 +1,15 @@
 # CHANGE
 
+## v0.13.6
+
+* New features
+  * perf(color_jitter.py): add hue use
+  * perf(resize.py): update Resize realization and usage
+    1. Supports scaling based on a single dimension; 
+    2. Added a new zoom option Resize2, for secondary scaling
+* Bug fixes
+* Breaking changes.
+
 ## v0.13.5
 
 * New features
