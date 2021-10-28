@@ -39,11 +39,7 @@ class ColorJitter(object):
         self.hue = hue
         self.p = p
 
-        self.t = A.ColorJitter(brightness=self.brightness,
-                               contrast=self.contrast,
-                               saturation=self.saturation,
-                               hue=self.hue,
-                               p=self.p)
+        self.t = A.ColorJitter(brightness=brightness, contrast=self.contrast, saturation=self.saturation, p=self.p)
 
     def __call__(self, image):
         return self.t(image=image)['image']
