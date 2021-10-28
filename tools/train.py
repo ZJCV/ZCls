@@ -71,7 +71,7 @@ def train(cfg):
         logger.info('resume end')
 
     train_data_loader = build_data(cfg, is_train=True, rank_id=local_rank_id, epoch=arguments['cur_epoch'])
-    test_data_loader = build_data(cfg, is_train=False, rank_id=local_rank_id, epoch=arguments['cur_epoch'])
+    test_data_loader = build_data(cfg, is_train=False, rank_id=local_rank_id)
 
     logger.info('init end')
     synchronize()
