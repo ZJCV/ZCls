@@ -11,7 +11,6 @@ import torchvision.transforms.transforms as transforms
 from torchvision.transforms.autoaugment import AutoAugmentPolicy
 
 from . import realization
-from .realization import Resize
 
 
 def parse_transform(cfg, is_train=True):
@@ -62,7 +61,7 @@ def parse_transform(cfg, is_train=True):
         elif method == 'VerticalFlip':
             p = cfg.TRANSFORM.VERTICAL_FLIP
             aug_list.append(transform(p=p))
-        elif method == 'Resize':
+        elif method == 'Resize' or method == 'Resize2':
             if is_train:
                 size, interpolation, p = cfg.TRANSFORM.TRAIN_RESIZE
             else:
