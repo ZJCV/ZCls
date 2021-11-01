@@ -1,7 +1,7 @@
 TRANSFORM:
   TRAIN_METHODS: ('Rotate', 'Resize', 'RandomCrop', 'HorizontalFlip', 'ColorJitter', 'CoarseDropout', 'Normalize', 'ToTensor')
   ROTATE: ((-30, 30), 1, 4, None, 1.0)
-  TRAIN_RESIZE: ((299, 299), 1, 1.0)
+  TRAIN_RESIZE: ((299, 299), 1, 0, 1.0)
   RANDOM_CROP: ((256, 256), 1.0)
   HORIZONTAL_FLIP: 1.0
   COLOR_JITTER: (0.2, 0., 0., 0., 1.0)
