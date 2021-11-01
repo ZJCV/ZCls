@@ -1,5 +1,16 @@
 # CHANGE
 
+
+## v0.14.0
+
+* New features
+  * perf(transforms): update Resize/AutoAugment/SquarePad
+    1. add largest edge mode for Resize;
+    2. optimize realization for Resize/AutoAugment/SquarePad.
+* Bug fixes
+  * fix(transforms): support Resize and Resize2 together
+* Breaking changes.
+
 ## v0.13.6
 
 * New features
