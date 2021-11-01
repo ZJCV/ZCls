@@ -14,11 +14,15 @@ from albumentations.augmentations.geometric import functional as F
 from typing import Sequence
 
 
-def get_hw(img: np.ndarray, size: int):
+def get_hw(img: np.ndarray, size: int, mode: int):
+    assert mode in [0, 1]
     h, w = img.shape[:2]
 
     short, long = (w, h) if w <= h else (h, w)
-    new_short, new_long = size, int(size * long / short)
+    if mode == 0:
+        new_short, new_long = size, int(size * long / short)
+    else:
+        new_short, new_long = int(size * short / long), size
 
     new_w, new_h = (new_short, new_long) if w <= h else (new_long, new_short)
     return new_h, new_w
@@ -39,10 +43,11 @@ class Resize(object):
             smaller edge of the image will be matched to this number.
             i.e, if height > width, then image will be rescaled to
             (size * height / width, size).
+        mode (int): zoom to the largest(1) or smallest edge(0). Default: 0
         p (float): probability of applying the transform. Default: 1.
     """
 
-    def __init__(self, size, interpolation=cv2.INTER_LINEAR, p=1.0):
+    def __init__(self, size, interpolation=cv2.INTER_LINEAR, mode=0, p=1.0):
         if p != 1.0:
             raise ValueError('p should always be 1.0')
         if not isinstance(size, (int, Sequence)):
@@ -55,14 +60,16 @@ class Resize(object):
         assert interpolation in [cv2.INTER_AREA, cv2.INTER_LINEAR]
         self.interpolation = interpolation
 
-    def __call__(self, img):
-        tmp_img = np.array(img)
-        if isinstance(self.size, Sequence) and len(self.size) == 1:
-            new_h, new_w = get_hw(tmp_img, list(self.size)[0])
-        else:
-            new_h, new_w = self.size
+        assert mode in [0, 1]
+        self.mode = 2 if len(self.size) == 2 else mode
 
-        new_img = F.resize(np.array(img), new_h, new_w, interpolation=self.interpolation)
+    def __call__(self, img):
+        if self.mode == 2:
+            new_h, new_w = self.size
+        else:
+            new_h, new_w = get_hw(img, list(self.size)[0], self.mode)
+
+        new_img = F.resize(img, new_h, new_w, interpolation=self.interpolation)
         return new_img
 
     def __repr__(self):

@@ -44,17 +44,20 @@ def add_config(_C):
     # default: p=0.5
     _C.TRANSFORM.VERTICAL_FLIP = 0.5
 
-    # default: size, interpolation=cv2.INTER_LINEAR, p=1.0
+    # default: size, interpolation=cv2.INTER_LINEAR, mode=0, p=1.0
     # for interpolation, should be
     #     INTER_AREA = 3
     #     INTER_CUBIC = 2
     #     INTER_LANCZOS4 = 4
     #     INTER_LINEAR = 1
     #     INTER_NEAREST = 0
-    _C.TRANSFORM.TRAIN_RESIZE = ((224, 224), 1, 1.0)
-    _C.TRANSFORM.TRAIN_RESIZE2 = ((224, ), 1, 1.0)
-    _C.TRANSFORM.TEST_RESIZE = ((224, 224), 1, 1.0)
-    _C.TRANSFORM.TEST_RESIZE2 = ((224, ), 1, 1.0)
+    # for mode, should be
+    #     mode = 0 (zoom to largest edge)
+    #     mode = 1 (zoom to smallest edge)
+    _C.TRANSFORM.TRAIN_RESIZE = ((224, 224), 1, 0, 1.0)
+    _C.TRANSFORM.TRAIN_RESIZE2 = ((224, ), 1, 0, 1.0)
+    _C.TRANSFORM.TEST_RESIZE = ((224, 224), 1, 0, 1.0)
+    _C.TRANSFORM.TEST_RESIZE2 = ((224, ), 1, 0, 1.0)
 
     # default: limit, interpolation=cv2.INTER_LINEAR, border_mode=cv2.BORDER_REFLECT_101, value=None, p=0.5
     # for interpolation, should be

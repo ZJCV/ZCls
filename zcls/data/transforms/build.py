@@ -63,10 +63,10 @@ def parse_transform(cfg, is_train=True):
             aug_list.append(transform(p=p))
         elif method == 'Resize' or method == 'Resize2':
             if is_train:
-                size, interpolation, p = cfg.TRANSFORM.TRAIN_RESIZE
+                size, interpolation, mode, p = cfg.TRANSFORM.TRAIN_RESIZE
             else:
-                size, interpolation, p = cfg.TRANSFORM.TEST_RESIZE
-            aug_list.append(transform(size, interpolation=interpolation, p=p))
+                size, interpolation, mode, p = cfg.TRANSFORM.TEST_RESIZE
+            aug_list.append(transform(size, interpolation=interpolation, mode=mode, p=p))
         elif method == 'Rotate':
             limit, interpolation, border_mode, value, p = cfg.TRANSFORM.ROTATE
             aug_list.append(transform(limit, interpolation=interpolation,

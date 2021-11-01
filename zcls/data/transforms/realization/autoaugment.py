@@ -31,13 +31,10 @@ class AutoAugment(object):
         self.t = autoaugment.AutoAugment(policy=self.policy)
 
     def __call__(self, image):
-        if isinstance(image, np.ndarray):
-            image = Image.fromarray(image)
-
         if np.random.rand(1) < self.p:
-            image = self.t(image)
+            image = np.array(self.t(Image.fromarray(image)))
 
-        return np.array(image)
+        return image
 
     def __repr__(self):
         return self.__class__.__name__ + '(policy={0}, p={1})'.format(self.policy, self.p)

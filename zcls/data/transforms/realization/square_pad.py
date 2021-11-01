@@ -36,6 +36,8 @@ class SquarePad(object):
 
     def __call__(self, image):
         h, w = image.shape[:2]
+        if h == w:
+            return image
 
         min_size = h if h > w else w
         self.t.min_width = min_size
