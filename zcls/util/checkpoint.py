@@ -1,7 +1,12 @@
 import os
 import torch
 from torch.nn.parallel import DistributedDataParallel
-from torchvision.models.utils import load_state_dict_from_url
+
+# see [vision/torchvision/_internally_replaced_utils.py](https://github.com/pytorch/vision/blob/b50ffef5f85029b1440ac155ca1e6d95c55520aa/torchvision/_internally_replaced_utils.py)
+try:
+    from torch.hub import load_state_dict_from_url
+except ImportError:
+    from torch.utils.model_zoo import load_url as load_state_dict_from_url
 
 from . import logging
 
