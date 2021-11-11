@@ -8,7 +8,6 @@
 """
 from abc import ABC
 
-import torch
 import torch.nn as nn
 from torch.nn.modules.module import T
 from resnest.torch.resnest import resnest50, resnest101, resnest200, resnest269
@@ -17,11 +16,13 @@ from resnest.torch.resnet import ResNet, Bottleneck
 from zcls.config.key_word import KEY_OUTPUT
 from zcls.model import registry
 from zcls.model.norm_helper import freezing_bn
+from zcls.model.misc import load_pretrained_weights
 
 
 class OfficialResNeSt(nn.Module, ABC):
 
     def __init__(self,
+                 cfg,
                  arch='resnest50_2s2x40d',
                  dropout_rate=0.,
                  num_classes=1000,
@@ -109,22 +110,18 @@ class OfficialResNeSt(nn.Module, ABC):
         else:
             raise ValueError('no such value')
 
-        self.init_weights(pretrained,
-                          pretrained_num_classes,
-                          num_classes)
+        self._init_weights(cfg)
 
-    def init_weights(self, pretrained, pretrained_num_classes, num_classes):
-        if pretrained != "":
-            self.model.load_state_dict(torch.load(pretrained))
-        if num_classes != pretrained_num_classes:
-            fc = self.model.fc
-            fc_features = fc.in_features
-
-            fc = nn.Linear(fc_features, num_classes)
-            nn.init.normal_(fc.weight, 0, 0.01)
-            nn.init.zeros_(fc.bias)
-
-            self.model.fc = fc
+    def _init_weights(self, cfg):
+        pretrained_local = cfg.MODEL.RECOGNIZER.PRETRAINED_LOCAL
+        pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
+        num_classes = cfg.MODEL.HEAD.NUM_CLASSES
+        load_pretrained_weights(self, cfg.MODEL.BACKBONE.ARCH,
+                                weights_path=None if pretrained_local == '' else pretrained_local,
+                                load_fc=pretrained_num_classes == num_classes,
+                                verbose=True,
+                                url_map=None
+                                )
 
     def train(self, mode: bool = True) -> T:
         super(OfficialResNeSt, self).train(mode=mode)
@@ -143,7 +140,7 @@ class OfficialResNeSt(nn.Module, ABC):
 @registry.RECOGNIZER.register('OfficialResNeSt')
 def build_official_resnest(cfg):
     # for recognizer
-    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED
+    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED_LOCAL
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
@@ -153,7 +150,8 @@ def build_official_resnest(cfg):
     dropout_rate = cfg.MODEL.HEAD.DROPOUT_RATE
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
 
-    return OfficialResNeSt(arch=arch,
+    return OfficialResNeSt(cfg,
+                           arch=arch,
                            dropout_rate=dropout_rate,
                            num_classes=num_classes,
                            fix_bn=fix_bn,

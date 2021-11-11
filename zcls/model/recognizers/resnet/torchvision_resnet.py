@@ -24,7 +24,7 @@ class TorchvisionResNet(nn.Module, ABC):
     def __init__(self,
                  arch="resnet18",
                  num_classes=1000,
-                 torchvision_pretrained=False,
+                 pretrained=False,
                  pretrained_num_classes=1000,
                  fix_bn=False,
                  partial_bn=False,
@@ -36,25 +36,25 @@ class TorchvisionResNet(nn.Module, ABC):
         self.partial_bn = partial_bn
 
         if arch == 'resnet18':
-            self.model = resnet18(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+            self.model = resnet18(pretrained=pretrained, num_classes=pretrained_num_classes,
                                   zero_init_residual=zero_init_residual)
         elif arch == 'resnet34':
-            self.model = resnet34(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+            self.model = resnet34(pretrained=pretrained, num_classes=pretrained_num_classes,
                                   zero_init_residual=zero_init_residual)
         elif arch == 'resnet50':
-            self.model = resnet50(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+            self.model = resnet50(pretrained=pretrained, num_classes=pretrained_num_classes,
                                   zero_init_residual=zero_init_residual)
         elif arch == 'resnet101':
-            self.model = resnet101(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+            self.model = resnet101(pretrained=pretrained, num_classes=pretrained_num_classes,
                                    zero_init_residual=zero_init_residual)
         elif arch == 'resnet152':
-            self.model = resnet152(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+            self.model = resnet152(pretrained=pretrained, num_classes=pretrained_num_classes,
                                    zero_init_residual=zero_init_residual)
         elif arch == 'resnext50_32x4d':
-            self.model = resnext50_32x4d(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+            self.model = resnext50_32x4d(pretrained=pretrained, num_classes=pretrained_num_classes,
                                          zero_init_residual=zero_init_residual)
         elif arch == 'resnext101_32x8d':
-            self.model = resnext101_32x8d(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes,
+            self.model = resnext101_32x8d(pretrained=pretrained, num_classes=pretrained_num_classes,
                                           zero_init_residual=zero_init_residual)
         else:
             raise ValueError('no such value')
@@ -86,7 +86,7 @@ class TorchvisionResNet(nn.Module, ABC):
 
 @registry.RECOGNIZER.register('TorchvisionResNet')
 def build_torchvision_resnet(cfg):
-    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
+    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
@@ -98,7 +98,7 @@ def build_torchvision_resnet(cfg):
     return TorchvisionResNet(
         arch=arch,
         num_classes=num_classes,
-        torchvision_pretrained=torchvision_pretrained,
+        pretrained=pretrained,
         pretrained_num_classes=pretrained_num_classes,
         fix_bn=fix_bn,
         partial_bn=partial_bn,
