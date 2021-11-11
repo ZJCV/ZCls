@@ -9,7 +9,6 @@
 
 from abc import ABC
 
-import torch
 import torch.nn as nn
 from torch.nn.modules.module import T
 
@@ -17,8 +16,8 @@ from zcls.config.key_word import KEY_OUTPUT
 from zcls.model.backbones.build import build_backbone
 from zcls.model.heads.build import build_head
 from zcls.model.norm_helper import freezing_bn
-from zcls.util.checkpoint import CheckPointer
 from zcls.util import logging
+from ..misc import load_pretrained_weights
 
 logger = logging.get_logger(__name__)
 
@@ -33,28 +32,18 @@ class BaseRecognizer(nn.Module, ABC):
         self.backbone = build_backbone(cfg)
         self.head = build_head(cfg)
 
-        zcls_pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED
+        self._init_weights(cfg)
+
+    def _init_weights(self, cfg):
+        pretrained_local = cfg.MODEL.RECOGNIZER.PRETRAINED_LOCAL
         pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
         num_classes = cfg.MODEL.HEAD.NUM_CLASSES
-        self.init_weights(zcls_pretrained,
-                          pretrained_num_classes,
-                          num_classes)
-
-    def init_weights(self, pretrained, pretrained_num_classes, num_classes):
-        if pretrained != "":
-            logger.info(f'load pretrained: {pretrained}')
-            check_pointer = CheckPointer(model=self)
-            check_pointer.load(pretrained, map_location=torch.device('cpu'))
-            logger.info("finish loading model weights")
-        if num_classes != pretrained_num_classes:
-            fc = self.head.fc
-            fc_features = fc.in_features
-
-            fc = nn.Linear(fc_features, num_classes)
-            nn.init.normal_(fc.weight, 0, 0.01)
-            nn.init.zeros_(fc.bias)
-
-            self.head.fc = fc
+        load_pretrained_weights(self, cfg.MODEL.BACKBONE.ARCH,
+                                weights_path=None if pretrained_local == '' else pretrained_local,
+                                load_fc=pretrained_num_classes == num_classes,
+                                verbose=True,
+                                url_map=None
+                                )
 
     def train(self, mode: bool = True) -> T:
         super(BaseRecognizer, self).train(mode=mode)
