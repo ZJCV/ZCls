@@ -15,19 +15,47 @@ from zcls.model.recognizers.build import build_recognizer
 def resnet():
     device = torch.device('cpu')
 
-    cfg_file = 'tests/configs/resnet/resnet50.yaml'
+    cfg_file = 'tests/configs/resnet/resnet/r18_zcls.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
     print(model)
 
-    cfg_file = 'tests/configs/resnet/resnet50_torchvision.yaml'
+    cfg_file = 'tests/configs/resnet/resnet/r34_zcls.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
     print(model)
 
-    cfg_file = 'tests/configs/resnet/resnet3d50.yaml'
+    cfg_file = 'tests/configs/resnet/resnet/r50_zcls.yaml'
+    cfg.merge_from_file(cfg_file)
+
+    model = build_recognizer(cfg, device)
+    print(model)
+
+    cfg_file = 'tests/configs/resnet/resnet/r101_zcls.yaml'
+    cfg.merge_from_file(cfg_file)
+
+    model = build_recognizer(cfg, device)
+    print(model)
+
+    cfg_file = 'tests/configs/resnet/resnet/r152_zcls.yaml'
+    cfg.merge_from_file(cfg_file)
+
+    model = build_recognizer(cfg, device)
+    print(model)
+
+    cfg_file = 'tests/configs/resnet/resnet/r50_torchvision.yaml'
+    cfg.merge_from_file(cfg_file)
+
+    model = build_recognizer(cfg, device)
+    print(model)
+
+
+def resnet3d():
+    device = torch.device('cpu')
+
+    cfg_file = 'tests/configs/resnet/r3d50_zcls.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
@@ -37,35 +65,51 @@ def resnet():
 def resnext():
     device = torch.device('cpu')
 
-    cfg_file = 'tests/configs/resnet/resnext50_32x4d.yaml'
+    cfg_file = 'tests/configs/resnet/resnext/resnext50_32x4d_zcls.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
     print(model)
 
-    cfg_file = 'tests/configs/resnet/resnext50_32x4d_torchvision.yaml'
+    cfg_file = 'tests/configs/resnet/resnext/resnext50_32x4d_torchvision.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
     print(model)
 
-    cfg_file = 'tests/configs/resnet/resnextd50_32x4d_acb.yaml'
+    cfg_file = 'tests/configs/resnet/resnext/resnextd50_32x4d_acb_zcls.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
     print(model)
 
-    cfg_file = 'tests/configs/resnet/resnextd50_32x4d_avg.yaml'
+    cfg_file = 'tests/configs/resnet/resnext/resnextd50_32x4d_avg_zcls.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
     print(model)
 
-    cfg_file = 'tests/configs/resnet/resnextd50_32x4d_fast_avg.yaml'
+    cfg_file = 'tests/configs/resnet/resnext/resnextd50_32x4d_fast_avg_zcls.yaml'
     cfg.merge_from_file(cfg_file)
 
     model = build_recognizer(cfg, device)
     print(model)
+
+    cfg_file = 'tests/configs/resnet/resnext/resnext101_32x8d_zcls.yaml'
+    cfg.merge_from_file(cfg_file)
+
+    model = build_recognizer(cfg, device)
+    print(model)
+
+    cfg_file = 'tests/configs/resnet/resnext/resnext101_32x8d_torchvision.yaml'
+    cfg.merge_from_file(cfg_file)
+
+    model = build_recognizer(cfg, device)
+    print(model)
+
+
+def sknet():
+    device = torch.device('cpu')
 
     cfg_file = 'tests/configs/resnet/sknet50.yaml'
     cfg.merge_from_file(cfg_file)
@@ -103,6 +147,8 @@ def resnest():
 
 
 if __name__ == '__main__':
-    resnet()
-    resnext()
+    # resnet()
+    # resnet3d()
+    # resnext()
+    # sknet()
     resnest()
