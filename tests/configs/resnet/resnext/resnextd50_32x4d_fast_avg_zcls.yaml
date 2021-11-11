@@ -8,25 +8,24 @@ MODEL:
     PARTIAL_BN: False
   ACT:
     TYPE: 'ReLU'
-  COMPRESSION:
-    WIDTH_MULTIPLIER: 1.3
-    ROUND_NEAREST: 8
-  ATTENTION:
-    WITH_ATTENTION: True
-    REDUCTION: 4
-    ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
   BACKBONE:
-    NAME: 'MNASNet'
-    ARCH: 'mnasnet_a1'
+    NAME: 'ResNetD'
     IN_PLANES: 3
+    ARCH: 'resnext50_32x4d'
+    BASE_PLANES: 64
+    LAYER_PLANES: (64, 128, 256, 512)
+    DOWNSAMPLES: (0, 1, 1, 1)
+    USE_AVG: True
+    FAST_AVG: True
   HEAD:
     NAME: 'GeneralHead2D'
-    FEATURE_DIMS: 1280
+    FEATURE_DIMS: 2048
     DROPOUT_RATE: 0.2
     NUM_CLASSES: 100
   RECOGNIZER:
-    NAME: 'MNASNet'
+    NAME: 'ResNet'
     PRELOADED: ""
     PRETRAINED_LOCAL: ""
     PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True

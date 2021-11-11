@@ -1,16 +1,15 @@
 MODEL:
   NORM:
-    TYPE: 'BatchNorm2d'
-    SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
   BACKBONE:
-    ARCH: 'resnet50'
+    ARCH: 'resnext101_32x8d'
   HEAD:
-    NUM_CLASSES: 100
+    NUM_CLASSES: 1000
   RECOGNIZER:
     NAME: 'TorchvisionResNet'
     PRELOADED: ""
-    TORCHVISION_PRETRAINED: False
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
     ZERO_INIT_RESIDUAL: True

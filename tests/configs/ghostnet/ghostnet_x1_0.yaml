@@ -26,5 +26,7 @@ MODEL:
     DROPOUT_RATE: 0.2
   RECOGNIZER:
     NAME: "GhostNet"
-#    PRELOADED: "outputs/converters/ghostnet_x1_0_imagenet.pth"
+    PRELOADED: ""
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000

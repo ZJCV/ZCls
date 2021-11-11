@@ -22,5 +22,7 @@ MODEL:
     NUM_CLASSES: 1000
   RECOGNIZER:
     NAME: 'MobileNetV2'
-#    PRELOADED: "outputs/converters/mobilenet_v2_imagenet.pth"
+    PRELOADED: ""
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000

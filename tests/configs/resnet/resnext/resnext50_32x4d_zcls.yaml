@@ -11,7 +11,7 @@ MODEL:
   BACKBONE:
     NAME: 'ResNet'
     IN_PLANES: 3
-    ARCH: 'resnet50'
+    ARCH: 'resnext50_32x4d'
     BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
     DOWNSAMPLES: (0, 1, 1, 1)
@@ -23,6 +23,7 @@ MODEL:
   RECOGNIZER:
     NAME: 'ResNet'
     PRELOADED: ""
-    PRETRAINED: ""
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
     ZERO_INIT_RESIDUAL: True

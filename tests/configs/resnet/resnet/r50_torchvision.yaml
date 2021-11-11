@@ -4,13 +4,14 @@ MODEL:
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
-  COMPRESSION:
-    WIDTH_MULTIPLIER: 1.0
+  BACKBONE:
+    ARCH: 'resnet50'
   HEAD:
     NUM_CLASSES: 100
   RECOGNIZER:
-    NAME: 'TorchvisionMobileNetV2'
+    NAME: 'TorchvisionResNet'
     PRELOADED: ""
     PRETRAINED_LOCAL: ""
     PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True
