@@ -117,8 +117,10 @@ def add_config(_C):
     _C.MODEL.RECOGNIZER.TYPE = 'ResNet'
     # zcls training model, used in the test phase
     _C.MODEL.RECOGNIZER.PRELOADED = ""
-    # zcls training model, used in the training stage
-    _C.MODEL.RECOGNIZER.PRETRAINED = ""
+    # Load the remote pre-training model, if it has
+    _C.MODEL.RECOGNIZER.PRETRAINED_REMOTE = True
+    # Load the local pre-training model
+    _C.MODEL.RECOGNIZER.PRETRAINED_LOCAL = ""
     # torchvision training model, used in the training phase
     _C.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED = False
     # Number of pre-training model categories
