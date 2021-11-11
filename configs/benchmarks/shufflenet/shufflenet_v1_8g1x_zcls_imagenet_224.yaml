@@ -41,5 +41,7 @@ MODEL:
     BIAS: False
   RECOGNIZER:
     NAME: 'ShuffleNetV1'
-    PRELOADED: "outputs/converters/shufflenetv1_8g1x_imagenet.pth"
+    PRELOADED: ""
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000

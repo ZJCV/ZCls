@@ -39,6 +39,8 @@ MODEL:
     NUM_CLASSES: 1000
   RECOGNIZER:
     NAME: 'ResNet'
-    PRELOADED: "outputs/converters/resnext101_32x8d_imagenet.pth"
+    PRELOADED: ""
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
     ZERO_INIT_RESIDUAL: True

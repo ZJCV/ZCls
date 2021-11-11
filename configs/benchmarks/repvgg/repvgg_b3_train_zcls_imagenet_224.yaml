@@ -37,6 +37,8 @@ MODEL:
     NUM_CLASSES: 1000
   RECOGNIZER:
     NAME: 'RepVGG'
-    PRELOADED: "outputs/converters/repvgg_b3_train_imagenet.pth"
+    PRELOADED: ""
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
     ZERO_INIT_RESIDUAL: True
