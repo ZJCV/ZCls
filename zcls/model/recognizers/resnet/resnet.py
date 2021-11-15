@@ -12,13 +12,13 @@ from zcls.model.misc import load_pretrained_weights
 from ..base_recognizer import BaseRecognizer
 
 url_map = {
-    'resnet18': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet18_imagenet.pth",
-    'resnet34': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet34_imagenet.pth",
-    'resnet50': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet50_imagenet.pth",
-    'resnet101': "",
-    'resnet152': "",
-    'resnext50_32x4d': "",
-    'resnext101_32x8d': ""
+    'resnet18': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet18_imagenet_384d0b7e.pth",
+    'resnet34': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet34_imagenet_e4448618.pth",
+    'resnet50': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet50_imagenet_025f6510.pth",
+    'resnet101': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet101_imagenet_cb164cb4.pth",
+    'resnet152': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnet152_imagenet_a8be90bf.pth",
+    'resnext50_32x4d': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnext50_32x4d_imagenet_a21b7284.pth",
+    'resnext101_32x8d': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/resnext101_32x8d_imagenet_b4025795.pth"
 }
 
 
