@@ -51,6 +51,10 @@ def load_pretrained_weights(model, model_name, weights_path=None, load_fc=True, 
         if 'head.fc.bias' in state_dict.keys():
             state_dict.pop('head.fc.bias')
             missing_keys_list.append('head.fc.bias')
+        if 'head.conv2.weight' in state_dict.keys():
+            state_dict.pop('head.conv2.weight')
+        if 'head.conv2.bias' in state_dict.keys():
+            state_dict.pop('head.conv2.bias')
         ret = model.load_state_dict(state_dict, strict=False)
         assert set(ret.missing_keys) == set(missing_keys_list), \
             'Missing keys when loading pretrained weights: {}'.format(ret.missing_keys)
