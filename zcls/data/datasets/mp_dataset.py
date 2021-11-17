@@ -98,12 +98,13 @@ def shuffle_dataset(sampler, cur_epoch, is_shuffle=False):
 
 class MPDataset(IterableDataset):
 
-    def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5), shuffle: bool = False,
-                 num_gpus: int = 1, rank_id: int = 0, epoch: int = 0, drop_last: bool = False):
+    def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5), keep_rgb: bool = False,
+                 shuffle: bool = False, num_gpus: int = 1, rank_id: int = 0, epoch: int = 0, drop_last: bool = False):
         super(MPDataset).__init__()
         self.root = root
         self.transform = transform
         self.target_transform = target_transform
+        self.keep_rgb = keep_rgb
         self.shuffle = shuffle
 
         self.rank = rank_id
@@ -120,7 +121,7 @@ class MPDataset(IterableDataset):
 
     def parse_file(self, img_list, label_list):
         for img_path, target in zip(img_list, label_list):
-            image = default_loader(img_path, rgb=False)
+            image = default_loader(img_path, rgb=self.keep_rgb)
             if self.transform is not None:
                 image = self.transform(image)
             if self.target_transform is not None:

@@ -8,6 +8,7 @@ DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
   TOP_K: (1, 5)
+  KEEP_RGB: True
 TRANSFORM:
   TEST_METHODS: ('Resize', 'CenterCrop', 'Normalize', 'ToTensor')
   TEST_RESIZE: ((224, ), 1, 0, 1.0)

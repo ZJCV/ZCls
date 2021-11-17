@@ -3,11 +3,12 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/resnest50_fast_2s1x64d_zcls_imagenet_224'
+OUTPUT_DIR: 'outputs/benchmarks/shufflenet_v1_3g2x_zcls_imagenet_224'
 DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
   TOP_K: (1, 5)
+  KEEP_RGB: True
 TRANSFORM:
   TEST_METHODS: ('Resize', 'CenterCrop', 'Normalize', 'ToTensor')
   TEST_RESIZE: ((224, ), 1, 0, 1.0)
@@ -27,25 +28,21 @@ MODEL:
     PARTIAL_BN: False
   ACT:
     TYPE: 'ReLU'
-  ATTENTION:
-    WITH_ATTENTIONS: (0, 0, 0, 0)
-    REDUCTION: 4
   BACKBONE:
-    NAME: 'ResNetD'
+    NAME: 'ShuffleNetV1'
+    ARCH: 'shufflenetv1_3g2x'
     IN_PLANES: 3
-    ARCH: 'resnest50_fast_2s1x64d'
-    BASE_PLANES: 64
-    LAYER_PLANES: (64, 128, 256, 512)
-    DOWNSAMPLES: (0, 1, 1, 1)
+    DOWNSAMPLES: (1, 1, 1)
+    WITH_GROUPS: (0, 1, 1)
   HEAD:
     NAME: 'GeneralHead2D'
-    FEATURE_DIMS: 2048
+    FEATURE_DIMS: 960
     DROPOUT_RATE: 0.
     NUM_CLASSES: 1000
+    BIAS: False
   RECOGNIZER:
-    NAME: 'ResNet'
+    NAME: 'ShuffleNetV1'
     PRELOADED: ""
     PRETRAINED_LOCAL: ""
     PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
-    ZERO_INIT_RESIDUAL: True

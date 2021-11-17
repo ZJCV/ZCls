@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/repvgg_d2se_infer_zcls_imagenet_320'
+OUTPUT_DIR: 'outputs/benchmarks/resnest200_zcls_imagenet_224'
 DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
@@ -11,8 +11,8 @@ DATASET:
   KEEP_RGB: True
 TRANSFORM:
   TEST_METHODS: ('Resize', 'CenterCrop', 'Normalize', 'ToTensor')
-  TEST_RESIZE: ((320, ), 1, 0, 1.0)
-  TEST_CENTER_CROP: ((320, 320), 1.0)
+  TEST_RESIZE: ((224, ), 1, 0, 1.0)
+  TEST_CENTER_CROP: ((224, 224), 1.0)
   NORMALIZE: ((0.485, 0.456, 0.406), (0.229, 0.224, 0.225), 255.0, 1.0)
   TO_TENSOR: 1.0
 DATALOADER:
@@ -21,27 +21,30 @@ DATALOADER:
 MODEL:
   CONV:
     TYPE: 'Conv2d'
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
   ACT:
     TYPE: 'ReLU'
   ATTENTION:
-    WITH_ATTENTION: True
-    REDUCTION: 16
-    ATTENTION_TYPE: 'SqueezeAndExcitationBlock2D'
-    BIAS: True
+    WITH_ATTENTIONS: (0, 0, 0, 0)
+    REDUCTION: 4
   BACKBONE:
-    NAME: 'RepVGG'
-    ARCH: 'repvgg_d2se'
+    NAME: 'ResNetD'
     IN_PLANES: 3
-    BASE_PLANES: 64
+    ARCH: 'resnest200'
+    BASE_PLANES: 128
     LAYER_PLANES: (64, 128, 256, 512)
-    DOWNSAMPLES: (1, 1, 1, 1)
+    DOWNSAMPLES: (0, 1, 1, 1)
   HEAD:
     NAME: 'GeneralHead2D'
-    FEATURE_DIMS: 2560
+    FEATURE_DIMS: 2048
     DROPOUT_RATE: 0.
     NUM_CLASSES: 1000
   RECOGNIZER:
-    NAME: 'RepVGG'
+    NAME: 'ResNet'
     PRELOADED: ""
     PRETRAINED_LOCAL: ""
     PRETRAINED_REMOTE: True

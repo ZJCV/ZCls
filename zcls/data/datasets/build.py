@@ -23,27 +23,32 @@ def build_dataset(cfg, transform=None, target_transform=None, is_train=True, **k
     dataset_name = cfg.DATASET.NAME
     data_root = cfg.DATASET.TRAIN_ROOT if is_train else cfg.DATASET.TEST_ROOT
     top_k = cfg.DATASET.TOP_K
+    keep_rgb = cfg.DATASET.KEEP_RGB
 
     if dataset_name == 'CIFAR100':
         dataset = CIFAR(data_root, train=is_train, transform=transform, target_transform=target_transform,
-                        top_k=top_k, is_cifar100=True)
+                        top_k=top_k, is_cifar100=True, keep_rgb=keep_rgb)
     elif dataset_name == 'CIFAR10':
         dataset = CIFAR(data_root, train=is_train, transform=transform, target_transform=target_transform,
-                        top_k=top_k, is_cifar100=False)
+                        top_k=top_k, is_cifar100=False, keep_rgb=keep_rgb)
     elif dataset_name == 'FashionMNIST':
         dataset = FashionMNIST(data_root, train=is_train, transform=transform, target_transform=target_transform,
-                               top_k=top_k)
+                               top_k=top_k, keep_rgb=keep_rgb)
     elif dataset_name == 'ImageNet':
         dataset = ImageNet(data_root, train=is_train, transform=transform, target_transform=target_transform,
-                           top_k=top_k)
+                           top_k=top_k, keep_rgb=keep_rgb)
     elif dataset_name == 'GeneralDataset':
-        dataset = GeneralDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
+        dataset = GeneralDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
+                                 keep_rgb=keep_rgb)
     elif dataset_name == 'GeneralDatasetV2':
-        dataset = GeneralDatasetV2(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
+        dataset = GeneralDatasetV2(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
+                                   keep_rgb=keep_rgb)
     elif dataset_name == 'LMDBDataset':
-        dataset = LMDBDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
+        dataset = LMDBDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
+                              keep_rgb=keep_rgb)
     elif dataset_name == 'LMDBImageNet':
-        dataset = LMDBImageNet(data_root, transform=transform, target_transform=target_transform, top_k=top_k)
+        dataset = LMDBImageNet(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
+                               keep_rgb=keep_rgb)
     elif dataset_name == 'MPDataset':
         shuffle = cfg.DATALOADER.RANDOM_SAMPLE if is_train else False
         num_gpus = cfg.NUM_GPUS
@@ -51,7 +56,8 @@ def build_dataset(cfg, transform=None, target_transform=None, is_train=True, **k
         epoch = kwargs.get('epoch', 0)
 
         dataset = MPDataset(data_root, transform=transform, target_transform=target_transform, top_k=top_k,
-                            shuffle=shuffle, num_gpus=num_gpus, rank_id=rank_id, epoch=epoch, drop_last=is_train)
+                            keep_rgb=keep_rgb, shuffle=shuffle, num_gpus=num_gpus, rank_id=rank_id, epoch=epoch,
+                            drop_last=is_train)
     else:
         raise ValueError(f"the dataset {dataset_name} does not exist")
 

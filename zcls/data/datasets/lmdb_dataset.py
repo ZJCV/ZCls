@@ -48,12 +48,13 @@ class LMDBDataset(Dataset):
     refert to [TypeError: can't pickle Environment objects when num_workers > 0 for LSUN #689](https://github.com/pytorch/vision/issues/689)
     """
 
-    def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5)):
+    def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5), keep_rgb=False):
         assert os.path.isfile(root)
 
         self.dbpath = root
         self.transform = transform
         self.target_transform = target_transform
+        self.keep_rgb = keep_rgb
         # create evaluator
         self._update_evaluator(top_k)
 
@@ -65,7 +66,7 @@ class LMDBDataset(Dataset):
 
         imgbuf, target = load_data(byteflow)
         image = self.get_image(imgbuf)
-        image = default_converter(image, rgb=False)
+        image = default_converter(image, rgb=self.keep_rgb)
 
         if self.transform is not None:
             image = self.transform(image)

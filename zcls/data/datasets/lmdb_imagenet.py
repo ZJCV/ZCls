@@ -21,8 +21,8 @@ class LMDBImageNet(LMDBDataset):
     refert to [TypeError: can't pickle Environment objects when num_workers > 0 for LSUN #689](https://github.com/pytorch/vision/issues/689)
     """
 
-    def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5)):
-        super().__init__(root, transform, target_transform, top_k)
+    def __init__(self, root, transform=None, target_transform=None, top_k=(1, 5), keep_rgb=False):
+        super().__init__(root, transform, target_transform, top_k, keep_rgb)
 
     def get_classes(self):
         """

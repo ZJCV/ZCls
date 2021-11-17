@@ -22,3 +22,5 @@ def add_config(_C):
     _C.DATASET.TEST_ROOT = './data/cifar'
     # used for evaluator
     _C.DATASET.TOP_K = (1,)
+    # keep rgb data format or not
+    _C.DATASET.KEEP_RGB = False

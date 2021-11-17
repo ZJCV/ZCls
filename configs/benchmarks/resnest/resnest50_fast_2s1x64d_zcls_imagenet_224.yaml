@@ -3,11 +3,12 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/resnest200_zcls_imagenet_224'
+OUTPUT_DIR: 'outputs/benchmarks/resnest50_fast_2s1x64d_zcls_imagenet_224'
 DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
   TOP_K: (1, 5)
+  KEEP_RGB: True
 TRANSFORM:
   TEST_METHODS: ('Resize', 'CenterCrop', 'Normalize', 'ToTensor')
   TEST_RESIZE: ((224, ), 1, 0, 1.0)
@@ -33,8 +34,8 @@ MODEL:
   BACKBONE:
     NAME: 'ResNetD'
     IN_PLANES: 3
-    ARCH: 'resnest200'
-    BASE_PLANES: 128
+    ARCH: 'resnest50_fast_2s1x64d'
+    BASE_PLANES: 64
     LAYER_PLANES: (64, 128, 256, 512)
     DOWNSAMPLES: (0, 1, 1, 1)
   HEAD:
