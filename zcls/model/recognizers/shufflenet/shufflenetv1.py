@@ -17,14 +17,14 @@ Note 2: Comparing ShuffleNet 2× with MobileNet whose complexity are comparable 
 """
 
 url_map = {
-    'shufflenetv1_3g0_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g0_5x_imagenet.pth",
-    'shufflenetv1_3g1_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g1_5x_imagenet.pth",
-    'shufflenetv1_3g1x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g1x_imagenet.pth",
-    'shufflenetv1_3g2x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g2x_imagenet.pth",
-    'shufflenetv1_8g0_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g0_5x_imagenet.pth",
-    'shufflenetv1_8g1_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g1_5x_imagenet.pth",
-    'shufflenetv1_8g1x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g1x_imagenet.pth",
-    'shufflenetv1_8g2x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g2x_imagenet.pth",
+    'shufflenetv1_3g0_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g0_5x_imagenet_de2ce242.pth",
+    'shufflenetv1_3g1x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g1x_imagenet_4b9454f2.pth",
+    'shufflenetv1_3g1_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g1_5x_imagenet_9ac247e1.pth",
+    'shufflenetv1_3g2x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_3g2x_imagenet_9835481a.pth",
+    'shufflenetv1_8g0_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g0_5x_imagenet_5940e6d3.pth",
+    'shufflenetv1_8g1x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g1x_imagenet_941bfdc6.pth",
+    'shufflenetv1_8g1_5x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g1_5x_imagenet_76b3f38d.pth",
+    'shufflenetv1_8g2x': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenetv1_8g2x_imagenet_9fb71642.pth",
 }
 
 
