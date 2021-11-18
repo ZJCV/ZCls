@@ -53,7 +53,7 @@ class GeneralHead2D(nn.Module, ABC):
 @registry.HEAD.register('GeneralHead2D')
 def build_general_head_2d(cfg):
     feature_dims = cfg.MODEL.HEAD.FEATURE_DIMS
-    num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
+    num_classes = cfg.MODEL.HEAD.NUM_CLASSES
     dropout_rate = cfg.MODEL.HEAD.DROPOUT_RATE
     bias = cfg.MODEL.HEAD.BIAS
 
