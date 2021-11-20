@@ -1,15 +1,45 @@
 
 # Pretrained Model
 
-There are three scenarios using the pretraining model:
+ZCls provides many pretrained model file in remote, and you can also use pths in local. There are three config items to load pretraining model:
 
-1. Using zcls pretraining model for reasoning
-2. Using zcls pre training model for training
-3. In the process of training, the program is interrupted and the training is resumed
+1. `cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE`
+2. `cfg.MODEL.RECOGNIZER.PRETRAINED_LOCAL`
+3. `cfg.MODEL.RECOGNIZER.PRELOADED`
 
-## For reasoning
+## PRETRAINED_REMOTE
 
-Configure the pretraining model path in the configuration file like this:
+Open the `PRETRAINED_REMOTE` item in config file, if zcls provides a pretrained model in remote, then will download and load it automatically
+
+```
+MODEL:
+  ...
+  ...
+  RECOGNIZER:
+    PRETRAINED_REMOTE: True
+    PRETRAINED_NUM_CLASSES: 1000
+```
+
+Set the number of output categories of the pre-training model correctly. If the current number of training categories is inconsistent with the pre-training categories, the pre-training parameters of the last classification layer will not be loaded. 
+
+## PRETRAINED_LOCAL
+
+Configure the local pretraining model path in the configuration file like this:
+
+```
+MODEL:
+  ...
+  ...
+  RECOGNIZER:
+    PRETRAINED_LOCAL: "/path/to/pretrained"
+    PRETRAINED_NUM_CLASSES: 1000
+```
+
+If both `PRETRAINED_LOCAL` and `PRETRAINED_REMOTE` are set, then `PRETRAINED_LOCAL` takes precedence. 
+
+## PRELOADED
+
+If the pre-training model contains the training-time module (use `cfg.MODEL.CONV.ADD_BLOCKS`) provided by zcls, the path of the pre-training model can be set in `PRELOADED`. 
 
 ```
 MODEL:
@@ -17,24 +47,4 @@ MODEL:
   ...
   RECOGNIZER:
     PRELOADED: "/path/to/pretrained"
-```
-
-## For training
-
-Configure the pretraining model path in the configuration file like this:
-
-```
-MODEL:
-  ...
-  ...
-  RECOGNIZER:
-    PRETRAINED: "/path/to/pretrained"
-```
-
-## For resumed
-
-Add the following fields `--resume` to the command line parameters：
-
-```
-$ CUDA_VISIBLE_DEVICES=3 python tools/test.py -cfg=configs/benchmarks/resnet/r18_zcls_imagenet_224.yaml --resume
 ```

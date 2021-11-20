@@ -8,7 +8,6 @@ Welcome to zcls, a classification model training/inferring framework.
 * [Roadmap](./roadmap.md)
 * [Get Started with ZCls](./get-started.md)
 * [Using Pretrained Model](./pretrained-model.md)
-* [Model Zoo](./model-zoo.md)
 * Dataset
     * [Use Builtin Datasets](./builtin-datasets.md)
     * Use Custom Datasets
