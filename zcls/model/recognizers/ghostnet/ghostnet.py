@@ -7,10 +7,13 @@
 @description: 
 """
 
-import torch.nn as nn
-
 from zcls.model import registry
+from zcls.model.misc import load_pretrained_weights
 from ..base_recognizer import BaseRecognizer
+
+url_map = {
+    'ghostnet_x1_0': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/ghostnet_x1_0_imagenet_0000e4da.pth",
+}
 
 
 @registry.RECOGNIZER.register('GhostNet')
@@ -19,14 +22,19 @@ class GhostNet(BaseRecognizer):
     def __init__(self, cfg):
         super().__init__(cfg)
 
-    def init_weights(self, pretrained, pretrained_num_classes, num_classes):
-        # Using super class method to load pretraining weights
-        super(GhostNet, self).init_weights(pretrained, pretrained_num_classes, pretrained_num_classes)
-        if num_classes != pretrained_num_classes:
-            in_channels = self.head.conv2.in_channels
-            conv2 = nn.Conv2d(in_channels, num_classes, kernel_size=1, stride=1, padding=0, bias=True)
+    def _init_weights(self, cfg):
+        if cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER == 1.0:
+            model_name = 'ghostnet_x1_0'
+        else:
+            model_name = 'GhostNet'
 
-            nn.init.kaiming_normal_(conv2.weight, mode="fan_out", nonlinearity="relu")
-            nn.init.zeros_(conv2.bias)
+        pretrained_local = cfg.MODEL.RECOGNIZER.PRETRAINED_LOCAL
+        pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
+        num_classes = cfg.MODEL.HEAD.NUM_CLASSES
 
-            self.head.conv2 = conv2
+        load_pretrained_weights(self, model_name,
+                                weights_path=None if pretrained_local == '' else pretrained_local,
+                                load_fc=pretrained_num_classes == num_classes,
+                                verbose=True,
+                                url_map=url_map if cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE else None
+                                )
