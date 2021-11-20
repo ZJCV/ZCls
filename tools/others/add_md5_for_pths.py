@@ -4,15 +4,48 @@
 @date: 2021/11/14 上午10:58
 @file: add_md5_for_pths.py
 @author: zj
-@description: 对每个pth文件添加md5校验码（仅取后8位）
+@description: Add md5 check code to each pth file (only the last 8 digits)
+Usage:
+1. add md5 for one file:
+    ```
+    $ python add_md5_for_pths.py weight_file_path dst_root --verbose
+    ```
+2. add md5 for batch files:
+    ```
+    $ python add_md5_for_pths.py weight_file_root dst_root --batch --verbose
+    ```
 """
 
 import os
 import hashlib
 import shutil
+import argparse
 
 from tqdm import tqdm
 from pathlib import Path
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Add md5 for weight file')
+    parser.add_argument("src",
+                        type=str,
+                        default="",
+                        help="Path to weight file")
+    parser.add_argument('dst',
+                        type=str,
+                        default="",
+                        help="Path to output")
+    parser.add_argument('--batch',
+                        default=False,
+                        action='store_true',
+                        help="Batch processing, when set True, enter src path as directory.")
+    parser.add_argument('--verbose',
+                        default=False,
+                        action='store_true',
+                        help="Print Info")
+
+    args = parser.parse_args()
+    return args
 
 
 def get_files(data_root):
@@ -39,26 +72,43 @@ def get_md5(file_path):
         return hs.hexdigest()
 
 
-def process(data_list):
-    assert isinstance(data_list, list)
-
+def process(data_list, dst_root):
     for file_path in tqdm(data_list):
         md5_code = get_md5(file_path)
 
         file_dir, file_name = os.path.split(file_path)[:2]
         name_prefix, name_suffix = os.path.splitext(file_name)[:2]
 
-        dst_file_path = os.path.join(file_dir, f'{name_prefix}_{str(md5_code[-8:])}{name_suffix}')
+        dst_file_path = os.path.join(dst_root, f'{name_prefix}_{str(md5_code[-8:])}{name_suffix}')
         assert not os.path.exists(dst_file_path)
 
         shutil.copy(file_path, dst_file_path)
 
 
 if __name__ == '__main__':
-    data_root = '/home/zj/repos/ZCls/outputs/converters'
+    args = parse_args()
 
-    print('get files ...')
-    files_list = get_files(data_root)
+    src_path = args.src
+    dst_path = os.path.abspath(args.dst)
+    is_batch = args.batch
+    is_verbose = args.verbose
 
-    print('process ...')
-    process(files_list)
+    if is_batch:
+        assert os.path.isdir(src_path), f'{src_path} is not a dir'
+        if is_verbose:
+            print(f'[SEARCH]: get files from {src_path}')
+        files_list = get_files(src_path)
+    else:
+        assert os.path.isfile(src_path), f'{src_path} is not a file'
+        if is_verbose:
+            print(f'[SEARCH]: process file {src_path}')
+        files_list = [src_path, ]
+
+    if is_verbose:
+        print('[PROCESS]: add md5')
+    if not os.path.exists(dst_path):
+        os.mkdir(dst_path)
+    assert os.path.isdir(dst_path), f'{dst_path} is not a dir'
+    process(files_list, dst_path)
+
+    print('done')
