@@ -31,9 +31,9 @@ class MNASNet(BaseRecognizer):
         model_name = cfg.MODEL.BACKBONE.ARCH
         assert isinstance(model_name, str)
         if model_name.startswith('mnasnet_b1'):
-            if len(cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER) == 0.5:
+            if cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER == 0.5:
                 model_name += '_0_5'
-            elif len(cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER) == 1.0:
+            elif cfg.MODEL.COMPRESSION.WIDTH_MULTIPLIER == 1.0:
                 model_name += '_1_0'
             else:
                 raise ValueError('No supports values')
