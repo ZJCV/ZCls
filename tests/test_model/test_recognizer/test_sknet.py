@@ -23,7 +23,7 @@ def test_data(model, input_shape, output_shape):
 
 
 def test_sknet():
-    config_file = 'configs/benchmarks/resnet/sknet50_zcls_imagenet_224.yaml'
+    config_file = 'configs/benchmarks/resnet-resnext/sknet50_zcls_imagenet_224.yaml'
     cfg.merge_from_file(config_file)
 
     model = ResNet(cfg)

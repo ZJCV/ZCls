@@ -42,7 +42,7 @@ def test_official_resnest():
 
 
 def test_zcls_resnest():
-    cfg.merge_from_file('configs/benchmarks/resnet/resnest50_fast_2s1x64d_imagenet_224.yaml')
+    cfg.merge_from_file('configs/benchmarks/resnet-resnext/resnest50_fast_2s1x64d_imagenet_224.yaml')
     model = build_recognizer(cfg, torch.device('cpu'))
     print(model)
     test_data(model, (3, 3, 224, 224), (3, 1000))

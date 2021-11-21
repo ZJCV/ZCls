@@ -1,0 +1,16 @@
+MODEL:
+  NORM:
+    TYPE: 'BatchNorm2d'
+    SYNC_BN: False
+    FIX_BN: False
+    PARTIAL_BN: False
+  BACKBONE:
+    ARCH: 'shufflenet_v2_x1_0'
+  HEAD:
+    NUM_CLASSES: 1000
+  RECOGNIZER:
+    NAME: "TorchvisionShuffleNetV2"
+    PRELOADED: ""
+    PRETRAINED_LOCAL: ""
+    PRETRAINED_REMOTE: False
+    PRETRAINED_NUM_CLASSES: 1000

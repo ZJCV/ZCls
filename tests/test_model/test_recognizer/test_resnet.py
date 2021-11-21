@@ -24,28 +24,28 @@ def test_data(model, input_shape, output_shape):
 
 
 def test_resnet():
-    config_file = 'configs/benchmarks/resnet/r18_zcls_imagenet_224.yaml'
+    config_file = 'configs/benchmarks/resnet-resnext/r18_zcls_imagenet_224.yaml'
     cfg.merge_from_file(config_file)
 
     model = ResNet(cfg)
     print(model)
     test_data(model, (1, 3, 224, 224), (1, 1000))
 
-    config_file = 'configs/benchmarks/resnet/r18_torchvision_imagenet_224.yaml'
+    config_file = 'configs/benchmarks/resnet-resnext/r18_torchvision_imagenet_224.yaml'
     cfg.merge_from_file(config_file)
 
     model = build_torchvision_resnet(cfg)
     print(model)
     test_data(model, (1, 3, 224, 224), (1, 1000))
 
-    config_file = 'configs/benchmarks/resnet/rxt50_32x4d_zcls_imagenet_224.yaml'
+    config_file = 'configs/benchmarks/resnet-resnext/rxt50_32x4d_zcls_imagenet_224.yaml'
     cfg.merge_from_file(config_file)
 
     model = ResNet(cfg)
     print(model)
     test_data(model, (1, 3, 224, 224), (1, 1000))
 
-    config_file = 'configs/benchmarks/resnet/rxt50_32x4d_torchvision_imagenet_224.yaml'
+    config_file = 'configs/benchmarks/resnet-resnext/rxt50_32x4d_torchvision_imagenet_224.yaml'
     cfg.merge_from_file(config_file)
 
     model = build_torchvision_resnet(cfg)
@@ -54,5 +54,5 @@ def test_resnet():
 
 
 if __name__ == '__main__':
-    print('*' * 10 + ' resnet')
+    print('*' * 10 + ' resnet-resnext')
     test_resnet()
