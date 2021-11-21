@@ -19,10 +19,10 @@ G4) Element-wise operations are non-negligible.
 """
 
 url_map = {
-    'shufflenet_v2_x0_5': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenet_v2_x0_5_imagenet.pth",
-    'shufflenet_v2_x1_0': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenet_v2_x1_0_imagenet.pth",
-    'shufflenet_v2_x1_5': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenet_v2_x1_5_imagenet.pth",
-    'shufflenet_v2_x2_0': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenet_v2_x2_0_imagenet.pth",
+    'shufflenet_v2_x0_5': "https://github.com/ZJCV/ZCls/releases/download/v0.14.0/shufflenet_v2_x0_5_imagenet_8fd98bb3.pth",
+    'shufflenet_v2_x1_0': "",
+    'shufflenet_v2_x1_5': "",
+    'shufflenet_v2_x2_0': "",
 }
 
 
