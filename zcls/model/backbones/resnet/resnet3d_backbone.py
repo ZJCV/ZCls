@@ -326,7 +326,7 @@ class ResNet3DBackbone(nn.Module, ABC):
 @registry.Backbone.register('ResNet3D')
 def build_resnet3d_backbone(cfg):
     arch = cfg.MODEL.BACKBONE.ARCH
-    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
+    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE
     conv_layer = get_conv(cfg)
     norm_layer = get_norm(cfg)
     act_layer = get_act(cfg)
@@ -349,7 +349,7 @@ def build_resnet3d_backbone(cfg):
 
     block_layer, layer_blocks, groups, width_per_group = arch_settings[arch]
     state_dict_2d = load_state_dict_from_url(model_urls[arch], progress=True) \
-        if torchvision_pretrained else None
+        if pretrained else None
 
     return ResNet3DBackbone(
         in_planes=in_planes,

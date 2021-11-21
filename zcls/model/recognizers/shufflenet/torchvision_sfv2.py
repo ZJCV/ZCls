@@ -24,7 +24,7 @@ class TorchvisionShuffleNetV2(nn.Module, ABC):
     def __init__(self,
                  arch="shufflenet_v2_x2_0",
                  num_classes=1000,
-                 torchvision_pretrained=False,
+                 pretrained=False,
                  pretrained_num_classes=1000,
                  fix_bn=False,
                  partial_bn=False):
@@ -34,13 +34,13 @@ class TorchvisionShuffleNetV2(nn.Module, ABC):
         self.partial_bn = partial_bn
 
         if arch == 'shufflenet_v2_x2_0':
-            self.model = shufflenet_v2_x2_0(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = shufflenet_v2_x2_0(pretrained=pretrained, num_classes=pretrained_num_classes)
         elif arch == 'shufflenet_v2_x1_5':
-            self.model = shufflenet_v2_x1_5(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = shufflenet_v2_x1_5(pretrained=pretrained, num_classes=pretrained_num_classes)
         elif arch == 'shufflenet_v2_x1_0':
-            self.model = shufflenet_v2_x1_0(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = shufflenet_v2_x1_0(pretrained=pretrained, num_classes=pretrained_num_classes)
         elif arch == 'shufflenet_v2_x0_5':
-            self.model = shufflenet_v2_x0_5(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = shufflenet_v2_x0_5(pretrained=pretrained, num_classes=pretrained_num_classes)
         else:
             raise ValueError('no such value')
 
@@ -71,7 +71,7 @@ class TorchvisionShuffleNetV2(nn.Module, ABC):
 
 @registry.RECOGNIZER.register('TorchvisionShuffleNetV2')
 def build_torchvision_sfv2(cfg):
-    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
+    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
     arch = cfg.MODEL.BACKBONE.ARCH
@@ -80,7 +80,7 @@ def build_torchvision_sfv2(cfg):
 
     return TorchvisionShuffleNetV2(arch=arch,
                                    num_classes=num_classes,
-                                   torchvision_pretrained=torchvision_pretrained,
+                                   pretrained=pretrained,
                                    pretrained_num_classes=pretrained_num_classes,
                                    fix_bn=fix_bn,
                                    partial_bn=partial_bn)

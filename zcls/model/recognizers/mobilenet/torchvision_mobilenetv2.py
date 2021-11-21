@@ -21,7 +21,7 @@ class TorchvisionMobileNetV2(nn.Module, ABC):
     def __init__(self,
                  num_classes=1000,
                  width_multiplier=1.0,
-                 torchvision_pretrained=False,
+                 pretrained=False,
                  pretrained_num_classes=1000,
                  fix_bn=False,
                  partial_bn=False,
@@ -30,7 +30,7 @@ class TorchvisionMobileNetV2(nn.Module, ABC):
         self.fix_bn = fix_bn
         self.partial_bn = partial_bn
 
-        self.model = mobilenet_v2(pretrained=torchvision_pretrained,
+        self.model = mobilenet_v2(pretrained=pretrained,
                                   width_mult=width_multiplier,
                                   norm_layer=norm_layer,
                                   num_classes=pretrained_num_classes)
@@ -64,7 +64,7 @@ class TorchvisionMobileNetV2(nn.Module, ABC):
 
 @registry.RECOGNIZER.register('TorchvisionMobileNetV2')
 def build_torchvision_mbv2(cfg):
-    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
+    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
@@ -74,7 +74,7 @@ def build_torchvision_mbv2(cfg):
 
     return TorchvisionMobileNetV2(
         num_classes=num_classes,
-        torchvision_pretrained=torchvision_pretrained,
+        pretrained=pretrained,
         pretrained_num_classes=pretrained_num_classes,
         width_multiplier=width_multiplier,
         fix_bn=fix_bn,

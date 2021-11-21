@@ -22,7 +22,7 @@ class TorchvisionMobileNetV3(nn.Module, ABC):
                  arch='mobilenet_v3_large',
                  width_multiplier=1.0,
                  num_classes=1000,
-                 torchvision_pretrained=False,
+                 pretrained=False,
                  pretrained_num_classes=1000,
                  fix_bn=False,
                  partial_bn=False,
@@ -32,12 +32,12 @@ class TorchvisionMobileNetV3(nn.Module, ABC):
         self.partial_bn = partial_bn
 
         if arch == 'mobilenet_v3_large':
-            self.model = mobilenet_v3_large(pretrained=torchvision_pretrained,
+            self.model = mobilenet_v3_large(pretrained=pretrained,
                                             _width_mult=width_multiplier,
                                             norm_layer=norm_layer,
                                             num_classes=pretrained_num_classes)
         elif arch == 'mobilenet_v3_small':
-            self.model = mobilenet_v3_small(pretrained=torchvision_pretrained,
+            self.model = mobilenet_v3_small(pretrained=pretrained,
                                             _width_mult=width_multiplier,
                                             norm_layer=norm_layer,
                                             num_classes=pretrained_num_classes)
@@ -74,7 +74,7 @@ class TorchvisionMobileNetV3(nn.Module, ABC):
 @registry.RECOGNIZER.register('TorchvisionMobileNetV3')
 def build_torchvision_mbv3(cfg):
     arch = cfg.MODEL.BACKBONE.ARCH
-    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
+    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     fix_bn = cfg.MODEL.NORM.FIX_BN
     partial_bn = cfg.MODEL.NORM.PARTIAL_BN
@@ -86,7 +86,7 @@ def build_torchvision_mbv3(cfg):
         arch=arch,
         width_multiplier=width_multiplier,
         num_classes=num_classes,
-        torchvision_pretrained=torchvision_pretrained,
+        pretrained=pretrained,
         pretrained_num_classes=pretrained_num_classes,
         fix_bn=fix_bn,
         partial_bn=partial_bn,

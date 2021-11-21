@@ -22,7 +22,7 @@ class TorchvisionMNASNet(nn.Module, ABC):
     def __init__(self,
                  width_multiplier=1.,
                  num_classes=1000,
-                 torchvision_pretrained=False,
+                 pretrained=False,
                  pretrained_num_classes=1000,
                  fix_bn=False,
                  partial_bn=False,
@@ -30,7 +30,7 @@ class TorchvisionMNASNet(nn.Module, ABC):
         """
         :param width_multiplier: 宽度乘法器
         :param num_classes: 类别数
-        :param torchvision_pretrained: 预训练模型
+        :param pretrained: 预训练模型
         :param pretrained_num_classes: 假定预训练模型类别数
         :param fix_bn: 固定BN
         :param partial_bn: 仅训练第一层BN
@@ -41,13 +41,13 @@ class TorchvisionMNASNet(nn.Module, ABC):
         self.partial_bn = partial_bn
 
         if width_multiplier == 0.5:
-            self.model = mnasnet0_5(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = mnasnet0_5(pretrained=pretrained, num_classes=pretrained_num_classes)
         elif width_multiplier == 0.75:
-            self.model = mnasnet0_75(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = mnasnet0_75(pretrained=pretrained, num_classes=pretrained_num_classes)
         elif width_multiplier == 1.0:
-            self.model = mnasnet1_0(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = mnasnet1_0(pretrained=pretrained, num_classes=pretrained_num_classes)
         elif width_multiplier == 1.3:
-            self.model = mnasnet1_3(pretrained=torchvision_pretrained, num_classes=pretrained_num_classes)
+            self.model = mnasnet1_3(pretrained=pretrained, num_classes=pretrained_num_classes)
         else:
             raise ValueError('no such value')
 
@@ -80,7 +80,7 @@ class TorchvisionMNASNet(nn.Module, ABC):
 
 @registry.RECOGNIZER.register('TorchvisionMNASNet')
 def build_torchvision_mnasnet(cfg):
-    torchvision_pretrained = cfg.MODEL.RECOGNIZER.TORCHVISION_PRETRAINED
+    pretrained = cfg.MODEL.RECOGNIZER.PRETRAINED_REMOTE
     pretrained_num_classes = cfg.MODEL.RECOGNIZER.PRETRAINED_NUM_CLASSES
     num_classes = cfg.MODEL.HEAD.NUM_CLASSES
     # bn
@@ -92,7 +92,7 @@ def build_torchvision_mnasnet(cfg):
     return TorchvisionMNASNet(
         width_multiplier=width_multiplier,
         num_classes=num_classes,
-        torchvision_pretrained=torchvision_pretrained,
+        pretrained=pretrained,
         pretrained_num_classes=pretrained_num_classes,
         fix_bn=fix_bn,
         partial_bn=partial_bn
