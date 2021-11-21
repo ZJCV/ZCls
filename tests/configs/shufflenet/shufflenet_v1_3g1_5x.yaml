@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/shufflenet_v2_x1_0_torchvision_imagenet_224'
+OUTPUT_DIR: 'outputs/benchmarks/shufflenet_v1_3g1_5x_zcls_imagenet_224'
 DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
@@ -19,17 +19,29 @@ DATALOADER:
   TEST_BATCH_SIZE: 32
   NUM_WORKERS: 4
 MODEL:
+  CONV:
+    TYPE: 'Conv2d'
   NORM:
     TYPE: 'BatchNorm2d'
     SYNC_BN: False
     FIX_BN: False
     PARTIAL_BN: False
+  ACT:
+    TYPE: 'ReLU'
   BACKBONE:
-    ARCH: 'shufflenet_v2_x1_0'
+    NAME: 'ShuffleNetV1'
+    ARCH: 'shufflenetv1_3g1_5x'
+    IN_PLANES: 3
+    DOWNSAMPLES: (1, 1, 1)
+    WITH_GROUPS: (0, 1, 1)
   HEAD:
+    NAME: 'GeneralHead2D'
+    FEATURE_DIMS: 1440
+    DROPOUT_RATE: 0.
     NUM_CLASSES: 1000
+    BIAS: False
   RECOGNIZER:
-    NAME: "TorchvisionShuffleNetV2"
+    NAME: 'ShuffleNetV1'
     PRELOADED: ""
     PRETRAINED_LOCAL: ""
     PRETRAINED_REMOTE: True

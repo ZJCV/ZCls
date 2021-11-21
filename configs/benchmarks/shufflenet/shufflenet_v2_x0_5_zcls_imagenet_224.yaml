@@ -39,7 +39,7 @@ MODEL:
     FEATURE_DIMS: 1024
     DROPOUT_RATE: 0.
     NUM_CLASSES: 1000
-    BIAS: True
+    BIAS: False
   RECOGNIZER:
     NAME: 'ShuffleNetV2'
     PRELOADED: ""

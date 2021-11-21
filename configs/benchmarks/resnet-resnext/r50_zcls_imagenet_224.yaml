@@ -3,7 +3,7 @@ NUM_NODES: 1
 RANK_ID: 0
 DIST_BACKEND: "nccl"
 RNG_SEED: 1
-OUTPUT_DIR: 'outputs/benchmarks/shufflenet_v1_3g1_5x_zcls_imagenet_224'
+OUTPUT_DIR: 'outputs/benchmarks/r50_zcls_imagenet_224'
 DATASET:
   NAME: 'ImageNet'
   TEST_ROOT: './data/imagenet'
@@ -24,25 +24,24 @@ MODEL:
   NORM:
     TYPE: 'BatchNorm2d'
     SYNC_BN: False
-    FIX_BN: False
-    PARTIAL_BN: False
   ACT:
     TYPE: 'ReLU'
   BACKBONE:
-    NAME: 'ShuffleNetV1'
-    ARCH: 'shufflenetv1_3g1_5x'
+    NAME: 'ResNet'
     IN_PLANES: 3
-    DOWNSAMPLES: (1, 1, 1)
-    WITH_GROUPS: (0, 1, 1)
+    ARCH: 'resnet50'
+    BASE_PLANES: 64
+    LAYER_PLANES: (64, 128, 256, 512)
+    DOWNSAMPLES: (0, 1, 1, 1)
   HEAD:
     NAME: 'GeneralHead2D'
-    FEATURE_DIMS: 960
+    FEATURE_DIMS: 2048
     DROPOUT_RATE: 0.
     NUM_CLASSES: 1000
-    BIAS: False
   RECOGNIZER:
-    NAME: 'ShuffleNetV1'
+    NAME: 'ResNet'
     PRELOADED: ""
-    PRETRAINED_LOCAL: ""
+    PRETRAINED_LOCAL: "/home/zj/yoyo/ZCls/outputs/resnet50_imagenet.pth"
     PRETRAINED_REMOTE: True
     PRETRAINED_NUM_CLASSES: 1000
+    ZERO_INIT_RESIDUAL: True
