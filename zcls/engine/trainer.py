@@ -53,7 +53,7 @@ def do_train(cfg, arguments,
 
     start_epoch = arguments['cur_epoch']
     epoch_iters = len(train_data_loader)
-    max_iter = (max_epoch - start_epoch) * epoch_iters
+    max_iter = (max_epoch + 1 - start_epoch) * epoch_iters
     current_iterations = 0
 
     if cfg.TRAIN.HYBRID_PRECISION:
