@@ -1,5 +1,19 @@
 # CHANGE
 
+## v0.15.0
+
+* New features
+  * perf(model): add load_pretrained_weights func
+  * perf(base_recognizer.py): update _init_weights
+  * feat(tools): add_md5_for_pths
+  * perf(config): add cfg.DATASET.KEEP_RGB to keep RGB data format or not… 
+    * Default is False
+* Bug fixes
+  * perf(checkpoint): adapt to the latest torchvision version 
+    * prevent error: "from torch.utils.model_zoo import load_url as load_state_dict_from_url"
+  * fix(heads): use cfg.MODEL.HEAD.NUM_CLASSES in head definition
+  * fix(trainer.py): fix max_iter calculate
+* Breaking changes.
 
 ## v0.14.0
 
