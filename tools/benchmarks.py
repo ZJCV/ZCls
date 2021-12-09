@@ -96,35 +96,35 @@ def mobilenet():
         main(data_shape, cfg_file, name)
 
 
-def shufflenet_v1():
-    data_shape = (1, 3, 224, 224)
-
-    cfg_file_list = [
-        'configs/benchmarks/shufflenet/shufflenet_v1_3g0_5x_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v1_3g1_5x_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v1_3g1x_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v1_3g2x_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v1_8g0_5x_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v1_8g1_5x_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v1_8g1x_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v1_8g2x_zcls_imagenet_224.yaml',
-    ]
-
-    name_list = [
-        'shufflenet_v1_3g0_5x_zcls',
-        'shufflenet_v1_3g1_5x_zcls',
-        'shufflenet_v1_3g1x_zcls',
-        'shufflenet_v1_3g2x_zcls',
-        'shufflenet_v1_8g0_5x_zcls',
-        'shufflenet_v1_8g1_5x_zcls',
-        'shufflenet_v1_8g1x_zcls',
-        'shufflenet_v1_8g2x_zcls',
-    ]
-
-    assert len(name_list) == len(cfg_file_list)
-
-    for name, cfg_file in zip(name_list, cfg_file_list):
-        main(data_shape, cfg_file, name)
+# def shufflenet_v1():
+#     data_shape = (1, 3, 224, 224)
+# 
+#     cfg_file_list = [
+#         'configs/benchmarks/shufflenet/shufflenet_v1_3g0_5x.yaml',
+#         'configs/benchmarks/shufflenet/shufflenet_v1_3g1_5x.yaml',
+#         'configs/benchmarks/shufflenet/shufflenet_v1_3g1x_zcls_imagenet_224.yaml',
+#         'configs/benchmarks/shufflenet/shufflenet_v1_3g2x.yaml',
+#         'configs/benchmarks/shufflenet/shufflenet_v1_8g0_5x_zcls_imagenet_224.yaml',
+#         'configs/benchmarks/shufflenet/shufflenet_v1_8g1_5x_zcls_imagenet_224.yaml',
+#         'configs/benchmarks/shufflenet/shufflenet_v1_8g1x.yaml',
+#         'configs/benchmarks/shufflenet/shufflenet_v1_8g2x_zcls_imagenet_224.yaml',
+#     ]
+# 
+#     name_list = [
+#         'shufflenet_v1_3g0_5x_zcls',
+#         'shufflenet_v1_3g1_5x_zcls',
+#         'shufflenet_v1_3g1x_zcls',
+#         'shufflenet_v1_3g2x_zcls',
+#         'shufflenet_v1_8g0_5x_zcls',
+#         'shufflenet_v1_8g1_5x_zcls',
+#         'shufflenet_v1_8g1x_zcls',
+#         'shufflenet_v1_8g2x_zcls',
+#     ]
+# 
+#     assert len(name_list) == len(cfg_file_list)
+# 
+#     for name, cfg_file in zip(name_list, cfg_file_list):
+#         main(data_shape, cfg_file, name)
 
 
 def shufflenet_v2():
@@ -133,8 +133,8 @@ def shufflenet_v2():
     cfg_file_list = [
         'configs/benchmarks/shufflenet/shufflenet_v2_x0_5_torchvision_imagenet_224.yaml',
         'configs/benchmarks/shufflenet/shufflenet_v2_x0_5_zcls_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_zcls_imagenet_224.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_torchvision.yaml',
+        'configs/benchmarks/shufflenet/shufflenet_v2_x1_0_zcls.yaml',
         'configs/benchmarks/shufflenet/shufflenet_v2_x1_5_zcls_imagenet_224.yaml',
         'configs/benchmarks/shufflenet/shufflenet_v2_x2_0_zcls_imagenet_224.yaml',
     ]
@@ -158,20 +158,20 @@ def resnet():
     data_shape = (1, 3, 224, 224)
 
     cfg_file_list = [
-        'configs/benchmarks/resnet/r18_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r18_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r34_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r34_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r50_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r50_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r101_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r101_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r152_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/resnet/r152_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/rxt50_32x4d_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/resnet/rxt50_32x4d_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/rxt101_32x8d_torchvision_imagenet_224.yaml',
-        'configs/benchmarks/resnet/rxt101_32x8d_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r18_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r18_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r34_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r34_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r50_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r50_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r101_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r101_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r152_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/r152_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/rxt50_32x4d_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/rxt50_32x4d_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/rxt101_32x8d_torchvision_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/rxt101_32x8d_zcls_imagenet_224.yaml',
     ]
 
     name_list = [
@@ -278,18 +278,18 @@ def senet_sknet_resnest():
     data_shape = (1, 3, 224, 224)
 
     cfg_file_list = [
-        'configs/benchmarks/resnet/se_r50_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/sknet50_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest50_fast_2s1x64d_official_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest50_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest50_official_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest101_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest101_official_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest200_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest200_official_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest269_zcls_imagenet_224.yaml',
-        'configs/benchmarks/resnet/resnest269_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/se_r50_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/sknet50_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest50_fast_2s1x64d_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest50_fast_2s1x64d_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest50_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest50_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest101_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest101_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest200_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest200_official_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest269_zcls_imagenet_224.yaml',
+        'configs/benchmarks/resnet-resnext/resnest269_official_imagenet_224.yaml',
     ]
 
     name_list = [
@@ -337,7 +337,7 @@ if __name__ == '__main__':
     # shufflenet_v1()
     # shufflenet_v2()
     # print('#' * 30)
-    # resnet()
+    # resnet-resnext()
     # print('#' * 30)
     # repvgg()
     # print('#' * 30)
