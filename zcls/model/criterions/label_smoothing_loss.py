@@ -8,6 +8,8 @@
 """
 
 from abc import ABC
+
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -15,7 +17,6 @@ from .. import registry
 from zcls.config.key_word import KEY_OUTPUT, KEY_LOSS
 
 
-@registry.CRITERION.register('LabelSmoothingLoss')
 class LabelSmoothingLoss(nn.Module, ABC):
     """
     Label smoothing cross entropy loss
@@ -24,12 +25,14 @@ class LabelSmoothingLoss(nn.Module, ABC):
     2. [Rethinking the Inception Architecture for Computer Vision](https://arxiv.org/abs/1512.00567)
     3. [[译]Rethinking the Inception Architecture for Computer Vision](https://blog.zhujian.life/posts/a0a2be91.html)
     4. [Label Smoothing in PyTorch](https://stackoverflow.com/questions/55681502/label-smoothing-in-pytorch)
+
+    from 1.10.0, torch add label_smoothing_loss to CrossEntropyLoss
     """
 
-    def __init__(self, cfg):
+    def __init__(self, epsilon, reduction='mean'):
         super(LabelSmoothingLoss, self).__init__()
-        self.epsilon = cfg.MODEL.CRITERION.SMOOTHING
-        self.reduction = cfg.MODEL.CRITERION.REDUCTION
+        self.epsilon = epsilon
+        self.reduction = reduction
 
     def __call__(self, output_dict, targets):
         assert isinstance(output_dict, dict) and KEY_OUTPUT in output_dict.keys()
@@ -47,3 +50,11 @@ class LabelSmoothingLoss(nn.Module, ABC):
 
     def linear_combination(self, x, y, epsilon):
         return epsilon * x + (1 - epsilon) * y
+
+
+@registry.CRITERION.register('LabelSmoothingLoss')
+def get_label_entropy_loss(cfg):
+    epsilon = cfg.MODEL.CRITERION.SMOOTHING
+    reduction = cfg.MODEL.CRITERION.REDUCTION
+
+    return LabelSmoothingLoss(epsilon, reduction)
