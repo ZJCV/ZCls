@@ -3,7 +3,6 @@
 # zcls/data/datasets/lmdb_dataset.py: 15,19
 # zcls/data/datasets/util.py: 14
 # zcls/data/transforms/realization/autoaugment.py: 10
-# zcls/data/transforms/resize.py: 15
 # zcls/util/collect_env.py: 9
 Pillow_SIMD == 7.0.0.post3
 
@@ -13,7 +12,7 @@ Pillow_SIMD == 7.0.0.post3
 # zcls/data/transforms/realization/horizontal_flip.py: 10
 # zcls/data/transforms/realization/normalize.py: 10
 # zcls/data/transforms/realization/random_crop.py: 10
-# zcls/data/transforms/realization/resize.py: 12
+# zcls/data/transforms/realization/resize.py: 13
 # zcls/data/transforms/realization/rotate.py: 11
 # zcls/data/transforms/realization/square_pad.py: 11
 # zcls/data/transforms/realization/to_tensor.py: 10
@@ -25,8 +24,7 @@ lmdb == 1.2.1
 
 # zcls/data/datasets/util.py: 13
 # zcls/data/transforms/realization/autoaugment.py: 9
-# zcls/data/transforms/resize.py: 14
-# zcls/data/transforms/square_pad.py: 12
+# zcls/data/transforms/realization/resize.py: 11
 # zcls/engine/trainer.py: 15
 # zcls/model/conv_helper.py: 10
 # zcls/model/layers/dbb_transforms.py: 2
@@ -42,14 +40,13 @@ numpy == 1.21.0
 # zcls/data/transforms/realization/resize.py: 10
 # zcls/data/transforms/realization/rotate.py: 10
 # zcls/data/transforms/realization/square_pad.py: 10
-# zcls/data/transforms/resize.py: 10
 # zcls/util/collect_env.py: 165
-opencv_python_headless == 4.5.3.56
+opencv_python == 4.5.3.56
 
 # zcls/util/misc.py: 10
 psutil == 5.8.0
 
-# zcls/model/recognizers/resnet/official_resnest.py: 15
+# zcls/model/recognizers/resnet/official_resnest.py: 14
 resnest == 0.0.6b20210114
 
 # zcls/data/datasets/lmdb_dataset.py: 10
@@ -71,7 +68,7 @@ thop == 0.0.31.post2005241907
 # zcls/data/datasets/general_dataset_v2.py: 13
 # zcls/data/datasets/imagenet.py: 10
 # zcls/data/datasets/lmdb_dataset.py: 16
-# zcls/data/datasets/mp_dataset.py: 15
+# zcls/data/datasets/mp_dataset.py: 14
 # zcls/data/samplers/distributed_sampler.py: 12,13,14
 # zcls/engine/inference.py: 12
 # zcls/engine/trainer.py: 13,16,18,19,45
@@ -105,7 +102,7 @@ thop == 0.0.31.post2005241907
 # zcls/model/backbones/vgg/repvgg_backbone.py: 10
 # zcls/model/conv_helper.py: 11,12
 # zcls/model/criterions/crossentropy_loss.py: 11
-# zcls/model/criterions/label_smoothing_loss.py: 11,12
+# zcls/model/criterions/label_smoothing_loss.py: 12,13,14
 # zcls/model/heads/general_head_2d.py: 11,12
 # zcls/model/heads/general_head_3d.py: 11,12
 # zcls/model/heads/mobilenetv3_head.py: 11,12
@@ -127,15 +124,15 @@ thop == 0.0.31.post2005241907
 # zcls/model/layers/simplified_non_local_embedded_gaussian.py: 10,11
 # zcls/model/layers/split_attention_conv2d.py: 11,13,14
 # zcls/model/layers/squeeze_and_excitation_block.py: 10
+# zcls/model/misc.py: 11,13
 # zcls/model/norm_helper.py: 10
-# zcls/model/recognizers/base_recognizer.py: 12,13,14
+# zcls/model/recognizers/base_recognizer.py: 12,13
 # zcls/model/recognizers/build.py: 10
-# zcls/model/recognizers/ghostnet/ghostnet.py: 10
 # zcls/model/recognizers/mobilenet/mobilenetv3.py: 10
 # zcls/model/recognizers/mobilenet/torchvision_mnasnet.py: 12
 # zcls/model/recognizers/mobilenet/torchvision_mobilenetv2.py: 11
 # zcls/model/recognizers/mobilenet/torchvision_mobilenetv3.py: 11
-# zcls/model/recognizers/resnet/official_resnest.py: 11,12,13
+# zcls/model/recognizers/resnet/official_resnest.py: 11,12
 # zcls/model/recognizers/resnet/torchvision_resnet.py: 12,13
 # zcls/model/recognizers/shufflenet/torchvision_sfv2.py: 12,13
 # zcls/optim/lr_schedulers/build.py: 10
@@ -146,7 +143,7 @@ thop == 0.0.31.post2005241907
 # zcls/optim/optimizers/build.py: 10
 # zcls/optim/optimizers/rmsprop.py: 10
 # zcls/optim/optimizers/sgd.py: 10,11
-# zcls/util/checkpoint.py: 2,3
+# zcls/util/checkpoint.py: 7,9
 # zcls/util/collect_env.py: 19,24,65
 # zcls/util/cutmix.py: 11
 # zcls/util/distributed.py: 9,10
@@ -156,7 +153,7 @@ thop == 0.0.31.post2005241907
 # zcls/util/multiprocessing.py: 6
 # zcls/util/precise_bn.py: 15,16
 # zcls/util/prefetcher.py: 10,11
-torch == 1.9.0+cu111
+torch == 1.10.0
 
 # zcls/data/datasets/cifar.py: 11
 # zcls/data/datasets/fashionmnist.py: 11
@@ -164,7 +161,6 @@ torch == 1.9.0+cu111
 # zcls/data/datasets/imagenet.py: 11
 # zcls/data/transforms/build.py: 10,11
 # zcls/data/transforms/realization/autoaugment.py: 12,13
-# zcls/data/transforms/square_pad.py: 13
 # zcls/model/backbones/resnet/resnet3d_backbone.py: 12,13
 # zcls/model/recognizers/mobilenet/mobilenetv3.py: 11
 # zcls/model/recognizers/mobilenet/torchvision_mnasnet.py: 13
@@ -172,9 +168,8 @@ torch == 1.9.0+cu111
 # zcls/model/recognizers/mobilenet/torchvision_mobilenetv3.py: 12
 # zcls/model/recognizers/resnet/torchvision_resnet.py: 14
 # zcls/model/recognizers/shufflenet/torchvision_sfv2.py: 14
-# zcls/util/checkpoint.py: 4
 # zcls/util/collect_env.py: 11
-torchvision == 0.10.0+cu111
+torchvision == 0.11.1
 
 # zcls/engine/inference.py: 13
 tqdm == 4.61.2
