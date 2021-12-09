@@ -58,7 +58,6 @@ if __name__ == '__main__':
     item_list = ['shufflenet_v2_x0_5', 'shufflenet_v2_x1_0']
     cfg_file_list = [
         'shufflenet_v2_x0_5_zcls_imagenet_224.yaml',
-        'shufflenet_v2_x1_0_zcls_imagenet_224.yaml',
     ]
     prefix_path = 'configs/benchmarks/shufflenet'
     for item, cfg_file in zip(item_list, cfg_file_list):

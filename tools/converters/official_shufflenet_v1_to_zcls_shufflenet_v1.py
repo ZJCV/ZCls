@@ -77,13 +77,13 @@ if __name__ == '__main__':
     item_list = ['shufflenetv1_3g2x', 'shufflenetv1_3g1_5x', 'shufflenetv1_3g1x', 'shufflenetv1_3g0_5x',
                  'shufflenetv1_8g2x', 'shufflenetv1_8g1_5x', 'shufflenetv1_8g1x', 'shufflenetv1_8g0_5x']
     cfg_file_list = [
-        'shufflenet_v1_3g2x_zcls_imagenet_224.yaml',
-        'shufflenet_v1_3g1_5x_zcls_imagenet_224.yaml',
+        'shufflenet_v1_3g2x.yaml',
+        'shufflenet_v1_3g1_5x.yaml',
         'shufflenet_v1_3g1x_zcls_imagenet_224.yaml',
-        'shufflenet_v1_3g0_5x_zcls_imagenet_224.yaml',
+        'shufflenet_v1_3g0_5x.yaml',
         'shufflenet_v1_8g2x_zcls_imagenet_224.yaml',
         'shufflenet_v1_8g1_5x_zcls_imagenet_224.yaml',
-        'shufflenet_v1_8g1x_zcls_imagenet_224.yaml',
+        'shufflenet_v1_8g1x.yaml',
         'shufflenet_v1_8g0_5x_zcls_imagenet_224.yaml',
     ]
     prefix_path = 'configs/benchmarks/shufflenet'

@@ -78,7 +78,7 @@ if __name__ == '__main__':
         'rxt50_32x4d_zcls_imagenet_224.yaml',
         'rxt101_32x8d_zcls_imagenet_224.yaml'
     ]
-    prefix_path = 'configs/benchmarks/resnet'
+    prefix_path = 'configs/benchmarks/resnet-resnext'
     for item, cfg_file in zip(item_list, cfg_file_list):
         config_path = os.path.join(prefix_path, cfg_file)
         print(config_path)
