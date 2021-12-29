@@ -21,7 +21,7 @@ def build_data(cfg, is_train=True, **kwargs):
     transform, target_transform = build_transform(cfg, is_train=is_train)
     dataset = build_dataset(cfg, transform=transform, target_transform=target_transform, is_train=is_train, **kwargs)
 
-    return build_dataloader(cfg, dataset, is_train=is_train)
+    return build_dataloader(cfg, dataset, is_train=is_train, **kwargs)
 
 
 def shuffle_dataset(loader, cur_epoch, is_shuffle=False):

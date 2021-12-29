@@ -41,8 +41,8 @@ def test(cfg):
     device = get_device(local_rank=local_rank_id)
     model = build_recognizer(cfg, device=device)
 
-    test_data_loader = build_data(cfg, is_train=False, rank_id=local_rank_id)
-
+    test_data_loader = build_data(cfg, is_train=False, device_type=device.type,
+                                  rank_id=local_rank_id)
     synchronize()
     do_evaluation(cfg, model, test_data_loader, device)
 

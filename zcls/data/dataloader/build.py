@@ -36,7 +36,8 @@ def build_sampler(cfg, dataset):
     return sampler
 
 
-def build_dataloader(cfg, dataset, is_train=True):
+def build_dataloader(cfg, dataset, is_train=True, **kwargs):
+    device_type = kwargs.get('device_type', 'cuda')
     batch_size = cfg.DATALOADER.TRAIN_BATCH_SIZE if is_train else cfg.DATALOADER.TEST_BATCH_SIZE
 
     sampler = None if isinstance(dataset, MPDataset) else build_sampler(cfg, dataset)
@@ -46,6 +47,7 @@ def build_dataloader(cfg, dataset, is_train=True):
                              batch_size=batch_size,
                              drop_last=is_train,
                              # [When to set pin_memory to true?](https://discuss.pytorch.org/t/when-to-set-pin-memory-to-true/19723)
-                             pin_memory=True)
+                             # Just using CPU, set pin_memory=False. Default: True
+                             pin_memory=True if 'cuda' in device_type else False)
 
     return data_loader
