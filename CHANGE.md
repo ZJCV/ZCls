@@ -1,5 +1,13 @@
 # CHANGE
 
+## v0.15.1
+
+* New features
+* Bug fixes
+  * fix(optim): filter all layers which require_grad=False
+  * fix(dataloader): when using cpu, set pin_memory=False. Default: True
+* Breaking changes.
+
 ## v0.15.0
 
 * New features
