@@ -10,7 +10,7 @@
 import torch.nn as nn
 
 from zcls.config import cfg
-from zcls.optim.optimizers.build import group_weight
+from zcls.optim.optimizers.build import filter_weight
 
 
 class TestA(nn.Module):
@@ -34,8 +34,12 @@ def test_group_weight():
     model = TestA()
     print(model)
 
-    groups = group_weight(cfg, model)
+    groups = filter_weight(cfg, model)
     print(groups)
+
+    import torch.optim as optim
+    optimizer = optim.SGD(groups, lr=1e-3, momentum=0.9, weight_decay=0.4)
+    optimizer.step()
 
 
 if __name__ == '__main__':

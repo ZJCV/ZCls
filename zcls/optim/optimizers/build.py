@@ -17,19 +17,21 @@ from .rmsprop import build_rmsprop
 
 def build_optimizer(cfg, model):
     assert isinstance(model, nn.Module)
-    groups = group_weight(cfg, model)
+    groups = filter_weight(cfg, model)
     optimizer = registry.OPTIMIZERS[cfg.OPTIMIZER.NAME](cfg, groups)
     optimizer.zero_grad()
 
     return optimizer
 
 
-def group_weight(cfg, module):
+def filter_weight(cfg, module):
     """
-    参考
+    1. Avoid bias of all layers and normalization layer for weight decay.
+    2. And filter all layers which require_grad=False
+
+    refer to
     1. [Allow to set 0 weight decay for biases and params in batch norm #1402](https://github.com/pytorch/pytorch/issues/1402)
     2. [Weight decay in the optimizers is a bad idea (especially with BatchNorm)](https://discuss.pytorch.org/t/weight-decay-in-the-optimizers-is-a-bad-idea-especially-with-batchnorm/16994)
-    过滤所有层bias和归一化层用于权重衰减
     """
     group_decay = []
     group_no_decay = []
@@ -61,5 +63,8 @@ def group_weight(cfg, module):
                     group_decay.append(m.bias)
 
     assert len(list(module.parameters())) == len(group_decay) + len(group_no_decay)
-    groups = [dict(params=group_decay), dict(params=group_no_decay, weight_decay=.0)]
+
+    new_group_decay = filter(lambda p: p.requires_grad, group_decay)
+    new_group_no_decay = filter(lambda p: p.requires_grad, group_no_decay)
+    groups = [dict(params=new_group_decay), dict(params=new_group_no_decay, weight_decay=0.)]
     return groups
