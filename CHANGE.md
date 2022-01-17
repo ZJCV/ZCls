@@ -1,5 +1,12 @@
 # CHANGE
 
+## v0.15.2
+
+* New features
+* Bug fixes
+  * perf(torchvision): update load_state_dict_from_url usage
+* Breaking changes.
+
 ## v0.15.1
 
 * New features
