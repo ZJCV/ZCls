@@ -56,7 +56,11 @@ def test_resnet3d_backbone():
 
 
 def test_pretrained_resnet3d_backbone():
-    from torchvision.models.utils import load_state_dict_from_url
+    # see [vision/torchvision/_internally_replaced_utils.py](https://github.com/pytorch/vision/blob/b50ffef5f85029b1440ac155ca1e6d95c55520aa/torchvision/_internally_replaced_utils.py)
+    try:
+        from torch.hub import load_state_dict_from_url
+    except ImportError:
+        from torch.utils.model_zoo import load_url as load_state_dict_from_url
     state_dict_2d = load_state_dict_from_url('https://download.pytorch.org/models/resnet50-19c8e357.pth', progress=True)
 
     data = torch.randn(1, 3, 1, 224, 224)

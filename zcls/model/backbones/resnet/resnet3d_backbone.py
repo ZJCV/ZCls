@@ -10,7 +10,12 @@
 from abc import ABC
 import torch.nn as nn
 from torchvision.models.resnet import model_urls
-from torchvision.models.utils import load_state_dict_from_url
+
+# see [vision/torchvision/_internally_replaced_utils.py](https://github.com/pytorch/vision/blob/b50ffef5f85029b1440ac155ca1e6d95c55520aa/torchvision/_internally_replaced_utils.py)
+try:
+    from torch.hub import load_state_dict_from_url
+except ImportError:
+    from torch.utils.model_zoo import load_url as load_state_dict_from_url
 
 from zcls.model import registry
 from zcls.model.conv_helper import get_conv
