@@ -7,8 +7,11 @@
 @description: 
 """
 
-import torch.nn as nn
+from .cross_entropy_loss import build_cross_entropy_loss
 
 
-def build_criterion():
-    return nn.CrossEntropyLoss()
+def build_criterion(args):
+    if args.loss == 'CrossEntropyLoss':
+        return build_cross_entropy_loss()
+    else:
+        raise ValueError(f"{args.loss} doesn't support")

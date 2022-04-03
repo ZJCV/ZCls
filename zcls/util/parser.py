@@ -35,6 +35,9 @@ def parse():
     parser.add_argument('-b', '--batch-size', default=256, type=int,
                         metavar='N', help='mini-batch size per process (default: 256)')
 
+    parser.add_argument('-l', '--loss', default="CrossEntropyLoss", type=str, metavar='LOSS',
+                        help='Loss type (default: CrossEntropyLoss)')
+
     parser.add_argument('-optim', '--optimizer', default="sgd", type=str, metavar='OPTIM',
                         help='Optimizer type (default: sgd)')
     parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
@@ -44,6 +47,7 @@ def parse():
                         help='momentum')
     parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
                         metavar='W', help='weight decay (default: 1e-4)')
+
     parser.add_argument('--print-freq', '-p', default=10, type=int,
                         metavar='N', help='print frequency (default: 10)')
     parser.add_argument('--resume', default='', type=str, metavar='PATH',
