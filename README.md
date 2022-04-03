@@ -7,7 +7,7 @@
  <div align="center"><a title="" href="https://github.com/ZJCV/ZCls"><img align="center" src="./imgs/ZCls.png"></a></div>
 
 <p align="center">
-  «ZCls» is a classification model training/inferring framework 
+  «ZCls» is a classification model training framework 
 <br>
 <br>
   <a href="https://github.com/RichardLitt/standard-readme"><img src="https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square"></a>

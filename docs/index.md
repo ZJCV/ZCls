@@ -1,6 +1,6 @@
-# ZCls(v0.15.2)
+# ZCls(v0.16.0)
 
-Welcome to zcls, a classification model training/inferring framework.
+Welcome to zcls, a classification model training framework.
 
 ## Chapter
 
@@ -27,4 +27,8 @@ Welcome to zcls, a classification model training/inferring framework.
 
 ## Breaking Changes
 
-1. From `v0.13.0`, add [albumentation](https://github.com/albumentations-team/albumentations) to replace [torchvision](https://github.com/pytorch/vision) as the main transform backbend. Now the image format is `BGR` not `RGB`
+1. From `v0.13.0`, add [albumentation](https://github.com/albumentations-team/albumentations) to
+   replace [torchvision](https://github.com/pytorch/vision) as the main transform backbend. Now the image format
+   is `BGR` not `RGB`
+2. From `v0.16.0`, the current training framework is improved based
+   on [apex](https://github.com/NVIDIA/apex/tree/master/examples/imagenet) engineering

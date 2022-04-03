@@ -8,7 +8,7 @@ import sys
 NAME = "zcls"
 AUTHOR = "zj"
 AUTHOR_EMAIL = "wy163zhuj@163.com"
-DESCRIPTION = "Object Classification Training/Inferring Framework "
+DESCRIPTION = "Object Classification Training Framework "
 URL = "https://github.com/ZJCV/ZCls"
 PYTHON_REQUIRES = ">=3.8"
 INSTALL_REQUIRES = [
