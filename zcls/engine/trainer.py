@@ -1,193 +1,121 @@
 # -*- coding: utf-8 -*-
 
 """
-@date: 2020/8/21 下午8:00
+@date: 2022/4/3 下午1:34
 @file: trainer.py
 @author: zj
 @description: 
 """
 
-import os
-import datetime
 import time
 import torch
 
-import numpy as np
-from torch.nn.parallel import DistributedDataParallel
+from ..util.meter import AverageMeter
+from ..util.prefetcher import data_prefetcher
+from ..util.metric import accuracy
+from ..util.dist import reduce_tensor
+from ..util.misc import to_python_float
+from ..optim.lr_scheduler.build import adjust_learning_rate
 
-from torch.cuda.amp import GradScaler
-from torch.cuda.amp import autocast
-
-from zcls.config.key_word import KEY_LOSS
-from zcls.util.metric_logger import MetricLogger, update_stats, log_iter_stats, log_epoch_stats
-from zcls.util.precise_bn import calculate_and_update_precise_bn
-from zcls.util.distributed import is_master_proc, synchronize
-from zcls.util import logging
-from zcls.util.prefetcher import Prefetcher
-from zcls.util.mixup import mixup_data, mixup_criterion, mixup_evaluate
-from zcls.util.cutmix import cutmix_data, cutmix_criterion, cutmix_evaluate
-
-from zcls.engine.inference import do_evaluation
-from zcls.data.build import shuffle_dataset
-
-logger = logging.get_logger(__name__)
+try:
+    from apex.parallel import DistributedDataParallel as DDP
+    from apex.fp16_utils import *
+    from apex import amp, optimizers
+    from apex.multi_tensor_apply import multi_tensor_applier
+except ImportError:
+    raise ImportError("Please install apex from https://www.github.com/nvidia/apex to run this example.")
 
 
-def do_train(cfg, arguments,
-             train_data_loader, test_data_loader,
-             model, criterion, optimizer, lr_scheduler,
-             check_pointer, device):
-    meters = MetricLogger()
-    evaluator = train_data_loader.dataset.evaluator
-    summary_writer = None
-    use_tensorboard = cfg.TRAIN.USE_TENSORBOARD
-    if is_master_proc() and use_tensorboard:
-        from torch.utils.tensorboard import SummaryWriter
-        summary_writer = SummaryWriter(log_dir=os.path.join(cfg.OUTPUT_DIR, 'tf_logs'))
+def train(args, train_loader, model, criterion, optimizer, epoch):
+    batch_time = AverageMeter()
+    losses = AverageMeter()
+    top1 = AverageMeter()
+    top5 = AverageMeter()
 
-    log_step = cfg.TRAIN.LOG_STEP
-    save_epoch = cfg.TRAIN.SAVE_EPOCH
-    eval_epoch = cfg.TRAIN.EVAL_EPOCH
-    max_epoch = cfg.TRAIN.MAX_EPOCH
-    gradient_accumulate_step = cfg.TRAIN.GRADIENT_ACCUMULATE_STEP
-
-    start_epoch = arguments['cur_epoch']
-    epoch_iters = len(train_data_loader)
-    max_iter = (max_epoch + 1 - start_epoch) * epoch_iters
-    current_iterations = 0
-
-    if cfg.TRAIN.HYBRID_PRECISION:
-        # Creates a GradScaler once at the beginning of training.
-        scalar = GradScaler()
+    # switch to train mode
     model.train()
-    optimizer.zero_grad()
-
-    synchronize()
-    logger.info("Start training ...")
-    # Perform the training loop.
-    logger.info("Start epoch: {}".format(start_epoch))
-    start_training_time = time.time()
     end = time.time()
-    for cur_epoch in range(start_epoch, max_epoch + 1):
-        shuffle_dataset(train_data_loader, cur_epoch, is_shuffle=cfg.DATALOADER.RANDOM_SAMPLE)
-        data_loader = Prefetcher(train_data_loader, device) if cfg.DATALOADER.PREFETCHER else train_data_loader
-        for iteration, (images, targets) in enumerate(data_loader):
-            if not cfg.DATALOADER.PREFETCHER:
-                images = images.to(device=device, non_blocking=True)
-                targets = targets.to(device=device, non_blocking=True)
-            mix_prob = np.random.rand(1)
-            if cfg.TRAIN.MIXUP and mix_prob < 0.5:
-                images, targets_a, targets_b, mix_lam = mixup_data(images, targets, alpha=1.0, device=device)
-            if cfg.TRAIN.CUTMIX and mix_prob < 0.5:
-                images, targets_a, targets_b, mix_lam = cutmix_data(images, targets, alpha=1.0, device=device)
 
-            if cfg.TRAIN.HYBRID_PRECISION:
-                # Runs the forward pass with autocasting.
-                with autocast():
-                    output_dict = model(images)
-                    if cfg.TRAIN.MIXUP and mix_prob < 0.5:
-                        loss_dict = mixup_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
-                    elif cfg.TRAIN.CUTMIX and mix_prob < 0.5:
-                        loss_dict = cutmix_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
-                    else:
-                        loss_dict = criterion(output_dict, targets)
-                    loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
-                if isinstance(model, DistributedDataParallel):
-                    # multi-gpu distributed training
-                    with model.no_sync():
-                        scalar.scale(loss).backward()
-                else:
-                    scalar.scale(loss).backward()
+    prefetcher = data_prefetcher(train_loader)
+    input, target = prefetcher.next()
+    i = 0
+    while input is not None:
+        i += 1
+        if args.prof >= 0 and i == args.prof:
+            print("Profiling begun at iteration {}".format(i))
+            torch.cuda.cudart().cudaProfilerStart()
+
+        if args.prof >= 0: torch.cuda.nvtx.range_push("Body of iteration {}".format(i))
+
+        # adjust_learning_rate(optimizer, epoch, i, len(train_loader))
+        adjust_learning_rate(args, optimizer, epoch, i, len(train_loader))
+
+        # compute output
+        if args.prof >= 0: torch.cuda.nvtx.range_push("forward")
+        output = model(input)
+        if args.prof >= 0: torch.cuda.nvtx.range_pop()
+        loss = criterion(output, target)
+
+        # compute gradient and do SGD step
+        optimizer.zero_grad()
+
+        if args.prof >= 0: torch.cuda.nvtx.range_push("backward")
+        with amp.scale_loss(loss, optimizer) as scaled_loss:
+            scaled_loss.backward()
+        if args.prof >= 0: torch.cuda.nvtx.range_pop()
+
+        # for param in model.parameters():
+        #     print(param.data.double().sum().item(), param.grad.data.double().sum().item())
+
+        if args.prof >= 0: torch.cuda.nvtx.range_push("optimizer.step()")
+        optimizer.step()
+        if args.prof >= 0: torch.cuda.nvtx.range_pop()
+
+        if i % args.print_freq == 0:
+            # Every print_freq iterations, check the loss, accuracy, and speed.
+            # For best performance, it doesn't make sense to print these metrics every
+            # iteration, since they incur an allreduce and some host<->device syncs.
+
+            # Measure accuracy
+            prec1, prec5 = accuracy(output.data, target, topk=(1, 5))
+
+            # Average loss and accuracy across processes for logging
+            if args.distributed:
+                reduced_loss = reduce_tensor(args.world_size, loss.data)
+                prec1 = reduce_tensor(args.world_size, prec1)
+                prec5 = reduce_tensor(args.world_size, prec5)
             else:
-                output_dict = model(images)
-                if cfg.TRAIN.MIXUP and mix_prob < 0.5:
-                    loss_dict = mixup_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
-                elif cfg.TRAIN.CUTMIX and mix_prob < 0.5:
-                    loss_dict = cutmix_criterion(criterion, output_dict, targets_a, targets_b, mix_lam)
-                else:
-                    loss_dict = criterion(output_dict, targets)
-                loss = loss_dict[KEY_LOSS] / gradient_accumulate_step
+                reduced_loss = loss.data
 
-                if isinstance(model, DistributedDataParallel):
-                    # multi-gpu distributed training
-                    with model.no_sync():
-                        loss.backward()
-                else:
-                    loss.backward()
+            # to_python_float incurs a host<->device sync
+            losses.update(to_python_float(reduced_loss), input.size(0))
+            top1.update(to_python_float(prec1), input.size(0))
+            top5.update(to_python_float(prec5), input.size(0))
 
-            if cfg.TRAIN.CLIP_GRADIENT:
-                torch.nn.utils.clip_grad_norm_(model.parameters(), cfg.TRAIN.MAX_NORM)
-
-            current_iterations += 1
-            if current_iterations % gradient_accumulate_step == 0:
-                current_iterations = 0
-                if cfg.TRAIN.HYBRID_PRECISION:
-                    scalar.step(optimizer)
-                    scalar.update()
-                else:
-                    optimizer.step()
-                optimizer.zero_grad()
-
-            if cfg.TRAIN.MIXUP and mix_prob < 0.5:
-                acc_dict = mixup_evaluate(evaluator, output_dict, targets_a, targets_b, mix_lam)
-            elif cfg.TRAIN.CUTMIX and mix_prob < 0.5:
-                acc_dict = cutmix_evaluate(evaluator, output_dict, targets_a, targets_b, mix_lam)
-            else:
-                acc_dict = evaluator.evaluate_train(output_dict, targets)
-            update_stats(cfg.NUM_GPUS, meters, loss_dict, acc_dict)
-
-            batch_time = time.time() - end
+            torch.cuda.synchronize()
+            batch_time.update((time.time() - end) / args.print_freq)
             end = time.time()
-            meters.update(time=batch_time)
-            if (iteration + 1) % log_step == 0:
-                logger.info(log_iter_stats(
-                    iteration, epoch_iters, cur_epoch, max_epoch, optimizer.param_groups[0]['lr'], meters))
-            if is_master_proc() and summary_writer:
-                global_step = (cur_epoch - 1) * epoch_iters + (iteration + 1)
-                for name, meter in meters.meters.items():
-                    summary_writer.add_scalar('{}/avg'.format(name), float(meter.avg),
-                                              global_step=global_step)
-                    summary_writer.add_scalar('{}/global_avg'.format(name), meter.global_avg,
-                                              global_step=global_step)
-                summary_writer.add_scalar('lr', optimizer.param_groups[0]['lr'], global_step=global_step)
 
-        if cfg.DATALOADER.PREFETCHER:
-            data_loader.release()
-            del data_loader
-        torch.cuda.empty_cache()
-        logger.info(log_epoch_stats(epoch_iters, cur_epoch, max_epoch, optimizer.param_groups[0]['lr'], meters))
-        arguments["cur_epoch"] = cur_epoch
-        lr_scheduler.step()
-        if is_master_proc() and save_epoch > 0 and cur_epoch % save_epoch == 0 and cur_epoch != max_epoch:
-            check_pointer.save("model_{:04d}".format(cur_epoch), **arguments)
-        if eval_epoch > 0 and cur_epoch % eval_epoch == 0 and cur_epoch != max_epoch:
-            if cfg.MODEL.NORM.PRECISE_BN:
-                calculate_and_update_precise_bn(
-                    train_data_loader,
-                    model,
-                    min(cfg.MODEL.NORM.NUM_BATCHES_PRECISE, len(train_data_loader)),
-                    cfg.NUM_GPUS > 0,
-                )
+            if args.local_rank == 0:
+                print('Epoch: [{0}][{1}/{2}]\t'
+                      'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                      'Speed {3:.3f} ({4:.3f})\t'
+                      'Loss {loss.val:.10f} ({loss.avg:.4f})\t'
+                      'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
+                      'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
+                    epoch, i, len(train_loader),
+                    args.world_size * args.batch_size / batch_time.val,
+                    args.world_size * args.batch_size / batch_time.avg,
+                    batch_time=batch_time,
+                    loss=losses, top1=top1, top5=top5))
+        if args.prof >= 0: torch.cuda.nvtx.range_push("prefetcher.next()")
+        input, target = prefetcher.next()
+        if args.prof >= 0: torch.cuda.nvtx.range_pop()
 
-            eval_results = do_evaluation(cfg, model, test_data_loader, device, cur_epoch=cur_epoch)
-            model.train()
-            if is_master_proc() and summary_writer:
-                for key, value in eval_results.items():
-                    summary_writer.add_scalar(f'eval/{key}', value, global_step=cur_epoch + 1)
+        # Pop range "Body of iteration {}".format(i)
+        if args.prof >= 0: torch.cuda.nvtx.range_pop()
 
-    if eval_epoch > 0:
-        logger.info('Start final evaluating...')
-        torch.cuda.empty_cache()  # speed up evaluating after training finished
-        eval_results = do_evaluation(cfg, model, test_data_loader, device)
-
-        if is_master_proc() and summary_writer:
-            for key, value in eval_results.items():
-                summary_writer.add_scalar(f'eval/{key}', value, global_step=arguments["cur_epoch"])
-            summary_writer.close()
-    if is_master_proc():
-        check_pointer.save("model_final", **arguments)
-    # compute training time
-    total_training_time = int(time.time() - start_training_time)
-    total_time_str = str(datetime.timedelta(seconds=total_training_time))
-    logger.info("Total training time: {} ({:.4f} s / it)".format(total_time_str, total_training_time / max_iter))
-    return model
+        if args.prof >= 0 and i == args.prof + 10:
+            print("Profiling ended at iteration {}".format(i))
+            torch.cuda.cudart().cudaProfilerStop()
+            quit()

@@ -1,118 +1,67 @@
 # -*- coding: utf-8 -*-
 
 """
-@date: 2020/10/4 下午3:09
+@date: 2022/4/3 下午1:30
 @file: parser.py
 @author: zj
 @description: 
 """
 
+import os
 import argparse
-from yacs.config import CfgNode as CN
+
+import torchvision.models as models
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='ZCls Training/Test With PyTorch')
-    parser.add_argument('-cfg',
-                        "--config_file",
-                        type=str,
-                        default="",
-                        metavar="FILE",
-                        help="path to config file")
-    parser.add_argument('--pretrained',
-                        type=str,
-                        default="",
-                        metavar='PRETRAINED_FILE',
-                        help="path to pretrained model")
-    parser.add_argument('-out',
-                        '--output_dir',
-                        type=str,
-                        default="",
-                        metavar="OUTPUT_DIR",
-                        help="path to output")
+def parse():
+    model_names = sorted(name for name in models.__dict__
+                         if name.islower() and not name.startswith("__")
+                         and callable(models.__dict__[name]))
 
-    parser.add_argument('--log_step',
-                        type=int,
-                        default=-1,
-                        help='Print logs every log_step (default: 10)')
-    parser.add_argument('--save_step',
-                        type=int,
-                        default=-1,
-                        help='Save checkpoint every save_step, disabled when save_step < 0 (default: 1000)')
-    parser.add_argument('--eval_step',
-                        type=int,
-                        default=-1,
-                        help='Evaluate dataset every eval_step, disabled when eval_step < 0 (default: 1000)')
+    parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
+    parser.add_argument('data', metavar='DIR',
+                        help='path to dataset')
+    parser.add_argument('--arch', '-a', metavar='ARCH', default='resnet18',
+                        choices=model_names,
+                        help='model architecture: ' +
+                             ' | '.join(model_names) +
+                             ' (default: resnet18)')
+    parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
+                        help='number of data loading workers (default: 4)')
+    parser.add_argument('--epochs', default=90, type=int, metavar='N',
+                        help='number of total epochs to run')
+    parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
+                        help='manual epoch number (useful on restarts)')
+    parser.add_argument('-b', '--batch-size', default=256, type=int,
+                        metavar='N', help='mini-batch size per process (default: 256)')
+    parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
+                        metavar='LR',
+                        help='Initial learning rate.  Will be scaled by <global batch size>/256: args.lr = args.lr*float(args.batch_size*args.world_size)/256.  A warmup schedule will also be applied over the first 5 epochs.')
+    parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
+                        help='momentum')
+    parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
+                        metavar='W', help='weight decay (default: 1e-4)')
+    parser.add_argument('--print-freq', '-p', default=10, type=int,
+                        metavar='N', help='print frequency (default: 10)')
+    parser.add_argument('--resume', default='', type=str, metavar='PATH',
+                        help='path to latest checkpoint (default: none)')
+    parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
+                        help='evaluate model on validation set')
+    parser.add_argument('--pretrained', dest='pretrained', action='store_true',
+                        help='use pre-trained model')
 
-    parser.add_argument('--resume',
-                        default=False,
-                        action='store_true',
-                        help='Resume training')
-    parser.add_argument('--use_tensorboard',
-                        default=True,
-                        action='store_false')
+    parser.add_argument('--prof', default=-1, type=int,
+                        help='Only run 10 iterations for profiling.')
+    parser.add_argument('--deterministic', action='store_true')
 
-    parser.add_argument('-g',
-                        '--gpus',
-                        type=int,
-                        default=-1,
-                        help='number of gpus per node (default: 1)')
-    parser.add_argument('-n',
-                        '--nodes',
-                        type=int,
-                        default=-1,
-                        metavar='N',
-                        help='number of machines (default: 1)')
-    parser.add_argument('-nr',
-                        '--nr',
-                        type=int,
-                        default=-1,
-                        help='ranking within the nodes (default: 0)')
-    parser.add_argument("--init_method",
-                        help="Initialization method, includes TCP or shared file-system",
-                        default="",
-                        type=str)
+    parser.add_argument("--local_rank", default=os.getenv('LOCAL_RANK', 0), type=int)
+    parser.add_argument('--sync_bn', action='store_true',
+                        help='enabling apex sync BN.')
 
-    parser.add_argument("opts",
-                        help="Modify config options using the command-line",
-                        default=None,
-                        nargs=argparse.REMAINDER)
-
+    parser.add_argument('--opt-level', type=str)
+    parser.add_argument('--keep-batchnorm-fp32', type=str, default=None)
+    parser.add_argument('--loss-scale', type=str, default=None)
+    parser.add_argument('--channels-last', type=bool, default=False)
     args = parser.parse_args()
+
     return args
-
-
-def load_config(args, cfg):
-    assert isinstance(args, argparse.Namespace)
-    assert isinstance(cfg, CN)
-    if args.config_file:
-        cfg.merge_from_file(args.config_file)
-    if args.pretrained:
-        cfg.MODEL.RECOGNIZER.PRELOADED = args.pretrained
-    if args.output_dir:
-        cfg.OUTPUT_DIR = args.output_dir
-
-    if args.log_step != -1:
-        cfg.TRAIN.LOG_STEP = args.log_step
-    if args.save_step != -1:
-        cfg.TRAIN.SAVE_STEP = args.save_step
-    if args.eval_step != -1:
-        cfg.TRAIN.EVAL_STEP = args.eval_step
-
-    if args.resume:
-        cfg.TRAIN.RESUME = True
-    if not args.use_tensorboard:
-        cfg.TRAIN.USE_TENSORBOARD = False
-
-    if args.gpus != -1:
-        cfg.NUM_GPUS = args.gpus
-    if args.nodes != -1:
-        cfg.NUM_NODES = args.nodes
-    if args.nr != -1:
-        cfg.RANK_ID = args.nr
-    if args.init_method:
-        cfg.INIT_METHOD = args.init_method
-
-    cfg.merge_from_list(args.opts)
-    cfg.freeze()
-    return cfg

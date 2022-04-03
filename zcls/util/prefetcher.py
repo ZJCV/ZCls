@@ -1,69 +1,65 @@
 # -*- coding: utf-8 -*-
 
 """
-@date: 2021/3/18 下午2:13
+@date: 2022/4/3 下午1:34
 @file: prefetcher.py
 @author: zj
 @description: 
 """
 
 import torch
-from torch.utils.data import DataLoader
-
-from . import logging
-
-logger = logging.get_logger(__name__)
 
 
-class Prefetcher():
-    """
-    from [data_prefetcher](https://github.com/NVIDIA/apex/blob/f5cd5ae937f168c763985f627bbf850648ea5f3f/examples/imagenet/main_amp.py#L256)
-    refert to:
-    1. [Dose data_prefetcher() really speed up training? #304](https://github.com/NVIDIA/apex/issues/304)
-    2. [如何给你PyTorch里的Dataloader打鸡血](https://zhuanlan.zhihu.com/p/66145913)
-    Note:
-    For overlapped prefetching, supplying pin_memory=True to the dataloader is always required
-    """
-
-    def __init__(self, loader: DataLoader, device):
-        assert isinstance(loader, DataLoader)
-        self.device = device
-        self.length = len(loader)
+class data_prefetcher():
+    def __init__(self, loader):
         self.loader = iter(loader)
         self.stream = torch.cuda.Stream()
-
+        self.mean = torch.tensor([0.485 * 255, 0.456 * 255, 0.406 * 255]).cuda().view(1, 3, 1, 1)
+        self.std = torch.tensor([0.229 * 255, 0.224 * 255, 0.225 * 255]).cuda().view(1, 3, 1, 1)
+        # With Amp, it isn't necessary to manually convert data to half.
+        # if args.fp16:
+        #     self.mean = self.mean.half()
+        #     self.std = self.std.half()
         self.preload()
 
     def preload(self):
         try:
             self.next_input, self.next_target = next(self.loader)
-        except StopIteration as e:
+        except StopIteration:
             self.next_input = None
             self.next_target = None
             return
+        # if record_stream() doesn't work, another option is to make sure device inputs are created
+        # on the main stream.
+        # self.next_input_gpu = torch.empty_like(self.next_input, device='cuda')
+        # self.next_target_gpu = torch.empty_like(self.next_target, device='cuda')
+        # Need to make sure the memory allocated for next_* is not still in use by the main stream
+        # at the time we start copying to next_*:
+        # self.stream.wait_stream(torch.cuda.current_stream())
         with torch.cuda.stream(self.stream):
-            # self.next_input = self.next_input.cuda(non_blocking=True)
-            # self.next_target = self.next_target.cuda(non_blocking=True)
-            self.next_input = self.next_input.to(self.device, non_blocking=True)
-            self.next_target = self.next_target.to(self.device, non_blocking=True)
+            self.next_input = self.next_input.cuda(non_blocking=True)
+            self.next_target = self.next_target.cuda(non_blocking=True)
+            # more code for the alternative if record_stream() doesn't work:
+            # copy_ will record the use of the pinned source tensor in this side stream.
+            # self.next_input_gpu.copy_(self.next_input, non_blocking=True)
+            # self.next_target_gpu.copy_(self.next_target, non_blocking=True)
+            # self.next_input = self.next_input_gpu
+            # self.next_target = self.next_target_gpu
 
-    def __next__(self):
+            # With Amp, it isn't necessary to manually convert data to half.
+            # if args.fp16:
+            #     self.next_input = self.next_input.half()
+            # else:
+            self.next_input = self.next_input.float()
+            self.next_input = self.next_input.sub_(self.mean).div_(self.std)
+
+    def next(self):
         torch.cuda.current_stream().wait_stream(self.stream)
-        if self.next_input is None:
-            raise StopIteration
         input = self.next_input
         target = self.next_target
+        if input is not None:
+            input.record_stream(torch.cuda.current_stream())
+        if target is not None:
+            target.record_stream(torch.cuda.current_stream())
         self.preload()
         return input, target
-
-    def __iter__(self):
-        return self
-
-    def __len__(self):
-        return self.length
-
-    def release(self):
-        del self.stream
-        del self.loader
-        self.device = None
-        self.length = None
