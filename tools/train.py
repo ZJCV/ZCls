@@ -11,7 +11,7 @@ import torch.utils.data.distributed
 from zcls.data.build import build_data
 from zcls.optim.optimizer.build import build_optimizer
 from zcls.model.criterion.build import build_criterion
-from zcls.model.build import build_model
+from zcls.model.model.build import build_model
 from zcls.engine.trainer import train
 from zcls.engine.infer import validate
 from zcls.util.parser import parse
@@ -141,7 +141,7 @@ def main():
                 'state_dict': model.state_dict(),
                 'best_prec1': best_prec1,
                 'optimizer': optimizer.state_dict(),
-            }, is_best)
+            }, is_best, filename=f'checkpoint_{epoch}.pth.tar')
 
 
 if __name__ == '__main__':

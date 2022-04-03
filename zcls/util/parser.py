@@ -10,13 +10,11 @@
 import os
 import argparse
 
-import torchvision.models as models
+from ..model.model.build import __supported_model__
 
 
 def parse():
-    model_names = sorted(name for name in models.__dict__
-                         if name.islower() and not name.startswith("__")
-                         and callable(models.__dict__[name]))
+    model_names = sorted(__supported_model__)
 
     parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
     parser.add_argument('data', metavar='DIR',
@@ -26,6 +24,9 @@ def parse():
                         help='model architecture: ' +
                              ' | '.join(model_names) +
                              ' (default: resnet18)')
+    parser.add_argument('-n', '--num-classes', default=1000, type=int, metavar='NUM-CLASSES',
+                        help='number of model output (default: 1000)')
+
     parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
                         help='number of data loading workers (default: 4)')
     parser.add_argument('--epochs', default=90, type=int, metavar='N',

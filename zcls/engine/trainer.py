@@ -59,6 +59,7 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
         # compute gradient and do SGD step
         optimizer.zero_grad()
 
+
         if args.prof >= 0: torch.cuda.nvtx.range_push("backward")
         with amp.scale_loss(loss, optimizer) as scaled_loss:
             scaled_loss.backward()
