@@ -34,6 +34,9 @@ def parse():
                         help='manual epoch number (useful on restarts)')
     parser.add_argument('-b', '--batch-size', default=256, type=int,
                         metavar='N', help='mini-batch size per process (default: 256)')
+
+    parser.add_argument('-optim', '--optimizer', default="sgd", type=str, metavar='OPTIM',
+                        help='Optimizer type (default: sgd)')
     parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
                         metavar='LR',
                         help='Initial learning rate.  Will be scaled by <global batch size>/256: args.lr = args.lr*float(args.batch_size*args.world_size)/256.  A warmup schedule will also be applied over the first 5 epochs.')

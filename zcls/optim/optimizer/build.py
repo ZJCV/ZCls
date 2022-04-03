@@ -7,10 +7,14 @@
 @description: 
 """
 
-import torch
+from .sgd import build_sgd
 
 
 def build_optimizer(args, model):
-    return torch.optim.SGD(model.parameters(), args.lr,
-                           momentum=args.momentum,
-                           weight_decay=args.weight_decay)
+    if args.optimizer == 'sgd':
+        return build_sgd(model,
+                         lr=args.lr,
+                         momentum=args.momentum,
+                         weight_decay=args.weight_decay)
+    else:
+        raise ValueError(f"{args.optimizer} doesn't support")
