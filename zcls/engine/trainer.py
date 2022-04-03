@@ -10,13 +10,6 @@
 import time
 import torch
 
-from ..util.meter import AverageMeter
-from ..util.prefetcher import data_prefetcher
-from ..util.metric import accuracy
-from ..util.dist import reduce_tensor
-from ..util.misc import to_python_float
-from ..optim.lr_scheduler.build import adjust_learning_rate
-
 try:
     from apex.parallel import DistributedDataParallel as DDP
     from apex.fp16_utils import *
@@ -24,6 +17,17 @@ try:
     from apex.multi_tensor_apply import multi_tensor_applier
 except ImportError:
     raise ImportError("Please install apex from https://www.github.com/nvidia/apex to run this example.")
+
+from ..util.meter import AverageMeter
+from ..util.prefetcher import data_prefetcher
+from ..util.metric import accuracy
+from ..util.distributed import reduce_tensor
+from ..util.misc import to_python_float
+from ..optim.lr_scheduler.build import adjust_learning_rate
+
+from zcls.util import logging
+
+logger = logging.get_logger(__name__)
 
 
 def train(args, train_loader, model, criterion, optimizer, epoch):
@@ -42,7 +46,7 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
     while input is not None:
         i += 1
         if args.prof >= 0 and i == args.prof:
-            print("Profiling begun at iteration {}".format(i))
+            logger.info("Profiling begun at iteration {}".format(i))
             torch.cuda.cudart().cudaProfilerStart()
 
         if args.prof >= 0: torch.cuda.nvtx.range_push("Body of iteration {}".format(i))
@@ -58,7 +62,6 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
-
 
         if args.prof >= 0: torch.cuda.nvtx.range_push("backward")
         with amp.scale_loss(loss, optimizer) as scaled_loss:
@@ -98,12 +101,12 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
             end = time.time()
 
             if args.local_rank == 0:
-                print('Epoch: [{0}][{1}/{2}]\t'
-                      'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                      'Speed {3:.3f} ({4:.3f})\t'
-                      'Loss {loss.val:.10f} ({loss.avg:.4f})\t'
-                      'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
-                      'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
+                logger.info('Epoch: [{0}][{1}/{2}]\t'
+                            'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                            'Speed {3:.3f} ({4:.3f})\t'
+                            'Loss {loss.val:.10f} ({loss.avg:.4f})\t'
+                            'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
+                            'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                     epoch, i, len(train_loader),
                     args.world_size * args.batch_size / batch_time.val,
                     args.world_size * args.batch_size / batch_time.avg,
@@ -117,6 +120,6 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
         if args.prof >= 0: torch.cuda.nvtx.range_pop()
 
         if args.prof >= 0 and i == args.prof + 10:
-            print("Profiling ended at iteration {}".format(i))
+            logger.info("Profiling ended at iteration {}".format(i))
             torch.cuda.cudart().cudaProfilerStop()
             quit()

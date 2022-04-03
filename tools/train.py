@@ -17,6 +17,10 @@ from zcls.engine.infer import validate
 from zcls.util.parser import parse
 from zcls.util.checkpoint import save_checkpoint
 
+from zcls.util import logging
+
+logger = logging.get_logger(__name__)
+
 try:
     from apex.parallel import DistributedDataParallel as DDP
     from apex.fp16_utils import *
@@ -30,11 +34,6 @@ def main():
     global best_prec1, args
 
     args = parse()
-    print("opt_level = {}".format(args.opt_level))
-    print("keep_batchnorm_fp32 = {}".format(args.keep_batchnorm_fp32), type(args.keep_batchnorm_fp32))
-    print("loss_scale = {}".format(args.loss_scale), type(args.loss_scale))
-
-    print("\nCUDNN VERSION: {}\n".format(torch.backends.cudnn.version()))
 
     cudnn.benchmark = True
     best_prec1 = 0
@@ -59,6 +58,19 @@ def main():
         args.world_size = torch.distributed.get_world_size()
 
     assert torch.backends.cudnn.enabled, "Amp requires cudnn backend to be enabled."
+
+    args.output_dir = 'outputs'
+    if args.local_rank == 0 and not os.path.exists(args.output_dir):
+        os.makedirs(args.output_dir)
+
+    logging.setup_logging(local_rank=args.local_rank, output_dir=args.output_dir)
+    logger.info(args)
+
+    logger.info("opt_level = {}".format(args.opt_level))
+    logger.info("keep_batchnorm_fp32 = {}".format(args.keep_batchnorm_fp32, type(args.keep_batchnorm_fp32)))
+    logger.info("loss_scale = {}".format(args.loss_scale, type(args.loss_scale)))
+
+    logger.info("\nCUDNN VERSION: {}\n".format(torch.backends.cudnn.version()))
 
     if args.channels_last:
         memory_format = torch.channels_last
@@ -98,17 +110,17 @@ def main():
         # Use a local scope to avoid dangling references
         def resume():
             if os.path.isfile(args.resume):
-                print("=> loading checkpoint '{}'".format(args.resume))
+                logger.info("=> loading checkpoint '{}'".format(args.resume))
                 checkpoint = torch.load(args.resume, map_location=lambda storage, loc: storage.cuda(args.gpu))
                 args.start_epoch = checkpoint['epoch']
                 global best_prec1
                 best_prec1 = checkpoint['best_prec1']
                 model.load_state_dict(checkpoint['state_dict'])
                 optimizer.load_state_dict(checkpoint['optimizer'])
-                print("=> loaded checkpoint '{}' (epoch {})"
+                logger.info("=> loaded checkpoint '{}' (epoch {})"
                       .format(args.resume, checkpoint['epoch']))
             else:
-                print("=> no checkpoint found at '{}'".format(args.resume))
+                logger.info("=> no checkpoint found at '{}'".format(args.resume))
 
         resume()
 
