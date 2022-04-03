@@ -7,11 +7,13 @@
 @description: 
 """
 
+import os
 import torch
 import shutil
 
 
-def save_checkpoint(state, is_best, filename='checkpoint.pth.tar'):
-    torch.save(state, filename)
+def save_checkpoint(state, is_best, output_dir='outputs', filename='checkpoint.pth.tar'):
+    save_path = os.path.join(output_dir, filename)
+    torch.save(state, save_path)
     if is_best:
-        shutil.copyfile(filename, 'model_best.pth.tar')
+        shutil.copyfile(save_path, os.path.join(output_dir, 'model_best.pth.tar'))

@@ -118,7 +118,7 @@ def main():
                 model.load_state_dict(checkpoint['state_dict'])
                 optimizer.load_state_dict(checkpoint['optimizer'])
                 logger.info("=> loaded checkpoint '{}' (epoch {})"
-                      .format(args.resume, checkpoint['epoch']))
+                            .format(args.resume, checkpoint['epoch']))
             else:
                 logger.info("=> no checkpoint found at '{}'".format(args.resume))
 
@@ -153,7 +153,7 @@ def main():
                 'state_dict': model.state_dict(),
                 'best_prec1': best_prec1,
                 'optimizer': optimizer.state_dict(),
-            }, is_best, filename=f'checkpoint_{epoch}.pth.tar')
+            }, is_best, output_dir=args.output_dir, filename=f'checkpoint_{epoch}.pth.tar')
 
 
 if __name__ == '__main__':

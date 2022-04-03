@@ -25,9 +25,9 @@ def build_model(args, memory_format):
 
     # create model
     if args.pretrained:
-        logger("=> using pre-trained model '{}'".format(args.arch))
+        logger.info("=> using pre-trained model '{}'".format(args.arch))
     else:
-        logger("=> creating model '{}'".format(args.arch))
+        logger.info("=> creating model '{}'".format(args.arch))
 
     if 'ghostnet' in args.arch:
         model = get_ghostnet(pretrained=args.pretrained, num_classes=args.num_classes, arch=args.arch)
@@ -38,7 +38,7 @@ def build_model(args, memory_format):
 
     if args.sync_bn:
         import apex
-        print("using apex synced BN")
+        logger.info("using apex synced BN")
         model = apex.parallel.convert_syncbn_model(model)
 
     model = model.cuda().to(memory_format=memory_format)

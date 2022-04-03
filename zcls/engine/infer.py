@@ -63,7 +63,7 @@ def validate(args, val_loader, model, criterion):
 
         # TODO:  Change timings to mirror train().
         if args.local_rank == 0 and i % args.print_freq == 0:
-            logger('Test: [{0}/{1}]\t'
+            logger.info('Test: [{0}/{1}]\t'
                    'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                    'Speed {2:.3f} ({3:.3f})\t'
                    'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
@@ -77,7 +77,7 @@ def validate(args, val_loader, model, criterion):
 
         input, target = prefetcher.next()
 
-    print(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f}'
-          .format(top1=top1, top5=top5))
+    logger.info(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f}'
+           .format(top1=top1, top5=top5))
 
     return top1.avg
