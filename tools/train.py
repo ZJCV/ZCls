@@ -16,6 +16,7 @@ from zcls.engine.trainer import train
 from zcls.engine.infer import validate
 from zcls.util.parser import parse
 from zcls.util.checkpoint import save_checkpoint
+from zcls.data.dataset.mp_dataset import MPDataset
 
 from zcls.util import logging
 
@@ -70,7 +71,7 @@ def main():
     logger.info("keep_batchnorm_fp32 = {}".format(args.keep_batchnorm_fp32, type(args.keep_batchnorm_fp32)))
     logger.info("loss_scale = {}".format(args.loss_scale, type(args.loss_scale)))
 
-    logger.info("\nCUDNN VERSION: {}\n".format(torch.backends.cudnn.version()))
+    logger.info("CUDNN VERSION: {}\n".format(torch.backends.cudnn.version()))
 
     if args.channels_last:
         memory_format = torch.channels_last
@@ -105,6 +106,7 @@ def main():
     # define loss function (criterion) and optimizer
     criterion = build_criterion(args).cuda()
 
+    args.epoch = 0
     # Optionally resume from a checkpoint
     if args.resume:
         # Use a local scope to avoid dangling references
@@ -119,6 +121,7 @@ def main():
                 optimizer.load_state_dict(checkpoint['optimizer'])
                 logger.info("=> loaded checkpoint '{}' (epoch {})"
                             .format(args.resume, checkpoint['epoch']))
+                args.epoch = checkpoint['epoch']
             else:
                 logger.info("=> no checkpoint found at '{}'".format(args.resume))
 
@@ -132,7 +135,9 @@ def main():
         return
 
     for epoch in range(args.start_epoch, args.epochs):
-        if args.distributed:
+        if isinstance(train_loader.dataset, MPDataset):
+            train_loader.dataset.set_epoch(epoch)
+        elif args.distributed:
             train_sampler.set_epoch(epoch)
 
         # train for one epoch

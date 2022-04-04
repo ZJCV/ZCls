@@ -11,14 +11,20 @@ import os
 import argparse
 
 from ..model.model.build import __supported_model__
+from ..data.dataset.build import __supported_dataset__
 
 
 def parse():
     model_names = sorted(__supported_model__)
+    dataset_names = sorted(__supported_dataset__)
 
     parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
-    parser.add_argument('data', metavar='DIR',
-                        help='path to dataset')
+    parser.add_argument('data', metavar='DIR', help='path to dataset')
+    parser.add_argument('--dataset', '-d', metavar='DATASET', default='general',
+                        choices=dataset_names,
+                        help='dataset type: ' +
+                             ' | '.join(dataset_names) +
+                             ' (default: general)')
     parser.add_argument('--arch', '-a', metavar='ARCH', default='resnet18',
                         choices=model_names,
                         help='model architecture: ' +
