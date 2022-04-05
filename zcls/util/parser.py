@@ -54,9 +54,17 @@ def parse():
                         help='momentum')
     parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
                         metavar='W', help='weight decay (default: 1e-4)')
+    parser.add_argument('--warmup', default=True, type=bool, metavar='WARMUP',
+                        help='Is warmup (default: True)')
+    parser.add_argument('--warmup-epochs', default=5, type=int, metavar='WARMUP-EPOCHS',
+                        help='Warmup epochs (default: 5)')
+    parser.add_argument('--lr-scheduler', default='MultiStepLR', type=str, metavar='LR-SCHEDULER',
+                        help='LR scheduler type (default: MultiStepLR)')
 
     parser.add_argument('--print-freq', '-p', default=10, type=int,
                         metavar='N', help='print frequency (default: 10)')
+    parser.add_argument('--output-dir', '-o', default='outputs', type=str,
+                        metavar='OUTPUT_DIR', help='output path (default: outputs)')
     parser.add_argument('--resume', default='', type=str, metavar='PATH',
                         help='path to latest checkpoint (default: none)')
     parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
