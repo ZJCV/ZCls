@@ -51,7 +51,6 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
 
         if args.prof >= 0: torch.cuda.nvtx.range_push("Body of iteration {}".format(i))
 
-        # adjust_learning_rate(optimizer, epoch, i, len(train_loader))
         adjust_learning_rate(args, optimizer, epoch, i, len(train_loader))
 
         # compute output
@@ -104,6 +103,7 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
                 logger.info('Epoch: [{0}][{1}/{2}]\t'
                             'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                             'Speed {3:.3f} ({4:.3f})\t'
+                            'Lr {lr:.4f}\t'
                             'Loss {loss.val:.10f} ({loss.avg:.4f})\t'
                             'Prec@1 {top1.val:.3f} ({top1.avg:.3f})\t'
                             'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
@@ -111,6 +111,7 @@ def train(args, train_loader, model, criterion, optimizer, epoch):
                     args.world_size * args.batch_size / batch_time.val,
                     args.world_size * args.batch_size / batch_time.avg,
                     batch_time=batch_time,
+                    lr=optimizer.param_groups[0]['lr'],
                     loss=losses, top1=top1, top5=top5))
         if args.prof >= 0: torch.cuda.nvtx.range_push("prefetcher.next()")
         input, target = prefetcher.next()
