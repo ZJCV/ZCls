@@ -10,6 +10,7 @@ import torch.utils.data.distributed
 
 from zcls.data.build import build_data
 from zcls.optim.optimizer.build import build_optimizer
+from zcls.optim.lr_scheduler.build import build_lr_scheduler
 from zcls.model.criterion.build import build_criterion
 from zcls.model.model.build import build_model
 from zcls.engine.trainer import train
@@ -60,13 +61,15 @@ def main():
 
     assert torch.backends.cudnn.enabled, "Amp requires cudnn backend to be enabled."
 
-    args.output_dir = 'outputs'
+    # args.output_dir = 'outputs'
     if args.local_rank == 0 and not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 
     logging.setup_logging(local_rank=args.local_rank, output_dir=args.output_dir)
     logger.info(args)
 
+    logger.info("local_rank: {0}, master_addr: {1}, master_port: {2}".format(
+        os.environ['LOCAL_RANK'], os.environ['MASTER_ADDR'], os.environ['MASTER_PORT']))
     logger.info("opt_level = {}".format(args.opt_level))
     logger.info("keep_batchnorm_fp32 = {}".format(args.keep_batchnorm_fp32, type(args.keep_batchnorm_fp32)))
     logger.info("loss_scale = {}".format(args.loss_scale, type(args.loss_scale)))
@@ -91,6 +94,7 @@ def main():
                                       keep_batchnorm_fp32=args.keep_batchnorm_fp32,
                                       loss_scale=args.loss_scale
                                       )
+    lr_scheduler = build_lr_scheduler(args, optimizer)
 
     # For distributed training, wrap the model with apex.parallel.DistributedDataParallel.
     # This must be done AFTER the call to amp.initialize.  If model = DDP(model) is called
@@ -119,6 +123,7 @@ def main():
                 best_prec1 = checkpoint['best_prec1']
                 model.load_state_dict(checkpoint['state_dict'])
                 optimizer.load_state_dict(checkpoint['optimizer'])
+                lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
                 logger.info("=> loaded checkpoint '{}' (epoch {})"
                             .format(args.resume, checkpoint['epoch']))
                 args.epoch = checkpoint['epoch']
@@ -143,6 +148,10 @@ def main():
         # train for one epoch
         train(args, train_loader, model, criterion, optimizer, epoch)
         torch.cuda.empty_cache()
+        if args.warmup and epoch < args.warmup_epochs:
+            pass
+        else:
+            lr_scheduler.step()
 
         # evaluate on validation set
         prec1 = validate(args, val_loader, model, criterion)
@@ -158,6 +167,7 @@ def main():
                 'state_dict': model.state_dict(),
                 'best_prec1': best_prec1,
                 'optimizer': optimizer.state_dict(),
+                'lr_scheduler': lr_scheduler.state_dict(),
             }, is_best, output_dir=args.output_dir, filename=f'checkpoint_{epoch}.pth.tar')
 
 
