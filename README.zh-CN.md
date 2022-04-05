@@ -19,6 +19,8 @@
   </a>
 </p>
 
+***正在构建一款更快速的训练框架: [ZCls2](https://github.com/ZJCV/ZCls2)***
+
 当前已实现：
 
 <p align="center">

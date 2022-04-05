@@ -19,6 +19,8 @@
   </a>
 </p>
 
+***A more faster training framework is under building: [ZCls2](https://github.com/ZJCV/ZCls2)***
+
 Supported Recognizers:
 
 <p align="center">
